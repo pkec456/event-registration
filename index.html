@@ -845,7 +845,12 @@ async function init(){
   setInterval(async ()=>{
     if(userIsTyping) return; // don't wipe out what the user is typing
     await loadData();
-    renderTab();
+
+    // 查詢頁面不要因為每 6 秒同步資料而自動消失。
+    // 只有其他頁籤需要重新繪製；查詢結果維持在畫面上。
+    if(activeTab !== "query"){
+      renderTab();
+    }
   }, 6000);
 }
 
