@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -125,7 +129,7 @@ document.addEventListener("focusout", (e)=>{
   if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
 });
 
-function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function uid(){ return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16)); }
 function norm(s){ return (s||"").trim().replace(/\s+/g," "); }
 function keyOf(name){ return norm(name).toLowerCase(); }
 function escapeHtml(s){
@@ -667,8 +671,8 @@ function renderAdmin(el){
       state.activities.push(activity);
       state.registrations[id] = [];
     }catch(e){
-      console.error(e);
-      showToast("建立活動失敗");
+      console.error("建立活動失敗:", e);
+      showToast("建立活動失敗：" + (e?.message || "請檢查 Supabase 設定"));
       return;
     }
     draftFields = ["公用哨角"];
