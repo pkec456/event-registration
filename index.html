@@ -106,6 +106,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLI
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
 let activeTab = "register";
+let queryResultVisible = false;
 let loaded = false;
 let openEventId = null;      // which event card is expanded in register view
 let adminExpandedId = null;  // which event's registrant list is expanded in admin tab
@@ -522,6 +523,7 @@ function renderQuery(el){
   const box = document.getElementById("query-result");
 
   function clearResult(){
+    queryResultVisible = false;
     box.innerHTML = "";
     input.value = "";
   }
@@ -535,6 +537,7 @@ function renderQuery(el){
       return;
     }
     const s = annualStats(name);
+    queryResultVisible = true;
     box.innerHTML = `
       <span class="backlink" id="query-back-link">← 返回重新查詢</span>
       <div class="card">
@@ -844,13 +847,13 @@ async function init(){
   render();
   setInterval(async ()=>{
     if(userIsTyping) return; // don't wipe out what the user is typing
-    await loadData();
 
-    // 查詢頁面不要因為每 6 秒同步資料而自動消失。
-    // 只有其他頁籤需要重新繪製；查詢結果維持在畫面上。
-    if(activeTab !== "query"){
-      renderTab();
-    }
+    // 背景同步資料，但「查詢」頁面絕對不重新 render。
+    // 否則查詢結果、輸入內容或畫面狀態都可能被清掉。
+    if(activeTab === "query") return;
+
+    await loadData();
+    renderTab();
   }, 6000);
 }
 
