@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台中浩天宮四紅哨角隊 活動簽到簿</title>
+<style>
+  :root{
+    --bg:#FBF1E2;
+    --surface:#FFFFFF;
+    --ink:#3B2416;
+    --ink-soft:#8C6B4E;
+    --accent:#D8531B;
+    --accent-soft:#F8DCC5;
+    --warn:#E2A227;
+    --warn-soft:#FBEAC4;
+    --absent:#9C2B1D;
+    --absent-soft:#F3D9D0;
+    --line:#EAD9C1;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{ max-width:520px; margin:0 auto; padding:16px 16px 40px; }
+  header.top{ padding:18px 4px 14px; text-align:center; }
+  header.top .eyebrow{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
+  header.top h1{ margin:4px 0 0; font-size:24px; font-weight:800; letter-spacing:-0.01em; }
+  nav.tabs{ display:flex; gap:6px; background:var(--surface); border-radius:999px; padding:5px; border:1px solid var(--line); margin-bottom:18px; }
+  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; transition:background .15s ease, color .15s ease; }
+  nav.tabs button.active{ background:var(--ink); color:#fff; }
+  .card{ background:var(--surface); border-radius:var(--radius); border:1px solid var(--line); padding:18px; margin-bottom:14px; }
+  .card h2{ margin:0 0 4px; font-size:16px; font-weight:800; }
+  .card p.hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  input[type=text], input[type=date], input[type=password], select{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:16px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin-bottom:10px;
+  }
+  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, select:focus{ outline:none; border-color:var(--accent); }
+  input.cell-input{
+    width:100%; padding:7px 8px; border-radius:7px; border:1.5px solid var(--line);
+    font-size:13px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin:0;
+  }
+  label.field-label{ font-size:13px; font-weight:700; color:var(--ink-soft); display:block; margin:0 0 6px; }
+  .field-row{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .field-row input[type=text]{ margin-bottom:0; }
+  .field-remove{
+    flex-shrink:0; width:34px; height:34px; border-radius:8px; border:1.5px solid var(--line);
+    background:#fff; color:var(--absent); font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  button.add-field{
+    width:100%; padding:10px; border-radius:10px; border:1.5px dashed var(--line);
+    background:transparent; color:var(--accent); font-size:13px; font-weight:700; cursor:pointer;
+    font-family:inherit; margin-bottom:10px;
+  }
+  button.primary{ width:100%; margin-top:6px; padding:13px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:15px; font-weight:700; font-family:inherit; cursor:pointer; }
+  button.primary:active{ opacity:.85; }
+  button.secondary{ width:100%; margin-top:8px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; }
+  .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; }
+  .status-open{ background:var(--warn-soft); color:var(--warn); }
+  .status-closed{ background:#EBEDE6; color:var(--ink-soft); }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .event-row{ padding:12px 0; border-top:1px solid var(--line); }
+  .event-row:first-of-type{ border-top:none; }
+  .event-row .row-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .event-row .name{ font-weight:800; font-size:14px; }
+  .event-row .meta{ color:var(--ink-soft); font-size:12px; margin-top:2px; }
+  .stat-line{ display:flex; gap:14px; font-size:12px; color:var(--ink-soft); margin-top:6px; flex-wrap:wrap; }
+  .stat-line b{ color:var(--ink); }
+  table.list-table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.list-table th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); padding:6px 6px; border-bottom:1.5px solid var(--line); }
+  table.list-table td{ padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  table.list-table td.name{ font-weight:700; }
+  .rate-bar-wrap{ display:flex; align-items:center; gap:8px; }
+  .rate-bar-track{ flex:1; height:6px; border-radius:99px; background:#EBEDE6; overflow:hidden; }
+  .rate-bar-fill{ height:100%; border-radius:99px; background:var(--accent); }
+  .rate-num{ font-weight:800; font-variant-numeric:tabular-nums; min-width:40px; text-align:right; font-size:12px; }
+  .big-rate{ display:flex; align-items:baseline; gap:6px; margin:6px 0 2px; }
+  .big-rate .num{ font-size:40px; font-weight:800; letter-spacing:-0.02em; }
+  .big-rate .unit{ font-size:16px; font-weight:700; color:var(--ink-soft); }
+  .empty{ text-align:center; padding:24px 8px; color:var(--ink-soft); font-size:13px; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
+  .note-shared{ font-size:11px; color:var(--ink-soft); background:#F5F6F1; border-radius:8px; padding:8px 10px; line-height:1.5; margin-top:10px; }
+  .divider{ height:1px; background:var(--line); margin:12px 0; }
+  .backlink{ font-size:13px; font-weight:700; color:var(--accent); cursor:pointer; display:inline-block; margin-bottom:10px; }
+  .lock-icon{ font-size:32px; margin-bottom:6px; }
+  .tag{ display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:2px 4px 2px 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = "event-registration-data";
+let state = { activities: [], registrations: {}, adminPin: null };
+let activeTab = "register";
+let loaded = false;
+let openEventId = null;      // which event card is expanded in register view
+let adminExpandedId = null;  // which event's registrant list is expanded in admin tab
+let adminUnlocked = false;   // in-memory only, resets on reload
+let userIsTyping = false;    // true while an input/textarea/password field has focus
+let pendingDeleteIdx = null; // index of registrant pending an in-page delete confirmation
+let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
+let draftName = "";
+let draftDate = "";
+
+document.addEventListener("focusin", (e)=>{
+  const tag = e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = true; }
+});
+document.addEventListener("focusout", (e)=>{
+  const tag = e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
+});
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function norm(s){ return (s||"").trim().replace(/\s+/g," "); }
+function keyOf(name){ return norm(name).toLowerCase(); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDate(iso){
+  try{ return new Date(iso).toLocaleDateString('zh-TW',{year:'numeric',month:'numeric',day:'numeric'}); }
+  catch(e){ return iso; }
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
+}
+
+async function loadData(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      state = {
+        activities: parsed.activities || [],
+        registrations: parsed.registrations || {},
+        adminPin: parsed.adminPin || null
+      };
+    }
+  }catch(e){ /* key not created yet */ }
+  loaded = true;
+}
+
+async function saveData(){
+  try{
+    const result = await window.storage.set(STORAGE_KEY, JSON.stringify(state), true);
+    if(!result){ showToast("儲存失敗，請再試一次"); }
+  }catch(e){ showToast("儲存失敗，請檢查網路"); }
+}
+
+function regsOf(activityId){ return state.registrations[activityId] || (state.registrations[activityId] = []); }
+
+function filledCount(activity){
+  const list = regsOf(activity.id);
+  // count registrants who filled in at least one field with a non-empty value
+  return list.filter(r => (activity.fields||[]).some(f => norm((r.fieldValues||{})[f.key]) !== "")).length;
+}
+
+function allKnownNames(){
+  const set = new Set();
+  Object.values(state.registrations).forEach(list=>{
+    (list||[]).forEach(r => set.add(norm(r.name)));
+  });
+  return Array.from(set).sort((a,b)=> a.localeCompare(b,'zh-Hant'));
+}
+
+function activitiesThisYear(){
+  const y = new Date().getFullYear();
+  return state.activities.filter(a => new Date(a.date).getFullYear() === y);
+}
+
+function recentOrOpenActivities(){
+  // for the check-in tab's activity picker: show activities from the past 7 days, plus anything still open
+  const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
+  return state.activities.filter(a => a.open || new Date(a.date).getTime() >= sevenDaysAgo);
+}
+
+function annualStats(name){
+  const k = keyOf(name);
+  const acts = activitiesThisYear();
+  let attended = 0;
+  const detail = acts.map(a=>{
+    const present = regsOf(a.id).some(r => keyOf(r.name) === k);
+    if(present) attended++;
+    return { activity: a, present };
+  });
+  const total = acts.length;
+  const rate = total === 0 ? 0 : Math.round((attended/total)*1000)/10;
+  return { attended, total, rate, detail };
+}
+
+function exportAnnualCSV(rows, year){
+  const escapeCsv = (v)=>{
+    const s = String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s;
+  };
+  let csv = "\uFEFF" + ["姓名","參加場次","總場次","出席率(%)"].join(",") + "\n";
+  rows.forEach(r=>{
+    csv += [escapeCsv(r.name), r.attended, r.total, r.rate].join(",") + "\n";
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `年度出席率總表_${year}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function render(){
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <header class="top">
+      <div class="eyebrow">台中浩天宮四紅哨角隊</div>
+      <h1>活動簽到簿</h1>
+    </header>
+    <nav class="tabs">
+      <button data-tab="register" class="${activeTab==='register'?'active':''}">簽到</button>
+      <button data-tab="query" class="${activeTab==='query'?'active':''}">查詢</button>
+      <button data-tab="admin" class="${activeTab==='admin'?'active':''}">管理者</button>
+    </nav>
+    <div id="tab-content"></div>
+  `;
+  app.querySelectorAll("nav.tabs button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      activeTab = btn.dataset.tab;
+      openEventId = null;
+      render();
+    });
+  });
+  renderTab();
+}
+
+function renderTab(){
+  const el = document.getElementById("tab-content");
+  if(!loaded){ el.innerHTML = `<div class="card"><div class="empty">載入中…</div></div>`; return; }
+  if(activeTab === "register") return renderRegister(el);
+  if(activeTab === "query") return renderQuery(el);
+  if(activeTab === "admin") return renderAdmin(el);
+}
+
+// ---------- REGISTER TAB ----------
+function renderRegister(el){
+  const acts = [...recentOrOpenActivities()].sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+  if(openEventId){
+    const activity = acts.find(a=>a.id===openEventId);
+    if(!activity){ openEventId = null; return renderRegister(el); }
+    const list = regsOf(activity.id);
+    const fields = activity.fields || [];
+
+    el.innerHTML = `
+      <span class="backlink" id="back-link">← 回活動列表</span>
+      <div class="card">
+        <h2>${escapeHtml(activity.name)}</h2>
+        <p class="hint">${fmtDate(activity.date)}</p>
+        <span class="status-pill ${activity.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${activity.open ? '開放簽到中' : '已停止簽到'}</span>
+        <div class="stat-line"><span><b>${list.length}</b> 人已簽到</span></div>
+        <div class="divider"></div>
+        ${ activity.open ? `
+          <input type="text" id="reg-name" placeholder="輸入姓名" />
+          ${ fields.map(f=>`
+            <label class="field-label">${escapeHtml(f.label)}</label>
+            <input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" />
+          `).join("") }
+          <button class="primary" id="reg-btn">完成簽到</button>
+        ` : `<p class="hint">這個活動目前已停止簽到。</p>` }
+      </div>
+      <div class="card">
+        <h2>簽到者名單（${list.length} 人）</h2>
+        ${ list.length === 0 ? `<div class="empty">還沒有人簽到</div>` : `
+          <table class="list-table">
+            <thead><tr><th>姓名</th>${fields.map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}${activity.open ? '<th></th>' : ''}</tr></thead>
+            <tbody>
+              ${list.map((r,i)=>`
+                <tr>
+                  <td class="name">${escapeHtml(r.name)}</td>
+                  ${fields.map(f=>`<td>${ (r.fieldValues && r.fieldValues[f.key]) ? escapeHtml(r.fieldValues[f.key]) : '—'}</td>`).join("")}
+                  ${activity.open ? `<td><button class="field-remove" data-delete-reg="${i}" title="刪除這筆簽到">×</button></td>` : ''}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+          ${ activity.open ? `<div class="note-shared">如果姓名打錯或欄位填錯，可以按 × 刪除自己的簽到紀錄，再重新填一次。</div>` : "" }
+        `}
+      </div>
+    `;
+    document.getElementById("back-link").addEventListener("click", ()=>{ openEventId = null; renderRegister(el); });
+
+    if(activity.open){
+      el.querySelectorAll("[data-delete-reg]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const idx = Number(btn.dataset.deleteReg);
+          list.splice(idx, 1);
+          await saveData();
+          showToast("已刪除");
+          renderRegister(el);
+        });
+      });
+    }
+
+    if(activity.open){
+      const btn = document.getElementById("reg-btn");
+      const nameInput = document.getElementById("reg-name");
+      const doRegister = async ()=>{
+        const name = norm(nameInput.value);
+        if(!name){ showToast("請輸入姓名"); return; }
+        if(list.some(r => keyOf(r.name) === keyOf(name))){ showToast(`${name} 已經簽到過了`); return; }
+        const fieldValues = {};
+        el.querySelectorAll(".reg-field-input").forEach(inp=>{
+          fieldValues[inp.dataset.key] = norm(inp.value);
+        });
+        list.push({ name, fieldValues, ts: new Date().toISOString() });
+        btn.disabled = true;
+        await saveData();
+        showToast(`${name} 簽到成功！`);
+        renderRegister(el);
+      };
+      btn.addEventListener("click", doRegister);
+    }
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="card">
+      <h2>選擇活動</h2>
+      <p class="hint">點選活動以查看詳情並完成簽到。這裡只顯示最近一週內或尚未結束的活動，更早的歷史活動請洽管理者查詢。</p>
+      ${ acts.length === 0 ? `<div class="empty">目前還沒有任何活動，請等待管理者建立</div>` :
+        acts.map(a=>{
+          return `
+            <div class="event-row" data-open="${a.id}" style="cursor:pointer;">
+              <div class="row-top">
+                <div>
+                  <div class="name">${escapeHtml(a.name)}</div>
+                  <div class="meta">${fmtDate(a.date)}</div>
+                </div>
+                <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
+              </div>
+              <div class="stat-line"><span><b>${(state.registrations[a.id]||[]).length}</b> 人已簽到</span></div>
+            </div>
+          `;
+        }).join("")
+      }
+    </div>
+  `;
+  el.querySelectorAll("[data-open]").forEach(row=>{
+    row.addEventListener("click", ()=>{ openEventId = row.dataset.open; renderRegister(el); });
+  });
+}
+
+// ---------- QUERY TAB ----------
+function renderQuery(el){
+  el.innerHTML = `
+    <div class="card">
+      <h2>查詢我的年度出席率</h2>
+      <p class="hint">輸入姓名，查看今年至今的活動簽到與出席狀況。</p>
+      <input type="text" id="query-name" placeholder="輸入姓名" />
+      <button class="primary" id="query-btn">查詢</button>
+    </div>
+    <div id="query-result"></div>
+  `;
+  const input = document.getElementById("query-name");
+  const box = document.getElementById("query-result");
+
+  function clearResult(){
+    box.innerHTML = "";
+    input.value = "";
+  }
+
+  const doQuery = ()=>{
+    const name = norm(input.value);
+    if(!name){ showToast("請輸入姓名"); return; }
+    const acts = activitiesThisYear();
+    if(acts.length === 0){
+      box.innerHTML = `<div class="card"><div class="empty">今年還沒有任何活動</div></div>`;
+      return;
+    }
+    const s = annualStats(name);
+    box.innerHTML = `
+      <span class="backlink" id="query-back-link">← 返回重新查詢</span>
+      <div class="card">
+        <h2>${escapeHtml(name)} · ${new Date().getFullYear()} 年</h2>
+        <div class="big-rate"><span class="num">${s.rate}</span><span class="unit">% 出席率</span></div>
+        <p class="hint" style="margin-top:2px;">簽到並出現於 ${s.attended} / 共 ${s.total} 場今年舉辦的活動</p>
+        <table class="list-table">
+          <thead><tr><th>活動</th><th>日期</th><th>狀態</th></tr></thead>
+          <tbody>
+            ${ s.detail.slice().reverse().map(d=>`
+              <tr>
+                <td class="name">${escapeHtml(d.activity.name)}</td>
+                <td>${fmtDate(d.activity.date)}</td>
+                <td>${d.present ? '✓ 已簽到' : '—'}</td>
+              </tr>
+            `).join("") }
+          </tbody>
+        </table>
+      </div>
+    `;
+    document.getElementById("query-back-link").addEventListener("click", clearResult);
+  };
+  document.getElementById("query-btn").addEventListener("click", doQuery);
+  input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") doQuery(); });
+}
+
+// ---------- ADMIN TAB (password gated) ----------
+function renderAdmin(el){
+  if(!adminUnlocked){
+    return renderAdminLock(el);
+  }
+  const acts = [...state.activities].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  const names = allKnownNames();
+  const yearActs = activitiesThisYear();
+  const rows = names.map(n => ({ name: n, ...annualStats(n) }))
+                     .sort((a,b)=> b.rate - a.rate || a.name.localeCompare(b.name,'zh-Hant'));
+
+  el.innerHTML = `
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+      <span class="status-pill status-open"><span class="status-dot"></span>管理者模式</span>
+      <button class="secondary" id="lock-btn" style="width:auto;margin:0;padding:8px 14px;">登出</button>
+    </div>
+
+    <div class="card">
+      <h2>建立新活動</h2>
+      <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
+      <input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
+      <label class="field-label">簽到欄位</label>
+      <div id="draft-fields-wrap">
+        ${ draftFields.map((label,i)=>`
+          <div class="field-row">
+            <input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費" />
+            <button class="field-remove" data-remove-field="${i}">×</button>
+          </div>
+        `).join("") }
+      </div>
+      <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
+      <button class="primary" id="create-btn">建立活動並開放簽到</button>
+    </div>
+
+    <div class="card">
+      <h2>活動列表（共 ${acts.length} 場・今年 ${yearActs.length} 場）</h2>
+      ${ acts.length === 0 ? `<div class="empty">還沒有建立任何活動</div>` :
+        acts.map(a=>{
+          const list = regsOf(a.id);
+          const expanded = adminExpandedId === a.id;
+          const fields = a.fields || [];
+          return `
+            <div class="event-row">
+              <div class="row-top" data-toggle="${a.id}" style="cursor:pointer;">
+                <div>
+                  <div class="name">${escapeHtml(a.name)}</div>
+                  <div class="meta">${fmtDate(a.date)}</div>
+                </div>
+                <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
+              </div>
+              <div class="stat-line">
+                <span><b>${list.length}</b> 人簽到</span>
+              </div>
+              ${ expanded ? `
+                <div style="margin-top:10px;">
+                  <button class="secondary" data-close="${a.id}">${a.open ? '停止此活動簽到' : '重新開放簽到'}</button>
+                  ${ list.length === 0 ? `<div class="empty">還沒有人簽到</div>` : `
+                    <table class="list-table">
+                      <thead><tr><th>姓名</th>${fields.map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}</tr></thead>
+                      <tbody>
+                        ${list.map((r,i)=>`
+                          <tr>
+                            <td><input class="cell-input" data-rename-ref="${a.id}|${i}" value="${escapeHtml(r.name)}" placeholder="姓名"/></td>
+                            ${fields.map(f=>`<td>${ (r.fieldValues && r.fieldValues[f.key]) ? escapeHtml(r.fieldValues[f.key]) : '—'}</td>`).join("")}
+                          </tr>
+                        `).join("")}
+                      </tbody>
+                    </table>
+                  `}
+                </div>
+              ` : ""}
+            </div>
+          `;
+        }).join("")
+      }
+    </div>
+
+    <div class="card">
+      <h2>年度出席率總表（${new Date().getFullYear()} 年，共 ${yearActs.length} 場）</h2>
+      ${ rows.length === 0 ? `<div class="empty">還沒有任何簽到紀錄</div>` : `
+        <button class="secondary" id="export-csv-btn" style="margin-top:0;margin-bottom:10px;">匯出 Excel（CSV）</button>
+        <table class="list-table">
+          <thead><tr><th>姓名</th><th>參加場次</th><th style="min-width:110px;">出席率</th></tr></thead>
+          <tbody>
+            ${ rows.map(r=>`
+              <tr>
+                <td class="name">${escapeHtml(r.name)}</td>
+                <td>${r.attended}/${r.total}</td>
+                <td>
+                  <div class="rate-bar-wrap">
+                    <div class="rate-bar-track"><div class="rate-bar-fill" style="width:${r.rate}%;"></div></div>
+                    <span class="rate-num">${r.rate}%</span>
+                  </div>
+                </td>
+              </tr>
+            `).join("") }
+          </tbody>
+        </table>
+      `}
+      <div class="note-shared">此系統的所有資料都是共用資料，任何開啟這個連結的人都看得到活動與簽到名單，管理者頁面則需要密碼才能進入或修改。</div>
+    </div>
+  `;
+
+  document.getElementById("lock-btn").addEventListener("click", ()=>{
+    adminUnlocked = false;
+    renderAdmin(el);
+  });
+
+  const exportBtn = document.getElementById("export-csv-btn");
+  if(exportBtn){
+    exportBtn.addEventListener("click", ()=>{
+      exportAnnualCSV(rows, new Date().getFullYear());
+      showToast("已匯出 CSV 檔案");
+    });
+  }
+
+  function syncDraftFieldsFromDom(){
+    draftName = document.getElementById("new-name").value;
+    draftDate = document.getElementById("new-date").value;
+    document.querySelectorAll(".draft-field-input").forEach(inp=>{
+      draftFields[Number(inp.dataset.idx)] = inp.value;
+    });
+  }
+
+  document.getElementById("add-field-btn").addEventListener("click", ()=>{
+    syncDraftFieldsFromDom();
+    draftFields.push("");
+    renderAdmin(el);
+  });
+
+  el.querySelectorAll("[data-remove-field]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      syncDraftFieldsFromDom();
+      draftFields.splice(Number(btn.dataset.removeField), 1);
+      renderAdmin(el);
+    });
+  });
+
+  document.getElementById("create-btn").addEventListener("click", async ()=>{
+    syncDraftFieldsFromDom();
+    const name = norm(draftName);
+    const dateVal = draftDate;
+    if(!name){ showToast("請輸入活動名稱"); return; }
+    const date = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+    const fields = draftFields.map(l=>norm(l)).filter(l=>l!=="").map(label=>({ key: uid(), label }));
+    const id = uid();
+    state.activities.push({ id, name, date, fields, open: true });
+    state.registrations[id] = [];
+    await saveData();
+    draftFields = ["公用哨角"];
+    draftName = "";
+    draftDate = "";
+    showToast("活動已建立");
+    renderAdmin(el);
+  });
+
+  el.querySelectorAll("[data-toggle]").forEach(row=>{
+    row.addEventListener("click", ()=>{
+      const id = row.dataset.toggle;
+      adminExpandedId = adminExpandedId === id ? null : id;
+      renderAdmin(el);
+    });
+  });
+
+  el.querySelectorAll("[data-close]").forEach(btn=>{
+    btn.addEventListener("click", async (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.close;
+      const a = state.activities.find(x=>x.id===id);
+      if(a){ a.open = !a.open; await saveData(); showToast(a.open ? "已重新開放簽到" : "已停止簽到"); renderAdmin(el); }
+    });
+  });
+
+  el.querySelectorAll("[data-rename-ref]").forEach(input=>{
+    input.addEventListener("change", async ()=>{
+      const [actId, idx] = input.dataset.renameRef.split("|");
+      const list = regsOf(actId);
+      const r = list[Number(idx)];
+      const newName = norm(input.value);
+      if(!newName){ showToast("姓名不能是空白"); input.value = r ? r.name : ""; return; }
+      if(r){
+        r.name = newName;
+        await saveData();
+        showToast("姓名已更新");
+      }
+    });
+  });
+}
+
+function renderAdminLock(el){
+  const firstTime = !state.adminPin;
+  el.innerHTML = `
+    <div class="card" style="text-align:center;">
+      <div class="lock-icon">🔒</div>
+      <h2>${firstTime ? '設定管理者密碼' : '輸入管理者密碼'}</h2>
+      <p class="hint">${firstTime ? '第一次使用，請設定一組密碼，之後進入管理者頁面都需要輸入。' : '請輸入密碼以進入管理者頁面。'}</p>
+      <input type="password" id="pin-input" placeholder="密碼" />
+      ${ firstTime ? `<input type="password" id="pin-confirm" placeholder="再輸入一次密碼" />` : "" }
+      <button class="primary" id="pin-btn">${firstTime ? '設定並登入' : '登入'}</button>
+    </div>
+  `;
+  const btn = document.getElementById("pin-btn");
+  const pinInput = document.getElementById("pin-input");
+  const doSubmit = async ()=>{
+    const val = pinInput.value;
+    if(!val){ showToast("請輸入密碼"); return; }
+    if(firstTime){
+      const confirmVal = document.getElementById("pin-confirm").value;
+      if(val !== confirmVal){ showToast("兩次輸入的密碼不一致"); return; }
+      state.adminPin = val;
+      await saveData();
+      adminUnlocked = true;
+      showToast("密碼已設定");
+      renderAdmin(el);
+    } else {
+      if(val === state.adminPin){
+        adminUnlocked = true;
+        renderAdmin(el);
+      } else {
+        showToast("密碼錯誤");
+      }
+    }
+  };
+  btn.addEventListener("click", doSubmit);
+  el.querySelectorAll("input[type=password]").forEach(inp=>{
+    inp.addEventListener("keydown",(e)=>{ if(e.key==="Enter") doSubmit(); });
+  });
+}
+
+async function init(){
+  render();
+  await loadData();
+  render();
+  setInterval(async ()=>{
+    if(userIsTyping) return; // don't wipe out what the user is typing
+    await loadData();
+    renderTab();
+  }, 6000);
+}
+
+init();
+</script>
+</body>
+</html>
