@@ -97,7 +97,12 @@
 <div id="app"></div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
 let activeTab = "register";
@@ -141,24 +146,98 @@ function showToast(msg){
 
 async function loadData(){
   try{
-    const res = await window.storage.get(STORAGE_KEY, true);
-    if(res && res.value){
-      const parsed = JSON.parse(res.value);
-      state = {
-        activities: parsed.activities || [],
-        registrations: parsed.registrations || {},
-        adminPin: parsed.adminPin || null
-      };
-    }
-  }catch(e){ /* key not created yet */ }
+    const [{ data: acts, error: aErr }, { data: regs, error: rErr }, { data: settings, error: sErr }] =
+      await Promise.all([
+        supabaseClient.from("activities").select("*").order("date", { ascending: false }),
+        supabaseClient.from("registrations").select("*").order("created_at", { ascending: true }),
+        supabaseClient.from("settings").select("*").eq("id", 1).maybeSingle()
+      ]);
+
+    if(aErr) throw aErr;
+    if(rErr) throw rErr;
+    if(sErr) throw sErr;
+
+    state.activities = (acts || []).map(a => ({
+      id: a.id,
+      name: a.name,
+      date: a.date,
+      fields: Array.isArray(a.fields) ? a.fields : [],
+      open: !!a.open
+    }));
+
+    state.registrations = {};
+    (regs || []).forEach(r => {
+      if(!state.registrations[r.activity_id]) state.registrations[r.activity_id] = [];
+      state.registrations[r.activity_id].push({
+        id: r.id,
+        name: r.name,
+        fieldValues: r.field_values || {},
+        ts: r.created_at
+      });
+    });
+
+    state.adminPin = settings ? settings.admin_pin : null;
+  }catch(e){
+    console.error("Supabase load error:", e);
+    showToast("雲端資料載入失敗");
+  }
   loaded = true;
 }
 
 async function saveData(){
-  try{
-    const result = await window.storage.set(STORAGE_KEY, JSON.stringify(state), true);
-    if(!result){ showToast("儲存失敗，請再試一次"); }
-  }catch(e){ showToast("儲存失敗，請檢查網路"); }
+  // 保留舊函式名稱，實際資料由各操作直接寫入 Supabase。
+  return true;
+}
+
+async function createActivityRemote(activity){
+  const { error } = await supabaseClient.from("activities").insert({
+    id: activity.id,
+    name: activity.name,
+    date: activity.date,
+    fields: activity.fields,
+    open: activity.open
+  });
+  if(error) throw error;
+}
+
+async function updateActivityRemote(activity){
+  const { error } = await supabaseClient.from("activities")
+    .update({
+      name: activity.name,
+      date: activity.date,
+      fields: activity.fields,
+      open: activity.open
+    })
+    .eq("id", activity.id);
+  if(error) throw error;
+}
+
+async function createRegistrationRemote(activityId, registration){
+  const { data, error } = await supabaseClient.from("registrations").insert({
+    id: registration.id || uid(),
+    activity_id: activityId,
+    name: registration.name,
+    field_values: registration.fieldValues || {}
+  }).select().single();
+  if(error) throw error;
+  return data;
+}
+
+async function deleteRegistrationRemote(registrationId){
+  const { error } = await supabaseClient.from("registrations").delete().eq("id", registrationId);
+  if(error) throw error;
+}
+
+async function renameRegistrationRemote(registrationId, name){
+  const { error } = await supabaseClient.from("registrations")
+    .update({ name }).eq("id", registrationId);
+  if(error) throw error;
+}
+
+async function saveAdminPinRemote(pin){
+  const { error } = await supabaseClient.from("settings")
+    .upsert({ id: 1, admin_pin: pin });
+  if(error) throw error;
 }
 
 function regsOf(activityId){ return state.registrations[activityId] || (state.registrations[activityId] = []); }
@@ -306,9 +385,17 @@ function renderRegister(el){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
           const idx = Number(btn.dataset.deleteReg);
-          list.splice(idx, 1);
-          await saveData();
-          showToast("已刪除");
+          const reg = list[idx];
+          if(reg && reg.id){
+            try{
+              await deleteRegistrationRemote(reg.id);
+              list.splice(idx, 1);
+              showToast("已刪除");
+            }catch(e){ console.error(e); showToast("刪除失敗"); }
+          }else{
+            list.splice(idx, 1);
+            showToast("已刪除");
+          }
           renderRegister(el);
         });
       });
@@ -325,11 +412,22 @@ function renderRegister(el){
         el.querySelectorAll(".reg-field-input").forEach(inp=>{
           fieldValues[inp.dataset.key] = norm(inp.value);
         });
-        list.push({ name, fieldValues, ts: new Date().toISOString() });
         btn.disabled = true;
-        await saveData();
-        showToast(`${name} 簽到成功！`);
-        renderRegister(el);
+        try{
+          const remote = await createRegistrationRemote(activity.id, { name, fieldValues });
+          list.push({
+            id: remote.id,
+            name: remote.name,
+            fieldValues: remote.field_values || {},
+            ts: remote.created_at
+          });
+          showToast(`${name} 簽到成功！`);
+          renderRegister(el);
+        }catch(e){
+          console.error(e);
+          btn.disabled = false;
+          showToast("簽到失敗，請再試一次");
+        }
       };
       btn.addEventListener("click", doRegister);
     }
@@ -563,9 +661,16 @@ function renderAdmin(el){
     const date = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
     const fields = draftFields.map(l=>norm(l)).filter(l=>l!=="").map(label=>({ key: uid(), label }));
     const id = uid();
-    state.activities.push({ id, name, date, fields, open: true });
-    state.registrations[id] = [];
-    await saveData();
+    const activity = { id, name, date, fields, open: true };
+    try{
+      await createActivityRemote(activity);
+      state.activities.push(activity);
+      state.registrations[id] = [];
+    }catch(e){
+      console.error(e);
+      showToast("建立活動失敗");
+      return;
+    }
     draftFields = ["公用哨角"];
     draftName = "";
     draftDate = "";
@@ -586,7 +691,18 @@ function renderAdmin(el){
       e.stopPropagation();
       const id = btn.dataset.close;
       const a = state.activities.find(x=>x.id===id);
-      if(a){ a.open = !a.open; await saveData(); showToast(a.open ? "已重新開放簽到" : "已停止簽到"); renderAdmin(el); }
+      if(a){
+        a.open = !a.open;
+        try{
+          await updateActivityRemote(a);
+          showToast(a.open ? "已重新開放簽到" : "已停止簽到");
+          renderAdmin(el);
+        }catch(err){
+          console.error(err);
+          a.open = !a.open;
+          showToast("更新失敗");
+        }
+      }
     });
   });
 
@@ -598,9 +714,15 @@ function renderAdmin(el){
       const newName = norm(input.value);
       if(!newName){ showToast("姓名不能是空白"); input.value = r ? r.name : ""; return; }
       if(r){
-        r.name = newName;
-        await saveData();
-        showToast("姓名已更新");
+        try{
+          await renameRegistrationRemote(r.id, newName);
+          r.name = newName;
+          showToast("姓名已更新");
+        }catch(err){
+          console.error(err);
+          input.value = r.name;
+          showToast("姓名更新失敗");
+        }
       }
     });
   });
@@ -626,9 +748,15 @@ function renderAdminLock(el){
     if(firstTime){
       const confirmVal = document.getElementById("pin-confirm").value;
       if(val !== confirmVal){ showToast("兩次輸入的密碼不一致"); return; }
-      state.adminPin = val;
-      await saveData();
-      adminUnlocked = true;
+      try{
+        await saveAdminPinRemote(val);
+        state.adminPin = val;
+        adminUnlocked = true;
+      }catch(err){
+        console.error(err);
+        showToast("密碼儲存失敗");
+        return;
+      }
       showToast("密碼已設定");
       renderAdmin(el);
     } else {
