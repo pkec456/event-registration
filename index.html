@@ -157,42 +157,27 @@ function showToast(msg){
 
 async function loadData(){
   try{
-    const [{ data: acts, error: aErr }, { data: regs, error: rErr }, { data: settings, error: sErr }] =
-      await Promise.all([
-        supabaseClient.from("activities").select("*").order("date", { ascending: false }),
-        supabaseClient.from("registrations").select("*").order("created_at", { ascending: true }),
-        supabaseClient.from("settings").select("*").eq("id", 1).maybeSingle()
-      ]);
-
+    const { data: acts, error: aErr } = await supabaseClient.from("activities").select("*").order("date", { ascending:false });
     if(aErr) throw aErr;
-    if(rErr) throw rErr;
-    if(sErr) throw sErr;
 
-    state.activities = (acts || []).map(a => ({
-      id: a.id,
-      name: a.name,
-      date: a.date,
-      fields: Array.isArray(a.fields) ? a.fields : [],
-      open: !!a.open
-    }));
+    state.activities=(acts||[]).map(a=>({id:a.id,name:a.name,date:a.date,fields:Array.isArray(a.fields)?a.fields:[],open:!!a.open}));
+    state.registrations={};
 
-    state.registrations = {};
-    (regs || []).forEach(r => {
-      if(!state.registrations[r.activity_id]) state.registrations[r.activity_id] = [];
-      state.registrations[r.activity_id].push({
-        id: r.id,
-        name: r.name,
-        fieldValues: r.field_values || {},
-        ts: r.created_at
+    // registrations 只有管理者登入後才讀取，避免匿名使用者取得完整名單。
+    if(adminUnlocked){
+      const { data: regs, error:rErr } = await supabaseClient.from("registrations").select("*").order("created_at",{ascending:true});
+      if(rErr) throw rErr;
+      (regs||[]).forEach(r=>{
+        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
+        state.registrations[r.activity_id].push({id:r.id,name:r.name,fieldValues:r.field_values||{},ts:r.created_at});
       });
-    });
-
-    state.adminPin = settings ? settings.admin_pin : null;
+    }
+    state.adminPin=null;
   }catch(e){
-    console.error("Supabase load error:", e);
-    showToast("雲端資料載入失敗");
+    console.error("Supabase load error:",e);
+    showToast("雲端資料載入失敗："+(e?.message||""));
   }
-  loaded = true;
+  loaded=true;
 }
 
 async function saveData(){
@@ -266,6 +251,31 @@ async function saveAdminPinRemote(pin){
   const { error } = await supabaseClient.from("settings")
     .upsert({ id: 1, admin_pin: pin });
   if(error) throw error;
+}
+
+async function adminSignIn(email, password){
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if(error) throw error;
+  return data;
+}
+
+async function adminSignOut(){
+  await supabaseClient.auth.signOut();
+  adminUnlocked = false;
+}
+
+async function checkAdminSession(){
+  const { data, error } = await supabaseClient.auth.getSession();
+  if(error || !data.session){ adminUnlocked = false; return false; }
+  const { data: row, error: adminError } = await supabaseClient
+    .from('admin_users')
+    .select('user_id, role')
+    .eq('user_id', data.session.user.id)
+    .eq('role', 'admin')
+    .maybeSingle();
+  if(adminError){ console.error('管理者權限確認失敗:', adminError); adminUnlocked=false; return false; }
+  adminUnlocked = !!row;
+  return adminUnlocked;
 }
 
 async function testSupabaseConnection(){
@@ -668,8 +678,9 @@ function renderAdmin(el){
     </div>
   `;
 
-  document.getElementById("lock-btn").addEventListener("click", ()=>{
-    adminUnlocked = false;
+  document.getElementById("lock-btn").addEventListener("click", async ()=>{
+    await adminSignOut();
+    showToast("已登出管理者");
     renderAdmin(el);
   });
 
@@ -797,65 +808,45 @@ function renderAdmin(el){
 }
 
 function renderAdminLock(el){
-  const firstTime = !state.adminPin;
   el.innerHTML = `
     <div class="card" style="text-align:center;">
       <div class="lock-icon">🔒</div>
-      <h2>${firstTime ? '設定管理者密碼' : '輸入管理者密碼'}</h2>
-      <p class="hint">${firstTime ? '第一次使用，請設定一組密碼，之後進入管理者頁面都需要輸入。' : '請輸入密碼以進入管理者頁面。'}</p>
-      <input type="password" id="pin-input" placeholder="密碼" />
-      ${ firstTime ? `<input type="password" id="pin-confirm" placeholder="再輸入一次密碼" />` : "" }
-      <button class="primary" id="pin-btn">${firstTime ? '設定並登入' : '登入'}</button>
-    </div>
-  `;
-  const btn = document.getElementById("pin-btn");
-  const pinInput = document.getElementById("pin-input");
-  const doSubmit = async ()=>{
-    const val = pinInput.value;
-    if(!val){ showToast("請輸入密碼"); return; }
-    if(firstTime){
-      const confirmVal = document.getElementById("pin-confirm").value;
-      if(val !== confirmVal){ showToast("兩次輸入的密碼不一致"); return; }
-      try{
-        await saveAdminPinRemote(val);
-        state.adminPin = val;
-        adminUnlocked = true;
-      }catch(err){
-        console.error(err);
-        showToast("密碼儲存失敗");
-        return;
-      }
-      showToast("密碼已設定");
-      renderAdmin(el);
-    } else {
-      if(val === state.adminPin){
-        adminUnlocked = true;
-        renderAdmin(el);
-      } else {
-        showToast("密碼錯誤");
-      }
-    }
+      <h2>管理者登入</h2>
+      <p class="hint">請使用管理者 Email 與密碼登入。</p>
+      <input type="text" id="admin-email" placeholder="管理者 Email" autocomplete="username" />
+      <input type="password" id="admin-password" placeholder="密碼" autocomplete="current-password" />
+      <button type="button" class="primary" id="admin-login-btn">登入管理者</button>
+    </div>`;
+  const btn=document.getElementById('admin-login-btn'), email=document.getElementById('admin-email'), pass=document.getElementById('admin-password');
+  const login=async()=>{
+    const e=norm(email.value), pw=pass.value;
+    if(!e){showToast('請輸入管理者 Email');return;}
+    if(!pw){showToast('請輸入密碼');return;}
+    btn.disabled=true;
+    try{
+      await adminSignIn(e,pw);
+      if(!await checkAdminSession()){ await supabaseClient.auth.signOut(); showToast('此帳號不是管理者'); btn.disabled=false; return; }
+      showToast('管理者登入成功'); renderAdmin(el);
+    }catch(err){ console.error(err); showToast('登入失敗：'+(err?.message||'請確認 Email 與密碼')); btn.disabled=false; }
   };
-  btn.addEventListener("click", doSubmit);
-  el.querySelectorAll("input[type=password]").forEach(inp=>{
-    inp.addEventListener("keydown",(e)=>{ if(e.key==="Enter") doSubmit(); });
-  });
+  btn.addEventListener('click',login);
+  [email,pass].forEach(x=>x.addEventListener('keydown',e=>{if(e.key==='Enter')login();}));
 }
 
 async function init(){
   render();
+  await checkAdminSession();
   await loadData();
   render();
+  supabaseClient.auth.onAuthStateChange(async ()=>{
+    await checkAdminSession();
+    if(activeTab === 'admin') render();
+  });
   setInterval(async ()=>{
-    if(userIsTyping) return; // don't wipe out what the user is typing
-
-    // 背景同步資料，但「查詢」頁面絕對不重新 render。
-    // 否則查詢結果、輸入內容或畫面狀態都可能被清掉。
-    if(activeTab === "query") return;
-
+    if(userIsTyping || activeTab === 'query') return;
     await loadData();
     renderTab();
-  }, 6000);
+  },6000);
 }
 
 init();
