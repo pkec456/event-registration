@@ -103,6 +103,27 @@
 const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const ADMIN_SESSION_KEY = "haotian_admin_session";
+async function adminLogin(username,password){
+  const {data,error}=await supabaseClient.rpc("admin_login",{p_username:username,p_password:password});
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"帳號或密碼錯誤");
+  localStorage.setItem(ADMIN_SESSION_KEY,JSON.stringify({username:data.username,role:data.role,token:data.token,at:Date.now()}));
+  adminUnlocked=true; return data;
+}
+function getAdminSession(){
+  try{
+    const s=JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)||"null");
+    if(!s?.username||!s?.token)return null;
+    if(Date.now()-s.at>12*60*60*1000){localStorage.removeItem(ADMIN_SESSION_KEY);return null;}
+    return s;
+  }catch(e){return null;}
+}
+function adminRole(){const s=getAdminSession();return s?s.role:null;}
+function isSuperAdmin(){return adminRole()==="super_admin";}
+async function adminLogout(){localStorage.removeItem(ADMIN_SESSION_KEY);adminUnlocked=false;}
+async function checkAdminSession(){adminUnlocked=!!getAdminSession();return adminUnlocked;}
+
 
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
@@ -253,30 +274,6 @@ async function saveAdminPinRemote(pin){
   if(error) throw error;
 }
 
-async function adminSignIn(email, password){
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if(error) throw error;
-  return data;
-}
-
-async function adminSignOut(){
-  await supabaseClient.auth.signOut();
-  adminUnlocked = false;
-}
-
-async function checkAdminSession(){
-  const { data, error } = await supabaseClient.auth.getSession();
-  if(error || !data.session){ adminUnlocked = false; return false; }
-  const { data: row, error: adminError } = await supabaseClient
-    .from('admin_users')
-    .select('user_id, role')
-    .eq('user_id', data.session.user.id)
-    .eq('role', 'admin')
-    .maybeSingle();
-  if(adminError){ console.error('管理者權限確認失敗:', adminError); adminUnlocked=false; return false; }
-  adminUnlocked = !!row;
-  return adminUnlocked;
-}
 
 async function testSupabaseConnection(){
   try{
@@ -576,6 +573,46 @@ function renderQuery(el){
 }
 
 // ---------- ADMIN TAB (password gated) ----------
+
+async function renderAdminAccounts(el){
+  if(!isSuperAdmin()){showToast("只有主管理員可以管理幹部");return;}
+  try{
+    const {data,error}=await supabaseClient.rpc("admin_list_accounts",{p_token:getAdminSession().token});
+    if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取失敗");
+    const rows=data.accounts||[];
+    el.innerHTML=`<div class="card"><h2>👥 幹部管理</h2>
+      <input id="new-officer-user" placeholder="新幹部帳號">
+      <input id="new-officer-pass" type="password" placeholder="初始密碼（至少 8 碼）">
+      <button class="primary" id="create-officer">新增幹部</button>
+      <div style="margin-top:16px">${rows.map(a=>`<div class="list-item" style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
+        <div><b>${escapeHtml(a.username)}</b><div class="hint">${a.role==="super_admin"?"主管理員":"幹部"} · ${a.active?"啟用":"停用"}</div></div>
+        ${a.role==="super_admin"?"":`<div><button class="secondary" data-edit="${escapeHtml(a.username)}">修改密碼</button>
+        <button class="secondary" data-toggle="${escapeHtml(a.username)}">${a.active?"停用":"啟用"}</button>
+        <button class="danger" data-del="${escapeHtml(a.username)}">刪除</button></div>`}
+      </div>`).join("")}</div>
+      <button class="secondary" id="back-admin">返回管理後台</button>
+    </div>`;
+    document.getElementById("create-officer").onclick=async()=>{
+      try{
+        const u=norm(document.getElementById("new-officer-user").value),pw=document.getElementById("new-officer-pass").value;
+        const {data,error}=await supabaseClient.rpc("admin_create_account",{p_token:getAdminSession().token,p_username:u,p_password:pw,p_role:"officer"});
+        if(error)throw error;if(!data.ok)throw new Error(data.message||"建立失敗");showToast("幹部建立成功");renderAdminAccounts(el);
+      }catch(e){showToast(e?.message||"建立失敗");}
+    };
+    el.querySelectorAll("[data-edit]").forEach(x=>x.onclick=async()=>{
+      const pw=prompt("輸入新的密碼（至少 8 碼）");if(pw===null)return;
+      try{const {data,error}=await supabaseClient.rpc("admin_update_account",{p_token:getAdminSession().token,p_username:x.dataset.edit,p_password:pw,p_active:true});if(error)throw error;if(!data.ok)throw new Error(data.message||"修改失敗");showToast("密碼已修改");renderAdminAccounts(el);}catch(e){showToast(e?.message||"修改失敗");}
+    });
+    el.querySelectorAll("[data-toggle]").forEach(x=>x.onclick=async()=>{
+      try{const {data,error}=await supabaseClient.rpc("admin_update_account",{p_token:getAdminSession().token,p_username:x.dataset.toggle,p_password:null,p_active:x.textContent.trim()==="啟用"});if(error)throw error;if(!data.ok)throw new Error(data.message||"更新失敗");renderAdminAccounts(el);}catch(e){showToast(e?.message||"更新失敗");}
+    });
+    el.querySelectorAll("[data-del]").forEach(x=>x.onclick=async()=>{
+      if(!confirm(`確定刪除幹部「${x.dataset.del}」？`))return;
+      try{const {data,error}=await supabaseClient.rpc("admin_delete_account",{p_token:getAdminSession().token,p_username:x.dataset.del});if(error)throw error;if(!data.ok)throw new Error(data.message||"刪除失敗");showToast("已刪除");renderAdminAccounts(el);}catch(e){showToast(e?.message||"刪除失敗");}
+    });
+    document.getElementById("back-admin").onclick=()=>renderAdmin(el);
+  }catch(e){showToast(e?.message||"讀取幹部失敗");}
+}
 function renderAdmin(el){
   if(!adminUnlocked){
     return renderAdminLock(el);
@@ -678,10 +715,10 @@ function renderAdmin(el){
     </div>
   `;
 
+  const ab=document.getElementById("admin-accounts-btn");
+  if(ab){ab.style.display=isSuperAdmin()?"":"none";ab.onclick=()=>renderAdminAccounts(el);}
   document.getElementById("lock-btn").addEventListener("click", async ()=>{
-    await adminSignOut();
-    showToast("已登出管理者");
-    renderAdmin(el);
+    await adminLogout();showToast("已登出管理者");renderAdmin(el);
   });
 
   const exportBtn = document.getElementById("export-csv-btn");
@@ -808,29 +845,23 @@ function renderAdmin(el){
 }
 
 function renderAdminLock(el){
-  el.innerHTML = `
-    <div class="card" style="text-align:center;">
-      <div class="lock-icon">🔒</div>
-      <h2>管理者登入</h2>
-      <p class="hint">請使用管理者 Email 與密碼登入。</p>
-      <input type="text" id="admin-email" placeholder="管理者 Email" autocomplete="username" />
-      <input type="password" id="admin-password" placeholder="密碼" autocomplete="current-password" />
-      <button type="button" class="primary" id="admin-login-btn">登入管理者</button>
-    </div>`;
-  const btn=document.getElementById('admin-login-btn'), email=document.getElementById('admin-email'), pass=document.getElementById('admin-password');
+  el.innerHTML=`<div class="card" style="text-align:center;">
+    <div class="lock-icon">🔒</div><h2>管理者登入</h2>
+    <p class="hint">請輸入管理者帳號與密碼。</p>
+    <input type="text" id="admin-username" placeholder="帳號" autocomplete="username">
+    <input type="password" id="admin-password" placeholder="密碼" autocomplete="current-password">
+    <button class="primary" id="admin-login-btn">登入管理者</button>
+  </div>`;
+  const b=document.getElementById("admin-login-btn"),u=document.getElementById("admin-username"),p=document.getElementById("admin-password");
   const login=async()=>{
-    const e=norm(email.value), pw=pass.value;
-    if(!e){showToast('請輸入管理者 Email');return;}
-    if(!pw){showToast('請輸入密碼');return;}
-    btn.disabled=true;
-    try{
-      await adminSignIn(e,pw);
-      if(!await checkAdminSession()){ await supabaseClient.auth.signOut(); showToast('此帳號不是管理者'); btn.disabled=false; return; }
-      showToast('管理者登入成功'); renderAdmin(el);
-    }catch(err){ console.error(err); showToast('登入失敗：'+(err?.message||'請確認 Email 與密碼')); btn.disabled=false; }
+    if(!norm(u.value)){showToast("請輸入帳號");return;}
+    if(!p.value){showToast("請輸入密碼");return;}
+    b.disabled=true;
+    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
+    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
-  btn.addEventListener('click',login);
-  [email,pass].forEach(x=>x.addEventListener('keydown',e=>{if(e.key==='Enter')login();}));
+  b.onclick=login;
+  [u,p].forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
 }
 
 async function init(){
