@@ -143,6 +143,66 @@
   background:#fff;
 }
 
+
+/* 幹部管理：每位幹部的三個操作按鈕並排 */
+.officer-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:8px;
+  width:100%;
+  margin-top:8px;
+}
+.officer-actions button{
+  width:100% !important;
+  min-width:0;
+  margin:0 !important;
+  white-space:nowrap;
+  padding-left:8px !important;
+  padding-right:8px !important;
+}
+
+
+/* 建立活動：限制人數／自動關閉 */
+.activity-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:10px 0;
+}
+.activity-option{
+  width:100%;
+  box-sizing:border-box;
+}
+.timer-options{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:8px 0 12px;
+}
+.timer-btn{
+  margin:0 !important;
+  width:100% !important;
+  padding:10px 6px !important;
+}
+.timer-btn.selected{
+  background:var(--accent) !important;
+  color:#fff !important;
+  border-color:var(--accent) !important;
+}
+.activity-created-by{
+  font-size:12px;
+  color:var(--ink-soft);
+  margin-top:3px;
+}
+.activity-limit{
+  font-size:12px;
+  color:var(--ink-soft);
+}
+@media(max-width:520px){
+  .activity-options{grid-template-columns:1fr;}
+  .timer-options{grid-template-columns:repeat(4,1fr);}
+}
+
 </style>
 </head>
 <body>
@@ -234,6 +294,8 @@ let pendingDeleteIdx = null; // index of registrant pending an in-page delete co
 let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
 let draftName = "";
 let draftDate = "";
+let draftMaxParticipants = "";
+let draftCloseMinutes = 0;
 
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
@@ -277,7 +339,17 @@ async function loadData(){
     const { data: acts, error: aErr } = await supabaseClient.from("activities").select("*").order("date", { ascending:false });
     if(aErr) throw aErr;
 
-    state.activities=(acts||[]).map(a=>({id:a.id,name:a.name,date:a.date,fields:Array.isArray(a.fields)?a.fields:[],open:!!a.open}));
+    state.activities=(acts||[]).map(a=>({
+      id:a.id,
+      name:a.name,
+      date:a.date,
+      fields:Array.isArray(a.fields)?a.fields:[],
+      open:!!a.open,
+      maxParticipants: a.max_participants == null ? null : Number(a.max_participants),
+      createdBy: a.created_by || "",
+      closeAt: a.close_at || null,
+      autoCloseMinutes: a.auto_close_minutes == null ? 0 : Number(a.auto_close_minutes)
+    }));
     state.registrations={};
 
     // registrations 只有管理者登入後才讀取，避免匿名使用者取得完整名單。
@@ -308,7 +380,11 @@ async function createActivityRemote(activity){
     name: activity.name,
     date: activity.date,
     fields: activity.fields,
-    open: activity.open
+    open: activity.open,
+    max_participants: activity.maxParticipants == null ? null : activity.maxParticipants,
+    created_by: activity.createdBy || "",
+    close_at: activity.closeAt || null,
+    auto_close_minutes: activity.autoCloseMinutes || 0
   };
 
   const { data, error } = await supabaseClient
@@ -336,7 +412,11 @@ async function updateActivityRemote(activity){
       name: activity.name,
       date: activity.date,
       fields: activity.fields,
-      open: activity.open
+      open: activity.open,
+      max_participants: activity.maxParticipants == null ? null : activity.maxParticipants,
+      created_by: activity.createdBy || "",
+      close_at: activity.closeAt || null,
+      auto_close_minutes: activity.autoCloseMinutes || 0
     })
     .eq("id", activity.id);
   if(error) throw error;
@@ -500,15 +580,21 @@ function renderRegister(el){
         <h2>${escapeHtml(activity.name)}</h2>
         <p class="hint">${fmtDate(activity.date)}</p>
         <span class="status-pill ${activity.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${activity.open ? '開放簽到中' : '已停止簽到'}</span>
-        <div class="stat-line"><span><b>${list.length}</b> 人已簽到</span></div>
+        <div class="stat-line">
+          <span><b>${list.length}</b>${activity.maxParticipants ? ` / ${activity.maxParticipants}` : ''} 人已簽到</span>
+        </div>
         <div class="divider"></div>
         ${ activity.open ? `
-          <input type="text" id="reg-name" placeholder="輸入姓名" />
-          ${ fields.map(f=>`
-            <label class="field-label">${escapeHtml(f.label)}</label>
-            <input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" />
-          `).join("") }
-          <button class="primary" id="reg-btn">完成簽到</button>
+          ${activity.maxParticipants && list.length >= activity.maxParticipants ? `
+            <div class="hint" style="margin:10px 0;">此活動已達人數上限，暫停接受簽到。</div>
+          ` : `
+            <input type="text" id="reg-name" placeholder="輸入姓名" />
+            ${ fields.map(f=>`
+              <label class="field-label">${escapeHtml(f.label)}</label>
+              <input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" />
+            `).join("") }
+            <button class="primary" id="reg-btn">完成簽到</button>
+          `}
         ` : `<p class="hint">這個活動目前已停止簽到。</p>` }
       </div>
       <div class="card">
@@ -597,6 +683,7 @@ function renderRegister(el){
                 <div>
                   <div class="name">${escapeHtml(a.name)}</div>
                   <div class="meta">${fmtDate(a.date)}</div>
+                  <div class="activity-created-by">建立者：${escapeHtml(a.createdBy || "—")}</div>
                 </div>
                 <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
               </div>
@@ -704,10 +791,10 @@ async function renderAdminAccounts(el){
     el.innerHTML=`
       <div class="card">
         <h2>👥 幹部管理</h2>
-        <p class="hint">主管理員可以新增、修改管理碼、啟用／停用或刪除幹部。</p>
+        <p class="hint">主管理員可以新增、修改密碼、啟用／停用或刪除幹部。</p>
 
         <input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off">
-        <input id="new-officer-pass" class="officer-input" type="password" placeholder="管理碼（至少 4 碼）" autocomplete="new-password">
+        <input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password">
         <button type="button" class="primary" id="create-officer">＋ 新增幹部</button>
 
         <div style="margin-top:18px" id="officer-list">
@@ -721,8 +808,8 @@ async function renderAdminAccounts(el){
                   </div>
                 </div>
                 ${a.role==="officer" ? `
-                  <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
-                    <button type="button" class="secondary officer-edit-btn">修改管理碼</button>
+                  <div class="officer-actions">
+                    <button type="button" class="secondary officer-edit-btn">修改密碼</button>
                     <button type="button" class="secondary officer-toggle-btn" data-active="${a.active ? "true":"false"}">${a.active?"停用":"啟用"}</button>
                     <button type="button" class="secondary officer-delete-btn">刪除</button>
                   </div>
@@ -789,7 +876,7 @@ async function renderAdminAccounts(el){
       if(!row) return;
       const username=row.dataset.officerUsername;
 
-      // 修改管理碼：使用頁面內輸入框，不使用 prompt
+      // 修改密碼：使用頁面內輸入框，不使用 prompt
       if(target.classList.contains("officer-edit-btn")){
         const oldBox=row.querySelector(".admin-edit-box");
         if(oldBox){
@@ -802,10 +889,10 @@ async function renderAdminAccounts(el){
         box.style.cssText="width:100%;margin-top:10px;";
         box.innerHTML=`
           <input class="officer-input edit-code-input" type="password"
-                 placeholder="新密碼（至少 4 碼）"
+                 placeholder="新的密碼（至少 4 碼）"
                  autocomplete="new-password">
           <div style="display:flex;gap:8px;margin-top:6px;">
-            <button type="button" class="primary save-code-btn">儲存</button>
+            <button type="button" class="primary save-code-btn">儲存新管理碼</button>
             <button type="button" class="secondary cancel-code-btn">取消</button>
           </div>
         `;
@@ -817,13 +904,13 @@ async function renderAdminAccounts(el){
           const newCode=box.querySelector(".edit-code-input")?.value || "";
 
           if(newCode.length<4){
-            showAdminMessage("新的管理碼至少 4 碼");
+            showAdminMessage("新的密碼至少 4 碼");
             return;
           }
 
           const saveBtn=box.querySelector(".save-code-btn");
           saveBtn.disabled=true;
-          showAdminMessage("正在儲存新的管理碼…");
+          showAdminMessage("正在儲存新的密碼…");
 
           try{
             const result=await supabaseClient.rpc("simple_change_officer_code",{
@@ -834,9 +921,9 @@ async function renderAdminAccounts(el){
             });
 
             if(result.error) throw result.error;
-            if(!result.data?.ok) throw new Error(result.data?.message||"修改管理碼失敗");
+            if(!result.data?.ok) throw new Error(result.data?.message||"修改密碼失敗");
 
-            showToast("管理碼修改成功");
+            showToast("密碼修改成功");
             await renderAdminAccounts(el);
           }catch(e){
             saveBtn.disabled=false;
@@ -948,6 +1035,27 @@ function renderAdmin(el){
       <h2>建立新活動</h2>
       <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
       <input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
+
+      <div class="activity-options">
+        <div class="activity-option">
+          <label class="field-label">人數限制</label>
+          <input type="number" id="new-max-participants" min="1" step="1"
+                 placeholder="預設無限制"
+                 value="${escapeHtml(draftMaxParticipants)}" />
+          <div class="hint">留白＝無人數限制</div>
+        </div>
+
+        <div class="activity-option">
+          <label class="field-label">活動關閉計時器</label>
+          <div class="timer-options">
+            <button type="button" class="secondary timer-btn ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button>
+            <button type="button" class="secondary timer-btn ${draftCloseMinutes===5?'selected':''}" data-timer="5">5分</button>
+            <button type="button" class="secondary timer-btn ${draftCloseMinutes===10?'selected':''}" data-timer="10">10分</button>
+            <button type="button" class="secondary timer-btn ${draftCloseMinutes===20?'selected':''}" data-timer="20">20分</button>
+          </div>
+        </div>
+      </div>
+
       <label class="field-label">簽到欄位</label>
       <div id="draft-fields-wrap">
         ${ draftFields.map((label,i)=>`
@@ -978,7 +1086,8 @@ function renderAdmin(el){
                 <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
               </div>
               <div class="stat-line">
-                <span><b>${list.length}</b> 人簽到</span>
+                <span><b>${list.length}</b>${a.maxParticipants ? ` / ${a.maxParticipants}` : ''} 人簽到</span>
+                <span class="activity-limit">${a.maxParticipants ? `上限 ${a.maxParticipants} 人` : '無人數限制'}</span>
               </div>
               ${ expanded ? `
                 <div style="margin-top:10px;">
@@ -1066,15 +1175,40 @@ function renderAdmin(el){
     });
   });
 
+  el.querySelectorAll("[data-timer]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      draftCloseMinutes = Number(btn.dataset.timer || 0);
+      el.querySelectorAll("[data-timer]").forEach(b=>b.classList.toggle("selected", Number(b.dataset.timer||0)===draftCloseMinutes));
+    });
+  });
+
   document.getElementById("create-btn").addEventListener("click", async ()=>{
     syncDraftFieldsFromDom();
     const name = norm(draftName);
     const dateVal = draftDate;
+    const maxRaw = (document.getElementById("new-max-participants")?.value || "").trim();
+    const maxParticipants = maxRaw === "" ? null : Number(maxRaw);
+    const closeMinutes = Number(draftCloseMinutes || 0);
+
     if(!name){ showToast("請輸入活動名稱"); return; }
+    if(maxParticipants !== null && (!Number.isInteger(maxParticipants) || maxParticipants < 1)){
+      showToast("人數限制請輸入 1 以上的整數"); return;
+    }
+
     const date = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
     const fields = draftFields.map(l=>norm(l)).filter(l=>l!=="").map(label=>({ key: uid(), label }));
     const id = uid();
-    const activity = { id, name, date, fields, open: true };
+    const session = getAdminSession();
+    const createdBy = session?.username || "";
+    const closeAt = closeMinutes > 0 ? new Date(Date.now() + closeMinutes*60000).toISOString() : null;
+
+    const activity = {
+      id, name, date, fields, open: true,
+      maxParticipants,
+      createdBy,
+      closeAt,
+      autoCloseMinutes: closeMinutes
+    };
     try{
       const test = await testSupabaseConnection();
       if(!test.ok){
@@ -1091,7 +1225,11 @@ function renderAdmin(el){
         name: saved.name,
         date: saved.date,
         fields: Array.isArray(saved.fields) ? saved.fields : fields,
-        open: !!saved.open
+        open: !!saved.open,
+        maxParticipants: saved.max_participants == null ? maxParticipants : Number(saved.max_participants),
+        createdBy: saved.created_by || createdBy,
+        closeAt: saved.close_at || closeAt,
+        autoCloseMinutes: saved.auto_close_minutes == null ? closeMinutes : Number(saved.auto_close_minutes)
       };
       state.activities.push(savedActivity);
       state.registrations[saved.id] = [];
@@ -1105,6 +1243,8 @@ function renderAdmin(el){
     draftFields = ["公用哨角"];
     draftName = "";
     draftDate = "";
+    draftMaxParticipants = "";
+    draftCloseMinutes = 0;
     showToast("活動已建立");
     renderAdmin(el);
   });
@@ -1186,6 +1326,21 @@ async function init(){
   render();
   setInterval(async ()=>{
     if(userIsTyping || activeTab === 'query') return;
+
+    // 自動關閉計時器：到時間後將活動設為停止簽到
+    const now = Date.now();
+    const expired = state.activities.filter(a => a.open && a.closeAt && new Date(a.closeAt).getTime() <= now);
+
+    for(const a of expired){
+      try{
+        a.open = false;
+        await updateActivityRemote(a);
+      }catch(e){
+        console.error("活動自動關閉失敗", e);
+        a.open = true;
+      }
+    }
+
     await loadData();
     renderTab();
   },6000);
