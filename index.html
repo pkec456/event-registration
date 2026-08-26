@@ -761,7 +761,7 @@ async function renderAdminAccounts(el){
         const pw=document.getElementById("new-officer-pass")?.value||"";
 
         if(!u){showAdminMessage("請輸入帳號");return;}
-        if(!pw){showAdminMessage("請輸入管理碼");return;}
+        if(!pw){showAdminMessage("請輸入密碼");return;}
 
         target.disabled=true;
         showAdminMessage("建立中…");
@@ -802,10 +802,10 @@ async function renderAdminAccounts(el){
         box.style.cssText="width:100%;margin-top:10px;";
         box.innerHTML=`
           <input class="officer-input edit-code-input" type="password"
-                 placeholder="新的管理碼（至少 4 碼）"
+                 placeholder="新密碼（至少 4 碼）"
                  autocomplete="new-password">
           <div style="display:flex;gap:8px;margin-top:6px;">
-            <button type="button" class="primary save-code-btn">儲存新管理碼</button>
+            <button type="button" class="primary save-code-btn">儲存</button>
             <button type="button" class="secondary cancel-code-btn">取消</button>
           </div>
         `;
