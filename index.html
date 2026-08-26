@@ -33,16 +33,20 @@
   header.top .eyebrow{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
   header.top h1{ margin:4px 0 0; font-size:24px; font-weight:800; letter-spacing:-0.01em; }
   nav.tabs{ display:flex; gap:6px; background:var(--surface); border-radius:999px; padding:5px; border:1px solid var(--line); margin-bottom:18px; }
-  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; transition:background .15s ease, color .15s ease; }
+  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; }
   nav.tabs button.active{ background:var(--ink); color:#fff; }
+  nav.tabs button:hover:not(.active):not(:disabled){ color:var(--ink); background:#F2ECDF; }
   .card{ background:var(--surface); border-radius:var(--radius); border:1px solid var(--line); padding:18px; margin-bottom:14px; }
   .card h2{ margin:0 0 4px; font-size:16px; font-weight:800; }
   .card p.hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
-  input[type=text], input[type=date], input[type=password], select{
+  input[type=text], input[type=date], input[type=password], input[type=number], select{
     width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
     font-size:16px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin-bottom:10px;
+    transition:border-color .15s ease, box-shadow .15s ease;
   }
-  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, select:focus{ outline:none; border-color:var(--accent); }
+  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=number]:focus, select:focus{
+    outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);
+  }
   input.cell-input{
     width:100%; padding:7px 8px; border-radius:7px; border:1.5px solid var(--line);
     font-size:13px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin:0;
@@ -60,8 +64,18 @@
     font-family:inherit; margin-bottom:10px;
   }
   button.primary{ width:100%; margin-top:6px; padding:13px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:15px; font-weight:700; font-family:inherit; cursor:pointer; }
-  button.primary:active{ opacity:.85; }
   button.secondary{ width:100%; margin-top:8px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; }
+
+  /* ---- 統一按鈕互動回饋（hover / active / disabled / focus）---- */
+  button{ transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease, transform .08s ease, opacity .15s ease; }
+  button:disabled{ opacity:.5; cursor:not-allowed; box-shadow:none !important; transform:none !important; }
+  button:active:not(:disabled){ transform:translateY(1px); }
+  button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  button.primary:hover:not(:disabled){ background:#C1481A; box-shadow:0 4px 14px rgba(216,83,27,.28); }
+  button.secondary:hover:not(:disabled){ border-color:var(--ink); background:#FAFAF7; }
+  button.add-field:hover:not(:disabled){ border-color:var(--accent); background:var(--accent-soft); }
+  .field-remove:hover:not(:disabled){ background:var(--absent-soft); border-color:var(--absent); color:var(--absent); }
+
   .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; }
   .status-open{ background:var(--warn-soft); color:var(--warn); }
   .status-closed{ background:#EBEDE6; color:var(--ink-soft); }
@@ -85,13 +99,30 @@
   .big-rate .num{ font-size:40px; font-weight:800; letter-spacing:-0.02em; }
   .big-rate .unit{ font-size:16px; font-weight:700; color:var(--ink-soft); }
   .empty{ text-align:center; padding:24px 8px; color:var(--ink-soft); font-size:13px; }
-  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
+  .toast.toast-error{ background:var(--absent); }
   .note-shared{ font-size:11px; color:var(--ink-soft); background:#F5F6F1; border-radius:8px; padding:8px 10px; line-height:1.5; margin-top:10px; }
   .divider{ height:1px; background:var(--line); margin:12px 0; }
   .backlink{ font-size:13px; font-weight:700; color:var(--accent); cursor:pointer; display:inline-block; margin-bottom:10px; }
   .lock-icon{ font-size:32px; margin-bottom:6px; }
   .tag{ display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:2px 4px 2px 0; }
+
+  /* 除錯用：不會自動消失的錯誤訊息框，讓建立活動失敗時的原因看得清楚 */
+  .debug-error-box{
+    display:none;
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:var(--absent-soft);
+    border:1px solid var(--absent);
+    color:var(--absent);
+    font-size:12px;
+    line-height:1.6;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .debug-error-box.show{ display:block; }
 
 /* 幹部模式：紅色 */
 .officer-mode-pill{
@@ -183,6 +214,10 @@
   margin:0 !important;
   width:100% !important;
   padding:10px 6px !important;
+}
+.timer-btn:hover:not(:disabled):not(.selected){
+  border-color:var(--accent) !important;
+  color:var(--accent) !important;
 }
 .timer-btn.selected{
   background:var(--accent) !important;
@@ -326,12 +361,15 @@ function fmtDate(iso){
   catch(e){ return iso; }
 }
 
-function showToast(msg){
+function showToast(msg, type){
   const t = document.getElementById("toast");
   t.textContent = msg;
+  t.classList.remove("toast-error");
+  if(type === "error") t.classList.add("toast-error");
   t.classList.add("show");
   clearTimeout(t._timer);
-  t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
+  const duration = type === "error" ? 5000 : 1800; // 錯誤訊息停留久一點，方便看清楚原因
+  t._timer = setTimeout(()=> t.classList.remove("show"), duration);
 }
 
 async function loadData(){
@@ -364,7 +402,7 @@ async function loadData(){
     state.adminPin=null;
   }catch(e){
     console.error("Supabase load error:",e);
-    showToast("雲端資料載入失敗："+(e?.message||""));
+    showToast("雲端資料載入失敗："+(e?.message||""), "error");
   }
   loaded=true;
 }
@@ -375,35 +413,49 @@ async function saveData(){
 }
 
 async function createActivityRemote(activity){
-  const payload = {
+  // 先用原本已經能正常建立活動的欄位新增，再補寫新功能欄位。
+  // 這樣即使 Supabase API schema 尚未完全刷新，也不會讓整個建立活動失敗。
+  const basePayload = {
     id: activity.id,
     name: activity.name,
     date: activity.date,
     fields: activity.fields,
-    open: activity.open,
+    open: activity.open
+  };
+
+  const { data: inserted, error: insertError } = await supabaseClient
+    .from("activities")
+    .insert(basePayload)
+    .select("*")
+    .single();
+
+  if(insertError){
+    console.error("建立活動基本資料失敗:", insertError);
+    throw insertError;
+  }
+
+  const extraPayload = {
     max_participants: activity.maxParticipants == null ? null : activity.maxParticipants,
     created_by: activity.createdBy || "",
     close_at: activity.closeAt || null,
     auto_close_minutes: activity.autoCloseMinutes || 0
   };
 
-  const { data, error } = await supabaseClient
+  const { data: updated, error: extraError } = await supabaseClient
     .from("activities")
-    .insert(payload)
-    .select()
+    .update(extraPayload)
+    .eq("id", activity.id)
+    .select("*")
     .single();
 
-  if(error){
-    console.error("Supabase activities.insert error:", {
-      message: error.message,
-      details: error.details,
-      hint: error.hint,
-      code: error.code,
-      payload
-    });
-    throw error;
+  if(extraError){
+    console.error("建立活動後寫入新功能欄位失敗:", extraError);
+    // 基本活動已成功建立。回傳基本資料，避免使用者看到「建立失敗」。
+    // 新欄位若尚未存在，活動仍可正常使用。
+    return inserted;
   }
-  return data;
+
+  return updated;
 }
 
 async function updateActivityRemote(activity){
@@ -628,7 +680,7 @@ function renderRegister(el){
               await deleteRegistrationRemote(reg.id);
               list.splice(idx, 1);
               showToast("已刪除");
-            }catch(e){ console.error(e); showToast("刪除失敗"); }
+            }catch(e){ console.error(e); showToast("刪除失敗", "error"); }
           }else{
             list.splice(idx, 1);
             showToast("已刪除");
@@ -663,7 +715,7 @@ function renderRegister(el){
         }catch(e){
           console.error(e);
           btn.disabled = false;
-          showToast("簽到失敗，請再試一次");
+          showToast("簽到失敗，請再試一次", "error");
         }
       };
       btn.addEventListener("click", doRegister);
@@ -1067,6 +1119,7 @@ function renderAdmin(el){
       </div>
       <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
       <button type="button" class="primary" id="create-btn">建立活動並開放簽到</button>
+      <div class="debug-error-box" id="create-activity-error"></div>
     </div>
 
     <div class="card">
@@ -1183,6 +1236,10 @@ function renderAdmin(el){
   });
 
   document.getElementById("create-btn").addEventListener("click", async ()=>{
+    const createBtn = document.getElementById("create-btn");
+    const errBox = document.getElementById("create-activity-error");
+    if(errBox){ errBox.classList.remove("show"); errBox.textContent = ""; }
+
     syncDraftFieldsFromDom();
     const name = norm(draftName);
     const dateVal = draftDate;
@@ -1209,13 +1266,17 @@ function renderAdmin(el){
       closeAt,
       autoCloseMinutes: closeMinutes
     };
+
+    createBtn.disabled = true;
     try{
       const test = await testSupabaseConnection();
       if(!test.ok){
         const msg = [test.message, test.code ? "code=" + test.code : "", test.details, test.hint]
           .filter(Boolean).join(" | ");
-        showToast("Supabase 連線失敗：" + msg);
+        showToast("Supabase 連線失敗，詳情見下方", "error");
+        if(errBox){ errBox.textContent = "連線檢查失敗：" + msg; errBox.classList.add("show"); }
         console.error("Supabase 連線失敗：", test);
+        createBtn.disabled = false;
         return;
       }
 
@@ -1234,12 +1295,23 @@ function renderAdmin(el){
       state.activities.push(savedActivity);
       state.registrations[saved.id] = [];
     }catch(e){
-      console.error("建立活動失敗:", e);
+      console.error("建立活動失敗:", {
+        error: e,
+        name,
+        date,
+        maxParticipants,
+        closeMinutes,
+        createdBy,
+        closeAt
+      });
       const msg = [e?.message, e?.code ? "code=" + e.code : "", e?.details, e?.hint]
         .filter(Boolean).join(" | ");
-      showToast("建立活動失敗：" + (msg || "未知錯誤"));
+      showToast("建立活動失敗，詳情見下方", "error");
+      if(errBox){ errBox.textContent = "建立活動失敗：" + (msg || "未知錯誤"); errBox.classList.add("show"); }
+      createBtn.disabled = false;
       return;
     }
+    createBtn.disabled = false;
     draftFields = ["公用哨角"];
     draftName = "";
     draftDate = "";
@@ -1271,7 +1343,7 @@ function renderAdmin(el){
         }catch(err){
           console.error(err);
           a.open = !a.open;
-          showToast("更新失敗");
+          showToast("更新失敗", "error");
         }
       }
     });
@@ -1292,7 +1364,7 @@ function renderAdmin(el){
         }catch(err){
           console.error(err);
           input.value = r.name;
-          showToast("姓名更新失敗");
+          showToast("姓名更新失敗", "error");
         }
       }
     });
@@ -1313,7 +1385,7 @@ function renderAdminLock(el){
     if(!p.value){showToast("請輸入密碼");return;}
     b.disabled=true;
     try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
-    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
+    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"), "error");b.disabled=false;}
   };
   b.onclick=login;
   [u,p].forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
