@@ -695,10 +695,16 @@ async function renderAdminAccounts(el){
 
     const rows=data.accounts||[];
 
+    // 移除上一版可能殘留的 click listener，避免同一個確認視窗跳多次。
+    if(el.__officerClickHandler){
+      el.removeEventListener("click", el.__officerClickHandler);
+      el.__officerClickHandler = null;
+    }
+
     el.innerHTML=`
       <div class="card">
         <h2>👥 幹部管理</h2>
-        <p class="hint">主管理員可以新增、修改管理碼、停用或刪除幹部。</p>
+        <p class="hint">主管理員可以新增、修改管理碼、啟用／停用或刪除幹部。</p>
 
         <input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off">
         <input id="new-officer-pass" class="officer-input" type="password" placeholder="管理碼（至少 4 碼）" autocomplete="new-password">
@@ -706,7 +712,7 @@ async function renderAdminAccounts(el){
 
         <div style="margin-top:18px" id="officer-list">
           ${rows.map(a=>`
-            <div class="event-row officer-row" data-officer-row="${escapeHtml(a.username)}" style="padding:14px 0;">
+            <div class="event-row officer-row" data-officer-username="${escapeHtml(a.username)}" style="padding:14px 0;">
               <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
                 <div>
                   <b>${escapeHtml(a.username)}</b>
@@ -716,9 +722,9 @@ async function renderAdminAccounts(el){
                 </div>
                 ${a.role==="officer" ? `
                   <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
-                    <button type="button" class="secondary officer-edit-btn" data-username="${escapeHtml(a.username)}">修改管理碼</button>
-                    <button type="button" class="secondary officer-toggle-btn" data-username="${escapeHtml(a.username)}" data-active="${a.active ? "true":"false"}">${a.active?"停用":"啟用"}</button>
-                    <button type="button" class="secondary officer-delete-btn" data-username="${escapeHtml(a.username)}">刪除</button>
+                    <button type="button" class="secondary officer-edit-btn">修改管理碼</button>
+                    <button type="button" class="secondary officer-toggle-btn" data-active="${a.active ? "true":"false"}">${a.active?"停用":"啟用"}</button>
+                    <button type="button" class="secondary officer-delete-btn">刪除</button>
                   </div>
                 ` : ""}
               </div>
@@ -732,23 +738,24 @@ async function renderAdminAccounts(el){
     `;
 
     const messageEl=document.getElementById("admin-action-message");
-    const showAdminMessage=(msg)=>{ if(messageEl) messageEl.textContent=msg||""; };
+    const showAdminMessage=(msg)=>{
+      if(messageEl) messageEl.textContent=msg||"";
+    };
 
-    // Use one delegated click listener on the container. This avoids buttons
-    // losing their handlers when the page is re-rendered.
-    const clickHandler=async(ev)=>{
+    const handler=async(ev)=>{
       const target=ev.target.closest("button");
       if(!target || !el.contains(target)) return;
 
-      // Return
+      // 返回
       if(target.id==="back-admin"){
-        el.removeEventListener("click",clickHandler);
+        el.removeEventListener("click", handler);
+        el.__officerClickHandler=null;
         window.__adminAccountsViewOpen=false;
         renderAdmin(el);
         return;
       }
 
-      // Create officer
+      // 新增幹部
       if(target.id==="create-officer"){
         const u=norm(document.getElementById("new-officer-user")?.value);
         const pw=document.getElementById("new-officer-pass")?.value||"";
@@ -773,28 +780,32 @@ async function renderAdminAccounts(el){
           await renderAdminAccounts(el);
         }catch(e){
           target.disabled=false;
-          console.error(e);
           showAdminMessage("新增失敗：" + (e?.message||"未知錯誤"));
         }
         return;
       }
 
-      // Edit password
+      const row=target.closest(".officer-row");
+      if(!row) return;
+      const username=row.dataset.officerUsername;
+
+      // 修改管理碼：使用頁面內輸入框，不使用 prompt
       if(target.classList.contains("officer-edit-btn")){
-        const username=target.dataset.username;
-        const row=target.closest(".officer-row");
-        if(!row) return;
+        const oldBox=row.querySelector(".admin-edit-box");
+        if(oldBox){
+          oldBox.remove();
+          return;
+        }
 
-        let box=row.querySelector(".admin-edit-box");
-        if(box){ box.remove(); return; }
-
-        box=document.createElement("div");
+        const box=document.createElement("div");
         box.className="admin-edit-box";
         box.style.cssText="width:100%;margin-top:10px;";
         box.innerHTML=`
-          <input class="officer-input edit-code-input" type="password" placeholder="新的管理碼（至少 4 碼）" autocomplete="new-password">
+          <input class="officer-input edit-code-input" type="password"
+                 placeholder="新的管理碼（至少 4 碼）"
+                 autocomplete="new-password">
           <div style="display:flex;gap:8px;margin-top:6px;">
-            <button type="button" class="primary save-code-btn">儲存</button>
+            <button type="button" class="primary save-code-btn">儲存新管理碼</button>
             <button type="button" class="secondary cancel-code-btn">取消</button>
           </div>
         `;
@@ -803,15 +814,16 @@ async function renderAdminAccounts(el){
         box.querySelector(".cancel-code-btn").onclick=()=>box.remove();
 
         box.querySelector(".save-code-btn").onclick=async()=>{
-          const newCode=box.querySelector(".edit-code-input").value;
-          if(!newCode || newCode.length<4){
-            showAdminMessage("管理碼至少 4 碼");
+          const newCode=box.querySelector(".edit-code-input")?.value || "";
+
+          if(newCode.length<4){
+            showAdminMessage("新的管理碼至少 4 碼");
             return;
           }
 
           const saveBtn=box.querySelector(".save-code-btn");
           saveBtn.disabled=true;
-          showAdminMessage("修改中…");
+          showAdminMessage("修改管理碼中…");
 
           try{
             const result=await supabaseClient.rpc("simple_update_officer",{
@@ -821,23 +833,22 @@ async function renderAdminAccounts(el){
               p_new_code:newCode,
               p_active:true
             });
-            if(result.error) throw result.error;
-            if(!result.data?.ok) throw new Error(result.data?.message||"修改失敗");
 
-            showToast("管理碼已修改");
+            if(result.error) throw result.error;
+            if(!result.data?.ok) throw new Error(result.data?.message||"修改管理碼失敗");
+
+            showToast("管理碼修改成功");
             await renderAdminAccounts(el);
           }catch(e){
             saveBtn.disabled=false;
-            console.error(e);
             showAdminMessage("修改失敗：" + (e?.message||"未知錯誤"));
           }
         };
         return;
       }
 
-      // Toggle active
+      // 啟用／停用：每次只確認一次
       if(target.classList.contains("officer-toggle-btn")){
-        const username=target.dataset.username;
         const currentlyActive=target.dataset.active==="true";
         const actionText=currentlyActive?"停用":"啟用";
 
@@ -854,6 +865,7 @@ async function renderAdminAccounts(el){
             p_new_code:null,
             p_active:!currentlyActive
           });
+
           if(result.error) throw result.error;
           if(!result.data?.ok) throw new Error(result.data?.message||`${actionText}失敗`);
 
@@ -861,16 +873,13 @@ async function renderAdminAccounts(el){
           await renderAdminAccounts(el);
         }catch(e){
           target.disabled=false;
-          console.error(e);
           showAdminMessage(`${actionText}失敗：`+(e?.message||"未知錯誤"));
         }
         return;
       }
 
-      // Delete
+      // 刪除
       if(target.classList.contains("officer-delete-btn")){
-        const username=target.dataset.username;
-
         if(!confirm(`確定刪除幹部「${username}」？\n刪除後無法使用此帳號登入。`)) return;
 
         target.disabled=true;
@@ -882,6 +891,7 @@ async function renderAdminAccounts(el){
             p_admin_code:session.access_code,
             p_username:username
           });
+
           if(result.error) throw result.error;
           if(!result.data?.ok) throw new Error(result.data?.message||"刪除失敗");
 
@@ -889,17 +899,15 @@ async function renderAdminAccounts(el){
           await renderAdminAccounts(el);
         }catch(e){
           target.disabled=false;
-          console.error(e);
           showAdminMessage("刪除失敗：" + (e?.message||"未知錯誤"));
         }
-        return;
       }
     };
 
-    el.addEventListener("click",clickHandler);
+    el.__officerClickHandler=handler;
+    el.addEventListener("click", handler);
 
   }catch(e){
-    console.error("幹部管理讀取失敗",e);
     el.innerHTML=`
       <div class="card">
         <h2>👥 幹部管理</h2>
@@ -913,6 +921,7 @@ async function renderAdminAccounts(el){
     };
   }
 }
+
 function renderAdmin(el){
   if(window.__adminAccountsViewOpen){
     return;
