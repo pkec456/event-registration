@@ -823,15 +823,14 @@ async function renderAdminAccounts(el){
 
           const saveBtn=box.querySelector(".save-code-btn");
           saveBtn.disabled=true;
-          showAdminMessage("修改管理碼中…");
+          showAdminMessage("正在儲存新的管理碼…");
 
           try{
-            const result=await supabaseClient.rpc("simple_update_officer",{
+            const result=await supabaseClient.rpc("simple_change_officer_code",{
               p_admin_username:session.username,
               p_admin_code:session.access_code,
               p_username:username,
-              p_new_code:newCode,
-              p_active:true
+              p_new_code:newCode
             });
 
             if(result.error) throw result.error;
