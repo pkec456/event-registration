@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
 <style>
+  /* 保留目前前端既有 CSS；本次只修正資料 API 相容性，不改版面樣式。 */
   :root{
     --bg:#FBF1E2;
     --surface:#FFFFFF;
@@ -19,6 +20,8 @@
     --absent-soft:#F3D9D0;
     --line:#EAD9C1;
     --radius:14px;
+    --btn-radius:10px;
+    --btn-min-h:44px;
   }
   *{box-sizing:border-box;}
   body{
@@ -32,51 +35,156 @@
   header.top{ padding:18px 4px 14px; text-align:center; }
   header.top .eyebrow{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
   header.top h1{ margin:4px 0 0; font-size:24px; font-weight:800; letter-spacing:-0.01em; }
+
+  /* ---------- 分頁籤 ---------- */
   nav.tabs{ display:flex; gap:6px; background:var(--surface); border-radius:999px; padding:5px; border:1px solid var(--line); margin-bottom:18px; }
-  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; transition:background .15s ease, color .15s ease; }
+  nav.tabs button{
+    flex:1; border:none; background:transparent; padding:10px 8px;
+    border-radius:999px; min-height:auto;
+    font-size:14px; font-weight:600; color:var(--ink-soft);
+  }
   nav.tabs button.active{ background:var(--ink); color:#fff; }
+  nav.tabs button:hover:not(.active):not(:disabled){ color:var(--ink); background:#F2ECDF; }
+
   .card{ background:var(--surface); border-radius:var(--radius); border:1px solid var(--line); padding:18px; margin-bottom:14px; }
   .card h2{ margin:0 0 4px; font-size:16px; font-weight:800; }
-  .card p.hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
-  input[type=text], input[type=date], input[type=password], select{
+  .card p.hint, .hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+
+  /* ---------- 輸入框：跟按鈕共用同一套最小高度 ---------- */
+  input[type=text], input[type=date], input[type=password], input[type=number], select{
     width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
     font-size:16px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin-bottom:10px;
+    min-height:var(--btn-min-h); transition:border-color .15s ease, box-shadow .15s ease;
   }
-  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, select:focus{ outline:none; border-color:var(--accent); }
+  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=number]:focus, select:focus{
+    outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);
+  }
   input.cell-input{
     width:100%; padding:7px 8px; border-radius:7px; border:1.5px solid var(--line);
     font-size:13px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin:0;
   }
+  .officer-input{
+    display:block; width:100%; box-sizing:border-box; height:46px;
+    padding:12px 14px; margin:8px 0; border:1px solid #d1d5db; border-radius:10px;
+    font:inherit; background:#fff;
+  }
+  .officer-input:focus{ outline:none; border-color:#111827; box-shadow:0 0 0 2px rgba(17,24,39,.08); }
+
   label.field-label{ font-size:13px; font-weight:700; color:var(--ink-soft); display:block; margin:0 0 6px; }
   .field-row{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
   .field-row input[type=text]{ margin-bottom:0; }
-  .field-remove{
-    flex-shrink:0; width:34px; height:34px; border-radius:8px; border:1.5px solid var(--line);
-    background:#fff; color:var(--absent); font-size:16px; font-weight:700; cursor:pointer; font-family:inherit;
+
+  /* ==================================================================
+     按鈕 — 全站只有這一個地方定義尺寸，不再有其他區塊互相覆蓋
+     ================================================================== */
+  button{
+    box-sizing:border-box;
+    font-family:inherit;
+    font-weight:700;
+    line-height:1.25;
+    cursor:pointer;
+    border-radius:var(--btn-radius);
+    transition:background-color .15s ease, border-color .15s ease, color .15s ease,
+               box-shadow .15s ease, transform .08s ease, opacity .15s ease;
   }
-  button.add-field{
-    width:100%; padding:10px; border-radius:10px; border:1.5px dashed var(--line);
-    background:transparent; color:var(--accent); font-size:13px; font-weight:700; cursor:pointer;
-    font-family:inherit; margin-bottom:10px;
+  button:hover:not(:disabled){ box-shadow:0 3px 10px rgba(59,36,22,.10); }
+  button:active:not(:disabled){ transform:translateY(1px); box-shadow:none; }
+  button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  button:disabled{ opacity:.5; cursor:not-allowed; box-shadow:none !important; transform:none !important; }
+
+  /* 大按鈕：登入／建立／送出／加欄位……全部同一種高度與字級 */
+  button.primary, button.secondary, button.add-field{
+    width:100%; min-height:var(--btn-min-h);
+    padding:12px 14px; font-size:15px; margin:0;
   }
-  button.primary{ width:100%; margin-top:6px; padding:13px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:15px; font-weight:700; font-family:inherit; cursor:pointer; }
-  button.primary:active{ opacity:.85; }
-  button.secondary{ width:100%; margin-top:8px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; }
+  button.primary{ background:var(--accent); color:#fff; border:1.5px solid var(--accent); }
+  button.primary:hover:not(:disabled){ background:#C1481A; border-color:#C1481A; }
+  button.secondary{ background:#fff; color:var(--ink); border:1.5px solid var(--line); }
+  button.secondary:hover:not(:disabled){ background:#FAF7F1; border-color:var(--ink); }
+  button.add-field{ background:transparent; color:var(--accent); border:1.5px dashed var(--line); font-size:13px; }
+  button.add-field:hover:not(:disabled){ background:var(--accent-soft); border-color:var(--accent); }
+
+  /* 小型方形圖示按鈕：刪除欄位 × ／返回箭頭 ←，統一 40×40 正方形 */
+  button.field-remove, .admin-page-title .back{
+    width:40px; height:40px; min-height:40px; min-width:40px;
+    padding:0; flex-shrink:0; margin:0;
+    background:#fff; color:var(--absent); border:1.5px solid var(--line);
+    font-size:16px; display:inline-flex; align-items:center; justify-content:center;
+  }
+  button.field-remove:hover:not(:disabled){ background:var(--absent-soft); border-color:var(--absent); }
+  .admin-page-title .back{ color:var(--ink); }
+  .admin-page-title .back:hover:not(:disabled){ background:#FAF7F1; border-color:var(--ink); }
+  .admin-page-title{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+
+  /* 同排並列的小型動作按鈕：幹部管理三顆、計時器／發布時機幾顆——共用同一套字級與內距，
+     不再各自被覆寫成不同大小；並排的顆數交給各自的 grid 容器決定 */
+  .officer-actions button,
+  .timer-options button{
+    width:100%; min-height:var(--btn-min-h); margin:0;
+    padding:9px 8px; font-size:13px; white-space:normal;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .timer-options button.selected{ background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  .officer-actions{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin-top:8px; }
+
+  .timer-options{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:8px 0 12px; }
+  @media(max-width:420px){ .timer-options{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+
+  /* 每一場活動的動作按鈕：固定 2×2，四顆按鈕永遠一樣大，
+     不會像 3 欄放 4 顆按鈕那樣，第 4 顆自己落單、大小跑掉 */
+  .activity-actions{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; margin-top:10px; }
+  .activity-actions button{
+    width:100%; min-height:var(--btn-min-h); margin:0;
+    padding:9px 8px; font-size:13px; white-space:normal; line-height:1.3;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+
+  /* 管理者首頁選單：功能入口方塊，用途和上面的小按鈕不同，故意做得比較大、
+     但同一個選單裡的每一塊彼此大小完全一致 */
+  .admin-menu{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .admin-menu button{
+    width:100%; min-height:64px; margin:0;
+    padding:14px; display:flex; flex-direction:column;
+    align-items:flex-start; justify-content:center; text-align:left;
+  }
+  .admin-menu .menu-title{ font-weight:800; display:block; }
+  .admin-menu .menu-hint{ font-size:12px; font-weight:500; color:var(--ink-soft); display:block; margin-top:3px; }
+  @media(max-width:520px){ .admin-menu{ grid-template-columns:1fr; } }
+
+  /* ---------- 活動建立表單：兩欄選項 ---------- */
+  .activity-options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
+  .activity-option{ width:100%; box-sizing:border-box; }
+  @media(max-width:520px){ .activity-options{ grid-template-columns:1fr; } }
+  .activity-created-by{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
+  .activity-limit{ font-size:12px; color:var(--ink-soft); }
+
+  /* ---------- 狀態標籤 ---------- */
   .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; }
   .status-open{ background:var(--warn-soft); color:var(--warn); }
   .status-closed{ background:#EBEDE6; color:var(--ink-soft); }
   .status-dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .officer-mode-pill{ background:#dc2626 !important; color:#fff !important; border-color:#dc2626 !important; }
+  .officer-mode-pill .status-dot{ background:#fff !important; }
+
+  /* ---------- 活動列（簽到頁與管理頁共用） ---------- */
   .event-row{ padding:12px 0; border-top:1px solid var(--line); }
   .event-row:first-of-type{ border-top:none; }
   .event-row .row-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
   .event-row .name{ font-weight:800; font-size:14px; }
   .event-row .meta{ color:var(--ink-soft); font-size:12px; margin-top:2px; }
+  .activity-row-hidden{ opacity:.55; }
+  .activity-hidden-tag{ display:inline-block; background:#eee; color:#777; font-size:11px; padding:3px 7px; border-radius:999px; margin-left:5px; }
+
   .stat-line{ display:flex; gap:14px; font-size:12px; color:var(--ink-soft); margin-top:6px; flex-wrap:wrap; }
   .stat-line b{ color:var(--ink); }
+
+  /* ---------- 表格 ---------- */
   table.list-table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
   table.list-table th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); padding:6px 6px; border-bottom:1.5px solid var(--line); }
   table.list-table td{ padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:middle; }
   table.list-table td.name{ font-weight:700; }
+
   .rate-bar-wrap{ display:flex; align-items:center; gap:8px; }
   .rate-bar-track{ flex:1; height:6px; border-radius:99px; background:#EBEDE6; overflow:hidden; }
   .rate-bar-fill{ height:100%; border-radius:99px; background:var(--accent); }
@@ -84,267 +192,33 @@
   .big-rate{ display:flex; align-items:baseline; gap:6px; margin:6px 0 2px; }
   .big-rate .num{ font-size:40px; font-weight:800; letter-spacing:-0.02em; }
   .big-rate .unit{ font-size:16px; font-weight:700; color:var(--ink-soft); }
+
   .empty{ text-align:center; padding:24px 8px; color:var(--ink-soft); font-size:13px; }
-  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; }
+
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
+
   .note-shared{ font-size:11px; color:var(--ink-soft); background:#F5F6F1; border-radius:8px; padding:8px 10px; line-height:1.5; margin-top:10px; }
   .divider{ height:1px; background:var(--line); margin:12px 0; }
   .backlink{ font-size:13px; font-weight:700; color:var(--accent); cursor:pointer; display:inline-block; margin-bottom:10px; }
   .lock-icon{ font-size:32px; margin-bottom:6px; }
   .tag{ display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:2px 4px 2px 0; }
 
-/* 幹部模式：紅色 */
-.officer-mode-pill{
-  background:#dc2626 !important;
-  color:#fff !important;
-  border-color:#dc2626 !important;
-}
-.officer-mode-pill .status-dot{
-  background:#fff !important;
-}
+  .debug-error-box{
+    display:none; margin-top:10px; padding:10px 12px; border-radius:10px;
+    background:var(--absent-soft); border:1px solid var(--absent); color:var(--absent);
+    font-size:12px; line-height:1.6; white-space:pre-wrap; word-break:break-word;
+  }
+  .debug-error-box.show{ display:block; }
 
-/* 幹部管理：帳號、管理碼輸入框完全統一 */
-#new-officer-user,
-#new-officer-pass{
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  height:46px;
-  min-height:46px;
-  max-height:46px;
-  padding:12px 14px;
-  margin:8px 0;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  font:inherit;
-  line-height:20px;
-  background:#fff;
-}
+  /* ---------- 管理者：各功能獨立頁面 ---------- */
+  .admin-page{ display:none; }
+  .admin-page.active{ display:block; }
+  .admin-edit-box{ width:100%; margin-top:10px; }
 
-#new-officer-user:focus,
-#new-officer-pass:focus{
-  outline:none;
-  border-color:#111827;
-  box-shadow:0 0 0 2px rgba(17,24,39,.08);
-}
-
-
-.admin-edit-box .officer-input{
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  height:46px;
-  min-height:46px;
-  padding:12px 14px;
-  margin:8px 0;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  font:inherit;
-  background:#fff;
-}
-
-
-/* 幹部管理：每位幹部的三個操作按鈕並排 */
-.officer-actions{
-  display:grid !important;
-  grid-template-columns:repeat(3, minmax(0, 1fr));
-  gap:8px;
-  width:100%;
-  margin-top:8px;
-}
-.officer-actions button{
-  width:100% !important;
-  min-width:0;
-  margin:0 !important;
-  white-space:nowrap;
-  padding-left:8px !important;
-  padding-right:8px !important;
-}
-
-
-/* 建立活動：限制人數／自動關閉 */
-.activity-options{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin:10px 0;
-}
-.activity-option{
-  width:100%;
-  box-sizing:border-box;
-}
-.timer-options{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:8px;
-  margin:8px 0 12px;
-}
-.timer-btn{
-  margin:0 !important;
-  width:100% !important;
-  padding:10px 6px !important;
-}
-.timer-btn.selected{
-  background:var(--accent) !important;
-  color:#fff !important;
-  border-color:var(--accent) !important;
-}
-.activity-created-by{
-  font-size:12px;
-  color:var(--ink-soft);
-  margin-top:3px;
-}
-.activity-limit{
-  font-size:12px;
-  color:var(--ink-soft);
-}
-@media(max-width:520px){
-  .activity-options{grid-template-columns:1fr;}
-  .timer-options{grid-template-columns:repeat(4,1fr);}
-}
-
-
-/* 管理者：各功能獨立頁面 */
-.admin-page{display:none;}
-.admin-page.active{display:block;}
-.admin-menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.admin-menu button{margin:0 !important;text-align:left;padding:14px !important;}
-.admin-menu .menu-title{font-weight:800;display:block;}
-.admin-menu .menu-hint{font-size:12px;color:var(--ink-soft);display:block;margin-top:3px;}
-.activity-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px;}
-.activity-actions button{margin:0 !important;width:100% !important;padding:9px 5px !important;font-size:12px !important;white-space:nowrap;}
-.activity-row-hidden{opacity:.55;}
-.activity-hidden-tag{display:inline-block;background:#eee;color:#777;font-size:11px;padding:3px 7px;border-radius:999px;margin-left:5px;}
-.admin-page-title{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.admin-page-title .back{width:auto;margin:0 !important;padding:7px 10px !important;}
-@media(max-width:520px){
-  .admin-menu{grid-template-columns:1fr;}
-  .activity-actions{grid-template-columns:repeat(3,1fr);}
-}
-
-
-/* ===== 全站按鈕 CSS 統一 ===== */
-button{
-  box-sizing:border-box;
-  min-height:44px;
-  border-radius:10px !important;
-  font-family:inherit !important;
-  font-size:14px !important;
-  font-weight:700 !important;
-  line-height:1.2 !important;
-  cursor:pointer;
-  transition:background-color .15s ease,border-color .15s ease,color .15s ease,
-             box-shadow .15s ease,transform .08s ease,opacity .15s ease;
-}
-button.primary,
-button.secondary,
-button.add-field,
-button.field-remove{
-  margin:0;
-}
-button.primary{
-  width:100%;
-  padding:12px 14px !important;
-  background:var(--accent);
-  color:#fff;
-  border:1.5px solid var(--accent) !important;
-}
-button.secondary{
-  width:100%;
-  padding:11px 14px !important;
-  background:#fff;
-  color:var(--ink);
-  border:1.5px solid var(--line) !important;
-}
-button.add-field{
-  width:100%;
-  min-height:44px;
-  padding:10px 14px !important;
-  background:transparent;
-  color:var(--accent);
-  border:1.5px dashed var(--line) !important;
-}
-button.field-remove{
-  flex:0 0 44px;
-  width:44px !important;
-  height:44px;
-  min-height:44px;
-  padding:0 !important;
-  background:#fff;
-  color:var(--absent);
-  border:1.5px solid var(--line) !important;
-}
-button:hover:not(:disabled){
-  box-shadow:0 3px 10px rgba(59,36,22,.10);
-}
-button.primary:hover:not(:disabled){
-  background:#C1481A;
-  border-color:#C1481A !important;
-}
-button.secondary:hover:not(:disabled){
-  background:#FAF7F1;
-  border-color:var(--ink) !important;
-}
-button.add-field:hover:not(:disabled){
-  background:var(--accent-soft);
-  border-color:var(--accent) !important;
-}
-button.field-remove:hover:not(:disabled){
-  background:var(--absent-soft);
-  border-color:var(--absent) !important;
-}
-button:active:not(:disabled){
-  transform:translateY(1px);
-  box-shadow:none;
-}
-button:focus-visible{
-  outline:2px solid var(--accent);
-  outline-offset:2px;
-}
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-  box-shadow:none !important;
-  transform:none !important;
-}
-
-/* 小型操作按鈕也保持同一套高度與字體 */
-.officer-actions button,
-.activity-actions button,
-.timer-btn{
-  min-height:44px;
-  padding:9px 8px !important;
-  margin:0 !important;
-}
-
-/* 三按鈕／四計時器維持並排，但外觀一致 */
-.officer-actions button,
-.activity-actions button,
-.timer-options button{
-  width:100% !important;
-}
-
-/* 返回按鈕 */
-.admin-page-title .back{
-  width:44px !important;
-  min-width:44px;
-  padding:0 !important;
-}
-
-/* 管理者首頁選單按鈕 */
-.admin-menu button{
-  width:100% !important;
-  min-height:60px;
-  text-align:left;
-  padding:12px 14px !important;
-}
-
-
-.publish-box{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#FAF7F1}.publish-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.publish-btn.selected{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.publish-status{font-size:12px;color:var(--ink-soft);margin-top:6px}.countdown-box{margin-top:10px;padding:10px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-weight:800;text-align:center}.countdown-box.closed{background:#EBEDE6;color:var(--ink-soft)}
-<style>
-.publish-choice-wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 12px}
-.publish-status{font-size:12px;color:var(--ink-soft);margin:6px 0 10px}
-@media(max-width:420px){.publish-choice-wrap{grid-template-columns:1fr}}
+  /* ---------- 發布時機倒數 ---------- */
+  .countdown-box{ margin-top:10px; padding:10px; border-radius:10px; background:var(--warn-soft); color:var(--warn); font-weight:800; text-align:center; }
+  .countdown-box.closed{ background:#EBEDE6; color:var(--ink-soft); }
 </style>
 </head>
 <body>
@@ -606,7 +480,30 @@ async function createActivityRemote(activity){
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"建立活動失敗");
-  return data.activity;
+
+  // 相容舊／新 SQL 回傳格式：
+  // 舊版可能回傳 data.activity；部分 SQL 只回傳 data.id。
+  // 前端不能直接讀 undefined.id，因此永遠整理成完整 activity。
+  const raw=data.activity || data;
+  return {
+    ...activity,
+    ...(raw && typeof raw === "object" ? raw : {}),
+    id: raw?.id || activity.id,
+    name: raw?.name ?? activity.name,
+    date: raw?.date ?? activity.date,
+    fields: Array.isArray(raw?.fields) ? raw.fields : activity.fields,
+    open: typeof raw?.open === "boolean" ? raw.open : activity.open,
+    maxParticipants: raw?.max_participants !== undefined
+      ? (raw.max_participants == null ? null : Number(raw.max_participants))
+      : (raw?.maxParticipants !== undefined ? raw.maxParticipants : activity.maxParticipants),
+    createdBy: raw?.created_by ?? raw?.createdBy ?? activity.createdBy,
+    closeAt: raw?.close_at ?? raw?.closeAt ?? activity.closeAt,
+    autoCloseMinutes: raw?.auto_close_minutes !== undefined
+      ? Number(raw.auto_close_minutes || 0)
+      : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
+    hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
+    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
+  };
 }
 async function updateActivityRemote(activity){
   const session=getAdminSession();
@@ -629,7 +526,28 @@ async function updateActivityRemote(activity){
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
-  return data.activity;
+
+  // 與建立活動相同：相容 data.activity 與只回傳欄位／id 的 SQL。
+  const raw=data.activity || data;
+  return {
+    ...activity,
+    ...(raw && typeof raw === "object" ? raw : {}),
+    id: raw?.id || activity.id,
+    name: raw?.name ?? activity.name,
+    date: raw?.date ?? activity.date,
+    fields: Array.isArray(raw?.fields) ? raw.fields : activity.fields,
+    open: typeof raw?.open === "boolean" ? raw.open : activity.open,
+    maxParticipants: raw?.max_participants !== undefined
+      ? (raw.max_participants == null ? null : Number(raw.max_participants))
+      : (raw?.maxParticipants !== undefined ? raw.maxParticipants : activity.maxParticipants),
+    createdBy: raw?.created_by ?? raw?.createdBy ?? activity.createdBy,
+    closeAt: raw?.close_at ?? raw?.closeAt ?? activity.closeAt,
+    autoCloseMinutes: raw?.auto_close_minutes !== undefined
+      ? Number(raw.auto_close_minutes || 0)
+      : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
+    hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
+    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
+  };
 }
 
 async function deleteActivityRemote(activityId){
@@ -660,17 +578,34 @@ async function createRegistrationRemote(activityId, registration){
     throw new Error(data?.message || "簽到失敗");
   }
 
-  return data.registration;
+  return data.registration || data;
 }
 
 async function deleteRegistrationRemote(registrationId){
+  // 直接刪除後必須確認資料庫真的消失。
+  const direct=await supabaseClient.from("registrations").delete().eq("id",registrationId);
+  if(!direct.error){
+    const verify=await supabaseClient.from("registrations")
+      .select("id").eq("id",registrationId).maybeSingle();
+    if(!verify.error && !verify.data) return true;
+  }
+
+  console.warn("直接刪除未確認成功，嘗試公開刪除 RPC：",direct.error);
+
   const rpc=await supabaseClient.rpc("public_delete_registration",{
     p_registration_id:registrationId
   });
+
   if(rpc.error) throw rpc.error;
   if(rpc.data && rpc.data.ok===false){
     throw new Error(rpc.data.message||"刪除簽到失敗");
   }
+
+  const verify2=await supabaseClient.from("registrations")
+    .select("id").eq("id",registrationId).maybeSingle();
+  if(verify2.error) throw verify2.error;
+  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
+
   return true;
 }
 
@@ -1228,7 +1163,10 @@ async function renderAdminAccounts(el){
 
     el.innerHTML=`
       <div class="card">
-        <h2>👥 幹部管理</h2>
+        <div class="admin-page-title">
+          <button type="button" class="secondary back" id="back-admin-top" aria-label="返回管理後台">←</button>
+          <h2 style="margin:0;">幹部管理</h2>
+        </div>
         <p class="hint">主管理員可以新增、修改密碼、啟用／停用或刪除幹部。</p>
 
         <input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off">
@@ -1258,7 +1196,6 @@ async function renderAdminAccounts(el){
         </div>
 
         <div id="admin-action-message" class="hint" style="margin-top:12px;min-height:20px;"></div>
-        <button type="button" class="secondary" id="back-admin">返回管理後台</button>
       </div>
     `;
 
@@ -1267,16 +1204,30 @@ async function renderAdminAccounts(el){
       if(messageEl) messageEl.textContent=msg||"";
     };
 
+    const goBackAdminHome=()=>{
+      if(el.__officerClickHandler){
+        el.removeEventListener("click",el.__officerClickHandler);
+        el.__officerClickHandler=null;
+      }
+      window.__adminAccountsViewOpen=false;
+      adminPage="home";
+      renderAdmin(el);
+    };
+
+    const topBackBtn=document.getElementById("back-admin-top");
+    if(topBackBtn) topBackBtn.onclick=(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      goBackAdminHome();
+    };
+
     const handler=async(ev)=>{
       const target=ev.target.closest("button");
       if(!target || !el.contains(target)) return;
 
       // 返回
-      if(target.id==="back-admin"){
-        el.removeEventListener("click", handler);
-        el.__officerClickHandler=null;
-        window.__adminAccountsViewOpen=false;
-        renderAdmin(el);
+      if(target.id==="back-admin" || target.id==="back-admin-top"){
+        goBackAdminHome();
         return;
       }
 
@@ -1586,6 +1537,7 @@ function renderAdmin(el){
   el.innerHTML=`
     <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
       <span class="status-pill ${isSuperAdmin()?"status-open":"officer-mode-pill"}"><span class="status-dot"></span>${isSuperAdmin()?"管理者模式":"幹部模式"}</span>
+      <span style="font-size:13px;font-weight:700;color:var(--ink-soft);">登入者：${escapeHtml(getAdminSession()?.username||"—")}</span>
       <button class="secondary" id="lock-btn" style="margin:0;width:auto;">登出</button>
     </div>
     ${content}
@@ -1768,9 +1720,9 @@ function setupCreateActivityPage(el){
       const saved=await createActivityRemote(activity);
       state.activities.push({
         ...activity,
-        ...saved,
-        id:saved.id||activity.id,
-        publishAt:saved.publish_at||null
+        ...(saved || {}),
+        id:saved?.id||activity.id,
+        publishAt:saved?.publish_at ?? saved?.publishAt ?? activity.publishAt ?? null
       });
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
