@@ -341,6 +341,10 @@ button:disabled{
 
 
 .publish-box{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#FAF7F1}.publish-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.publish-btn.selected{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.publish-status{font-size:12px;color:var(--ink-soft);margin-top:6px}.countdown-box{margin-top:10px;padding:10px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-weight:800;text-align:center}.countdown-box.closed{background:#EBEDE6;color:var(--ink-soft)}
+<style>
+.publish-choice-wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 12px}
+.publish-status{font-size:12px;color:var(--ink-soft);margin:6px 0 10px}
+@media(max-width:420px){.publish-choice-wrap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -679,9 +683,13 @@ function activitiesThisYear(){
 }
 
 function recentOrOpenActivities(){
-  // for the check-in tab's activity picker: show activities from the past 7 days, plus anything still open
   const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
-  return state.activities.filter(a => !a.hidden && (a.open || new Date(a.date).getTime() >= sevenDaysAgo));
+  return state.activities.filter(a=>{
+    if(a.hidden) return false;
+    const publishAt = a.publishAt ? new Date(a.publishAt).getTime() : null;
+    if(Number.isFinite(publishAt) && publishAt > Date.now()) return false;
+    return a.open || new Date(a.date).getTime() >= sevenDaysAgo;
+  });
 }
 
 function annualStats(name){
@@ -1387,9 +1395,9 @@ function activityAdminRow(a, hidden=false){
       <div class="row-top">
         <div>
           <div class="name">${escapeHtml(a.name)} ${hidden?'<span class="activity-hidden-tag">已隱藏</span>':''}</div>
-          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
+          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="activity-created-by">${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? `發布時間：${new Date(a.publishAt).toLocaleString("zh-TW",{hour12:false})}` : `發布時間：立即`}</div>
         </div>
-        <span class="status-pill ${a.open?'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
+        <span class="status-pill ${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? 'status-closed' : (a.open?'status-open':'status-closed')}"><span class="status-dot"></span>${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? '未發布' : (a.open?'開放中':'已停止')}</span>
       </div>
       <div class="stat-line">
         <span><b>${list.length}</b>${a.maxParticipants?` / ${a.maxParticipants}`:""} 人簽到</span>
@@ -1436,10 +1444,14 @@ function setupCreateActivityPage(el){
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
-      state.activities.push({...activity,id:saved.id||activity.id});
+      state.activities.push({
+        ...activity,
+        ...saved,
+        id:saved.id||activity.id,
+        publishAt:saved.publish_at||null
+      });
       state.registrations[activity.id]=[];
       pendingPublishActivity=state.activities.find(x=>x.id===activity.id)||activity;
-      publishAtMode="now"; publishAtValue="";
       showPublishChooser(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
@@ -1452,83 +1464,98 @@ function setupCreateActivityPage(el){
 
 function showPublishChooser(el){
   const a=pendingPublishActivity;
-  if(!a) return;
+  if(!a){
+    adminPage="activities";
+    renderAdmin(el);
+    return;
+  }
+
+  let mode="now";
 
   el.innerHTML=`
     <div class="card">
       <div class="admin-page-title">
-        <button class="secondary back" id="publish-cancel">←</button>
+        <button type="button" class="secondary back" id="publish-back">←</button>
         <h2 style="margin:0;">發布活動</h2>
       </div>
-      <p class="hint">「${escapeHtml(a.name)}」已建立，選擇發布方式。</p>
+
+      <p class="hint">活動「${escapeHtml(a.name)}」已建立。請選擇發布方式。</p>
 
       <label class="field-label">發布時間</label>
-      <div class="timer-options" style="grid-template-columns:repeat(3,minmax(0,1fr));">
-        <button type="button" class="secondary timer-btn publish-choice selected" data-publish="now">立即</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish="1day">一天後</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish="1week">一個禮拜後</button>
+
+      <div class="timer-options publish-choice-wrap">
+        <button type="button" class="secondary timer-btn publish-choice selected" data-publish-mode="now">立即</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1day">一天後</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1week">一個禮拜後</button>
       </div>
 
       <div id="publish-preview" class="publish-status">立即發布</div>
-      <button type="button" class="primary" id="save-publish">發布</button>
+
+      <button type="button" class="primary" id="confirm-publish">發布</button>
     </div>
   `;
-
-  publishMode="now";
 
   const preview=document.getElementById("publish-preview");
 
   el.querySelectorAll(".publish-choice").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      publishMode=btn.dataset.publish || "now";
+      mode=btn.dataset.publishMode || "now";
       el.querySelectorAll(".publish-choice").forEach(b=>{
-        b.classList.toggle("selected", b===btn);
+        b.classList.toggle("selected",b===btn);
       });
+
       preview.textContent =
-        publishMode==="now" ? "立即發布" :
-        publishMode==="1day" ? "將於一天後發布" :
-        "將於一個禮拜後發布";
+        mode==="now" ? "立即發布" :
+        mode==="1day" ? "發布時間：一天後" :
+        "發布時間：一個禮拜後";
     });
   });
 
-  document.getElementById("publish-cancel").onclick=()=>{
+  document.getElementById("publish-back").onclick=()=>{
     pendingPublishActivity=null;
     adminPage="activities";
     renderAdmin(el);
   };
 
-  document.getElementById("save-publish").onclick=async()=>{
-    const btn=document.getElementById("save-publish");
+  document.getElementById("confirm-publish").onclick=async()=>{
+    const btn=document.getElementById("confirm-publish");
     btn.disabled=true;
 
-    let publishAt=null;
-    if(publishMode==="1day"){
-      publishAt=new Date(Date.now()+24*60*60*1000).toISOString();
-    }else if(publishMode==="1week"){
-      publishAt=new Date(Date.now()+7*24*60*60*1000).toISOString();
-    }
+    const publishAt =
+      mode==="1day"
+        ? new Date(Date.now()+24*60*60*1000).toISOString()
+        : mode==="1week"
+          ? new Date(Date.now()+7*24*60*60*1000).toISOString()
+          : null;
 
     a.publishAt=publishAt;
 
     try{
-      await updateActivityRemote(a);
+      const saved=await updateActivityRemote(a);
 
       const idx=state.activities.findIndex(x=>x.id===a.id);
-      if(idx>=0) state.activities[idx].publishAt=publishAt;
+      if(idx>=0){
+        state.activities[idx]={
+          ...state.activities[idx],
+          ...a,
+          publishAt:saved?.publish_at || publishAt
+        };
+      }
 
-      draftFields=["公用哨角"];
+      draftFields=[];
       draftName="";
       draftDate="";
       draftMaxParticipants="";
       draftCloseMinutes=0;
-      publishMode="now";
-      pendingPublishActivity=null;
 
-      showToast(publishAt ? "已設定發布時間" : "活動已發布");
+      pendingPublishActivity=null;
       adminPage="activities";
+
+      showToast(publishAt ? "已設定未來發布時間" : "活動已發布");
       renderAdmin(el);
+
     }catch(e){
-      console.error(e);
+      console.error("發布活動失敗",e);
       btn.disabled=false;
       showToast("發布失敗："+(e?.message||"未知錯誤"),"error");
     }
@@ -1626,6 +1653,14 @@ async function init(){
 }
 
 init();
+
+window.addEventListener("error",function(ev){
+  console.error("前端錯誤：",ev.error||ev.message);
+  const app=document.getElementById("app");
+  if(app && !app.innerHTML.trim()){
+    app.innerHTML='<div class="card"><h2>頁面載入錯誤</h2><p class="hint">請重新整理頁面；若仍空白，請開啟瀏覽器主控台查看錯誤。</p><pre style="white-space:pre-wrap;">'+escapeHtml(ev.message||"JavaScript error")+'</pre></div>';
+  }
+});
 </script>
 </body>
 </html>
