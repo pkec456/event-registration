@@ -557,7 +557,7 @@ async function deleteActivityRemote(activityId){
   const {data,error}=await supabaseClient.rpc("simple_admin_delete_activity",{
     p_admin_username:session.username,
     p_admin_code:session.access_code,
-    p_id:activityId
+    p_activity_id:activityId
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"刪除活動失敗");
