@@ -664,11 +664,15 @@ async function createRegistrationRemote(activityId, registration){
 }
 
 async function deleteRegistrationRemote(registrationId){
-  // 先嘗試直接刪除；若 RLS 不允許匿名 DELETE，使用公開刪除 RPC。
-  const {error}=await supabaseClient.from("registrations").delete().eq("id",registrationId);
-  if(!error) return true;
+  // 直接刪除後必須確認資料庫真的消失。
+  const direct=await supabaseClient.from("registrations").delete().eq("id",registrationId);
+  if(!direct.error){
+    const verify=await supabaseClient.from("registrations")
+      .select("id").eq("id",registrationId).maybeSingle();
+    if(!verify.error && !verify.data) return true;
+  }
 
-  console.warn("直接刪除簽到失敗，嘗試公開刪除 RPC：",error);
+  console.warn("直接刪除未確認成功，嘗試公開刪除 RPC：",direct.error);
 
   const rpc=await supabaseClient.rpc("public_delete_registration",{
     p_registration_id:registrationId
@@ -678,6 +682,12 @@ async function deleteRegistrationRemote(registrationId){
   if(rpc.data && rpc.data.ok===false){
     throw new Error(rpc.data.message||"刪除簽到失敗");
   }
+
+  const verify2=await supabaseClient.from("registrations")
+    .select("id").eq("id",registrationId).maybeSingle();
+  if(verify2.error) throw verify2.error;
+  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
+
   return true;
 }
 
@@ -890,7 +900,11 @@ async function refreshActivityRegistrations(activityId){
 }
 
 function renderRegister(el){
-  const acts = [...recentOrOpenActivities()].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  const acts = [...recentOrOpenActivities()].sort((a,b)=>{
+    const ac=a.createdAt ? new Date(a.createdAt).getTime() : new Date(a.date).getTime();
+    const bc=b.createdAt ? new Date(b.createdAt).getTime() : new Date(b.date).getTime();
+    return bc-ac;
+  });
 
   if(openEventId){
     const activity = acts.find(a=>a.id===openEventId);
@@ -961,8 +975,14 @@ function renderRegister(el){
             try{
               await deleteRegistrationRemote(reg.id);
 
-              // 重新從資料庫確認刪除結果，避免舊的 state / 背景更新把資料又放回來。
+              // 重新從資料庫確認。只有資料庫真的不存在這筆 id，才算刪除成功。
               const freshAfterDelete=await refreshActivityRegistrations(activity.id);
+              const stillExists=freshAfterDelete.some(x=>String(x.id)===String(reg.id));
+
+              if(stillExists){
+                throw new Error("資料庫仍存在這筆簽到紀錄，刪除沒有真正完成");
+              }
+
               list.length=0;
               freshAfterDelete.forEach(x=>list.push(x));
 
@@ -2026,6 +2046,14 @@ window.addEventListener("error",function(ev){
   }
 });
 
+
+window.state = state;
+window.showToast = showToast;
+window.updateActivityRemote = updateActivityRemote;
+window.deleteActivityRemote = deleteActivityRemote;
+window.loadData = loadData;
+window.renderAdmin = renderAdmin;
+
 })().catch(function(e){
   console.error("JavaScript 錯誤：",e);
   try{
@@ -2097,21 +2125,21 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
           };
 
           if(window.state){
-            state.activities=Array.isArray(state.activities)?state.activities:[];
-            const idx=state.activities.findIndex(x=>String(x.id)===String(id));
-            if(idx>=0) state.activities[idx]=a;
-            else state.activities.push(a);
+            window.state.activities=Array.isArray(window.state.activities)?window.state.activities:[];
+            const idx=window.state.activities.findIndex(x=>String(x.id)===String(id));
+            if(idx>=0) window.state.activities[idx]=a;
+            else window.state.activities.push(a);
           }
         }
       }catch(dbErr){
         console.error("[活動管理] 直接查詢活動失敗",dbErr);
-        showToast("讀取活動失敗："+(dbErr.message||dbErr),"error");
+        window.showToast("讀取活動失敗："+(dbErr.message||dbErr),"error");
         return;
       }
     }
 
     if(!a){
-      showToast("資料庫找不到此活動："+id,"error");
+      window.showToast("資料庫找不到此活動："+id,"error");
       console.error("[活動管理] 資料庫也找不到活動",id);
       return;
     }
@@ -2132,14 +2160,14 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     const old=a.open;
     a.open=next;
     try{
-      await updateActivityRemote(a);
-      showToast(next?"活動已開啟":"活動已關閉");
-      await loadData();
-      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+      await window.updateActivityRemote(a);
+      window.showToast(next?"活動已開啟":"活動已關閉");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
       a.open=old;
       console.error("[活動管理] 開啟/關閉失敗",e);
-      showToast("活動更新失敗："+(e.message||e),"error");
+      window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
   }
@@ -2151,14 +2179,14 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     const old=!!a.hidden;
     a.hidden=next;
     try{
-      await updateActivityRemote(a);
-      showToast(next?"活動已隱藏":"已取消隱藏");
-      await loadData();
-      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+      await window.updateActivityRemote(a);
+      window.showToast(next?"活動已隱藏":"已取消隱藏");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
       a.hidden=old;
       console.error("[活動管理] 隱藏失敗",e);
-      showToast("隱藏更新失敗："+(e.message||e),"error");
+      window.showToast("隱藏更新失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
   }
@@ -2167,15 +2195,15 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的簽到資料也會刪除，無法復原。")) return;
     btn.disabled=true;
     try{
-      await deleteActivityRemote(a.id);
-      state.activities=state.activities.filter(x=>String(x.id)!==String(a.id));
-      delete state.registrations[a.id];
-      showToast("活動已刪除");
-      await loadData();
-      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+      await window.deleteActivityRemote(a.id);
+      window.state.activities=window.state.activities.filter(x=>String(x.id)!==String(a.id));
+      delete window.state.registrations[a.id];
+      window.showToast("活動已刪除");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
       console.error("[活動管理] 刪除失敗",e);
-      showToast("刪除失敗："+(e.message||e),"error");
+      window.showToast("刪除失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
   }
