@@ -453,6 +453,11 @@ document.addEventListener("focusout", (e)=>{
   if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
 });
 
+function safeOn(selector,event,handler,root=document){
+  const el=root.querySelector(selector);
+  if(el) el.addEventListener(event,handler);
+  return el;
+}
 function uid(){
   if(window.crypto && typeof window.crypto.randomUUID === "function"){
     return window.crypto.randomUUID();
@@ -972,9 +977,9 @@ function renderQuery(el){
         </table>
       </div>
     `;
-    document.getElementById("query-back-link").addEventListener("click", clearResult);
+    (()=>{const __el=document.getElementById("query-back-link");if(__el)__el.addEventListener("click", clearResult);})();
   };
-  document.getElementById("query-btn").addEventListener("click", doQuery);
+  (()=>{const __el=document.getElementById("query-btn");if(__el)__el.addEventListener("click", doQuery);})();
   input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") doQuery(); });
 }
 
@@ -1376,7 +1381,7 @@ function renderAdmin(el){
     ${content}
   `;
 
-  document.getElementById("lock-btn").onclick=async()=>{
+  const lockBtn=document.getElementById("lock-btn"); if(lockBtn) lockBtn.onclick=async()=>{
     await adminLogout(); adminPage="home"; showToast("已登出管理者"); renderAdmin(el);
   };
 
@@ -1454,7 +1459,7 @@ function setupCreateActivityPage(el){
     input.addEventListener("change",rememberCreateDraft);
   });
 
-  document.getElementById("add-field-btn").onclick=()=>{
+  const addFieldBtn=document.getElementById("add-field-btn"); if(addFieldBtn) addFieldBtn.onclick=()=>{
     syncDraftFieldsFromDom(); draftFields.push(""); renderAdmin(el);
   };
   el.querySelectorAll("[data-remove-field]").forEach(btn=>{
@@ -1480,7 +1485,7 @@ function setupCreateActivityPage(el){
     };
   });
 
-  document.getElementById("create-btn").onclick=async()=>{
+  const createBtn=document.getElementById("create-btn"); if(createBtn) createBtn.onclick=async()=>{
     const createBtn=document.getElementById("create-btn"), errBox=document.getElementById("create-activity-error");
     syncDraftFieldsFromDom();
     const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
@@ -1586,7 +1591,7 @@ function renderAdminLock(el){
     catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
   if(b) b.onclick=login;
-  [u,p].forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
+  [u,p].filter(Boolean).forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
 }
 
 async function init(){
@@ -1634,8 +1639,13 @@ window.addEventListener("error",function(ev){
 
 <div id="runtime-debug" style="display:none;position:fixed;inset:12px;z-index:9999;background:#fff;border:2px solid #9C2B1D;border-radius:14px;padding:16px;overflow:auto;color:#3B2416;font:13px/1.5 monospace;box-shadow:0 12px 40px rgba(0,0,0,.2);"><b>程式除錯訊息</b><pre id="runtime-debug-text" style="white-space:pre-wrap;word-break:break-word;"></pre></div>
 <script>
-window.addEventListener("error",function(e){var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");if(b&&x){b.style.display="block";x.textContent="JavaScript 錯誤："+String(e.message||"未知錯誤")+(e.filename?"\n檔案："+e.filename:"")+(e.lineno?"\n行："+e.lineno:"");}});
-window.addEventListener("unhandledrejection",function(e){var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");if(b&&x){b.style.display="block";x.textContent="Promise 錯誤："+String(e.reason&&e.reason.message||e.reason||"未知錯誤");}});
+function showRuntimeError(title,reason){
+ var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");
+ if(b&&x){b.style.display="block";x.textContent=title+"："+String(reason&&reason.message||reason||"未知錯誤")+
+ (reason&&reason.stack?"\n\n"+reason.stack:"");}
+}
+window.addEventListener("error",function(e){showRuntimeError("JavaScript 錯誤",e.error||e.message);});
+window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promise 錯誤",e.reason);});
 </script>
 </body>
 
