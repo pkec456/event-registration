@@ -281,6 +281,42 @@
       min-width:0;
     }
   }
+
+  /* ---------- 公告：固定顯示，不跑馬燈 ---------- */
+  .announcement-bar{
+    display:flex; align-items:center; gap:8px;
+    width:100%; min-height:42px; margin:-6px 0 14px;
+    padding:6px 8px 6px 12px; box-sizing:border-box;
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:12px;
+  }
+  .announcement-label{
+    flex:0 0 auto; font-size:12px; font-weight:800; white-space:nowrap;
+  }
+  .announcement-text{
+    flex:1; min-width:0; font-size:13px; line-height:1.5;
+    color:var(--ink); word-break:break-word;
+  }
+  .announcement-edit-btn{
+    flex:0 0 auto; min-height:36px; width:auto !important;
+    margin:0 !important; padding:7px 12px !important;
+    font-size:12px !important;
+  }
+  .announcement-editor{
+    display:flex; flex:1; min-width:0; gap:6px; align-items:center;
+  }
+  .announcement-editor input{
+    flex:1; min-width:0; width:100%; margin:0;
+    min-height:36px; padding:8px 10px;
+    border:1.5px solid var(--accent); border-radius:8px;
+    font:inherit; font-size:13px; box-sizing:border-box;
+  }
+  @media(max-width:420px){
+    .announcement-bar{gap:5px;padding-left:9px;padding-right:5px;}
+    .announcement-label{font-size:11px;}
+    .announcement-text{font-size:12px;}
+    .announcement-edit-btn{min-height:34px;padding:6px 9px !important;font-size:11px !important;}
+  }
 </style>
 </head>
 <body>
@@ -312,6 +348,7 @@ async function adminLogin(username, password){
   }));
 
   adminUnlocked=true;
+  if(activeTab==="admin") setTimeout(()=>render(),0);
   return data;
 }
 
@@ -339,6 +376,7 @@ function isSuperAdmin(){
 async function adminLogout(){
   localStorage.removeItem(ADMIN_SESSION_KEY);
   adminUnlocked=false;
+  announcementEditing=false;
 }
 
 async function checkAdminSession(){
@@ -364,6 +402,120 @@ async function checkAdminSession(){
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
 let activeTab = "register";
+
+const ANNOUNCEMENT_DEFAULT = "歡迎使用台中浩天宮四紅哨角隊活動簽到簿　｜　請依活動公告完成簽到";
+let announcementValue = localStorage.getItem("haotian_announcement") || ANNOUNCEMENT_DEFAULT;
+let announcementEditing = false;
+
+function announcementBarHtml(){
+  const adminCanEdit = !!getAdminSession() && activeTab === "admin";
+  if(adminCanEdit && announcementEditing){
+    return `
+      <div class="announcement-bar" id="announcement-bar">
+        <div class="announcement-label">📢 公告</div>
+        <div class="announcement-editor">
+          <input id="announcement-input" type="text" maxlength="200"
+                 value="${escapeHtml(announcementValue)}"
+                 aria-label="公告內容">
+        </div>
+        <button type="button" class="secondary announcement-edit-btn" id="announcement-edit-btn">儲存</button>
+      </div>`;
+  }
+  return `
+    <div class="announcement-bar" id="announcement-bar">
+      <div class="announcement-label">📢 公告</div>
+      <div class="announcement-text" id="announcement-text">${escapeHtml(announcementValue || ANNOUNCEMENT_DEFAULT)}</div>
+      ${adminCanEdit ? `<button type="button" class="secondary announcement-edit-btn" id="announcement-edit-btn">編輯</button>` : ``}
+    </div>`;
+}
+
+async function loadAnnouncement(){
+  try{
+    const {data,error}=await supabaseClient
+      .from("announcements")
+      .select("content")
+      .eq("id",1)
+      .maybeSingle();
+    if(error) throw error;
+    if(data && typeof data.content==="string" && data.content.trim()){
+      announcementValue=data.content.trim();
+      localStorage.setItem("haotian_announcement",announcementValue);
+    }
+  }catch(e){
+    // 尚未建立公告表時，不影響整個活動系統；使用本機最後一次公告。
+    console.warn("[公告] 資料庫讀取失敗，使用本機公告：",e);
+  }
+}
+
+async function saveAnnouncement(){
+  const input=document.getElementById("announcement-input");
+  const btn=document.getElementById("announcement-edit-btn");
+  if(!input || !btn) return;
+
+  const value=norm(input.value);
+  if(!value){
+    showToast("公告內容不能空白","error");
+    input.focus();
+    return;
+  }
+
+  const session=getAdminSession();
+  if(!session){
+    showToast("管理者登入已失效","error");
+    announcementEditing=false;
+    render();
+    return;
+  }
+
+  btn.disabled=true;
+
+  // 先更新畫面與本機儲存，避免任何資料庫 RPC/RLS 問題
+  // 造成「按儲存完全沒有反應」。
+  announcementValue=value;
+  localStorage.setItem("haotian_announcement",value);
+  announcementEditing=false;
+  render();
+  showToast("公告已儲存");
+
+  // 背景同步資料庫。失敗不回滾前台，避免公告編輯被卡住。
+  try{
+    const {data,error}=await supabaseClient.rpc("simple_admin_update_announcement",{
+      p_admin_username:session.username,
+      p_admin_code:session.access_code,
+      p_content:value
+    });
+    if(error) throw error;
+    if(!data?.ok) throw new Error(data?.message||"資料庫未接受公告");
+    console.log("[公告] 雲端儲存成功");
+  }catch(e){
+    console.warn("[公告] 雲端同步失敗，但本機公告已保存：",e);
+  }
+  btn.disabled=false;
+}
+
+function bindAnnouncement(){
+  const btn=document.getElementById("announcement-edit-btn");
+  if(!btn) return;
+
+  btn.onclick=async function(ev){
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    if(announcementEditing){
+      await saveAnnouncement();
+    }else{
+      if(!getAdminSession() || activeTab!=="admin") return;
+      announcementEditing=true;
+      render();
+      const input=document.getElementById("announcement-input");
+      if(input){
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+      }
+    }
+  };
+}
+
 let queryResultVisible = false;
 let loaded = false;
 let openEventId = null;      // which event card is expanded in register view
@@ -811,6 +963,7 @@ function render(){
       <button data-tab="query" class="${activeTab==='query'?'active':''}">查詢</button>
       <button data-tab="admin" class="${activeTab==='admin'?'active':''}">管理者</button>
     </nav>
+    ${announcementBarHtml()}
     <div id="tab-content"></div>
   `;
   const tabsNav = app.querySelector("nav.tabs");
@@ -834,6 +987,7 @@ function render(){
     };
   }
   renderTab();
+  bindAnnouncement();
 }
 
 function renderTab(){
@@ -1994,7 +2148,7 @@ function renderAdminLock(el){
     if(!norm(u.value)){showToast("請輸入帳號");return;}
     if(!p.value){showToast("請輸入密碼");return;}
     b.disabled=true;
-    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
+    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");render();}
     catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
   if(b) b.onclick=login;
@@ -2033,6 +2187,7 @@ async function init(){
   },6000);
 }
 
+loadAnnouncement();
 init();
 
 window.addEventListener("error",function(ev){
@@ -2049,6 +2204,7 @@ window.showToast = showToast;
 window.updateActivityRemote = updateActivityRemote;
 window.deleteActivityRemote = deleteActivityRemote;
 window.loadData = loadData;
+window.loadAnnouncement = loadAnnouncement;
 window.renderAdmin = renderAdmin;
 
 })().catch(function(e){
