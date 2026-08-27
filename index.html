@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿</title>
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
 <style>
   :root{
     --bg:#FBF1E2;
@@ -453,6 +453,13 @@ document.addEventListener("focusout", (e)=>{
   if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
 });
 
+function safeAdd(el,event,handler){
+  if(el && typeof el.addEventListener==="function") el.addEventListener(event,handler);
+  return el;
+}
+function safeAddById(id,event,handler){
+  return safeAdd(document.getElementById(id),event,handler);
+}
 function safeOn(selector,event,handler,root=document){
   const el=root.querySelector(selector);
   if(el) el.addEventListener(event,handler);
@@ -758,18 +765,32 @@ function render(){
     </nav>
     <div id="tab-content"></div>
   `;
-  app.querySelectorAll("nav.tabs button").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      activeTab = btn.dataset.tab;
+  const tabsNav = app.querySelector("nav.tabs");
+  if(tabsNav){
+    tabsNav.onclick = (ev)=>{
+      const btn = ev.target.closest("button[data-tab]");
+      if(!btn || !tabsNav.contains(btn)) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const nextTab = btn.dataset.tab;
+      if(!nextTab) return;
+
+      activeTab = nextTab;
       openEventId = null;
+      adminExpandedId = null;
+      queryResultVisible = false;
+
+      // 只重新產生目前內容，不保留舊頁面的 DOM 事件。
       render();
-    });
-  });
+    };
+  }
   renderTab();
 }
 
 function renderTab(){
   const el = document.getElementById("tab-content");
+  if(!el) return;
   if(!loaded){ el.innerHTML = `<div class="card"><div class="empty">載入中…</div></div>`; return; }
   if(activeTab === "register") return renderRegister(el);
   if(activeTab === "query") return renderQuery(el);
@@ -842,11 +863,11 @@ function renderRegister(el){
         `}
       </div>
     `;
-    document.getElementById("back-link").addEventListener("click", ()=>{ openEventId = null; renderRegister(el); });
+    safeAddById("back-link","click", ()=>{ openEventId = null; renderRegister(el); });
 
     if(activity.open){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>{
-        btn.addEventListener("click", async ()=>{
+        safeAdd(btn,"click",async ()=>{
           const idx = Number(btn.dataset.deleteReg);
           const reg = list[idx];
           if(reg && reg.id){
@@ -869,6 +890,11 @@ function renderRegister(el){
     if(activity.open){
       const btn = document.getElementById("reg-btn");
       const nameInput = document.getElementById("reg-name");
+
+      // 活動達到人數上限時，畫面刻意不產生 reg-btn / reg-name。
+      // 因此這裡不能直接對 null 綁定事件。
+      if(!btn || !nameInput) return;
+
       const doRegister = async ()=>{
         const name = norm(nameInput.value);
         if(!name){ showToast("請輸入姓名"); return; }
@@ -939,6 +965,7 @@ function renderQuery(el){
     <div id="query-result"></div>
   `;
   const input = document.getElementById("query-name");
+  if(!input) return;
   const box = document.getElementById("query-result");
 
   function clearResult(){
@@ -980,7 +1007,7 @@ function renderQuery(el){
     (()=>{const __el=document.getElementById("query-back-link");if(__el)__el.addEventListener("click", clearResult);})();
   };
   (()=>{const __el=document.getElementById("query-btn");if(__el)__el.addEventListener("click", doQuery);})();
-  input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") doQuery(); });
+  safeAdd(input,"keydown",(e)=>{ if(e.key==="Enter") doQuery(); });
 }
 
 // ---------- ADMIN TAB (password gated) ----------
@@ -1530,50 +1557,158 @@ function showPublishChooser(el){
 }
 
 function setupActivityManagementPage(el){
-  el.querySelectorAll("[data-activity-close]").forEach(btn=>{
-    btn.onclick=async()=>{
-      const a=state.activities.find(x=>x.id===btn.dataset.activityClose);
-      if(!a)return;
-      const next=!a.open;
-      if(!confirm(next?`確定重新開放「${a.name}」？`:`確定關閉「${a.name}」？`))return;
-      a.open=next;
-      try{await updateActivityRemote(a);showToast(next?"已重新開放":"已關閉");renderAdmin(el);}
-      catch(e){a.open=!next;showToast("活動更新失敗："+(e?.message||"未知錯誤"),"error");}
-    };
-  });
+  // 活動管理：直接對「目前畫面上的按鈕」綁定 onclick。
+  // 不再依賴事件委派，避免被其他 DOM 事件攔截。
+  const buttons = el.querySelectorAll(
+    "[data-activity-close],[data-activity-hide],[data-activity-delete]"
+  );
 
-  el.querySelectorAll("[data-activity-hide]").forEach(btn=>{
-    btn.onclick=async()=>{
-      const a=state.activities.find(x=>x.id===btn.dataset.activityHide);
-      if(!a)return;
-      const next=!a.hidden;
-      if(!confirm(next?`確定隱藏「${a.name}」？
-隊員活動列表將不再顯示。`:`確定取消隱藏「${a.name}」？`))return;
-      a.hidden=next;
-      try{await updateActivityRemote(a);showToast(next?"活動已隱藏":"已取消隱藏");renderAdmin(el);}
-      catch(e){a.hidden=!next;showToast("隱藏狀態更新失敗："+(e?.message||"未知錯誤"),"error");}
-    };
-  });
+  buttons.forEach(btn=>{
+    btn.disabled=false;
 
-  el.querySelectorAll("[data-activity-delete]").forEach(btn=>{
-    btn.onclick=async()=>{
-      const a=state.activities.find(x=>x.id===btn.dataset.activityDelete);
-      if(!a)return;
-      if(!confirm(`確定永久刪除「${a.name}」？
-此活動的簽到資料也會刪除，無法復原。`))return;
-      btn.disabled=true;
-      try{
-        await deleteActivityRemote(a.id);
-        state.activities=state.activities.filter(x=>x.id!==a.id);
-        delete state.registrations[a.id];
-        showToast("活動已刪除");renderAdmin(el);
-      }catch(e){
-        btn.disabled=false;
-        showToast("刪除失敗："+(e?.message||"請確認 Supabase 權限"),"error");
+    btn.onclick = async function(ev){
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      ev.stopPropagation();
+
+      const id =
+        this.getAttribute("data-activity-close") ||
+        this.getAttribute("data-activity-hide") ||
+        this.getAttribute("data-activity-delete");
+
+      const a = state.activities.find(x=>String(x.id)===String(id));
+
+      if(!a){
+        showToast("找不到這個活動，請重新整理資料","error");
+        console.error("活動不存在，id=",id,"activities=",state.activities);
+        return;
+      }
+
+      const isClose=this.hasAttribute("data-activity-close");
+      const isHide=this.hasAttribute("data-activity-hide");
+      const isDelete=this.hasAttribute("data-activity-delete");
+
+      if(isClose){
+        const next=!a.open;
+        const action=next?"開啟":"關閉";
+
+        if(!confirm(`確定${action}「${a.name}」？`)) return;
+
+        this.disabled=true;
+
+        try{
+          // 明確建立完整 payload，避免 update 時遺漏 hidden/publishAt 等欄位。
+          const payload={
+            id:a.id,
+            name:a.name,
+            date:a.date,
+            fields:a.fields||[],
+            open:next,
+            maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
+            createdBy:a.createdBy||"",
+            closeAt:a.closeAt||null,
+            autoCloseMinutes:a.autoCloseMinutes||0,
+            hidden:!!a.hidden,
+            publishAt:a.publishAt||null
+          };
+
+          console.log("活動開關更新:",payload);
+          await updateActivityRemote(payload);
+
+          a.open=next;
+          showToast(next?"活動已開啟":"活動已關閉");
+
+          // 重新讀取資料庫，確保畫面與資料庫一致。
+          await loadData();
+          renderAdmin(el);
+        }catch(err){
+          console.error("活動開關失敗:",err);
+          this.disabled=false;
+          showToast("活動更新失敗："+(err?.message||"未知錯誤"),"error");
+        }
+        return;
+      }
+
+      if(isHide){
+        const next=!a.hidden;
+        const action=next?"隱藏":"取消隱藏";
+
+        if(!confirm(next
+          ? `確定隱藏「${a.name}」？\n隊員活動列表將不再顯示。`
+          : `確定取消隱藏「${a.name}」？`
+        )) return;
+
+        this.disabled=true;
+
+        try{
+          const payload={
+            id:a.id,
+            name:a.name,
+            date:a.date,
+            fields:a.fields||[],
+            open:!!a.open,
+            maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
+            createdBy:a.createdBy||"",
+            closeAt:a.closeAt||null,
+            autoCloseMinutes:a.autoCloseMinutes||0,
+            hidden:next,
+            publishAt:a.publishAt||null
+          };
+
+          console.log("活動隱藏更新:",payload);
+          await updateActivityRemote(payload);
+
+          a.hidden=next;
+          showToast(next?"活動已隱藏":"已取消隱藏");
+
+          await loadData();
+          renderAdmin(el);
+        }catch(err){
+          console.error("活動隱藏失敗:",err);
+          this.disabled=false;
+          showToast("隱藏狀態更新失敗："+(err?.message||"未知錯誤"),"error");
+        }
+        return;
+      }
+
+      if(isDelete){
+        if(!confirm(
+          `確定永久刪除「${a.name}」？\n`+
+          `此活動的簽到資料也會刪除，無法復原。`
+        )) return;
+
+        this.disabled=true;
+
+        try{
+          console.log("刪除活動:",a.id);
+          await deleteActivityRemote(a.id);
+
+          state.activities=state.activities.filter(
+            x=>String(x.id)!==String(a.id)
+          );
+          delete state.registrations[a.id];
+
+          if(adminExpandedId===a.id) adminExpandedId=null;
+
+          showToast("活動已刪除");
+
+          await loadData();
+          renderAdmin(el);
+        }catch(err){
+          console.error("活動刪除失敗:",err);
+          this.disabled=false;
+          showToast(
+            "刪除失敗："+(err?.message||"請確認 Supabase 權限"),
+            "error"
+          );
+        }
       }
     };
   });
+
+  console.log("活動管理按鈕已綁定，共",buttons.length,"個");
 }
+
 function renderAdminLock(el){
   el.innerHTML=`<div class="card" style="text-align:center;">
     <div class="lock-icon">🔒</div><h2>管理者登入</h2>
@@ -1591,7 +1726,7 @@ function renderAdminLock(el){
     catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
   if(b) b.onclick=login;
-  [u,p].filter(Boolean).forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
+  [u,p].filter(Boolean).forEach(x=>safeAdd(x,"keydown",e=>{if(e.key==="Enter")login();}));
 }
 
 async function init(){
@@ -1618,7 +1753,7 @@ async function init(){
 
     if(activeTab !== "admin"){
       await loadData();
-      renderTab();
+      if(!userIsTyping) renderTab();
     }else if(!userIsTyping){
       // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
       await loadData();
@@ -1641,11 +1776,150 @@ window.addEventListener("error",function(ev){
 <script>
 function showRuntimeError(title,reason){
  var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");
- if(b&&x){b.style.display="block";x.textContent=title+"："+String(reason&&reason.message||reason||"未知錯誤")+
- (reason&&reason.stack?"\n\n"+reason.stack:"");}
+ if(b&&x){b.style.display="block";x.textContent=title+"："+String(reason&&reason.message||reason||"未知錯誤")+(reason&&reason.stack?"\n\n"+reason.stack:"");}
 }
 window.addEventListener("error",function(e){showRuntimeError("JavaScript 錯誤",e.error||e.message);});
 window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promise 錯誤",e.reason);});
+</script>
+
+<script>
+/* ===== 活動管理最終除錯層 ===== */
+(function(){
+  function activityButtonHandler(ev){
+    const btn=ev.target && ev.target.closest &&
+      ev.target.closest("[data-activity-close],[data-activity-hide],[data-activity-delete]");
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const id=btn.getAttribute("data-activity-close") ||
+             btn.getAttribute("data-activity-hide") ||
+             btn.getAttribute("data-activity-delete");
+
+    console.log("[活動管理] 按鈕被點擊", {
+      id:id,
+      close:btn.getAttribute("data-activity-close"),
+      hide:btn.getAttribute("data-activity-hide"),
+      delete:btn.getAttribute("data-activity-delete")
+    });
+
+    let a=(window.state && Array.isArray(state.activities))
+      ? state.activities.find(x=>String(x.id)===String(id))
+      : null;
+
+    // state 可能因頁面重繪尚未同步；直接以按鈕上的 UUID 查資料庫。
+    if(!a){
+      try{
+        const {data:remoteActivity,error:remoteError}=await supabaseClient
+          .from("activities")
+          .select("*")
+          .eq("id",id)
+          .maybeSingle();
+
+        if(remoteError) throw remoteError;
+
+        if(remoteActivity){
+          a={
+            id:remoteActivity.id,
+            name:remoteActivity.name,
+            date:remoteActivity.date,
+            fields:Array.isArray(remoteActivity.fields)?remoteActivity.fields:[],
+            open:!!remoteActivity.open,
+            maxParticipants:remoteActivity.max_participants==null?null:Number(remoteActivity.max_participants),
+            createdBy:remoteActivity.created_by||"",
+            closeAt:remoteActivity.close_at||null,
+            autoCloseMinutes:remoteActivity.auto_close_minutes==null?0:Number(remoteActivity.auto_close_minutes),
+            hidden:!!remoteActivity.hidden,
+            publishAt:remoteActivity.publish_at||null
+          };
+
+          if(window.state){
+            state.activities=Array.isArray(state.activities)?state.activities:[];
+            const idx=state.activities.findIndex(x=>String(x.id)===String(id));
+            if(idx>=0) state.activities[idx]=a;
+            else state.activities.push(a);
+          }
+        }
+      }catch(dbErr){
+        console.error("[活動管理] 直接查詢活動失敗",dbErr);
+        showToast("讀取活動失敗："+(dbErr.message||dbErr),"error");
+        return;
+      }
+    }
+
+    if(!a){
+      showToast("資料庫找不到此活動："+id,"error");
+      console.error("[活動管理] 資料庫也找不到活動",id);
+      return;
+    }
+
+    if(btn.hasAttribute("data-activity-close")){
+      activityActionClose(a,btn);
+    }else if(btn.hasAttribute("data-activity-hide")){
+      activityActionHide(a,btn);
+    }else{
+      activityActionDelete(a,btn);
+    }
+  }
+
+  async function activityActionClose(a,btn){
+    const next=!a.open;
+    if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
+    btn.disabled=true;
+    const old=a.open;
+    a.open=next;
+    try{
+      await updateActivityRemote(a);
+      showToast(next?"活動已開啟":"活動已關閉");
+      await loadData();
+      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+    }catch(e){
+      a.open=old;
+      console.error("[活動管理] 開啟/關閉失敗",e);
+      showToast("活動更新失敗："+(e.message||e),"error");
+      btn.disabled=false;
+    }
+  }
+
+  async function activityActionHide(a,btn){
+    const next=!a.hidden;
+    if(!confirm(next?"確定隱藏「"+a.name+"」？":"確定取消隱藏「"+a.name+"」？")) return;
+    btn.disabled=true;
+    const old=!!a.hidden;
+    a.hidden=next;
+    try{
+      await updateActivityRemote(a);
+      showToast(next?"活動已隱藏":"已取消隱藏");
+      await loadData();
+      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+    }catch(e){
+      a.hidden=old;
+      console.error("[活動管理] 隱藏失敗",e);
+      showToast("隱藏更新失敗："+(e.message||e),"error");
+      btn.disabled=false;
+    }
+  }
+
+  async function activityActionDelete(a,btn){
+    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的簽到資料也會刪除，無法復原。")) return;
+    btn.disabled=true;
+    try{
+      await deleteActivityRemote(a.id);
+      state.activities=state.activities.filter(x=>String(x.id)!==String(a.id));
+      delete state.registrations[a.id];
+      showToast("活動已刪除");
+      await loadData();
+      if(typeof renderAdmin==="function") renderAdmin(document.getElementById("tab-content"));
+    }catch(e){
+      console.error("[活動管理] 刪除失敗",e);
+      showToast("刪除失敗："+(e.message||e),"error");
+      btn.disabled=false;
+    }
+  }
+
+  // capture=true：在任何其他 click handler 前攔截活動按鈕。
+  document.addEventListener("click",activityButtonHandler,true);
+})();
 </script>
 </body>
 
