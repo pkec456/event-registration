@@ -437,9 +437,12 @@ let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, re
 let draftName = "";
 let draftDate = "";
 let draftMaxParticipants = "";
-let draftCloseMinutes = 0;\nlet publishMode = "now";\nlet pendingPublishActivity = null;
+let draftCloseMinutes = 0;
+let pendingPublishActivity = null;
+let publishMode = "now";
+
+
 let adminPage = "home";
-let pendingPublishActivity=null, publishAtMode="now", publishAtValue="";
 
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
@@ -686,8 +689,8 @@ function recentOrOpenActivities(){
   const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
   return state.activities.filter(a=>{
     if(a.hidden) return false;
-    const publishAt = a.publishAt ? new Date(a.publishAt).getTime() : null;
-    if(Number.isFinite(publishAt) && publishAt > Date.now()) return false;
+    const ts = a.publishAt ? new Date(a.publishAt).getTime() : null;
+    if(Number.isFinite(ts) && ts > Date.now()) return false;
     return a.open || new Date(a.date).getTime() >= sevenDaysAgo;
   });
 }
@@ -708,18 +711,18 @@ function annualStats(name){
 
 function exportAnnualCSV(rows, year){
   const escapeCsv = (v)=>{
-    const s = String(v);
-    return /[",\n]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s;
+    const s=String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
   };
-  let csv = "\uFEFF" + ["姓名","參加場次","總場次","出席率(%)"].join(",") + "\n";
+  let csv="\uFEFF"+["姓名","參加場次","總場次","出席率(%)"].join(",")+"\n";
   rows.forEach(r=>{
-    csv += [escapeCsv(r.name), r.attended, r.total, r.rate].join(",") + "\n";
+    csv += [escapeCsv(r.name),r.attended,r.total,r.rate].join(",")+"\n";
   });
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `年度出席率總表_${year}.csv`;
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`年度出席率總表_${year}.csv`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1186,7 +1189,8 @@ async function renderAdminAccounts(el){
 
       // 刪除
       if(target.classList.contains("officer-delete-btn")){
-        if(!confirm(`確定刪除幹部「${username}」？\n刪除後無法使用此帳號登入。`)) return;
+        if(!confirm(`確定刪除幹部「${username}」？
+刪除後無法使用此帳號登入。`)) return;
 
         target.disabled=true;
         showAdminMessage("刪除中…");
@@ -1310,7 +1314,13 @@ function renderAdmin(el){
             </div>`).join("")}
         </div>
         <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
-        <button type="button" class="primary" id="create-btn">建立活動並開放簽到</button>
+        <label class="field-label">發布時間</label>
+      <div class="timer-options publish-choice-wrap">
+        <button type="button" class="secondary timer-btn publish-choice selected" data-publish-mode="now">立即</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1day">一天後</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1week">一個禮拜後</button>
+      </div>
+<button type="button" class="primary" id="create-btn">建立</button>
         <div class="debug-error-box" id="create-activity-error"></div>
       </div>`;
   }
@@ -1411,6 +1421,18 @@ function activityAdminRow(a, hidden=false){
     </div>`;
 }
 
+function rememberCreateDraft(){
+  const n=document.getElementById("new-name");
+  const d=document.getElementById("new-date");
+  const m=document.getElementById("new-max-participants");
+  if(n) draftName=n.value;
+  if(d) draftDate=d.value;
+  if(m) draftMaxParticipants=m.value;
+  document.querySelectorAll(".draft-field-input").forEach(inp=>{
+    const i=Number(inp.dataset.idx);
+    if(Number.isFinite(i)) draftFields[i]=inp.value;
+  });
+}
 function setupCreateActivityPage(el){
   function syncDraftFieldsFromDom(){
     draftName=document.getElementById("new-name")?.value||"";
@@ -1420,6 +1442,18 @@ function setupCreateActivityPage(el){
     document.querySelectorAll(".draft-field-input").forEach(inp=>draftFields[Number(inp.dataset.idx)]=inp.value);
   }
 
+  ["new-name","new-date","new-max-participants"].forEach(id=>{
+    const input=document.getElementById(id);
+    if(input){
+      input.addEventListener("input",rememberCreateDraft);
+      input.addEventListener("change",rememberCreateDraft);
+    }
+  });
+  el.querySelectorAll(".draft-field-input").forEach(input=>{
+    input.addEventListener("input",rememberCreateDraft);
+    input.addEventListener("change",rememberCreateDraft);
+  });
+
   document.getElementById("add-field-btn").onclick=()=>{
     syncDraftFieldsFromDom(); draftFields.push(""); renderAdmin(el);
   };
@@ -1427,7 +1461,23 @@ function setupCreateActivityPage(el){
     btn.onclick=()=>{syncDraftFieldsFromDom();draftFields.splice(Number(btn.dataset.removeField),1);renderAdmin(el);};
   });
   el.querySelectorAll("[data-timer]").forEach(btn=>{
-    btn.onclick=()=>{draftCloseMinutes=Number(btn.dataset.timer);el.querySelectorAll("[data-timer]").forEach(b=>b.classList.toggle("selected",Number(b.dataset.timer)===draftCloseMinutes));};
+    btn.onclick=(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      draftCloseMinutes=Number(btn.dataset.timer || 0);
+      el.querySelectorAll("[data-timer]").forEach(b=>{
+        b.classList.toggle("selected", Number(b.dataset.timer||0)===draftCloseMinutes);
+      });
+    };
+  });
+  el.querySelectorAll(".publish-choice").forEach(btn=>{
+    btn.onclick=(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      publishMode=btn.dataset.publishMode || "now";
+      el.querySelectorAll(".publish-choice").forEach(b=>b.classList.toggle("selected",b===btn));
+      rememberCreateDraft();
+    };
   });
 
   document.getElementById("create-btn").onclick=async()=>{
@@ -1435,12 +1485,16 @@ function setupCreateActivityPage(el){
     syncDraftFieldsFromDom();
     const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
     const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
+    const publishAt =
+      publishMode==="1day" ? new Date(Date.now()+24*60*60*1000).toISOString() :
+      publishMode==="1week" ? new Date(Date.now()+7*24*60*60*1000).toISOString() :
+      null;
     if(!name){showToast("請輸入活動名稱");return;}
     if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
-    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:null};
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
@@ -1451,8 +1505,10 @@ function setupCreateActivityPage(el){
         publishAt:saved.publish_at||null
       });
       state.registrations[activity.id]=[];
-      pendingPublishActivity=state.activities.find(x=>x.id===activity.id)||activity;
-      showPublishChooser(el);
+      pendingPublishActivity=null;
+      showToast(publishAt ? "活動已建立，尚未發布" : "活動已建立並發布");
+      adminPage="activities";
+      renderAdmin(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
       if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
@@ -1463,103 +1519,9 @@ function setupCreateActivityPage(el){
 
 
 function showPublishChooser(el){
-  const a=pendingPublishActivity;
-  if(!a){
-    adminPage="activities";
-    renderAdmin(el);
-    return;
-  }
-
-  let mode="now";
-
-  el.innerHTML=`
-    <div class="card">
-      <div class="admin-page-title">
-        <button type="button" class="secondary back" id="publish-back">←</button>
-        <h2 style="margin:0;">發布活動</h2>
-      </div>
-
-      <p class="hint">活動「${escapeHtml(a.name)}」已建立。請選擇發布方式。</p>
-
-      <label class="field-label">發布時間</label>
-
-      <div class="timer-options publish-choice-wrap">
-        <button type="button" class="secondary timer-btn publish-choice selected" data-publish-mode="now">立即</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1day">一天後</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1week">一個禮拜後</button>
-      </div>
-
-      <div id="publish-preview" class="publish-status">立即發布</div>
-
-      <button type="button" class="primary" id="confirm-publish">發布</button>
-    </div>
-  `;
-
-  const preview=document.getElementById("publish-preview");
-
-  el.querySelectorAll(".publish-choice").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      mode=btn.dataset.publishMode || "now";
-      el.querySelectorAll(".publish-choice").forEach(b=>{
-        b.classList.toggle("selected",b===btn);
-      });
-
-      preview.textContent =
-        mode==="now" ? "立即發布" :
-        mode==="1day" ? "發布時間：一天後" :
-        "發布時間：一個禮拜後";
-    });
-  });
-
-  document.getElementById("publish-back").onclick=()=>{
-    pendingPublishActivity=null;
-    adminPage="activities";
-    renderAdmin(el);
-  };
-
-  document.getElementById("confirm-publish").onclick=async()=>{
-    const btn=document.getElementById("confirm-publish");
-    btn.disabled=true;
-
-    const publishAt =
-      mode==="1day"
-        ? new Date(Date.now()+24*60*60*1000).toISOString()
-        : mode==="1week"
-          ? new Date(Date.now()+7*24*60*60*1000).toISOString()
-          : null;
-
-    a.publishAt=publishAt;
-
-    try{
-      const saved=await updateActivityRemote(a);
-
-      const idx=state.activities.findIndex(x=>x.id===a.id);
-      if(idx>=0){
-        state.activities[idx]={
-          ...state.activities[idx],
-          ...a,
-          publishAt:saved?.publish_at || publishAt
-        };
-      }
-
-      draftFields=[];
-      draftName="";
-      draftDate="";
-      draftMaxParticipants="";
-      draftCloseMinutes=0;
-
-      pendingPublishActivity=null;
-      adminPage="activities";
-
-      showToast(publishAt ? "已設定未來發布時間" : "活動已發布");
-      renderAdmin(el);
-
-    }catch(e){
-      console.error("發布活動失敗",e);
-      btn.disabled=false;
-      showToast("發布失敗："+(e?.message||"未知錯誤"),"error");
-    }
-  };
+  pendingPublishActivity=null;
+  adminPage="activities";
+  renderAdmin(el);
 }
 
 function setupActivityManagementPage(el){
@@ -1580,7 +1542,8 @@ function setupActivityManagementPage(el){
       const a=state.activities.find(x=>x.id===btn.dataset.activityHide);
       if(!a)return;
       const next=!a.hidden;
-      if(!confirm(next?`確定隱藏「${a.name}」？\n隊員活動列表將不再顯示。`:`確定取消隱藏「${a.name}」？`))return;
+      if(!confirm(next?`確定隱藏「${a.name}」？
+隊員活動列表將不再顯示。`:`確定取消隱藏「${a.name}」？`))return;
       a.hidden=next;
       try{await updateActivityRemote(a);showToast(next?"活動已隱藏":"已取消隱藏");renderAdmin(el);}
       catch(e){a.hidden=!next;showToast("隱藏狀態更新失敗："+(e?.message||"未知錯誤"),"error");}
@@ -1591,7 +1554,8 @@ function setupActivityManagementPage(el){
     btn.onclick=async()=>{
       const a=state.activities.find(x=>x.id===btn.dataset.activityDelete);
       if(!a)return;
-      if(!confirm(`確定永久刪除「${a.name}」？\n此活動的簽到資料也會刪除，無法復原。`))return;
+      if(!confirm(`確定永久刪除「${a.name}」？
+此活動的簽到資料也會刪除，無法復原。`))return;
       btn.disabled=true;
       try{
         await deleteActivityRemote(a.id);
@@ -1621,7 +1585,7 @@ function renderAdminLock(el){
     try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
     catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
-  b.onclick=login;
+  if(b) b.onclick=login;
   [u,p].forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
 }
 
@@ -1647,8 +1611,13 @@ async function init(){
       }
     }
 
-    await loadData();
-    renderTab();
+    if(activeTab !== "admin"){
+      await loadData();
+      renderTab();
+    }else if(!userIsTyping){
+      // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
+      await loadData();
+    }
   },6000);
 }
 
@@ -1662,5 +1631,16 @@ window.addEventListener("error",function(ev){
   }
 });
 </script>
+
+<div id="runtime-debug" style="display:none;position:fixed;inset:12px;z-index:9999;background:#fff;border:2px solid #9C2B1D;border-radius:14px;padding:16px;overflow:auto;color:#3B2416;font:13px/1.5 monospace;box-shadow:0 12px 40px rgba(0,0,0,.2);"><b>程式除錯訊息</b><pre id="runtime-debug-text" style="white-space:pre-wrap;word-break:break-word;"></pre></div>
+<script>
+window.addEventListener("error",function(e){var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");if(b&&x){b.style.display="block";x.textContent="JavaScript 錯誤："+String(e.message||"未知錯誤")+(e.filename?"\n檔案："+e.filename:"")+(e.lineno?"\n行："+e.lineno:"");}});
+window.addEventListener("unhandledrejection",function(e){var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");if(b&&x){b.style.display="block";x.textContent="Promise 錯誤："+String(e.reason&&e.reason.message||e.reason||"未知錯誤");}});
+</script>
 </body>
+
+
+
+
+
 </html>
