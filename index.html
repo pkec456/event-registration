@@ -352,7 +352,9 @@ button:disabled{
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
+<script>/*__APP_ASYNC_IIFE__*/
+(async function(){
+
 const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -2022,6 +2024,14 @@ window.addEventListener("error",function(ev){
   if(app && !app.innerHTML.trim()){
     app.innerHTML='<div class="card"><h2>頁面載入錯誤</h2><p class="hint">請重新整理頁面；若仍空白，請開啟瀏覽器主控台查看錯誤。</p><pre style="white-space:pre-wrap;">'+escapeHtml(ev.message||"JavaScript error")+'</pre></div>';
   }
+});
+
+})().catch(function(e){
+  console.error("JavaScript 錯誤：",e);
+  try{
+    const box=document.getElementById("debug-error");
+    if(box){box.textContent="JavaScript 錯誤："+(e&&e.message?e.message:e);}
+  }catch(_){}
 });
 </script>
 
