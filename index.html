@@ -1451,28 +1451,87 @@ function setupCreateActivityPage(el){
 
 
 function showPublishChooser(el){
-  const a=pendingPublishActivity;if(!a)return;
-  el.innerHTML=`<div class="card">
-    <div class="admin-page-title"><button class="secondary back" id="publish-cancel">←</button><h2 style="margin:0;">發布活動</h2></div>
-    <p class="hint">「${escapeHtml(a.name)}」已建立，請選擇隊員何時可以看到。</p>
-    <div class="publish-box"><label class="field-label">發布時間</label>
-      <div class="publish-options">
-        <button type="button" class="secondary publish-btn ${publishAtMode==="now"?"selected":""}" data-publish-mode="now">立即發布</button>
-        <button type="button" class="secondary publish-btn ${publishAtMode==="scheduled"?"selected":""}" data-publish-mode="scheduled">預約發布</button>
+  const a=pendingPublishActivity;
+  if(!a) return;
+
+  el.innerHTML=`
+    <div class="card">
+      <div class="admin-page-title">
+        <button class="secondary back" id="publish-cancel">←</button>
+        <h2 style="margin:0;">發布活動</h2>
       </div>
-      <input class="publish-date-input" type="datetime-local" id="publish-at" value="${escapeHtml(publishAtValue)}" ${publishAtMode==="scheduled"?"":"style=\"display:none\""}>
+      <p class="hint">「${escapeHtml(a.name)}」已建立，選擇發布方式。</p>
+
+      <label class="field-label">發布時間</label>
+      <div class="timer-options" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+        <button type="button" class="secondary timer-btn publish-choice selected" data-publish="now">立即</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish="1day">一天後</button>
+        <button type="button" class="secondary timer-btn publish-choice" data-publish="1week">一個禮拜後</button>
+      </div>
+
+      <div id="publish-preview" class="publish-status">立即發布</div>
+      <button type="button" class="primary" id="save-publish">發布</button>
     </div>
-    <button class="primary" id="save-publish">儲存發布設定</button>
-  </div>`;
-  el.querySelectorAll("[data-publish-mode]").forEach(b=>b.onclick=()=>{publishAtMode=b.dataset.publishMode;publishAtValue=document.getElementById("publish-at")?.value||"";showPublishChooser(el)});
-  document.getElementById("publish-at").oninput=e=>publishAtValue=e.target.value;
-  document.getElementById("publish-cancel").onclick=()=>{pendingPublishActivity=null;adminPage="activities";renderAdmin(el)};
+  `;
+
+  publishMode="now";
+
+  const preview=document.getElementById("publish-preview");
+
+  el.querySelectorAll(".publish-choice").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      publishMode=btn.dataset.publish || "now";
+      el.querySelectorAll(".publish-choice").forEach(b=>{
+        b.classList.toggle("selected", b===btn);
+      });
+      preview.textContent =
+        publishMode==="now" ? "立即發布" :
+        publishMode==="1day" ? "將於一天後發布" :
+        "將於一個禮拜後發布";
+    });
+  });
+
+  document.getElementById("publish-cancel").onclick=()=>{
+    pendingPublishActivity=null;
+    adminPage="activities";
+    renderAdmin(el);
+  };
+
   document.getElementById("save-publish").onclick=async()=>{
-    const btn=document.getElementById("save-publish");let pa=null;
-    if(publishAtMode==="scheduled"){const v=document.getElementById("publish-at").value;if(!v){showToast("請選擇發布時間");return}pa=new Date(v).toISOString();if(new Date(pa)<=new Date()){showToast("發布時間必須晚於現在");return}}
-    btn.disabled=true;a.publishAt=pa;
-    try{await updateActivityRemote(a);draftFields=["公用哨角"];draftName="";draftDate="";draftMaxParticipants="";draftCloseMinutes=0;pendingPublishActivity=null;showToast(pa?"已設定預約發布":"活動已立即發布");adminPage="activities";renderAdmin(el)}
-    catch(e){btn.disabled=false;showToast("發布設定失敗："+(e?.message||"未知錯誤"),"error")}
+    const btn=document.getElementById("save-publish");
+    btn.disabled=true;
+
+    let publishAt=null;
+    if(publishMode==="1day"){
+      publishAt=new Date(Date.now()+24*60*60*1000).toISOString();
+    }else if(publishMode==="1week"){
+      publishAt=new Date(Date.now()+7*24*60*60*1000).toISOString();
+    }
+
+    a.publishAt=publishAt;
+
+    try{
+      await updateActivityRemote(a);
+
+      const idx=state.activities.findIndex(x=>x.id===a.id);
+      if(idx>=0) state.activities[idx].publishAt=publishAt;
+
+      draftFields=["公用哨角"];
+      draftName="";
+      draftDate="";
+      draftMaxParticipants="";
+      draftCloseMinutes=0;
+      publishMode="now";
+      pendingPublishActivity=null;
+
+      showToast(publishAt ? "已設定發布時間" : "活動已發布");
+      adminPage="activities";
+      renderAdmin(el);
+    }catch(e){
+      console.error(e);
+      btn.disabled=false;
+      showToast("發布失敗："+(e?.message||"未知錯誤"),"error");
+    }
   };
 }
 
