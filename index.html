@@ -664,30 +664,13 @@ async function createRegistrationRemote(activityId, registration){
 }
 
 async function deleteRegistrationRemote(registrationId){
-  // 直接刪除後必須確認資料庫真的消失。
-  const direct=await supabaseClient.from("registrations").delete().eq("id",registrationId);
-  if(!direct.error){
-    const verify=await supabaseClient.from("registrations")
-      .select("id").eq("id",registrationId).maybeSingle();
-    if(!verify.error && !verify.data) return true;
-  }
-
-  console.warn("直接刪除未確認成功，嘗試公開刪除 RPC：",direct.error);
-
   const rpc=await supabaseClient.rpc("public_delete_registration",{
     p_registration_id:registrationId
   });
-
   if(rpc.error) throw rpc.error;
   if(rpc.data && rpc.data.ok===false){
     throw new Error(rpc.data.message||"刪除簽到失敗");
   }
-
-  const verify2=await supabaseClient.from("registrations")
-    .select("id").eq("id",registrationId).maybeSingle();
-  if(verify2.error) throw verify2.error;
-  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
-
   return true;
 }
 
