@@ -33,20 +33,16 @@
   header.top .eyebrow{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
   header.top h1{ margin:4px 0 0; font-size:24px; font-weight:800; letter-spacing:-0.01em; }
   nav.tabs{ display:flex; gap:6px; background:var(--surface); border-radius:999px; padding:5px; border:1px solid var(--line); margin-bottom:18px; }
-  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; }
+  nav.tabs button{ flex:1; border:none; background:transparent; padding:10px 8px; border-radius:999px; font-size:14px; font-weight:600; color:var(--ink-soft); cursor:pointer; font-family:inherit; transition:background .15s ease, color .15s ease; }
   nav.tabs button.active{ background:var(--ink); color:#fff; }
-  nav.tabs button:hover:not(.active):not(:disabled){ color:var(--ink); background:#F2ECDF; }
   .card{ background:var(--surface); border-radius:var(--radius); border:1px solid var(--line); padding:18px; margin-bottom:14px; }
   .card h2{ margin:0 0 4px; font-size:16px; font-weight:800; }
   .card p.hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
-  input[type=text], input[type=date], input[type=password], input[type=number], select{
+  input[type=text], input[type=date], input[type=password], select{
     width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
     font-size:16px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin-bottom:10px;
-    transition:border-color .15s ease, box-shadow .15s ease;
   }
-  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=number]:focus, select:focus{
-    outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);
-  }
+  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, select:focus{ outline:none; border-color:var(--accent); }
   input.cell-input{
     width:100%; padding:7px 8px; border-radius:7px; border:1.5px solid var(--line);
     font-size:13px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin:0;
@@ -64,18 +60,8 @@
     font-family:inherit; margin-bottom:10px;
   }
   button.primary{ width:100%; margin-top:6px; padding:13px 14px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-size:15px; font-weight:700; font-family:inherit; cursor:pointer; }
+  button.primary:active{ opacity:.85; }
   button.secondary{ width:100%; margin-top:8px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-size:14px; font-weight:600; font-family:inherit; cursor:pointer; }
-
-  /* ---- 統一按鈕互動回饋（hover / active / disabled / focus）---- */
-  button{ transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease, transform .08s ease, opacity .15s ease; }
-  button:disabled{ opacity:.5; cursor:not-allowed; box-shadow:none !important; transform:none !important; }
-  button:active:not(:disabled){ transform:translateY(1px); }
-  button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  button.primary:hover:not(:disabled){ background:#C1481A; box-shadow:0 4px 14px rgba(216,83,27,.28); }
-  button.secondary:hover:not(:disabled){ border-color:var(--ink); background:#FAFAF7; }
-  button.add-field:hover:not(:disabled){ border-color:var(--accent); background:var(--accent-soft); }
-  .field-remove:hover:not(:disabled){ background:var(--absent-soft); border-color:var(--absent); color:var(--absent); }
-
   .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; }
   .status-open{ background:var(--warn-soft); color:var(--warn); }
   .status-closed{ background:#EBEDE6; color:var(--ink-soft); }
@@ -99,30 +85,13 @@
   .big-rate .num{ font-size:40px; font-weight:800; letter-spacing:-0.02em; }
   .big-rate .unit{ font-size:16px; font-weight:700; color:var(--ink-soft); }
   .empty{ text-align:center; padding:24px 8px; color:var(--ink-soft); font-size:13px; }
-  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
-  .toast.toast-error{ background:var(--absent); }
   .note-shared{ font-size:11px; color:var(--ink-soft); background:#F5F6F1; border-radius:8px; padding:8px 10px; line-height:1.5; margin-top:10px; }
   .divider{ height:1px; background:var(--line); margin:12px 0; }
   .backlink{ font-size:13px; font-weight:700; color:var(--accent); cursor:pointer; display:inline-block; margin-bottom:10px; }
   .lock-icon{ font-size:32px; margin-bottom:6px; }
   .tag{ display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:2px 4px 2px 0; }
-
-  /* 除錯用：不會自動消失的錯誤訊息框，讓建立活動失敗時的原因看得清楚 */
-  .debug-error-box{
-    display:none;
-    margin-top:10px;
-    padding:10px 12px;
-    border-radius:10px;
-    background:var(--absent-soft);
-    border:1px solid var(--absent);
-    color:var(--absent);
-    font-size:12px;
-    line-height:1.6;
-    white-space:pre-wrap;
-    word-break:break-word;
-  }
-  .debug-error-box.show{ display:block; }
 
 /* 幹部模式：紅色 */
 .officer-mode-pill{
@@ -215,10 +184,6 @@
   width:100% !important;
   padding:10px 6px !important;
 }
-.timer-btn:hover:not(:disabled):not(.selected){
-  border-color:var(--accent) !important;
-  color:var(--accent) !important;
-}
 .timer-btn.selected{
   background:var(--accent) !important;
   color:#fff !important;
@@ -236,6 +201,142 @@
 @media(max-width:520px){
   .activity-options{grid-template-columns:1fr;}
   .timer-options{grid-template-columns:repeat(4,1fr);}
+}
+
+
+/* 管理者：各功能獨立頁面 */
+.admin-page{display:none;}
+.admin-page.active{display:block;}
+.admin-menu{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.admin-menu button{margin:0 !important;text-align:left;padding:14px !important;}
+.admin-menu .menu-title{font-weight:800;display:block;}
+.admin-menu .menu-hint{font-size:12px;color:var(--ink-soft);display:block;margin-top:3px;}
+.activity-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px;}
+.activity-actions button{margin:0 !important;width:100% !important;padding:9px 5px !important;font-size:12px !important;white-space:nowrap;}
+.activity-row-hidden{opacity:.55;}
+.activity-hidden-tag{display:inline-block;background:#eee;color:#777;font-size:11px;padding:3px 7px;border-radius:999px;margin-left:5px;}
+.admin-page-title{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.admin-page-title .back{width:auto;margin:0 !important;padding:7px 10px !important;}
+@media(max-width:520px){
+  .admin-menu{grid-template-columns:1fr;}
+  .activity-actions{grid-template-columns:repeat(3,1fr);}
+}
+
+
+/* ===== 全站按鈕 CSS 統一 ===== */
+button{
+  box-sizing:border-box;
+  min-height:44px;
+  border-radius:10px !important;
+  font-family:inherit !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.2 !important;
+  cursor:pointer;
+  transition:background-color .15s ease,border-color .15s ease,color .15s ease,
+             box-shadow .15s ease,transform .08s ease,opacity .15s ease;
+}
+button.primary,
+button.secondary,
+button.add-field,
+button.field-remove{
+  margin:0;
+}
+button.primary{
+  width:100%;
+  padding:12px 14px !important;
+  background:var(--accent);
+  color:#fff;
+  border:1.5px solid var(--accent) !important;
+}
+button.secondary{
+  width:100%;
+  padding:11px 14px !important;
+  background:#fff;
+  color:var(--ink);
+  border:1.5px solid var(--line) !important;
+}
+button.add-field{
+  width:100%;
+  min-height:44px;
+  padding:10px 14px !important;
+  background:transparent;
+  color:var(--accent);
+  border:1.5px dashed var(--line) !important;
+}
+button.field-remove{
+  flex:0 0 44px;
+  width:44px !important;
+  height:44px;
+  min-height:44px;
+  padding:0 !important;
+  background:#fff;
+  color:var(--absent);
+  border:1.5px solid var(--line) !important;
+}
+button:hover:not(:disabled){
+  box-shadow:0 3px 10px rgba(59,36,22,.10);
+}
+button.primary:hover:not(:disabled){
+  background:#C1481A;
+  border-color:#C1481A !important;
+}
+button.secondary:hover:not(:disabled){
+  background:#FAF7F1;
+  border-color:var(--ink) !important;
+}
+button.add-field:hover:not(:disabled){
+  background:var(--accent-soft);
+  border-color:var(--accent) !important;
+}
+button.field-remove:hover:not(:disabled){
+  background:var(--absent-soft);
+  border-color:var(--absent) !important;
+}
+button:active:not(:disabled){
+  transform:translateY(1px);
+  box-shadow:none;
+}
+button:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  box-shadow:none !important;
+  transform:none !important;
+}
+
+/* 小型操作按鈕也保持同一套高度與字體 */
+.officer-actions button,
+.activity-actions button,
+.timer-btn{
+  min-height:44px;
+  padding:9px 8px !important;
+  margin:0 !important;
+}
+
+/* 三按鈕／四計時器維持並排，但外觀一致 */
+.officer-actions button,
+.activity-actions button,
+.timer-options button{
+  width:100% !important;
+}
+
+/* 返回按鈕 */
+.admin-page-title .back{
+  width:44px !important;
+  min-width:44px;
+  padding:0 !important;
+}
+
+/* 管理者首頁選單按鈕 */
+.admin-menu button{
+  width:100% !important;
+  min-height:60px;
+  text-align:left;
+  padding:12px 14px !important;
 }
 
 </style>
@@ -331,6 +432,7 @@ let draftName = "";
 let draftDate = "";
 let draftMaxParticipants = "";
 let draftCloseMinutes = 0;
+let adminPage = "home";
 
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
@@ -361,21 +463,37 @@ function fmtDate(iso){
   catch(e){ return iso; }
 }
 
-function showToast(msg, type){
+function showToast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
-  t.classList.remove("toast-error");
-  if(type === "error") t.classList.add("toast-error");
   t.classList.add("show");
   clearTimeout(t._timer);
-  const duration = type === "error" ? 5000 : 1800; // 錯誤訊息停留久一點，方便看清楚原因
-  t._timer = setTimeout(()=> t.classList.remove("show"), duration);
+  t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
 }
 
 async function loadData(){
   try{
-    const { data: acts, error: aErr } = await supabaseClient.from("activities").select("*").order("date", { ascending:false });
-    if(aErr) throw aErr;
+    let acts = [];
+
+    if(adminUnlocked){
+      const session=getAdminSession();
+      const {data: adminData,error:adminErr}=await supabaseClient.rpc("simple_admin_list_activities",{
+        p_admin_username:session.username,
+        p_admin_code:session.access_code
+      });
+      if(adminErr) throw adminErr;
+      if(!adminData?.ok) throw new Error(adminData?.message||"管理者活動資料讀取失敗");
+      acts=adminData.activities||[];
+    }else{
+      const {data: publicActs,error:aErr}=await supabaseClient
+        .from("activities")
+        .select("*")
+        .eq("open",true)
+        .eq("hidden",false)
+        .order("date",{ascending:false});
+      if(aErr) throw aErr;
+      acts=publicActs||[];
+    }
 
     state.activities=(acts||[]).map(a=>({
       id:a.id,
@@ -383,97 +501,105 @@ async function loadData(){
       date:a.date,
       fields:Array.isArray(a.fields)?a.fields:[],
       open:!!a.open,
-      maxParticipants: a.max_participants == null ? null : Number(a.max_participants),
-      createdBy: a.created_by || "",
-      closeAt: a.close_at || null,
-      autoCloseMinutes: a.auto_close_minutes == null ? 0 : Number(a.auto_close_minutes)
+      maxParticipants:a.max_participants==null?null:Number(a.max_participants),
+      createdBy:a.created_by||"",
+      closeAt:a.close_at||null,
+      autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
+      hidden:!!a.hidden
     }));
+
     state.registrations={};
 
-    // registrations 只有管理者登入後才讀取，避免匿名使用者取得完整名單。
     if(adminUnlocked){
-      const { data: regs, error:rErr } = await supabaseClient.from("registrations").select("*").order("created_at",{ascending:true});
+      const session=getAdminSession();
+      const {data: regData,error:rErr}=await supabaseClient.rpc("simple_admin_list_registrations",{
+        p_admin_username:session.username,
+        p_admin_code:session.access_code
+      });
       if(rErr) throw rErr;
-      (regs||[]).forEach(r=>{
+      if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
+      (regData.registrations||[]).forEach(r=>{
         if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
-        state.registrations[r.activity_id].push({id:r.id,name:r.name,fieldValues:r.field_values||{},ts:r.created_at});
+        state.registrations[r.activity_id].push({
+          id:r.id,
+          activity_id:r.activity_id,
+          name:r.name,
+          fieldValues:r.field_values||{},
+          ts:r.created_at
+        });
       });
     }
+
     state.adminPin=null;
   }catch(e){
     console.error("Supabase load error:",e);
-    showToast("雲端資料載入失敗："+(e?.message||""), "error");
+    showToast("雲端資料載入失敗："+(e?.message||""),"error");
   }
   loaded=true;
 }
-
 async function saveData(){
   // 保留舊函式名稱，實際資料由各操作直接寫入 Supabase。
   return true;
 }
 
 async function createActivityRemote(activity){
-  // 先用原本已經能正常建立活動的欄位新增，再補寫新功能欄位。
-  // 這樣即使 Supabase API schema 尚未完全刷新，也不會讓整個建立活動失敗。
-  const basePayload = {
-    id: activity.id,
-    name: activity.name,
-    date: activity.date,
-    fields: activity.fields,
-    open: activity.open
-  };
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
 
-  const { data: inserted, error: insertError } = await supabaseClient
-    .from("activities")
-    .insert(basePayload)
-    .select("*")
-    .single();
-
-  if(insertError){
-    console.error("建立活動基本資料失敗:", insertError);
-    throw insertError;
-  }
-
-  const extraPayload = {
-    max_participants: activity.maxParticipants == null ? null : activity.maxParticipants,
-    created_by: activity.createdBy || "",
-    close_at: activity.closeAt || null,
-    auto_close_minutes: activity.autoCloseMinutes || 0
-  };
-
-  const { data: updated, error: extraError } = await supabaseClient
-    .from("activities")
-    .update(extraPayload)
-    .eq("id", activity.id)
-    .select("*")
-    .single();
-
-  if(extraError){
-    console.error("建立活動後寫入新功能欄位失敗:", extraError);
-    // 基本活動已成功建立。回傳基本資料，避免使用者看到「建立失敗」。
-    // 新欄位若尚未存在，活動仍可正常使用。
-    return inserted;
-  }
-
-  return updated;
-}
-
-async function updateActivityRemote(activity){
-  const { error } = await supabaseClient.from("activities")
-    .update({
-      name: activity.name,
-      date: activity.date,
-      fields: activity.fields,
-      open: activity.open,
-      max_participants: activity.maxParticipants == null ? null : activity.maxParticipants,
-      created_by: activity.createdBy || "",
-      close_at: activity.closeAt || null,
-      auto_close_minutes: activity.autoCloseMinutes || 0
-    })
-    .eq("id", activity.id);
+  const {data,error}=await supabaseClient.rpc("simple_admin_create_activity",{
+    p_admin_username:session.username,
+    p_admin_code:session.access_code,
+    p_id:activity.id,
+    p_name:activity.name,
+    p_date:activity.date,
+    p_fields:activity.fields,
+    p_open:activity.open,
+    p_max_participants:activity.maxParticipants,
+    p_created_by:activity.createdBy||session.username,
+    p_close_at:activity.closeAt,
+    p_auto_close_minutes:activity.autoCloseMinutes||0,
+    p_hidden:!!activity.hidden
+  });
   if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"建立活動失敗");
+  return data.activity;
+}
+async function updateActivityRemote(activity){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+
+  const {data,error}=await supabaseClient.rpc("simple_admin_update_activity",{
+    p_admin_username:session.username,
+    p_admin_code:session.access_code,
+    p_id:activity.id,
+    p_name:activity.name,
+    p_date:activity.date,
+    p_fields:activity.fields,
+    p_open:activity.open,
+    p_max_participants:activity.maxParticipants,
+    p_created_by:activity.createdBy||session.username,
+    p_close_at:activity.closeAt,
+    p_auto_close_minutes:activity.autoCloseMinutes||0,
+    p_hidden:!!activity.hidden
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
+  return data.activity;
 }
 
+async function deleteActivityRemote(activityId){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+
+  const {data,error}=await supabaseClient.rpc("simple_admin_delete_activity",{
+    p_admin_username:session.username,
+    p_admin_code:session.access_code,
+    p_id:activityId
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"刪除活動失敗");
+  return data;
+}
 async function createRegistrationRemote(activityId, registration){
   const { data, error } = await supabaseClient.from("registrations").insert({
     id: registration.id || uid(),
@@ -543,7 +669,7 @@ function activitiesThisYear(){
 function recentOrOpenActivities(){
   // for the check-in tab's activity picker: show activities from the past 7 days, plus anything still open
   const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
-  return state.activities.filter(a => a.open || new Date(a.date).getTime() >= sevenDaysAgo);
+  return state.activities.filter(a => !a.hidden && (a.open || new Date(a.date).getTime() >= sevenDaysAgo));
 }
 
 function annualStats(name){
@@ -680,7 +806,7 @@ function renderRegister(el){
               await deleteRegistrationRemote(reg.id);
               list.splice(idx, 1);
               showToast("已刪除");
-            }catch(e){ console.error(e); showToast("刪除失敗", "error"); }
+            }catch(e){ console.error(e); showToast("刪除失敗"); }
           }else{
             list.splice(idx, 1);
             showToast("已刪除");
@@ -715,7 +841,7 @@ function renderRegister(el){
         }catch(e){
           console.error(e);
           btn.disabled = false;
-          showToast("簽到失敗，請再試一次", "error");
+          showToast("簽到失敗，請再試一次");
         }
       };
       btn.addEventListener("click", doRegister);
@@ -1061,322 +1187,282 @@ async function renderAdminAccounts(el){
 }
 
 function renderAdmin(el){
-  if(window.__adminAccountsViewOpen){
-    return;
+  if(window.__adminAccountsViewOpen) return;
+
+  if(!adminUnlocked) return renderAdminLock(el);
+
+  const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const names=allKnownNames();
+  const yearActs=activitiesThisYear();
+  const rows=names.map(n=>({name:n,...annualStats(n)}))
+    .sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
+
+  const pageTitle = {
+    home:"管理者首頁",
+    create:"建立活動",
+    activities:"活動管理",
+    attendance:"出席率"
+  };
+
+  let content="";
+
+  if(adminPage==="home"){
+    content=`
+      <div class="card">
+        <div class="admin-page-title">
+          <h2 style="margin:0;">管理者功能</h2>
+        </div>
+        <div class="admin-menu">
+          <button class="secondary" data-admin-page="create">
+            <span class="menu-title">➕ 建立活動</span>
+            <span class="menu-hint">可預先建立未來活動</span>
+          </button>
+          <button class="secondary" data-admin-page="activities">
+            <span class="menu-title">📋 活動管理</span>
+            <span class="menu-hint">關閉、隱藏、刪除活動</span>
+          </button>
+          <button class="secondary" data-admin-page="attendance">
+            <span class="menu-title">📊 出席率</span>
+            <span class="menu-hint">查看年度出席統計</span>
+          </button>
+          ${isSuperAdmin()?`<button class="secondary" id="admin-accounts-btn">
+            <span class="menu-title">👥 幹部管理</span>
+            <span class="menu-hint">新增、停用、刪除、修改密碼</span>
+          </button>`:""}
+        </div>
+      </div>`;
   }
 
-  if(!adminUnlocked){
-    return renderAdminLock(el);
-  }
-  const acts = [...state.activities].sort((a,b)=> new Date(b.date) - new Date(a.date));
-  const names = allKnownNames();
-  const yearActs = activitiesThisYear();
-  const rows = names.map(n => ({ name: n, ...annualStats(n) }))
-                     .sort((a,b)=> b.rate - a.rate || a.name.localeCompare(b.name,'zh-Hant'));
-
-  el.innerHTML = `
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span class="status-pill status-open ${isSuperAdmin() ? "" : "officer-mode-pill"}"><span class="status-dot"></span>${isSuperAdmin() ? "管理者模式" : "幹部模式"}</span>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;width:100%;">
-        ${isSuperAdmin() ? '<button class="secondary" id="admin-accounts-btn" style="margin:0;">👥 幹部管理</button>' : ''}
-        <button class="secondary" id="lock-btn" style="margin:0;">登出</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>建立新活動</h2>
-      <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
-      <input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
-
-      <div class="activity-options">
-        <div class="activity-option">
-          <label class="field-label">人數限制</label>
-          <input type="number" id="new-max-participants" min="1" step="1"
-                 placeholder="預設無限制"
-                 value="${escapeHtml(draftMaxParticipants)}" />
-          <div class="hint">留白＝無人數限制</div>
+  if(adminPage==="create"){
+    content=`
+      <div class="card">
+        <div class="admin-page-title">
+          <button class="secondary back" data-admin-page="home">←</button>
+          <h2 style="margin:0;">建立活動</h2>
         </div>
-
-        <div class="activity-option">
-          <label class="field-label">活動關閉計時器</label>
-          <div class="timer-options">
-            <button type="button" class="secondary timer-btn ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button>
-            <button type="button" class="secondary timer-btn ${draftCloseMinutes===5?'selected':''}" data-timer="5">5分</button>
-            <button type="button" class="secondary timer-btn ${draftCloseMinutes===10?'selected':''}" data-timer="10">10分</button>
-            <button type="button" class="secondary timer-btn ${draftCloseMinutes===20?'selected':''}" data-timer="20">20分</button>
+        <p class="hint">可以提前建立未來活動；活動日期到了仍可手動開放或使用計時器。</p>
+        <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
+        <input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
+        <div class="activity-options">
+          <div class="activity-option">
+            <label class="field-label">人數限制</label>
+            <input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}" />
+            <div class="hint">留白＝無人數限制</div>
           </div>
-        </div>
-      </div>
-
-      <label class="field-label">簽到欄位</label>
-      <div id="draft-fields-wrap">
-        ${ draftFields.map((label,i)=>`
-          <div class="field-row">
-            <input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費" />
-            <button class="field-remove" data-remove-field="${i}">×</button>
-          </div>
-        `).join("") }
-      </div>
-      <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
-      <button type="button" class="primary" id="create-btn">建立活動並開放簽到</button>
-      <div class="debug-error-box" id="create-activity-error"></div>
-    </div>
-
-    <div class="card">
-      <h2>活動列表（共 ${acts.length} 場・今年 ${yearActs.length} 場）</h2>
-      ${ acts.length === 0 ? `<div class="empty">還沒有建立任何活動</div>` :
-        acts.map(a=>{
-          const list = regsOf(a.id);
-          const expanded = adminExpandedId === a.id;
-          const fields = a.fields || [];
-          return `
-            <div class="event-row">
-              <div class="row-top" data-toggle="${a.id}" style="cursor:pointer;">
-                <div>
-                  <div class="name">${escapeHtml(a.name)}</div>
-                  <div class="meta">${fmtDate(a.date)}</div>
-                </div>
-                <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
-              </div>
-              <div class="stat-line">
-                <span><b>${list.length}</b>${a.maxParticipants ? ` / ${a.maxParticipants}` : ''} 人簽到</span>
-                <span class="activity-limit">${a.maxParticipants ? `上限 ${a.maxParticipants} 人` : '無人數限制'}</span>
-              </div>
-              ${ expanded ? `
-                <div style="margin-top:10px;">
-                  <button class="secondary" data-close="${a.id}">${a.open ? '停止此活動簽到' : '重新開放簽到'}</button>
-                  ${ list.length === 0 ? `<div class="empty">還沒有人簽到</div>` : `
-                    <table class="list-table">
-                      <thead><tr><th>姓名</th>${fields.map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}</tr></thead>
-                      <tbody>
-                        ${list.map((r,i)=>`
-                          <tr>
-                            <td><input class="cell-input" data-rename-ref="${a.id}|${i}" value="${escapeHtml(r.name)}" placeholder="姓名"/></td>
-                            ${fields.map(f=>`<td>${ (r.fieldValues && r.fieldValues[f.key]) ? escapeHtml(r.fieldValues[f.key]) : '—'}</td>`).join("")}
-                          </tr>
-                        `).join("")}
-                      </tbody>
-                    </table>
-                  `}
-                </div>
-              ` : ""}
+          <div class="activity-option">
+            <label class="field-label">活動關閉計時器</label>
+            <div class="timer-options">
+              <button type="button" class="secondary timer-btn ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button>
+              <button type="button" class="secondary timer-btn ${draftCloseMinutes===5?'selected':''}" data-timer="5">5分</button>
+              <button type="button" class="secondary timer-btn ${draftCloseMinutes===10?'selected':''}" data-timer="10">10分</button>
+              <button type="button" class="secondary timer-btn ${draftCloseMinutes===20?'selected':''}" data-timer="20">20分</button>
             </div>
-          `;
-        }).join("")
-      }
-    </div>
+          </div>
+        </div>
+        <label class="field-label">簽到欄位</label>
+        <div id="draft-fields-wrap">
+          ${draftFields.map((label,i)=>`
+            <div class="field-row">
+              <input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費" />
+              <button class="field-remove" data-remove-field="${i}">×</button>
+            </div>`).join("")}
+        </div>
+        <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
+        <button type="button" class="primary" id="create-btn">建立活動並開放簽到</button>
+        <div class="debug-error-box" id="create-activity-error"></div>
+      </div>`;
+  }
 
-    <div class="card">
-      <h2>年度出席率總表（${new Date().getFullYear()} 年，共 ${yearActs.length} 場）</h2>
-      ${ rows.length === 0 ? `<div class="empty">還沒有任何簽到紀錄</div>` : `
-        <button class="secondary" id="export-csv-btn" style="margin-top:0;margin-bottom:10px;">匯出 Excel（CSV）</button>
-        <table class="list-table">
-          <thead><tr><th>姓名</th><th>參加場次</th><th style="min-width:110px;">出席率</th></tr></thead>
-          <tbody>
-            ${ rows.map(r=>`
+  if(adminPage==="activities"){
+    const visibleActs=acts.filter(a=>!a.hidden);
+    const hiddenActs=acts.filter(a=>a.hidden);
+    content=`
+      <div class="card">
+        <div class="admin-page-title">
+          <button class="secondary back" data-admin-page="home">←</button>
+          <h2 style="margin:0;">活動管理</h2>
+        </div>
+        <p class="hint">活動可以提前建立。關閉＝停止簽到；隱藏＝從隊員活動列表移除；刪除＝刪除活動與其簽到資料。</p>
+        ${visibleActs.length===0?`<div class="empty">目前沒有顯示中的活動</div>`:
+          visibleActs.map(a=>activityAdminRow(a)).join("")}
+      </div>
+      ${hiddenActs.length?`
+      <div class="card">
+        <h2>已隱藏活動（${hiddenActs.length}）</h2>
+        ${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}
+      </div>`:""}
+    `;
+  }
+
+  if(adminPage==="attendance"){
+    content=`
+      <div class="card">
+        <div class="admin-page-title">
+          <button class="secondary back" data-admin-page="home">←</button>
+          <h2 style="margin:0;">年度出席率</h2>
+        </div>
+        <p class="hint">今年共 ${yearActs.length} 場活動。</p>
+        ${rows.length===0?`<div class="empty">還沒有任何簽到紀錄</div>`:`
+          <button class="secondary" id="export-csv-btn" style="margin-top:0;margin-bottom:10px;">匯出 Excel（CSV）</button>
+          <table class="list-table">
+            <thead><tr><th>姓名</th><th>參加場次</th><th style="min-width:110px;">出席率</th></tr></thead>
+            <tbody>${rows.map(r=>`
               <tr>
                 <td class="name">${escapeHtml(r.name)}</td>
                 <td>${r.attended}/${r.total}</td>
-                <td>
-                  <div class="rate-bar-wrap">
-                    <div class="rate-bar-track"><div class="rate-bar-fill" style="width:${r.rate}%;"></div></div>
-                    <span class="rate-num">${r.rate}%</span>
-                  </div>
-                </td>
-              </tr>
-            `).join("") }
-          </tbody>
-        </table>
-      `}
-      <div class="note-shared">活動與簽到功能供隊員使用；管理者登入後才能查看完整簽到名單、管理活動與幹部。</div>
+                <td><div class="rate-bar-wrap"><div class="rate-bar-track"><div class="rate-bar-fill" style="width:${r.rate}%;"></div></div><span class="rate-num">${r.rate}%</span></div></td>
+              </tr>`).join("")}</tbody>
+          </table>`}
+      </div>`;
+  }
+
+  el.innerHTML=`
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span class="status-pill ${isSuperAdmin()?"status-open":"officer-mode-pill"}"><span class="status-dot"></span>${isSuperAdmin()?"管理者模式":"幹部模式"}</span>
+      <button class="secondary" id="lock-btn" style="margin:0;width:auto;">登出</button>
     </div>
+    ${content}
   `;
 
-  const ab=document.getElementById("admin-accounts-btn");
-  if(ab){ab.style.display=isSuperAdmin()?"":"none";ab.onclick=()=>renderAdminAccounts(el);}
-  document.getElementById("lock-btn").addEventListener("click", async ()=>{
-    await adminLogout();showToast("已登出管理者");renderAdmin(el);
-  });
+  document.getElementById("lock-btn").onclick=async()=>{
+    await adminLogout(); adminPage="home"; showToast("已登出管理者"); renderAdmin(el);
+  };
 
-  const exportBtn = document.getElementById("export-csv-btn");
-  if(exportBtn){
-    exportBtn.addEventListener("click", ()=>{
-      exportAnnualCSV(rows, new Date().getFullYear());
-      showToast("已匯出 CSV 檔案");
-    });
-  }
-
-  function syncDraftFieldsFromDom(){
-    draftName = document.getElementById("new-name").value;
-    draftDate = document.getElementById("new-date").value;
-    document.querySelectorAll(".draft-field-input").forEach(inp=>{
-      draftFields[Number(inp.dataset.idx)] = inp.value;
-    });
-  }
-
-  document.getElementById("add-field-btn").addEventListener("click", ()=>{
-    syncDraftFieldsFromDom();
-    draftFields.push("");
-    renderAdmin(el);
-  });
-
-  el.querySelectorAll("[data-remove-field]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      syncDraftFieldsFromDom();
-      draftFields.splice(Number(btn.dataset.removeField), 1);
+  el.querySelectorAll("[data-admin-page]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      adminPage=btn.dataset.adminPage;
       renderAdmin(el);
     });
   });
 
-  el.querySelectorAll("[data-timer]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      draftCloseMinutes = Number(btn.dataset.timer || 0);
-      el.querySelectorAll("[data-timer]").forEach(b=>b.classList.toggle("selected", Number(b.dataset.timer||0)===draftCloseMinutes));
-    });
-  });
+  const accountBtn=document.getElementById("admin-accounts-btn");
+  if(accountBtn) accountBtn.onclick=()=>renderAdminAccounts(el);
 
-  document.getElementById("create-btn").addEventListener("click", async ()=>{
-    const createBtn = document.getElementById("create-btn");
-    const errBox = document.getElementById("create-activity-error");
-    if(errBox){ errBox.classList.remove("show"); errBox.textContent = ""; }
-
-    syncDraftFieldsFromDom();
-    const name = norm(draftName);
-    const dateVal = draftDate;
-    const maxRaw = (document.getElementById("new-max-participants")?.value || "").trim();
-    const maxParticipants = maxRaw === "" ? null : Number(maxRaw);
-    const closeMinutes = Number(draftCloseMinutes || 0);
-
-    if(!name){ showToast("請輸入活動名稱"); return; }
-    if(maxParticipants !== null && (!Number.isInteger(maxParticipants) || maxParticipants < 1)){
-      showToast("人數限制請輸入 1 以上的整數"); return;
-    }
-
-    const date = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
-    const fields = draftFields.map(l=>norm(l)).filter(l=>l!=="").map(label=>({ key: uid(), label }));
-    const id = uid();
-    const session = getAdminSession();
-    const createdBy = session?.username || "";
-    const closeAt = closeMinutes > 0 ? new Date(Date.now() + closeMinutes*60000).toISOString() : null;
-
-    const activity = {
-      id, name, date, fields, open: true,
-      maxParticipants,
-      createdBy,
-      closeAt,
-      autoCloseMinutes: closeMinutes
-    };
-
-    createBtn.disabled = true;
-    try{
-      const test = await testSupabaseConnection();
-      if(!test.ok){
-        const msg = [test.message, test.code ? "code=" + test.code : "", test.details, test.hint]
-          .filter(Boolean).join(" | ");
-        showToast("Supabase 連線失敗，詳情見下方", "error");
-        if(errBox){ errBox.textContent = "連線檢查失敗：" + msg; errBox.classList.add("show"); }
-        console.error("Supabase 連線失敗：", test);
-        createBtn.disabled = false;
-        return;
-      }
-
-      const saved = await createActivityRemote(activity);
-      const savedActivity = {
-        id: saved.id,
-        name: saved.name,
-        date: saved.date,
-        fields: Array.isArray(saved.fields) ? saved.fields : fields,
-        open: !!saved.open,
-        maxParticipants: saved.max_participants == null ? maxParticipants : Number(saved.max_participants),
-        createdBy: saved.created_by || createdBy,
-        closeAt: saved.close_at || closeAt,
-        autoCloseMinutes: saved.auto_close_minutes == null ? closeMinutes : Number(saved.auto_close_minutes)
-      };
-      state.activities.push(savedActivity);
-      state.registrations[saved.id] = [];
-    }catch(e){
-      console.error("建立活動失敗:", {
-        error: e,
-        name,
-        date,
-        maxParticipants,
-        closeMinutes,
-        createdBy,
-        closeAt
-      });
-      const msg = [e?.message, e?.code ? "code=" + e.code : "", e?.details, e?.hint]
-        .filter(Boolean).join(" | ");
-      showToast("建立活動失敗，詳情見下方", "error");
-      if(errBox){ errBox.textContent = "建立活動失敗：" + (msg || "未知錯誤"); errBox.classList.add("show"); }
-      createBtn.disabled = false;
-      return;
-    }
-    createBtn.disabled = false;
-    draftFields = ["公用哨角"];
-    draftName = "";
-    draftDate = "";
-    draftMaxParticipants = "";
-    draftCloseMinutes = 0;
-    showToast("活動已建立");
-    renderAdmin(el);
-  });
-
-  el.querySelectorAll("[data-toggle]").forEach(row=>{
-    row.addEventListener("click", ()=>{
-      const id = row.dataset.toggle;
-      adminExpandedId = adminExpandedId === id ? null : id;
-      renderAdmin(el);
-    });
-  });
-
-  el.querySelectorAll("[data-close]").forEach(btn=>{
-    btn.addEventListener("click", async (e)=>{
-      e.stopPropagation();
-      const id = btn.dataset.close;
-      const a = state.activities.find(x=>x.id===id);
-      if(a){
-        a.open = !a.open;
-        try{
-          await updateActivityRemote(a);
-          showToast(a.open ? "已重新開放簽到" : "已停止簽到");
-          renderAdmin(el);
-        }catch(err){
-          console.error(err);
-          a.open = !a.open;
-          showToast("更新失敗", "error");
-        }
-      }
-    });
-  });
-
-  el.querySelectorAll("[data-rename-ref]").forEach(input=>{
-    input.addEventListener("change", async ()=>{
-      const [actId, idx] = input.dataset.renameRef.split("|");
-      const list = regsOf(actId);
-      const r = list[Number(idx)];
-      const newName = norm(input.value);
-      if(!newName){ showToast("姓名不能是空白"); input.value = r ? r.name : ""; return; }
-      if(r){
-        try{
-          await renameRegistrationRemote(r.id, newName);
-          r.name = newName;
-          showToast("姓名已更新");
-        }catch(err){
-          console.error(err);
-          input.value = r.name;
-          showToast("姓名更新失敗", "error");
-        }
-      }
-    });
-  });
+  if(adminPage==="create") setupCreateActivityPage(el);
+  if(adminPage==="activities") setupActivityManagementPage(el);
+  if(adminPage==="attendance"){
+    const b=document.getElementById("export-csv-btn");
+    if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};
+  }
 }
 
+function activityAdminRow(a, hidden=false){
+  const list=regsOf(a.id);
+  return `
+    <div class="event-row ${hidden?'activity-row-hidden':''}">
+      <div class="row-top">
+        <div>
+          <div class="name">${escapeHtml(a.name)} ${hidden?'<span class="activity-hidden-tag">已隱藏</span>':''}</div>
+          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
+        </div>
+        <span class="status-pill ${a.open?'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
+      </div>
+      <div class="stat-line">
+        <span><b>${list.length}</b>${a.maxParticipants?` / ${a.maxParticipants}`:""} 人簽到</span>
+        <span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span>
+      </div>
+      <div class="activity-actions">
+        <button class="secondary" data-activity-close="${a.id}">${a.open?"關閉":"開啟"}</button>
+        <button class="secondary" data-activity-hide="${a.id}">${hidden?"取消隱藏":"隱藏"}</button>
+        <button class="secondary" data-activity-delete="${a.id}">刪除</button>
+      </div>
+    </div>`;
+}
+
+function setupCreateActivityPage(el){
+  function syncDraftFieldsFromDom(){
+    draftName=document.getElementById("new-name")?.value||"";
+    draftDate=document.getElementById("new-date")?.value||"";
+    const max=document.getElementById("new-max-participants");
+    draftMaxParticipants=max?max.value:"";
+    document.querySelectorAll(".draft-field-input").forEach(inp=>draftFields[Number(inp.dataset.idx)]=inp.value);
+  }
+
+  document.getElementById("add-field-btn").onclick=()=>{
+    syncDraftFieldsFromDom(); draftFields.push(""); renderAdmin(el);
+  };
+  el.querySelectorAll("[data-remove-field]").forEach(btn=>{
+    btn.onclick=()=>{syncDraftFieldsFromDom();draftFields.splice(Number(btn.dataset.removeField),1);renderAdmin(el);};
+  });
+  el.querySelectorAll("[data-timer]").forEach(btn=>{
+    btn.onclick=()=>{draftCloseMinutes=Number(btn.dataset.timer);el.querySelectorAll("[data-timer]").forEach(b=>b.classList.toggle("selected",Number(b.dataset.timer)===draftCloseMinutes));};
+  });
+
+  document.getElementById("create-btn").onclick=async()=>{
+    const createBtn=document.getElementById("create-btn"), errBox=document.getElementById("create-activity-error");
+    syncDraftFieldsFromDom();
+    const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
+    const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
+    if(!name){showToast("請輸入活動名稱");return;}
+    if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
+    const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
+    const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
+    const session=getAdminSession();
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false};
+    createBtn.disabled=true;
+    try{
+      const saved=await createActivityRemote(activity);
+      state.activities.push({...activity,id:saved.id||activity.id});
+      state.registrations[activity.id]=[];
+      draftFields=["公用哨角"];draftName="";draftDate="";draftMaxParticipants="";draftCloseMinutes=0;
+      showToast("活動已建立");adminPage="activities";renderAdmin(el);
+    }catch(e){
+      const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
+      if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
+      showToast("建立活動失敗","error");createBtn.disabled=false;
+    }
+  };
+}
+
+function setupActivityManagementPage(el){
+  el.querySelectorAll("[data-activity-close]").forEach(btn=>{
+    btn.onclick=async()=>{
+      const a=state.activities.find(x=>x.id===btn.dataset.activityClose);
+      if(!a)return;
+      const next=!a.open;
+      if(!confirm(next?`確定重新開放「${a.name}」？`:`確定關閉「${a.name}」？`))return;
+      a.open=next;
+      try{await updateActivityRemote(a);showToast(next?"已重新開放":"已關閉");renderAdmin(el);}
+      catch(e){a.open=!next;showToast("活動更新失敗："+(e?.message||"未知錯誤"),"error");}
+    };
+  });
+
+  el.querySelectorAll("[data-activity-hide]").forEach(btn=>{
+    btn.onclick=async()=>{
+      const a=state.activities.find(x=>x.id===btn.dataset.activityHide);
+      if(!a)return;
+      const next=!a.hidden;
+      if(!confirm(next?`確定隱藏「${a.name}」？\n隊員活動列表將不再顯示。`:`確定取消隱藏「${a.name}」？`))return;
+      a.hidden=next;
+      try{await updateActivityRemote(a);showToast(next?"活動已隱藏":"已取消隱藏");renderAdmin(el);}
+      catch(e){a.hidden=!next;showToast("隱藏狀態更新失敗："+(e?.message||"未知錯誤"),"error");}
+    };
+  });
+
+  el.querySelectorAll("[data-activity-delete]").forEach(btn=>{
+    btn.onclick=async()=>{
+      const a=state.activities.find(x=>x.id===btn.dataset.activityDelete);
+      if(!a)return;
+      if(!confirm(`確定永久刪除「${a.name}」？\n此活動的簽到資料也會刪除，無法復原。`))return;
+      btn.disabled=true;
+      try{
+        await deleteActivityRemote(a.id);
+        state.activities=state.activities.filter(x=>x.id!==a.id);
+        delete state.registrations[a.id];
+        showToast("活動已刪除");renderAdmin(el);
+      }catch(e){
+        btn.disabled=false;
+        showToast("刪除失敗："+(e?.message||"請確認 Supabase 權限"),"error");
+      }
+    };
+  });
+}
 function renderAdminLock(el){
   el.innerHTML=`<div class="card" style="text-align:center;">
     <div class="lock-icon">🔒</div><h2>管理者登入</h2>
-    <p class="hint">請輸入管理者帳號與管理碼。</p>
+    <p class="hint">請輸入管理者帳號與密碼。</p>
     <input type="text" id="admin-username" placeholder="帳號" autocomplete="username">
-    <input type="password" id="admin-password" placeholder="管理碼" autocomplete="current-password">
+    <input type="password" id="admin-password" placeholder="密碼" autocomplete="current-password">
     <button class="primary" id="admin-login-btn">登入管理者</button>
   </div>`;
   const b=document.getElementById("admin-login-btn"),u=document.getElementById("admin-username"),p=document.getElementById("admin-password");
@@ -1385,7 +1471,7 @@ function renderAdminLock(el){
     if(!p.value){showToast("請輸入密碼");return;}
     b.disabled=true;
     try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
-    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"), "error");b.disabled=false;}
+    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
   b.onclick=login;
   [u,p].forEach(x=>x.addEventListener("keydown",e=>{if(e.key==="Enter")login();}));
