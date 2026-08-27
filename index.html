@@ -339,6 +339,8 @@ button:disabled{
   padding:12px 14px !important;
 }
 
+
+.publish-box{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#FAF7F1}.publish-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.publish-btn.selected{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.publish-status{font-size:12px;color:var(--ink-soft);margin-top:6px}.countdown-box{margin-top:10px;padding:10px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-weight:800;text-align:center}.countdown-box.closed{background:#EBEDE6;color:var(--ink-soft)}
 </style>
 </head>
 <body>
@@ -433,6 +435,7 @@ let draftDate = "";
 let draftMaxParticipants = "";
 let draftCloseMinutes = 0;
 let adminPage = "home";
+let pendingPublishActivity=null, publishAtMode="now", publishAtValue="";
 
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
@@ -488,11 +491,10 @@ async function loadData(){
       const {data: publicActs,error:aErr}=await supabaseClient
         .from("activities")
         .select("*")
-        .eq("open",true)
         .eq("hidden",false)
         .order("date",{ascending:false});
       if(aErr) throw aErr;
-      acts=publicActs||[];
+      acts=(publicActs||[]).filter(a=>!a.publish_at || new Date(a.publish_at).getTime()<=Date.now());
     }
 
     state.activities=(acts||[]).map(a=>({
@@ -505,7 +507,8 @@ async function loadData(){
       createdBy:a.created_by||"",
       closeAt:a.close_at||null,
       autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
-      hidden:!!a.hidden
+      hidden:!!a.hidden,
+      publishAt:a.publish_at||null
     }));
 
     state.registrations={};
@@ -558,7 +561,8 @@ async function createActivityRemote(activity){
     p_created_by:activity.createdBy||session.username,
     p_close_at:activity.closeAt,
     p_auto_close_minutes:activity.autoCloseMinutes||0,
-    p_hidden:!!activity.hidden
+    p_hidden:!!activity.hidden,
+    p_publish_at:activity.publishAt||null
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"建立活動失敗");
@@ -580,7 +584,8 @@ async function updateActivityRemote(activity){
     p_created_by:activity.createdBy||session.username,
     p_close_at:activity.closeAt,
     p_auto_close_minutes:activity.autoCloseMinutes||0,
-    p_hidden:!!activity.hidden
+    p_hidden:!!activity.hidden,
+    p_publish_at:activity.publishAt||null
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
@@ -743,6 +748,20 @@ function renderTab(){
 }
 
 // ---------- REGISTER TAB ----------
+function formatCountdown(ms){
+  const s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
+  return (d?d+"天 ":"")+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+function renderCountdown(activity){
+  const box=document.getElementById("event-countdown");if(!box)return;
+  const timer=()=>{
+    const now=Date.now(), end=activity.closeAt?new Date(activity.closeAt).getTime():null;
+    if(end&&end>now) box.innerHTML=`<div class="countdown-box">⏳ 簽到截止倒數：${formatCountdown(end-now)}</div>`;
+    else box.innerHTML="";
+  };
+  timer(); clearInterval(activity._countdownTimer); activity._countdownTimer=setInterval(timer,1000);
+}
+
 function renderRegister(el){
   const acts = [...recentOrOpenActivities()].sort((a,b)=> new Date(b.date) - new Date(a.date));
 
@@ -760,7 +779,7 @@ function renderRegister(el){
         <span class="status-pill ${activity.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${activity.open ? '開放簽到中' : '已停止簽到'}</span>
         <div class="stat-line">
           <span><b>${list.length}</b>${activity.maxParticipants ? ` / ${activity.maxParticipants}` : ''} 人已簽到</span>
-        </div>
+        </div><div id="event-countdown"></div>
         <div class="divider"></div>
         ${ activity.open ? `
           ${activity.maxParticipants && list.length >= activity.maxParticipants ? `
@@ -816,6 +835,8 @@ function renderRegister(el){
       });
     }
 
+    renderCountdown(activity);
+
     if(activity.open){
       const btn = document.getElementById("reg-btn");
       const nameInput = document.getElementById("reg-name");
@@ -861,11 +882,11 @@ function renderRegister(el){
                 <div>
                   <div class="name">${escapeHtml(a.name)}</div>
                   <div class="meta">${fmtDate(a.date)}</div>
-                  <div class="activity-created-by">建立者：${escapeHtml(a.createdBy || "—")}</div>
+                  
                 </div>
                 <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
               </div>
-              <div class="stat-line"><span><b>${(state.registrations[a.id]||[]).length}</b> 人已簽到</span></div>
+              <div class="stat-line"><span><b>${(state.registrations[a.id]||[]).length}</b>${a.maxParticipants ? ` / ${a.maxParticipants}` : ""} 人已簽到</span></div>
             </div>
           `;
         }).join("")
@@ -1398,19 +1419,47 @@ function setupCreateActivityPage(el){
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
-    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false};
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:null};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
       state.activities.push({...activity,id:saved.id||activity.id});
       state.registrations[activity.id]=[];
-      draftFields=["公用哨角"];draftName="";draftDate="";draftMaxParticipants="";draftCloseMinutes=0;
-      showToast("活動已建立");adminPage="activities";renderAdmin(el);
+      pendingPublishActivity=state.activities.find(x=>x.id===activity.id)||activity;
+      publishAtMode="now"; publishAtValue="";
+      showPublishChooser(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
       if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
       showToast("建立活動失敗","error");createBtn.disabled=false;
     }
+  };
+}
+
+
+function showPublishChooser(el){
+  const a=pendingPublishActivity;if(!a)return;
+  el.innerHTML=`<div class="card">
+    <div class="admin-page-title"><button class="secondary back" id="publish-cancel">←</button><h2 style="margin:0;">發布活動</h2></div>
+    <p class="hint">「${escapeHtml(a.name)}」已建立，請選擇隊員何時可以看到。</p>
+    <div class="publish-box"><label class="field-label">發布時間</label>
+      <div class="publish-options">
+        <button type="button" class="secondary publish-btn ${publishAtMode==="now"?"selected":""}" data-publish-mode="now">立即發布</button>
+        <button type="button" class="secondary publish-btn ${publishAtMode==="scheduled"?"selected":""}" data-publish-mode="scheduled">預約發布</button>
+      </div>
+      <input class="publish-date-input" type="datetime-local" id="publish-at" value="${escapeHtml(publishAtValue)}" ${publishAtMode==="scheduled"?"":"style=\"display:none\""}>
+    </div>
+    <button class="primary" id="save-publish">儲存發布設定</button>
+  </div>`;
+  el.querySelectorAll("[data-publish-mode]").forEach(b=>b.onclick=()=>{publishAtMode=b.dataset.publishMode;publishAtValue=document.getElementById("publish-at")?.value||"";showPublishChooser(el)});
+  document.getElementById("publish-at").oninput=e=>publishAtValue=e.target.value;
+  document.getElementById("publish-cancel").onclick=()=>{pendingPublishActivity=null;adminPage="activities";renderAdmin(el)};
+  document.getElementById("save-publish").onclick=async()=>{
+    const btn=document.getElementById("save-publish");let pa=null;
+    if(publishAtMode==="scheduled"){const v=document.getElementById("publish-at").value;if(!v){showToast("請選擇發布時間");return}pa=new Date(v).toISOString();if(new Date(pa)<=new Date()){showToast("發布時間必須晚於現在");return}}
+    btn.disabled=true;a.publishAt=pa;
+    try{await updateActivityRemote(a);draftFields=["公用哨角"];draftName="";draftDate="";draftMaxParticipants="";draftCloseMinutes=0;pendingPublishActivity=null;showToast(pa?"已設定預約發布":"活動已立即發布");adminPage="activities";renderAdmin(el)}
+    catch(e){btn.disabled=false;showToast("發布設定失敗："+(e?.message||"未知錯誤"),"error")}
   };
 }
 
