@@ -231,6 +231,56 @@
   }
   .system-footer .version{ font-weight:700; }
   .system-footer .maker{ margin-top:2px; }
+
+  /* ---------- 手機日期／時間欄位 ---------- */
+  input[type="datetime-local"],
+  input[type="time"]{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:12px 10px;
+    min-height:var(--btn-min-h);
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    font-size:16px;
+    font-family:inherit;
+    background:#fbfcfa;
+    color:var(--ink);
+    color-scheme:light;
+    margin-bottom:10px;
+  }
+  input[type="datetime-local"]:focus,
+  input[type="time"]:focus{
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+
+  @media(max-width:520px){
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="time"]{
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      box-sizing:border-box;
+      font-size:16px;
+      padding-left:10px;
+      padding-right:8px;
+      overflow:hidden;
+    }
+
+    .activity-options{
+      grid-template-columns:1fr;
+    }
+
+    .activity-options > *,
+    .activity-option{
+      width:100%;
+      min-width:0;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1466,7 +1516,7 @@ function renderAdmin(el){
         </div>
         <p class="hint">可以提前建立未來活動；活動日期到了仍可手動開放或使用計時器。</p>
         <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
-        <input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
+        <label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
         <div class="activity-options">
           <div class="activity-option">
             <label class="field-label">人數限制</label>
