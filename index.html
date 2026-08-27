@@ -532,6 +532,8 @@ async function loadData(){
 
     state.registrations={};
 
+    // 管理者使用安全 RPC；隊員頁只讀取公開簽到名單。
+    // 簽到頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
     if(adminUnlocked){
       const session=getAdminSession();
       const {data: regData,error:rErr}=await supabaseClient.rpc("simple_admin_list_registrations",{
@@ -541,6 +543,23 @@ async function loadData(){
       if(rErr) throw rErr;
       if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
       (regData.registrations||[]).forEach(r=>{
+        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
+        state.registrations[r.activity_id].push({
+          id:r.id,
+          activity_id:r.activity_id,
+          name:r.name,
+          fieldValues:r.field_values||{},
+          ts:r.created_at
+        });
+      });
+    }else{
+      const {data: regData,error:rErr}=await supabaseClient
+        .from("registrations")
+        .select("id,activity_id,name,field_values,created_at")
+        .order("created_at",{ascending:true});
+      if(rErr) throw rErr;
+
+      (regData||[]).forEach(r=>{
         if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
         state.registrations[r.activity_id].push({
           id:r.id,
@@ -643,8 +662,21 @@ async function createRegistrationRemote(activityId, registration){
 }
 
 async function deleteRegistrationRemote(registrationId){
-  const { error } = await supabaseClient.from("registrations").delete().eq("id", registrationId);
-  if(error) throw error;
+  // 先嘗試直接刪除；若 RLS 不允許匿名 DELETE，使用公開刪除 RPC。
+  const {error}=await supabaseClient.from("registrations").delete().eq("id",registrationId);
+  if(!error) return true;
+
+  console.warn("直接刪除簽到失敗，嘗試公開刪除 RPC：",error);
+
+  const rpc=await supabaseClient.rpc("public_delete_registration",{
+    p_registration_id:registrationId
+  });
+
+  if(rpc.error) throw rpc.error;
+  if(rpc.data && rpc.data.ok===false){
+    throw new Error(rpc.data.message||"刪除簽到失敗");
+  }
+  return true;
 }
 
 async function renameRegistrationRemote(registrationId, name){
@@ -673,6 +705,30 @@ async function testSupabaseConnection(){
       details:e?.details || "",
       hint:e?.hint || ""
     };
+  }
+}
+
+const SIGNED_LOCAL_KEY="haotian_signed_names_v1";
+function getLocalSignedMap(){
+  try{return JSON.parse(localStorage.getItem(SIGNED_LOCAL_KEY)||"{}")||{};}
+  catch(e){return {};}
+}
+function hasLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  const arr=Array.isArray(map[activityId])?map[activityId]:[];
+  return arr.some(n=>keyOf(n)===keyOf(name));
+}
+function rememberLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  if(!Array.isArray(map[activityId])) map[activityId]=[];
+  if(!map[activityId].some(n=>keyOf(n)===keyOf(name))) map[activityId].push(norm(name));
+  localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
+}
+function forgetLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  if(Array.isArray(map[activityId])){
+    map[activityId]=map[activityId].filter(n=>keyOf(n)!==keyOf(name));
+    localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
   }
 }
 
@@ -812,6 +868,25 @@ function renderCountdown(activity){
   timer(); clearInterval(activity._countdownTimer); activity._countdownTimer=setInterval(timer,1000);
 }
 
+async function refreshActivityRegistrations(activityId){
+  const {data,error}=await supabaseClient
+    .from("registrations")
+    .select("id,activity_id,name,field_values,created_at")
+    .eq("activity_id",activityId)
+    .order("created_at",{ascending:true});
+  if(error) throw error;
+
+  const fresh=(data||[]).map(r=>({
+    id:r.id,
+    activity_id:r.activity_id,
+    name:r.name,
+    fieldValues:r.field_values||{},
+    ts:r.created_at
+  }));
+  state.registrations[activityId]=fresh;
+  return fresh;
+}
+
 function renderRegister(el){
   const acts = [...recentOrOpenActivities()].sort((a,b)=> new Date(b.date) - new Date(a.date));
 
@@ -863,17 +938,33 @@ function renderRegister(el){
         `}
       </div>
     `;
-    safeAddById("back-link","click", ()=>{ openEventId = null; renderRegister(el); });
+    const backLink = document.getElementById("back-link");
+    if(backLink){
+      backLink.onclick = (ev)=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        openEventId = null;
+        renderRegister(el);
+      };
+    }
 
     if(activity.open){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>{
-        safeAdd(btn,"click",async ()=>{
+        btn.onclick = async (ev)=>{
+          ev.preventDefault();
+          ev.stopPropagation();
           const idx = Number(btn.dataset.deleteReg);
           const reg = list[idx];
           if(reg && reg.id){
             try{
               await deleteRegistrationRemote(reg.id);
-              list.splice(idx, 1);
+
+              // 重新從資料庫確認刪除結果，避免舊的 state / 背景更新把資料又放回來。
+              const freshAfterDelete=await refreshActivityRegistrations(activity.id);
+              list.length=0;
+              freshAfterDelete.forEach(x=>list.push(x));
+
+              forgetLocalSigned(activity.id,reg.name);
               showToast("已刪除");
             }catch(e){ console.error(e); showToast("刪除失敗"); }
           }else{
@@ -881,7 +972,7 @@ function renderRegister(el){
             showToast("已刪除");
           }
           renderRegister(el);
-        });
+        };
       });
     }
 
@@ -898,29 +989,116 @@ function renderRegister(el){
       const doRegister = async ()=>{
         const name = norm(nameInput.value);
         if(!name){ showToast("請輸入姓名"); return; }
-        if(list.some(r => keyOf(r.name) === keyOf(name))){ showToast(`${name} 已經簽到過了`); return; }
+
+        let freshList;
+        try{
+          freshList=await refreshActivityRegistrations(activity.id);
+        }catch(e){
+          console.error("簽到前更新名單失敗:",e);
+          showToast("無法取得最新簽到狀態，請稍後再試","error");
+          return;
+        }
+
+        // 人數上限一定以資料庫最新名單計算。
+        if(activity.maxParticipants && freshList.length >= activity.maxParticipants){
+          showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`,"error");
+          renderRegister(el);
+          return;
+        }
+
+        if(freshList.some(r => keyOf(r.name) === keyOf(name))){
+          showToast(`${name} 已經簽到過了`,"error");
+          nameInput.focus();
+          return;
+        }
+
         const fieldValues = {};
         el.querySelectorAll(".reg-field-input").forEach(inp=>{
           fieldValues[inp.dataset.key] = norm(inp.value);
         });
+
         btn.disabled = true;
+        nameInput.disabled = true;
+        el.querySelectorAll(".reg-field-input").forEach(inp=>inp.disabled=true);
+
         try{
-          const remote = await createRegistrationRemote(activity.id, { name, fieldValues });
-          list.push({
-            id: remote.id,
-            name: remote.name,
-            fieldValues: remote.field_values || {},
-            ts: remote.created_at
-          });
+          const remote = await createRegistrationRemote(activity.id,{name,fieldValues});
+
+          const newReg={
+            id:remote.id,
+            name:remote.name || name,
+            fieldValues:remote.field_values || fieldValues,
+            ts:remote.created_at || new Date().toISOString()
+          };
+
+          // 立即更新本頁 state，不重新 render 整個頁面，避免表單被重置。
+          state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);
+          state.registrations[activity.id].push(newReg);
+          rememberLocalSigned(activity.id,name);
+
+          // 清空表單，保留在同一個活動頁。
+          nameInput.value="";
+          el.querySelectorAll(".reg-field-input").forEach(inp=>inp.value="");
+
+          // 更新人數顯示。
+          const stat=el.querySelector(".stat-line");
+          if(stat){
+            const currentCount=state.registrations[activity.id].length;
+            stat.innerHTML=`<span><b>${currentCount}</b>${activity.maxParticipants ? ` / ${activity.maxParticipants}` : ''} 人已簽到</span>`;
+          }
+
+          // 直接把新簽到資料插入名單，不讓整頁閃退/重置。
+          const tbody=el.querySelector(".list-table tbody");
+          if(tbody){
+            const tr=document.createElement("tr");
+            tr.innerHTML=
+              `<td class="name">${escapeHtml(newReg.name)}</td>`+
+              fields.map(f=>`<td>${newReg.fieldValues && newReg.fieldValues[f.key] ? escapeHtml(newReg.fieldValues[f.key]) : "—"}</td>`).join("")+
+              (activity.open?`<td><button class="field-remove" data-delete-reg="${list.length-1}" title="刪除這筆簽到">×</button></td>`:"");
+            tbody.appendChild(tr);
+
+            const del=tr.querySelector("[data-delete-reg]");
+            if(del){
+              del.onclick=async(ev)=>{
+                ev.preventDefault();
+                ev.stopPropagation();
+                const idx=Number(del.dataset.deleteReg);
+                const reg=list[idx];
+                if(!reg)return;
+                try{
+                  await deleteRegistrationRemote(reg.id);
+                  forgetLocalSigned(activity.id,reg.name);
+                  list.splice(idx,1);
+                  showToast("已刪除");
+                  renderRegister(el);
+                }catch(e){
+                  console.error(e);
+                  showToast("刪除失敗："+(e?.message||"未知錯誤"),"error");
+                }
+              };
+            }
+          }
+
           showToast(`${name} 簽到成功！`);
-          renderRegister(el);
         }catch(e){
-          console.error(e);
-          btn.disabled = false;
-          showToast("簽到失敗，請再試一次");
+          console.error("簽到失敗:",e);
+          const msg=String(e?.message||"");
+          // 後端若已經判定重複，明確顯示，不再讓使用者重試造成重複。
+          if(/已經|已簽到|duplicate|duplicat|already/i.test(msg)){
+            rememberLocalSigned(activity.id,name);
+            showToast(`${name} 已經簽到過了`,"error");
+          }else if(/上限|limit|full|capacity/i.test(msg)){
+            showToast("此活動已達人數上限","error");
+          }else{
+            showToast("簽到失敗："+(msg||"請再試一次"),"error");
+          }
+        }finally{
+          btn.disabled=false;
+          nameInput.disabled=false;
+          el.querySelectorAll(".reg-field-input").forEach(inp=>inp.disabled=false);
         }
       };
-      btn.addEventListener("click", doRegister);
+      btn.onclick = doRegister;
     }
     return;
   }
@@ -1293,7 +1471,7 @@ function renderAdmin(el){
         <div class="admin-menu">
           <button class="secondary" data-admin-page="create">
             <span class="menu-title">➕ 建立活動</span>
-            <span class="menu-hint">可預先建立未來活動</span>
+            <span class="menu-hint">${isSuperAdmin() ? "主管理員／幹部皆可建立活動" : "幹部可建立活動"}</span>
           </button>
           <button class="secondary" data-admin-page="activities">
             <span class="menu-title">📋 活動管理</span>
@@ -1432,24 +1610,77 @@ function renderAdmin(el){
 
 function activityAdminRow(a, hidden=false){
   const list=regsOf(a.id);
+  const expanded=window.adminAttendanceExpandedId===a.id;
+  const future=a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now();
+
   return `
-    <div class="event-row ${hidden?'activity-row-hidden':''}">
+    <div class="event-row ${hidden?'activity-row-hidden':''}" data-admin-activity-row="${escapeHtml(a.id)}">
       <div class="row-top">
         <div>
           <div class="name">${escapeHtml(a.name)} ${hidden?'<span class="activity-hidden-tag">已隱藏</span>':''}</div>
-          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="activity-created-by">${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? `發布時間：${new Date(a.publishAt).toLocaleString("zh-TW",{hour12:false})}` : `發布時間：立即`}</div>
+          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
+          <div class="activity-created-by">
+            ${future
+              ? `發布時間：${new Date(a.publishAt).toLocaleString("zh-TW",{hour12:false})}`
+              : `發布時間：立即`}
+          </div>
         </div>
-        <span class="status-pill ${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? 'status-closed' : (a.open?'status-open':'status-closed')}"><span class="status-dot"></span>${a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now() ? '未發布' : (a.open?'開放中':'已停止')}</span>
+        <span class="status-pill ${future?'status-closed':(a.open?'status-open':'status-closed')}">
+          <span class="status-dot"></span>${future?'未發布':(a.open?'開放中':'已停止')}
+        </span>
       </div>
+
       <div class="stat-line">
         <span><b>${list.length}</b>${a.maxParticipants?` / ${a.maxParticipants}`:""} 人簽到</span>
         <span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span>
       </div>
+
       <div class="activity-actions">
-        <button class="secondary" data-activity-close="${a.id}">${a.open?"關閉":"開啟"}</button>
-        <button class="secondary" data-activity-hide="${a.id}">${hidden?"取消隱藏":"隱藏"}</button>
-        <button class="secondary" data-activity-delete="${a.id}">刪除</button>
+        <button type="button" class="secondary" data-admin-attendance="${escapeHtml(a.id)}">
+          ${expanded?"隱藏簽到名單":`查看簽到名單（${list.length}）`}
+        </button>
+        <button type="button" class="secondary" data-activity-close="${escapeHtml(a.id)}">
+          ${a.open?"關閉":"開啟"}
+        </button>
+        <button type="button" class="secondary" data-activity-hide="${escapeHtml(a.id)}">
+          ${hidden?"取消隱藏":"隱藏"}
+        </button>
+        <button type="button" class="secondary" data-activity-delete="${escapeHtml(a.id)}">刪除</button>
       </div>
+
+      ${expanded ? `
+        <div class="admin-attendance-panel">
+          <div class="divider"></div>
+          <div style="font-weight:800;font-size:14px;margin-bottom:8px;">
+            簽到者名單（${list.length} 人）
+          </div>
+          ${list.length===0
+            ? `<div class="empty" style="padding:16px 4px;">目前還沒有人簽到</div>`
+            : `<table class="list-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>姓名</th>
+                    ${(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}
+                    <th>簽到時間</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${list.map((r,i)=>`
+                    <tr>
+                      <td>${i+1}</td>
+                      <td class="name">${escapeHtml(r.name)}</td>
+                      ${(a.fields||[]).map(f=>`
+                        <td>${r.fieldValues && r.fieldValues[f.key] ? escapeHtml(r.fieldValues[f.key]) : "—"}</td>
+                      `).join("")}
+                      <td>${r.ts ? new Date(r.ts).toLocaleString("zh-TW",{hour12:false}) : "—"}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>`
+          }
+        </div>
+      `:""}
     </div>`;
 }
 
@@ -1557,6 +1788,28 @@ function showPublishChooser(el){
 }
 
 function setupActivityManagementPage(el){
+  // 活動管理：查看／隱藏簽到名單
+  el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
+    btn.onclick=async(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      const id=btn.getAttribute("data-admin-attendance");
+      window.adminAttendanceExpandedId =
+        window.adminAttendanceExpandedId===id ? null : id;
+
+      // 若目前 state 沒有該活動的簽到資料，重新載入一次。
+      const a=state.activities.find(x=>String(x.id)===String(id));
+      if(a && (!state.registrations[a.id] || state.registrations[a.id].length===0)){
+        try{
+          await loadData();
+        }catch(e){
+          console.error("讀取簽到名單失敗",e);
+        }
+      }
+      renderAdmin(el);
+    };
+  });
+
   // 活動管理：直接對「目前畫面上的按鈕」綁定 onclick。
   // 不再依賴事件委派，避免被其他 DOM 事件攔截。
   const buttons = el.querySelectorAll(
@@ -1785,7 +2038,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 <script>
 /* ===== 活動管理最終除錯層 ===== */
 (function(){
-  function activityButtonHandler(ev){
+  async function activityButtonHandler(ev){
     const btn=ev.target && ev.target.closest &&
       ev.target.closest("[data-activity-close],[data-activity-hide],[data-activity-delete]");
     if(!btn) return;
