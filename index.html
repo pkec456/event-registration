@@ -433,7 +433,7 @@ let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, re
 let draftName = "";
 let draftDate = "";
 let draftMaxParticipants = "";
-let draftCloseMinutes = 0;
+let draftCloseMinutes = 0;\nlet publishMode = "now";\nlet pendingPublishActivity = null;
 let adminPage = "home";
 let pendingPublishActivity=null, publishAtMode="now", publishAtValue="";
 
@@ -606,14 +606,21 @@ async function deleteActivityRemote(activityId){
   return data;
 }
 async function createRegistrationRemote(activityId, registration){
-  const { data, error } = await supabaseClient.from("registrations").insert({
-    id: registration.id || uid(),
-    activity_id: activityId,
-    name: registration.name,
-    field_values: registration.fieldValues || {}
-  }).select().single();
+  // 隊員簽到改走公開 RPC。
+  // 不直接 INSERT registrations，避免被 Supabase RLS 擋住。
+  const { data, error } = await supabaseClient.rpc("public_create_registration", {
+    p_activity_id: activityId,
+    p_name: registration.name,
+    p_field_values: registration.fieldValues || {}
+  });
+
   if(error) throw error;
-  return data;
+
+  if(!data?.ok){
+    throw new Error(data?.message || "簽到失敗");
+  }
+
+  return data.registration;
 }
 
 async function deleteRegistrationRemote(registrationId){
@@ -709,6 +716,12 @@ function exportAnnualCSV(rows, year){
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function getPublishAt(){
+  if(publishMode === "1day") return new Date(Date.now()+24*60*60*1000).toISOString();
+  if(publishMode === "1week") return new Date(Date.now()+7*24*60*60*1000).toISOString();
+  return null;
 }
 
 function render(){
