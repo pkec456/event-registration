@@ -219,6 +219,18 @@
   /* ---------- 發布時機倒數 ---------- */
   .countdown-box{ margin-top:10px; padding:10px; border-radius:10px; background:var(--warn-soft); color:var(--warn); font-weight:800; text-align:center; }
   .countdown-box.closed{ background:#EBEDE6; color:var(--ink-soft); }
+
+  /* ---------- 系統資訊頁尾 ---------- */
+  .system-footer{
+    margin-top:28px;
+    padding:14px 8px 6px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:11px;
+    line-height:1.7;
+  }
+  .system-footer .version{ font-weight:700; }
+  .system-footer .maker{ margin-top:2px; }
 </style>
 </head>
 <body>
@@ -2147,6 +2159,11 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   document.addEventListener("click",activityButtonHandler,true);
 })();
 </script>
+
+  <footer class="system-footer" aria-label="系統資訊">
+    <div class="version">系統版本：v1.0</div>
+    <div class="maker">製作者：小樂</div>
+  </footer>
 </body>
 
 
