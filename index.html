@@ -2184,6 +2184,73 @@ body .app-header:not(.home-header){
   height:20px !important;
 }
 
+
+/* v78 — compress checked-in list columns without removing any function */
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  grid-template-columns:
+    24px
+    minmax(72px,1.05fr)
+    repeat(var(--field-count,1),minmax(48px,.9fr))
+    30px !important;
+  gap:5px !important;
+}
+.signin-list-head{
+  padding-left:4px !important;
+  padding-right:4px !important;
+}
+.block.tight .list-row:has(.signin-field-value){
+  padding:9px 4px !important;
+}
+.signin-list-head > div,
+.signin-field-value{
+  font-size:10px !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-name{
+  font-size:12px !important;
+}
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:
+      22px
+      minmax(64px,1fr)
+      repeat(var(--field-count,1),minmax(44px,.9fr))
+      28px !important;
+    gap:4px !important;
+  }
+  .signin-list-head > div,
+  .signin-field-value{font-size:9px !important}
+}
+
+
+/* v79 — checked-in list delete = plain X, no background */
+.signin-delete-btn{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:#171717 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:0 !important;
+  cursor:pointer !important;
+}
+.signin-delete-btn:hover,
+.signin-delete-btn:focus-visible{
+  background:transparent !important;
+  color:#d71920 !important;
+  outline:none !important;
+}
+.signin-delete-btn svg{
+  width:18px !important;
+  height:18px !important;
+}
+
 </style>
 </head>
 <body>
@@ -2921,7 +2988,7 @@ function renderRegister(el){
               <div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div>
             </div>
             ${fields.map(f=>`<div class="signin-field-value">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</div>`).join("")}
-            ${activity.open?`<button class="icon-btn danger" data-delete-reg="${i}" title="刪除簽到"><i data-lucide="trash-2"></i></button>`:`<i class="check" data-lucide="check"></i>`}
+            ${activity.open?`<button class="signin-delete-btn" data-delete-reg="${i}" title="刪除簽到" aria-label="刪除簽到"><i data-lucide="x"></i></button>`:`<i class="check" data-lucide="check"></i>`}
           </div>`).join("")}
         `}
       </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
