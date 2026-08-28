@@ -2133,6 +2133,57 @@ body .app-header:not(.home-header){
   margin-top:4px !important;
 }
 
+
+/* v75 — logout is exclusive to the administrator area */
+.home-fixed-header .top-admin-access{
+  cursor:pointer !important;
+}
+.home-fixed-header .top-admin-access{
+  color:var(--ink) !important;
+}
+.home-fixed-header .top-admin-access svg{
+  color:inherit !important;
+  stroke:currentColor !important;
+}
+.admin-main-hero-logout{
+  display:flex !important;
+}
+
+
+/* v76 — when logged in, show shield + logout side-by-side on the home */
+.top-admin-actions{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+}
+.top-admin-access,
+.top-admin-logout{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  border-radius:14px !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 42px !important;
+  cursor:pointer !important;
+}
+.top-admin-logout{
+  border:1px solid var(--line) !important;
+  background:#fff !important;
+  color:var(--ink) !important;
+}
+.top-admin-logout:hover,
+.top-admin-logout:focus-visible{
+  color:#d71920 !important;
+  border-color:#efb8bb !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.top-admin-logout svg{
+  width:20px !important;
+  height:20px !important;
+}
+
 </style>
 </head>
 <body>
@@ -2657,11 +2708,14 @@ function render(){
     app.innerHTML=`
       <header class="top home-fixed-header">
         <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
+        <div class="top-admin-actions">
         <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
           type="button" id="top-admin-access" aria-label="管理者"
-          title="${adminUnlocked?"登出管理者":"管理者登入"}">
-          <i data-lucide="${adminUnlocked?"log-out":"shield"}"></i>
+          title="${adminUnlocked?"進入管理者":"管理者登入"}">
+          <i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i>
         </button>
+        ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
+      </div>
       </header>
       <nav class="tabs home-tabs">
         <button data-tab="register" class="${activeTab==='register'?'active':''}">
@@ -2696,21 +2750,22 @@ function render(){
   };
 
   const adminAccess=app.querySelector("#top-admin-access");
-  if(adminAccess)adminAccess.onclick=async()=>{
-    if(adminUnlocked){
-      await adminLogout();
-      adminPage="home";
-      openEventId=null;
-      adminExpandedId=null;
-      queryResultVisible=false;
-      showToast("已登出管理者");
-      render();
-      return;
-    }
+  if(adminAccess)adminAccess.onclick=()=>{
     activeTab="admin";
     openEventId=null;
     adminExpandedId=null;
     queryResultVisible=false;
+    render();
+  };
+
+  const topAdminLogout=app.querySelector("#top-admin-logout");
+  if(topAdminLogout)topAdminLogout.onclick=async()=>{
+    await adminLogout();
+    adminPage="home";
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    showToast("已登出管理者");
     render();
   };
 
