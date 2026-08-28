@@ -6,317 +6,43 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
 <style>
-  /* 保留目前前端既有 CSS；本次只修正資料 API 相容性，不改版面樣式。 */
-  :root{
-    --bg:#FBF1E2;
-    --surface:#FFFFFF;
-    --ink:#3B2416;
-    --ink-soft:#8C6B4E;
-    --accent:#D8531B;
-    --accent-soft:#F8DCC5;
-    --warn:#E2A227;
-    --warn-soft:#FBEAC4;
-    --absent:#9C2B1D;
-    --absent-soft:#F3D9D0;
-    --line:#EAD9C1;
-    --radius:14px;
-    --btn-radius:10px;
-    --btn-min-h:44px;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  #app{ max-width:520px; margin:0 auto; padding:16px 16px 40px; }
-  header.top{ padding:18px 4px 14px; text-align:center; }
-  header.top .eyebrow{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; }
-  header.top h1{ margin:4px 0 0; font-size:24px; font-weight:800; letter-spacing:-0.01em; }
-
-  /* ---------- 分頁籤 ---------- */
-  nav.tabs{ display:flex; gap:6px; background:var(--surface); border-radius:999px; padding:5px; border:1px solid var(--line); margin-bottom:18px; }
-  nav.tabs button{
-    flex:1; border:none; background:transparent; padding:10px 8px;
-    border-radius:999px; min-height:auto;
-    font-size:14px; font-weight:600; color:var(--ink-soft);
-  }
-  nav.tabs button.active{ background:var(--ink); color:#fff; }
-  nav.tabs button:hover:not(.active):not(:disabled){ color:var(--ink); background:#F2ECDF; }
-
-  .card{ background:var(--surface); border-radius:var(--radius); border:1px solid var(--line); padding:18px; margin-bottom:14px; }
-  .card h2{ margin:0 0 4px; font-size:16px; font-weight:800; }
-  .card p.hint, .hint{ margin:0 0 14px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
-
-  /* ---------- 輸入框：跟按鈕共用同一套最小高度 ---------- */
-  input[type=text], input[type=date], input[type=password], input[type=number], select{
-    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
-    font-size:16px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin-bottom:10px;
-    min-height:var(--btn-min-h); transition:border-color .15s ease, box-shadow .15s ease;
-  }
-  input[type=text]:focus, input[type=date]:focus, input[type=password]:focus, input[type=number]:focus, select:focus{
-    outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);
-  }
-  input.cell-input{
-    width:100%; padding:7px 8px; border-radius:7px; border:1.5px solid var(--line);
-    font-size:13px; font-family:inherit; background:#fbfcfa; color:var(--ink); margin:0;
-  }
-  .officer-input{
-    display:block; width:100%; box-sizing:border-box; height:46px;
-    padding:12px 14px; margin:8px 0; border:1px solid #d1d5db; border-radius:10px;
-    font:inherit; background:#fff;
-  }
-  .officer-input:focus{ outline:none; border-color:#111827; box-shadow:0 0 0 2px rgba(17,24,39,.08); }
-
-  label.field-label{ font-size:13px; font-weight:700; color:var(--ink-soft); display:block; margin:0 0 6px; }
-  .field-row{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
-  .field-row input[type=text]{ margin-bottom:0; }
-
-  /* ==================================================================
-     按鈕 — 全站只有這一個地方定義尺寸，不再有其他區塊互相覆蓋
-     ================================================================== */
-  button{
-    box-sizing:border-box;
-    font-family:inherit;
-    font-weight:700;
-    line-height:1.25;
-    cursor:pointer;
-    border-radius:var(--btn-radius);
-    transition:background-color .15s ease, border-color .15s ease, color .15s ease,
-               box-shadow .15s ease, transform .08s ease, opacity .15s ease;
-  }
-  button:hover:not(:disabled){ box-shadow:0 3px 10px rgba(59,36,22,.10); }
-  button:active:not(:disabled){ transform:translateY(1px); box-shadow:none; }
-  button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-  button:disabled{ opacity:.5; cursor:not-allowed; box-shadow:none !important; transform:none !important; }
-
-  /* 大按鈕：登入／建立／送出／加欄位……全部同一種高度與字級 */
-  button.primary, button.secondary, button.add-field{
-    width:100%; min-height:var(--btn-min-h);
-    padding:12px 14px; font-size:15px; margin:0;
-  }
-  button.primary{ background:var(--accent); color:#fff; border:1.5px solid var(--accent); }
-  button.primary:hover:not(:disabled){ background:#C1481A; border-color:#C1481A; }
-  button.secondary{ background:#fff; color:var(--ink); border:1.5px solid var(--line); }
-  button.secondary:hover:not(:disabled){ background:#FAF7F1; border-color:var(--ink); }
-  button.add-field{ background:transparent; color:var(--accent); border:1.5px dashed var(--line); font-size:13px; }
-  button.add-field:hover:not(:disabled){ background:var(--accent-soft); border-color:var(--accent); }
-
-  /* 小型方形圖示按鈕：刪除欄位 × ／返回箭頭 ←，統一 40×40 正方形 */
-  button.field-remove, .admin-page-title .back{
-    width:40px; height:40px; min-height:40px; min-width:40px;
-    padding:0; flex-shrink:0; margin:0;
-    background:#fff; color:var(--absent); border:1.5px solid var(--line);
-    font-size:16px; display:inline-flex; align-items:center; justify-content:center;
-  }
-  button.field-remove:hover:not(:disabled){ background:var(--absent-soft); border-color:var(--absent); }
-  .admin-page-title .back{ color:var(--ink); }
-  .admin-page-title .back:hover:not(:disabled){ background:#FAF7F1; border-color:var(--ink); }
-  .admin-page-title{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-
-  /* 同排並列的小型動作按鈕：幹部管理三顆、計時器／發布時機幾顆——共用同一套字級與內距，
-     不再各自被覆寫成不同大小；並排的顆數交給各自的 grid 容器決定 */
-  .officer-actions button,
-  .timer-options button{
-    width:100%; min-height:var(--btn-min-h); margin:0;
-    padding:9px 8px; font-size:13px; white-space:normal;
-    display:flex; align-items:center; justify-content:center; text-align:center;
-  }
-  .timer-options button.selected{ background:var(--accent); color:#fff; border-color:var(--accent); }
-
-  .officer-actions{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin-top:8px; }
-
-  .timer-options{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:8px 0 12px; }
-  @media(max-width:420px){ .timer-options{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
-
-  /* 每一場活動的動作按鈕：固定 2×2，四顆按鈕永遠一樣大，
-     不會像 3 欄放 4 顆按鈕那樣，第 4 顆自己落單、大小跑掉 */
-  .activity-actions{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; margin-top:10px; }
-  .activity-actions button{
-    width:100%; min-height:var(--btn-min-h); margin:0;
-    padding:9px 8px; font-size:13px; white-space:normal; line-height:1.3;
-    display:flex; align-items:center; justify-content:center; text-align:center;
-  }
-
-  /* 管理者首頁選單：功能入口方塊，用途和上面的小按鈕不同，故意做得比較大、
-     但同一個選單裡的每一塊彼此大小完全一致 */
-  .admin-menu{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .admin-menu button{
-    width:100%; min-height:64px; margin:0;
-    padding:14px; display:flex; flex-direction:column;
-    align-items:flex-start; justify-content:center; text-align:left;
-  }
-  .admin-menu .menu-title{ font-weight:800; display:block; }
-  .admin-menu .menu-hint{ font-size:12px; font-weight:500; color:var(--ink-soft); display:block; margin-top:3px; }
-  @media(max-width:520px){ .admin-menu{ grid-template-columns:1fr; } }
-
-  /* ---------- 活動建立表單：兩欄選項 ---------- */
-  .activity-options{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0; }
-  .activity-option{ width:100%; box-sizing:border-box; }
-  @media(max-width:520px){ .activity-options{ grid-template-columns:1fr; } }
-  .activity-created-by{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
-  .activity-limit{ font-size:12px; color:var(--ink-soft); }
-
-  /* ---------- 狀態標籤 ---------- */
-  .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; }
-  .status-open{ background:var(--warn-soft); color:var(--warn); }
-  .status-closed{ background:#EBEDE6; color:var(--ink-soft); }
-  .status-dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
-  .officer-mode-pill{ background:#dc2626 !important; color:#fff !important; border-color:#dc2626 !important; }
-  .officer-mode-pill .status-dot{ background:#fff !important; }
-
-  /* ---------- 活動列（簽到頁與管理頁共用） ---------- */
-  .event-row{ padding:12px 0; border-top:1px solid var(--line); }
-  .event-row:first-of-type{ border-top:none; }
-  .event-row .row-top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
-  .event-row .name{ font-weight:800; font-size:14px; }
-  .event-row .meta{ color:var(--ink-soft); font-size:12px; margin-top:2px; }
-  .activity-row-hidden{ opacity:.55; }
-  .activity-hidden-tag{ display:inline-block; background:#eee; color:#777; font-size:11px; padding:3px 7px; border-radius:999px; margin-left:5px; }
-
-  .stat-line{ display:flex; gap:14px; font-size:12px; color:var(--ink-soft); margin-top:6px; flex-wrap:wrap; }
-  .stat-line b{ color:var(--ink); }
-
-  /* ---------- 表格 ---------- */
-  table.list-table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
-  table.list-table th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); padding:6px 6px; border-bottom:1.5px solid var(--line); }
-  table.list-table td{ padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:middle; }
-  table.list-table td.name{ font-weight:700; }
-
-  .rate-bar-wrap{ display:flex; align-items:center; gap:8px; }
-  .rate-bar-track{ flex:1; height:6px; border-radius:99px; background:#EBEDE6; overflow:hidden; }
-  .rate-bar-fill{ height:100%; border-radius:99px; background:var(--accent); }
-  .rate-num{ font-weight:800; font-variant-numeric:tabular-nums; min-width:40px; text-align:right; font-size:12px; }
-  .big-rate{ display:flex; align-items:baseline; gap:6px; margin:6px 0 2px; }
-  .big-rate .num{ font-size:40px; font-weight:800; letter-spacing:-0.02em; }
-  .big-rate .unit{ font-size:16px; font-weight:700; color:var(--ink-soft); }
-
-  .empty{ text-align:center; padding:24px 8px; color:var(--ink-soft); font-size:13px; }
-
-  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:#fff; padding:11px 18px; border-radius:999px; font-size:13px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis; }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
-
-  .note-shared{ font-size:11px; color:var(--ink-soft); background:#F5F6F1; border-radius:8px; padding:8px 10px; line-height:1.5; margin-top:10px; }
-  .divider{ height:1px; background:var(--line); margin:12px 0; }
-  .backlink{ font-size:13px; font-weight:700; color:var(--accent); cursor:pointer; display:inline-block; margin-bottom:10px; }
-  .lock-icon{ font-size:32px; margin-bottom:6px; }
-  .tag{ display:inline-block; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; padding:3px 8px; border-radius:999px; margin:2px 4px 2px 0; }
-
-  .debug-error-box{
-    display:none; margin-top:10px; padding:10px 12px; border-radius:10px;
-    background:var(--absent-soft); border:1px solid var(--absent); color:var(--absent);
-    font-size:12px; line-height:1.6; white-space:pre-wrap; word-break:break-word;
-  }
-  .debug-error-box.show{ display:block; }
-
-  /* ---------- 管理者：各功能獨立頁面 ---------- */
-  .admin-page{ display:none; }
-  .admin-page.active{ display:block; }
-  .admin-edit-box{ width:100%; margin-top:10px; }
-
-  /* ---------- 發布時機倒數 ---------- */
-  .countdown-box{ margin-top:10px; padding:10px; border-radius:10px; background:var(--warn-soft); color:var(--warn); font-weight:800; text-align:center; }
-  .countdown-box.closed{ background:#EBEDE6; color:var(--ink-soft); }
-
-  /* ---------- 系統資訊頁尾 ---------- */
-  .system-footer{
-    margin-top:28px;
-    padding:14px 8px 6px;
-    text-align:center;
-    color:var(--ink-soft);
-    font-size:11px;
-    line-height:1.7;
-  }
-  .system-footer .version{ font-weight:700; }
-  .system-footer .maker{ margin-top:2px; }
-
-  /* ---------- 手機日期／時間欄位 ---------- */
-  input[type="datetime-local"],
-  input[type="time"]{
-    width:100%;
-    max-width:100%;
-    min-width:0;
-    box-sizing:border-box;
-    padding:12px 10px;
-    min-height:var(--btn-min-h);
-    border-radius:10px;
-    border:1.5px solid var(--line);
-    font-size:16px;
-    font-family:inherit;
-    background:#fbfcfa;
-    color:var(--ink);
-    color-scheme:light;
-    margin-bottom:10px;
-  }
-  input[type="datetime-local"]:focus,
-  input[type="time"]:focus{
-    outline:none;
-    border-color:var(--accent);
-    box-shadow:0 0 0 3px var(--accent-soft);
-  }
-
-  @media(max-width:520px){
-    input[type="date"],
-    input[type="datetime-local"],
-    input[type="time"]{
-      width:100%;
-      max-width:100%;
-      min-width:0;
-      box-sizing:border-box;
-      font-size:16px;
-      padding-left:10px;
-      padding-right:8px;
-      overflow:hidden;
-    }
-
-    .activity-options{
-      grid-template-columns:1fr;
-    }
-
-    .activity-options > *,
-    .activity-option{
-      width:100%;
-      min-width:0;
-    }
-  }
-
-  /* ---------- 公告：固定顯示，不跑馬燈 ---------- */
-  .announcement-bar{
-    display:flex; align-items:center; gap:8px;
-    width:100%; min-height:42px; margin:-6px 0 14px;
-    padding:6px 8px 6px 12px; box-sizing:border-box;
-    background:var(--surface); border:1px solid var(--line);
-    border-radius:12px;
-  }
-  .announcement-label{
-    flex:0 0 auto; font-size:12px; font-weight:800; white-space:nowrap;
-  }
-  .announcement-text{
-    flex:1; min-width:0; font-size:13px; line-height:1.5;
-    color:var(--ink); word-break:break-word;
-  }
-  .announcement-edit-btn{
-    flex:0 0 auto; min-height:36px; width:auto !important;
-    margin:0 !important; padding:7px 12px !important;
-    font-size:12px !important;
-  }
-  .announcement-editor{
-    display:flex; flex:1; min-width:0; gap:6px; align-items:center;
-  }
-  .announcement-editor input{
-    flex:1; min-width:0; width:100%; margin:0;
-    min-height:36px; padding:8px 10px;
-    border:1.5px solid var(--accent); border-radius:8px;
-    font:inherit; font-size:13px; box-sizing:border-box;
-  }
-  @media(max-width:420px){
-    .announcement-bar{gap:5px;padding-left:9px;padding-right:5px;}
-    .announcement-label{font-size:11px;}
-    .announcement-text{font-size:12px;}
-    .announcement-edit-btn{min-height:34px;padding:6px 9px !important;font-size:11px !important;}
-  }
+:root{
+  --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
+  --accent:#c9141b; --accent-soft:#fff0f0; --success:#22a35a; --warning:#e59a13; --danger:#b42318;
+  --radius:22px; --small-radius:14px; --btn-h:48px;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;color:inherit}
+button:disabled{opacity:.5;cursor:not-allowed}
+#app{max-width:520px;margin:0 auto;padding:0 16px 92px}
+.top{padding:22px 2px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-brand{display:flex;align-items:center;gap:11px;min-width:0}.top-brand-icon{width:42px;height:42px;border-radius:14px;background:#171717;color:#fff;display:grid;place-items:center;flex:0 0 auto}.top-brand h1{margin:0;font-size:18px;line-height:1.2;font-weight:850}.top-brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.top-bell{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto}
+.tabs{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:7px;background:rgba(245,245,243,.94);backdrop-filter:blur(12px);margin:0 -16px 16px;padding-left:16px;padding-right:16px;border-bottom:1px solid var(--line)}
+.tabs button{min-height:42px;background:transparent;border-radius:13px;font-size:13px;font-weight:800;color:#777;display:flex;align-items:center;justify-content:center;gap:6px}.tabs button.active{background:#171717;color:#fff}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:18px 2px 10px}.section-head h2{margin:0;font-size:16px;font-weight:850}.section-head span{font-size:12px;color:var(--muted)}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.block.tight{padding:14px}.block.soft{background:var(--surface-2);border-color:transparent}
+.hero{background:#171717;color:#fff;border-radius:var(--radius);padding:20px;margin-bottom:14px}.hero-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.hero-icon{width:48px;height:48px;border-radius:16px;background:#fff;color:#171717;display:grid;place-items:center}.hero h2{margin:0;font-size:22px;letter-spacing:-.02em}.hero p{margin:5px 0 0;color:#cfcfcf;font-size:13px}.hero .role{font-size:11px;font-weight:800;color:#fff;background:#2d2d2d;padding:7px 10px;border-radius:999px;display:inline-flex;gap:5px;align-items:center}
+.announcement{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:flex-start}.announcement-icon{width:42px;height:42px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.announcement h3{margin:0 0 4px;font-size:14px}.announcement p{margin:0;color:#666;font-size:13px;line-height:1.5}
+.activity-grid{display:grid;gap:12px}.activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.activity-card:active{transform:scale(.99)}.activity-top{display:flex;gap:12px;align-items:flex-start}.activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.activity-main{min-width:0;flex:1}.activity-name{font-size:17px;font-weight:850}.activity-meta{margin-top:4px;color:#777;font-size:12px}.activity-right{display:flex;align-items:center;gap:8px}.count{font-size:13px;font-weight:800;white-space:nowrap}.arrow{color:#999}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
+.back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
+.form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:#171717;color:#fff;border-color:#171717}
+.draft-field{display:flex;gap:8px;margin-bottom:8px}.draft-field input{flex:1}.icon-btn{width:44px;height:48px;border-radius:14px;background:#f7f7f5;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto}.icon-btn.danger{color:var(--danger)}.add-field{width:100%;height:44px;border:1px dashed #ccc;background:transparent;border-radius:13px;color:#555;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
+.primary{width:100%;min-height:var(--btn-h);background:var(--accent);color:#fff;border-radius:15px;font-weight:850;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}.secondary{min-height:44px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:13px;font-weight:800;font-size:13px}.secondary:hover{background:#f7f7f5}.danger-btn{color:var(--danger)}
+.checkin-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px}.checkin-button{margin-top:4px}.list{margin-top:8px}.list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.list-index{width:28px;height:28px;border-radius:10px;background:#f1f1ef;display:grid;place-items:center;font-size:11px;font-weight:850}.list-main{flex:1;min-width:0}.list-name{font-weight:800;font-size:14px}.list-meta{font-size:11px;color:#999;margin-top:2px}.check{color:var(--success)}
+.search-hero{text-align:center;padding:28px 18px}.search-icon{width:68px;height:68px;border-radius:22px;background:#f1f1ef;display:grid;place-items:center;margin:0 auto 14px}.search-hero h2{margin:0;font-size:19px}.search-hero p{margin:6px 0 18px;color:#777;font-size:12px}.result-summary{display:flex;align-items:center;justify-content:space-between;gap:12px}.rate-number{font-size:40px;font-weight:900;line-height:1}.rate-label{font-size:11px;color:#777;margin-top:4px}.result-name{font-size:18px;font-weight:900}.result-year{font-size:12px;color:#888;margin-top:3px}
+.admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}.metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.metric b{display:block;font-size:22px}.metric span{font-size:10px;color:#777}.admin-menu{display:grid;gap:10px}.admin-action{min-height:76px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:left}.admin-action .menu-icon{width:42px;height:42px;border-radius:14px;background:#f2f2ef;display:grid;place-items:center;flex:0 0 auto}.admin-action .menu-text{flex:1}.admin-action strong{display:block;font-size:14px}.admin-action small{display:block;margin-top:4px;color:#888;font-size:11px}.admin-action .chev{color:#999}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-head .actions{display:flex;gap:7px}.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}.activity-admin-card.hidden{opacity:.65}.admin-card-top{display:flex;gap:10px;align-items:flex-start}.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.admin-card-info{flex:1;min-width:0}.admin-card-name{font-weight:900;font-size:15px}.admin-card-meta{font-size:11px;color:#888;margin-top:3px}.admin-card-status{margin-top:8px}.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.admin-actions button.danger{color:var(--danger)}
+.officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.officer-input{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;margin-bottom:9px}.admin-edit-box{margin-top:10px}
+.rate-list{display:grid;gap:9px}.rate-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}.rate-head{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:850}.rate-bar{height:7px;border-radius:99px;background:#eee;margin-top:10px;overflow:hidden}.rate-fill{height:100%;background:var(--accent);border-radius:99px}
+.empty{text-align:center;color:#888;padding:28px 10px;font-size:13px}.debug-error-box{display:none;margin-top:10px;padding:12px;border-radius:14px;background:#fff0f0;border:1px solid #f0b6b6;color:#a00;font-size:12px;white-space:pre-wrap;word-break:break-word}.debug-error-box.show{display:block}.countdown-box{margin-top:12px;padding:10px 12px;border-radius:13px;background:#fff5dd;color:#9b6800;text-align:center;font-size:12px;font-weight:850}.note-shared{font-size:11px;color:#888;background:#f5f5f3;border-radius:13px;padding:10px 12px;line-height:1.5;margin-top:10px}.divider{height:1px;background:var(--line);margin:14px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#171717;color:#fff;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.system-footer{margin-top:28px;padding:10px 0;text-align:center;color:#aaa;font-size:10px;line-height:1.6}.system-footer .version{font-weight:800}.system-footer .maker{margin-top:1px}
+.table-wrap{overflow-x:auto}.list-table{width:100%;border-collapse:collapse;font-size:12px}.list-table th{text-align:left;color:#888;font-size:10px;padding:8px;border-bottom:1px solid var(--line)}.list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.list-table td.name{font-weight:800}.rate-bar-wrap{display:flex;align-items:center;gap:8px}.rate-bar-track{flex:1;height:6px;border-radius:99px;background:#eee;overflow:hidden}.rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}.rate-num{font-weight:850;min-width:38px;text-align:right;font-size:11px}
+@media(max-width:420px){.grid-2{grid-template-columns:1fr}.choice-grid.four{grid-template-columns:repeat(2,1fr)}.admin-actions{grid-template-columns:repeat(2,1fr)}.officer-actions{grid-template-columns:1fr 1fr}.officer-actions button:first-child{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -324,6 +50,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>/*__APP_ASYNC_IIFE__*/
 (async function(){
 
@@ -348,7 +75,6 @@ async function adminLogin(username, password){
   }));
 
   adminUnlocked=true;
-  if(activeTab==="admin") setTimeout(()=>render(),0);
   return data;
 }
 
@@ -376,7 +102,6 @@ function isSuperAdmin(){
 async function adminLogout(){
   localStorage.removeItem(ADMIN_SESSION_KEY);
   adminUnlocked=false;
-  announcementEditing=false;
 }
 
 async function checkAdminSession(){
@@ -402,120 +127,6 @@ async function checkAdminSession(){
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
 let activeTab = "register";
-
-const ANNOUNCEMENT_DEFAULT = "歡迎使用台中浩天宮四紅哨角隊活動簽到簿　｜　請依活動公告完成簽到";
-let announcementValue = localStorage.getItem("haotian_announcement") || ANNOUNCEMENT_DEFAULT;
-let announcementEditing = false;
-
-function announcementBarHtml(){
-  const adminCanEdit = !!getAdminSession() && activeTab === "admin";
-  if(adminCanEdit && announcementEditing){
-    return `
-      <div class="announcement-bar" id="announcement-bar">
-        <div class="announcement-label">📢 公告</div>
-        <div class="announcement-editor">
-          <input id="announcement-input" type="text" maxlength="200"
-                 value="${escapeHtml(announcementValue)}"
-                 aria-label="公告內容">
-        </div>
-        <button type="button" class="secondary announcement-edit-btn" id="announcement-edit-btn">儲存</button>
-      </div>`;
-  }
-  return `
-    <div class="announcement-bar" id="announcement-bar">
-      <div class="announcement-label">📢 公告</div>
-      <div class="announcement-text" id="announcement-text">${escapeHtml(announcementValue || ANNOUNCEMENT_DEFAULT)}</div>
-      ${adminCanEdit ? `<button type="button" class="secondary announcement-edit-btn" id="announcement-edit-btn">編輯</button>` : ``}
-    </div>`;
-}
-
-async function loadAnnouncement(){
-  try{
-    const {data,error}=await supabaseClient
-      .from("announcements")
-      .select("content")
-      .eq("id",1)
-      .maybeSingle();
-    if(error) throw error;
-    if(data && typeof data.content==="string" && data.content.trim()){
-      announcementValue=data.content.trim();
-      localStorage.setItem("haotian_announcement",announcementValue);
-    }
-  }catch(e){
-    // 尚未建立公告表時，不影響整個活動系統；使用本機最後一次公告。
-    console.warn("[公告] 資料庫讀取失敗，使用本機公告：",e);
-  }
-}
-
-async function saveAnnouncement(){
-  const input=document.getElementById("announcement-input");
-  const btn=document.getElementById("announcement-edit-btn");
-  if(!input || !btn) return;
-
-  const value=norm(input.value);
-  if(!value){
-    showToast("公告內容不能空白","error");
-    input.focus();
-    return;
-  }
-
-  const session=getAdminSession();
-  if(!session){
-    showToast("管理者登入已失效","error");
-    announcementEditing=false;
-    render();
-    return;
-  }
-
-  btn.disabled=true;
-
-  // 先更新畫面與本機儲存，避免任何資料庫 RPC/RLS 問題
-  // 造成「按儲存完全沒有反應」。
-  announcementValue=value;
-  localStorage.setItem("haotian_announcement",value);
-  announcementEditing=false;
-  render();
-  showToast("公告已儲存");
-
-  // 背景同步資料庫。失敗不回滾前台，避免公告編輯被卡住。
-  try{
-    const {data,error}=await supabaseClient.rpc("simple_admin_update_announcement",{
-      p_admin_username:session.username,
-      p_admin_code:session.access_code,
-      p_content:value
-    });
-    if(error) throw error;
-    if(!data?.ok) throw new Error(data?.message||"資料庫未接受公告");
-    console.log("[公告] 雲端儲存成功");
-  }catch(e){
-    console.warn("[公告] 雲端同步失敗，但本機公告已保存：",e);
-  }
-  btn.disabled=false;
-}
-
-function bindAnnouncement(){
-  const btn=document.getElementById("announcement-edit-btn");
-  if(!btn) return;
-
-  btn.onclick=async function(ev){
-    ev.preventDefault();
-    ev.stopPropagation();
-
-    if(announcementEditing){
-      await saveAnnouncement();
-    }else{
-      if(!getAdminSession() || activeTab!=="admin") return;
-      announcementEditing=true;
-      render();
-      const input=document.getElementById("announcement-input");
-      if(input){
-        input.focus();
-        input.setSelectionRange(input.value.length,input.value.length);
-      }
-    }
-  };
-}
-
 let queryResultVisible = false;
 let loaded = false;
 let openEventId = null;      // which event card is expanded in register view
@@ -948,55 +559,40 @@ function getPublishAt(){
 }
 
 function render(){
-  if(window.__adminAccountsViewOpen){
-    return;
-  }
-
-  const app = document.getElementById("app");
-  app.innerHTML = `
+  if(window.__adminAccountsViewOpen) return;
+  const app=document.getElementById("app");
+  app.innerHTML=`
     <header class="top">
-      <div class="eyebrow">台中浩天宮四紅哨角隊</div>
-      <h1>活動簽到簿</h1>
+      <div class="top-brand">
+        <div class="top-brand-icon"><i data-lucide="megaphone"></i></div>
+        <div><h1>台中浩天宮四紅哨角隊</h1><p>活動簽到簿</p></div>
+      </div>
+      <button class="top-bell" type="button" aria-label="公告"><i data-lucide="bell"></i></button>
     </header>
     <nav class="tabs">
-      <button data-tab="register" class="${activeTab==='register'?'active':''}">簽到</button>
-      <button data-tab="query" class="${activeTab==='query'?'active':''}">查詢</button>
-      <button data-tab="admin" class="${activeTab==='admin'?'active':''}">管理者</button>
+      <button data-tab="register" class="${activeTab==='register'?'active':''}"><i data-lucide="circle-check"></i>簽到</button>
+      <button data-tab="query" class="${activeTab==='query'?'active':''}"><i data-lucide="search"></i>查詢</button>
+      <button data-tab="admin" class="${activeTab==='admin'?'active':''}"><i data-lucide="shield-check"></i>管理者</button>
     </nav>
-    ${announcementBarHtml()}
     <div id="tab-content"></div>
   `;
-  const tabsNav = app.querySelector("nav.tabs");
-  if(tabsNav){
-    tabsNav.onclick = (ev)=>{
-      const btn = ev.target.closest("button[data-tab]");
-      if(!btn || !tabsNav.contains(btn)) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      const nextTab = btn.dataset.tab;
-      if(!nextTab) return;
-
-      activeTab = nextTab;
-      openEventId = null;
-      adminExpandedId = null;
-      queryResultVisible = false;
-
-      // 只重新產生目前內容，不保留舊頁面的 DOM 事件。
-      render();
-    };
-  }
+  const tabsNav=app.querySelector("nav.tabs");
+  if(tabsNav) tabsNav.onclick=(ev)=>{
+    const btn=ev.target.closest("button[data-tab]"); if(!btn)return;
+    ev.preventDefault(); ev.stopPropagation(); activeTab=btn.dataset.tab; openEventId=null; adminExpandedId=null; queryResultVisible=false; render();
+  };
   renderTab();
-  bindAnnouncement();
 }
-
+function refreshIcons(){
+  if(window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons({attrs:{"stroke-width":2}});
+}
 function renderTab(){
-  const el = document.getElementById("tab-content");
-  if(!el) return;
-  if(!loaded){ el.innerHTML = `<div class="card"><div class="empty">載入中…</div></div>`; return; }
-  if(activeTab === "register") return renderRegister(el);
-  if(activeTab === "query") return renderQuery(el);
-  if(activeTab === "admin") return renderAdmin(el);
+  const el=document.getElementById("tab-content"); if(!el)return;
+  if(!loaded){el.innerHTML=`<div class="block"><div class="empty">載入中…</div></div>`; refreshIcons(); return;}
+  if(activeTab==="register") renderRegister(el);
+  else if(activeTab==="query") renderQuery(el);
+  else if(activeTab==="admin") renderAdmin(el);
+  refreshIcons();
 }
 
 // ---------- REGISTER TAB ----------
@@ -1034,827 +630,131 @@ async function refreshActivityRegistrations(activityId){
 }
 
 function renderRegister(el){
-  const acts = [...recentOrOpenActivities()].sort((a,b)=>{
-    const ac=a.createdAt ? new Date(a.createdAt).getTime() : new Date(a.date).getTime();
-    const bc=b.createdAt ? new Date(b.createdAt).getTime() : new Date(b.date).getTime();
-    return bc-ac;
+  const acts=[...recentOrOpenActivities()].sort((a,b)=>{
+    const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
+    const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
   });
-
   if(openEventId){
-    const activity = acts.find(a=>a.id===openEventId);
-    if(!activity){ openEventId = null; return renderRegister(el); }
-    const list = regsOf(activity.id);
-    const fields = activity.fields || [];
-
-    el.innerHTML = `
-      <span class="backlink" id="back-link">← 回活動列表</span>
-      <div class="card">
-        <h2>${escapeHtml(activity.name)}</h2>
-        <p class="hint">${fmtDate(activity.date)}</p>
-        <span class="status-pill ${activity.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${activity.open ? '開放簽到中' : '已停止簽到'}</span>
-        <div class="stat-line">
-          <span><b>${list.length}</b>${activity.maxParticipants ? ` / ${activity.maxParticipants}` : ''} 人已簽到</span>
-        </div><div id="event-countdown"></div>
-        <div class="divider"></div>
-        ${ activity.open ? `
-          ${activity.maxParticipants && list.length >= activity.maxParticipants ? `
-            <div class="hint" style="margin:10px 0;">此活動已達人數上限，暫停接受簽到。</div>
-          ` : `
-            <input type="text" id="reg-name" placeholder="輸入姓名" />
-            ${ fields.map(f=>`
-              <label class="field-label">${escapeHtml(f.label)}</label>
-              <input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" />
-            `).join("") }
-            <button class="primary" id="reg-btn">完成簽到</button>
-          `}
-        ` : `<p class="hint">這個活動目前已停止簽到。</p>` }
+    const activity=acts.find(a=>a.id===openEventId);
+    if(!activity){openEventId=null;return renderRegister(el);}
+    const list=regsOf(activity.id), fields=activity.fields||[];
+    el.innerHTML=`
+      <button class="back" id="back-link"><i data-lucide="arrow-left"></i>返回活動列表</button>
+      <div class="hero">
+        <div class="hero-row"><div class="hero-icon"><i data-lucide="calendar-days"></i></div><div style="flex:1"><h2>${escapeHtml(activity.name)}</h2><p>${fmtDate(activity.date)}</p></div><i data-lucide="more-horizontal"></i></div>
       </div>
-      <div class="card">
-        <h2>簽到者名單（${list.length} 人）</h2>
-        ${ list.length === 0 ? `<div class="empty">還沒有人簽到</div>` : `
-          <table class="list-table">
-            <thead><tr><th>姓名</th>${fields.map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}${activity.open ? '<th></th>' : ''}</tr></thead>
-            <tbody>
-              ${list.map((r,i)=>`
-                <tr>
-                  <td class="name">${escapeHtml(r.name)}</td>
-                  ${fields.map(f=>`<td>${ (r.fieldValues && r.fieldValues[f.key]) ? escapeHtml(r.fieldValues[f.key]) : '—'}</td>`).join("")}
-                  ${activity.open ? `<td><button class="field-remove" data-delete-reg="${i}" title="刪除這筆簽到">×</button></td>` : ''}
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-          ${ activity.open ? `<div class="note-shared">如果姓名打錯或欄位填錯，可以按 × 刪除自己的簽到紀錄，再重新填一次。</div>` : "" }
-        `}
+      <div class="checkin-card">
+        <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        <div id="event-countdown"></div>
+        ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
+          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" /></div>
+          ${fields.map(f=>`<div class="field"><label class="field-label">${escapeHtml(f.label)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
+          <button class="primary checkin-button" id="reg-btn"><i data-lucide="circle-check"></i>確認簽到</button>
+        `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
       </div>
+      <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
+      <div class="block tight"><div class="list">
+        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:list.map((r,i)=>`<div class="list-row"><div class="list-index">${i+1}</div><div class="list-main"><div class="list-name">${escapeHtml(r.name)}</div><div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div></div>${fields.map(f=>`<span class="list-meta">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):""}</span>`).join("")}${activity.open?`<button class="icon-btn danger" data-delete-reg="${i}" title="刪除簽到"><i data-lucide="trash-2"></i></button>`:`<i class="check" data-lucide="check"></i>`}</div>`).join("")}
+      </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
     `;
-    const backLink = document.getElementById("back-link");
-    if(backLink){
-      backLink.onclick = (ev)=>{
-        ev.preventDefault();
-        ev.stopPropagation();
-        openEventId = null;
-        renderRegister(el);
-      };
-    }
-
+    document.getElementById("back-link").onclick=(ev)=>{ev.preventDefault();openEventId=null;renderRegister(el);refreshIcons();};
     if(activity.open){
-      el.querySelectorAll("[data-delete-reg]").forEach(btn=>{
-        btn.onclick = async (ev)=>{
-          ev.preventDefault();
-          ev.stopPropagation();
-          const idx = Number(btn.dataset.deleteReg);
-          const reg = list[idx];
-          if(reg && reg.id){
-            try{
-              await deleteRegistrationRemote(reg.id);
-
-              // 重新從資料庫確認。只有資料庫真的不存在這筆 id，才算刪除成功。
-              const freshAfterDelete=await refreshActivityRegistrations(activity.id);
-              const stillExists=freshAfterDelete.some(x=>String(x.id)===String(reg.id));
-
-              if(stillExists){
-                throw new Error("資料庫仍存在這筆簽到紀錄，刪除沒有真正完成");
-              }
-
-              list.length=0;
-              freshAfterDelete.forEach(x=>list.push(x));
-
-              forgetLocalSigned(activity.id,reg.name);
-              showToast("已刪除");
-            }catch(e){ console.error(e); showToast("刪除失敗"); }
-          }else{
-            list.splice(idx, 1);
-            showToast("已刪除");
-          }
-          renderRegister(el);
-        };
+      el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
+        ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
+        try{await deleteRegistrationRemote(reg.id);const fresh=await refreshActivityRegistrations(activity.id);if(fresh.some(x=>String(x.id)===String(reg.id)))throw new Error("資料庫仍存在這筆簽到紀錄");state.registrations[activity.id]=fresh;forgetLocalSigned(activity.id,reg.name);showToast("已刪除");}catch(e){console.error(e);showToast("刪除失敗："+(e?.message||"未知錯誤"));}renderRegister(el);refreshIcons();
       });
-    }
-
-    renderCountdown(activity);
-
-    if(activity.open){
-      const btn = document.getElementById("reg-btn");
-      const nameInput = document.getElementById("reg-name");
-
-      // 活動達到人數上限時，畫面刻意不產生 reg-btn / reg-name。
-      // 因此這裡不能直接對 null 綁定事件。
-      if(!btn || !nameInput) return;
-
-      const doRegister = async ()=>{
-        const name = norm(nameInput.value);
-        if(!name){ showToast("請輸入姓名"); return; }
-
-        let freshList;
-        try{
-          freshList=await refreshActivityRegistrations(activity.id);
-        }catch(e){
-          console.error("簽到前更新名單失敗:",e);
-          showToast("無法取得最新簽到狀態，請稍後再試","error");
-          return;
-        }
-
-        // 人數上限一定以資料庫最新名單計算。
-        if(activity.maxParticipants && freshList.length >= activity.maxParticipants){
-          showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`,"error");
-          renderRegister(el);
-          return;
-        }
-
-        if(freshList.some(r => keyOf(r.name) === keyOf(name))){
-          showToast(`${name} 已經簽到過了`,"error");
-          nameInput.focus();
-          return;
-        }
-
-        const fieldValues = {};
-        el.querySelectorAll(".reg-field-input").forEach(inp=>{
-          fieldValues[inp.dataset.key] = norm(inp.value);
-        });
-
-        btn.disabled = true;
-        nameInput.disabled = true;
-        el.querySelectorAll(".reg-field-input").forEach(inp=>inp.disabled=true);
-
-        try{
-          const remote = await createRegistrationRemote(activity.id,{name,fieldValues});
-
-          const newReg={
-            id:remote.id,
-            name:remote.name || name,
-            fieldValues:remote.field_values || fieldValues,
-            ts:remote.created_at || new Date().toISOString()
-          };
-
-          // 立即更新本頁 state，不重新 render 整個頁面，避免表單被重置。
-          state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);
-          state.registrations[activity.id].push(newReg);
-          rememberLocalSigned(activity.id,name);
-
-          // 清空表單，保留在同一個活動頁。
-          nameInput.value="";
-          el.querySelectorAll(".reg-field-input").forEach(inp=>inp.value="");
-
-          // 更新人數顯示。
-          const stat=el.querySelector(".stat-line");
-          if(stat){
-            const currentCount=state.registrations[activity.id].length;
-            stat.innerHTML=`<span><b>${currentCount}</b>${activity.maxParticipants ? ` / ${activity.maxParticipants}` : ''} 人已簽到</span>`;
-          }
-
-          // 直接把新簽到資料插入名單，不讓整頁閃退/重置。
-          const tbody=el.querySelector(".list-table tbody");
-          if(tbody){
-            const tr=document.createElement("tr");
-            tr.innerHTML=
-              `<td class="name">${escapeHtml(newReg.name)}</td>`+
-              fields.map(f=>`<td>${newReg.fieldValues && newReg.fieldValues[f.key] ? escapeHtml(newReg.fieldValues[f.key]) : "—"}</td>`).join("")+
-              (activity.open?`<td><button class="field-remove" data-delete-reg="${list.length-1}" title="刪除這筆簽到">×</button></td>`:"");
-            tbody.appendChild(tr);
-
-            const del=tr.querySelector("[data-delete-reg]");
-            if(del){
-              del.onclick=async(ev)=>{
-                ev.preventDefault();
-                ev.stopPropagation();
-                const idx=Number(del.dataset.deleteReg);
-                const reg=list[idx];
-                if(!reg)return;
-                try{
-                  await deleteRegistrationRemote(reg.id);
-                  forgetLocalSigned(activity.id,reg.name);
-                  list.splice(idx,1);
-                  showToast("已刪除");
-                  renderRegister(el);
-                }catch(e){
-                  console.error(e);
-                  showToast("刪除失敗："+(e?.message||"未知錯誤"),"error");
-                }
-              };
-            }
-          }
-
-          showToast(`${name} 簽到成功！`);
-        }catch(e){
-          console.error("簽到失敗:",e);
-          const msg=String(e?.message||"");
-          // 後端若已經判定重複，明確顯示，不再讓使用者重試造成重複。
-          if(/已經|已簽到|duplicate|duplicat|already/i.test(msg)){
-            rememberLocalSigned(activity.id,name);
-            showToast(`${name} 已經簽到過了`,"error");
-          }else if(/上限|limit|full|capacity/i.test(msg)){
-            showToast("此活動已達人數上限","error");
-          }else{
-            showToast("簽到失敗："+(msg||"請再試一次"),"error");
-          }
-        }finally{
-          btn.disabled=false;
-          nameInput.disabled=false;
-          el.querySelectorAll(".reg-field-input").forEach(inp=>inp.disabled=false);
-        }
-      };
-      btn.onclick = doRegister;
-    }
-    return;
-  }
-
-  el.innerHTML = `
-    <div class="card">
-      <h2>選擇活動</h2>
-      <p class="hint">點選活動以查看詳情並完成簽到。這裡只顯示最近一週內或尚未結束的活動，更早的歷史活動請洽管理者查詢。</p>
-      ${ acts.length === 0 ? `<div class="empty">目前還沒有任何活動，請等待管理者建立</div>` :
-        acts.map(a=>{
-          return `
-            <div class="event-row" data-open="${a.id}" style="cursor:pointer;">
-              <div class="row-top">
-                <div>
-                  <div class="name">${escapeHtml(a.name)}</div>
-                  <div class="meta">${fmtDate(a.date)}</div>
-                  
-                </div>
-                <span class="status-pill ${a.open ? 'status-open':'status-closed'}"><span class="status-dot"></span>${a.open?'開放中':'已停止'}</span>
-              </div>
-              <div class="stat-line"><span><b>${(state.registrations[a.id]||[]).length}</b>${a.maxParticipants ? ` / ${a.maxParticipants}` : ""} 人已簽到</span></div>
-            </div>
-          `;
-        }).join("")
+      const btn=document.getElementById("reg-btn"),nameInput=document.getElementById("reg-name");
+      if(btn&&nameInput){
+        const doRegister=async()=>{
+          const name=norm(nameInput.value);if(!name){showToast("請輸入姓名");return;}
+          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
+          if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
+          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
+          const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
+          btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
+          try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id,name:remote.name||name,fieldValues:remote.field_values||fieldValues,ts:remote.created_at||new Date().toISOString()};state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);state.registrations[activity.id].push(newReg);rememberLocalSigned(activity.id,name);showToast(`${name} 簽到成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
+        };btn.onclick=doRegister;nameInput.onkeydown=e=>{if(e.key==="Enter")doRegister();};
       }
-    </div>
+    }
+    renderCountdown(activity);refreshIcons();return;
+  }
+  el.innerHTML=`
+    <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div><h3>公告</h3><p>感謝大家的參與，請留意活動開放狀態與簽到資訊。</p></div></div>
+    <div class="section-head"><h2>近期活動</h2><span>點擊活動直接簽到</span></div>
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card" data-open="${a.id}"><div class="activity-top"><div class="activity-icon"><i data-lucide="calendar-days"></i></div><div class="activity-main"><div class="activity-name">${escapeHtml(a.name)}</div><div class="activity-meta">${fmtDate(a.date)}</div><div style="margin-top:8px"><span class="status ${a.open?'open':'closed'}"><span class="dot"></span>${a.open?'開放中':'已停止'}</span></div></div><div class="activity-right"><span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span><span class="arrow"><i data-lucide="chevron-right"></i></span></div></div></div>`).join("")}</div>
   `;
-  el.querySelectorAll("[data-open]").forEach(row=>{
-    row.addEventListener("click", ()=>{ openEventId = row.dataset.open; renderRegister(el); });
-  });
+  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
 }
 
 // ---------- QUERY TAB ----------
 function renderQuery(el){
-  el.innerHTML = `
-    <div class="card">
-      <h2>查詢我的年度出席率</h2>
-      <p class="hint">輸入姓名，查看今年至今的活動簽到與出席狀況。</p>
-      <input type="text" id="query-name" placeholder="輸入姓名" />
-      <button class="primary" id="query-btn">查詢</button>
-    </div>
-    <div id="query-result"></div>
-  `;
-  const input = document.getElementById("query-name");
-  if(!input) return;
-  const box = document.getElementById("query-result");
-
-  function clearResult(){
-    queryResultVisible = false;
-    box.innerHTML = "";
-    input.value = "";
-  }
-
-  const doQuery = ()=>{
-    const name = norm(input.value);
-    if(!name){ showToast("請輸入姓名"); return; }
-    const acts = activitiesThisYear();
-    if(acts.length === 0){
-      box.innerHTML = `<div class="card"><div class="empty">今年還沒有任何活動</div></div>`;
-      return;
-    }
-    const s = annualStats(name);
-    queryResultVisible = true;
-    box.innerHTML = `
-      <span class="backlink" id="query-back-link">← 返回重新查詢</span>
-      <div class="card">
-        <h2>${escapeHtml(name)} · ${new Date().getFullYear()} 年</h2>
-        <div class="big-rate"><span class="num">${s.rate}</span><span class="unit">% 出席率</span></div>
-        <p class="hint" style="margin-top:2px;">簽到並出現於 ${s.attended} / 共 ${s.total} 場今年舉辦的活動</p>
-        <table class="list-table">
-          <thead><tr><th>活動</th><th>日期</th><th>狀態</th></tr></thead>
-          <tbody>
-            ${ s.detail.slice().reverse().map(d=>`
-              <tr>
-                <td class="name">${escapeHtml(d.activity.name)}</td>
-                <td>${fmtDate(d.activity.date)}</td>
-                <td>${d.present ? '✓ 已簽到' : '—'}</td>
-              </tr>
-            `).join("") }
-          </tbody>
-        </table>
-      </div>
-    `;
-    (()=>{const __el=document.getElementById("query-back-link");if(__el)__el.addEventListener("click", clearResult);})();
-  };
-  (()=>{const __el=document.getElementById("query-btn");if(__el)__el.addEventListener("click", doQuery);})();
-  safeAdd(input,"keydown",(e)=>{ if(e.key==="Enter") doQuery(); });
+  el.innerHTML=`<div class="form-block search-hero"><div class="search-icon"><i data-lucide="search"></i></div><h2>查詢年度出席狀況</h2><p>輸入姓名，查看今年的活動簽到紀錄。</p><input type="text" id="query-name" placeholder="請輸入姓名"/><button class="primary" id="query-btn"><i data-lucide="search"></i>查詢</button></div><div id="query-result"></div>`;
+  const input=document.getElementById("query-name"),box=document.getElementById("query-result");if(!input)return;
+  const doQuery=()=>{const name=norm(input.value);if(!name){showToast("請輸入姓名");return;}const acts=activitiesThisYear();if(!acts.length){box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;return;}const s=annualStats(name);box.innerHTML=`<div class="block"><div class="result-summary"><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year">${new Date().getFullYear()} 年 · 已簽到 ${s.attended}/${s.total} 場</div></div><div style="text-align:right"><div class="rate-number">${s.rate}%</div><div class="rate-label">出席率</div></div></div></div><div class="section-head"><h2>活動紀錄</h2></div><div class="block tight"><div class="list">${s.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="status open"><i data-lucide="check"></i> 已簽到</span>`:`<span class="status closed">未簽到</span>`}</div>`).join("")}</div></div><button class="secondary" id="query-back-link" style="width:100%;margin-top:4px"><i data-lucide="arrow-left"></i>重新查詢</button>`;document.getElementById("query-back-link").onclick=()=>renderQuery(el);refreshIcons();};
+  document.getElementById("query-btn").onclick=doQuery;input.onkeydown=e=>{if(e.key==="Enter")doQuery();};refreshIcons();
 }
 
 // ---------- ADMIN TAB (password gated) ----------
 
 async function renderAdminAccounts(el){
-  window.__adminAccountsViewOpen = true;
-
-  if(!isSuperAdmin()){
-    showToast("只有主管理員可以管理幹部");
-    return;
-  }
-
-  const session=getAdminSession();
-  if(!session){
-    showToast("管理者登入已失效");
-    return;
-  }
-
+  window.__adminAccountsViewOpen=true;
+  if(!isSuperAdmin()){showToast("只有主管理員可以管理幹部");return;}
+  const session=getAdminSession();if(!session){showToast("管理者登入已失效");return;}
   try{
-    const {data,error}=await supabaseClient.rpc("simple_list_admins",{
-      p_admin_username:session.username,
-      p_admin_code:session.access_code
-    });
-
-    if(error) throw error;
-    if(!data?.ok) throw new Error(data?.message||"讀取幹部失敗");
-
-    const rows=data.accounts||[];
-
-    // 移除上一版可能殘留的 click listener，避免同一個確認視窗跳多次。
-    if(el.__officerClickHandler){
-      el.removeEventListener("click", el.__officerClickHandler);
-      el.__officerClickHandler = null;
-    }
-
-    el.innerHTML=`
-      <div class="card">
-        <div class="admin-page-title">
-          <button type="button" class="secondary back" id="back-admin-top" aria-label="返回管理後台">←</button>
-          <h2 style="margin:0;">幹部管理</h2>
-        </div>
-        <p class="hint">主管理員可以新增、修改密碼、啟用／停用或刪除幹部。</p>
-
-        <input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off">
-        <input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password">
-        <button type="button" class="primary" id="create-officer">＋ 新增幹部</button>
-
-        <div style="margin-top:18px" id="officer-list">
-          ${rows.map(a=>`
-            <div class="event-row officer-row" data-officer-username="${escapeHtml(a.username)}" style="padding:14px 0;">
-              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;">
-                <div>
-                  <b>${escapeHtml(a.username)}</b>
-                  <div class="hint">
-                    ${a.role==="super_admin"?"主管理員":"幹部"} · ${a.active?"啟用":"停用"}
-                  </div>
-                </div>
-                ${a.role==="officer" ? `
-                  <div class="officer-actions">
-                    <button type="button" class="secondary officer-edit-btn">修改密碼</button>
-                    <button type="button" class="secondary officer-toggle-btn" data-active="${a.active ? "true":"false"}">${a.active?"停用":"啟用"}</button>
-                    <button type="button" class="secondary officer-delete-btn">刪除</button>
-                  </div>
-                ` : ""}
-              </div>
-            </div>
-          `).join("")}
-        </div>
-
-        <div id="admin-action-message" class="hint" style="margin-top:12px;min-height:20px;"></div>
-      </div>
-    `;
-
-    const messageEl=document.getElementById("admin-action-message");
-    const showAdminMessage=(msg)=>{
-      if(messageEl) messageEl.textContent=msg||"";
+    const {data,error}=await supabaseClient.rpc("simple_list_admins",{p_admin_username:session.username,p_admin_code:session.access_code});
+    if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取幹部失敗");const rows=data.accounts||[];
+    el.innerHTML=`<button class="back" id="back-admin-top"><i data-lucide="arrow-left"></i>返回管理後台</button><div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
+    refreshIcons();
+    const messageEl=document.getElementById("admin-action-message"),showAdminMessage=msg=>{if(messageEl)messageEl.textContent=msg||""};
+    const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";renderAdmin(el);};document.getElementById("back-admin-top").onclick=goBack;
+    el.onclick=async ev=>{const target=ev.target.closest("button");if(!target)return;const row=target.closest("[data-officer-username]");const username=row?.dataset.officerUsername;
+      if(target.id==="create-officer"){const u=norm(document.getElementById("new-officer-user")?.value),pw=document.getElementById("new-officer-pass")?.value||"";if(!u){showAdminMessage("請輸入帳號");return}if(!pw){showAdminMessage("請輸入密碼");return}target.disabled=true;try{const result=await supabaseClient.rpc("simple_create_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:u,p_code:pw});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"建立失敗");showToast("幹部建立成功");await renderAdminAccounts(el);}catch(e){target.disabled=false;showAdminMessage("新增失敗："+(e?.message||"未知錯誤"));}return;}
+      if(!row||!username)return;
+      if(target.classList.contains("officer-edit-btn")){const old=row.querySelector(".admin-edit-box");if(old){old.remove();return}const box=document.createElement("div");box.className="admin-edit-box";box.innerHTML=`<input class="officer-input edit-code-input" type="password" placeholder="新的密碼（至少 4 碼）"><div style="display:flex;gap:7px"><button class="primary save-code-btn" type="button">儲存</button><button class="secondary cancel-code-btn" type="button">取消</button></div>`;row.appendChild(box);box.querySelector(".cancel-code-btn").onclick=()=>box.remove();box.querySelector(".save-code-btn").onclick=async()=>{const newCode=box.querySelector(".edit-code-input")?.value||"";if(newCode.length<4){showAdminMessage("新的密碼至少 4 碼");return}try{const result=await supabaseClient.rpc("simple_change_officer_code",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:newCode});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"修改密碼失敗");showToast("密碼修改成功");await renderAdminAccounts(el);}catch(e){showAdminMessage("修改失敗："+(e?.message||"未知錯誤"));}};return;}
+      if(target.classList.contains("officer-toggle-btn")){const active=target.dataset.active==="true",action=active?"停用":"啟用";if(!confirm(`確定${action}幹部「${username}」？`))return;try{const result=await supabaseClient.rpc("simple_update_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:null,p_active:!active});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||`${action}失敗`);showToast(active?"已停用":"已啟用");await renderAdminAccounts(el);}catch(e){showAdminMessage(`${action}失敗：`+(e?.message||"未知錯誤"));}return;}
+      if(target.classList.contains("officer-delete-btn")){if(!confirm(`確定刪除幹部「${username}」？
+刪除後無法使用此帳號登入。`))return;try{const result=await supabaseClient.rpc("simple_delete_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"刪除失敗");showToast("幹部已刪除");await renderAdminAccounts(el);}catch(e){showAdminMessage("刪除失敗："+(e?.message||"未知錯誤"));}}
     };
-
-    const goBackAdminHome=()=>{
-      if(el.__officerClickHandler){
-        el.removeEventListener("click",el.__officerClickHandler);
-        el.__officerClickHandler=null;
-      }
-      window.__adminAccountsViewOpen=false;
-      adminPage="home";
-      renderAdmin(el);
-    };
-
-    const topBackBtn=document.getElementById("back-admin-top");
-    if(topBackBtn) topBackBtn.onclick=(ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
-      goBackAdminHome();
-    };
-
-    const handler=async(ev)=>{
-      const target=ev.target.closest("button");
-      if(!target || !el.contains(target)) return;
-
-      // 返回
-      if(target.id==="back-admin" || target.id==="back-admin-top"){
-        goBackAdminHome();
-        return;
-      }
-
-      // 新增幹部
-      if(target.id==="create-officer"){
-        const u=norm(document.getElementById("new-officer-user")?.value);
-        const pw=document.getElementById("new-officer-pass")?.value||"";
-
-        if(!u){showAdminMessage("請輸入帳號");return;}
-        if(!pw){showAdminMessage("請輸入密碼");return;}
-
-        target.disabled=true;
-        showAdminMessage("建立中…");
-
-        try{
-          const result=await supabaseClient.rpc("simple_create_officer",{
-            p_admin_username:session.username,
-            p_admin_code:session.access_code,
-            p_username:u,
-            p_code:pw
-          });
-          if(result.error) throw result.error;
-          if(!result.data?.ok) throw new Error(result.data?.message||"建立失敗");
-
-          showToast("幹部建立成功");
-          await renderAdminAccounts(el);
-        }catch(e){
-          target.disabled=false;
-          showAdminMessage("新增失敗：" + (e?.message||"未知錯誤"));
-        }
-        return;
-      }
-
-      const row=target.closest(".officer-row");
-      if(!row) return;
-      const username=row.dataset.officerUsername;
-
-      // 修改密碼：使用頁面內輸入框，不使用 prompt
-      if(target.classList.contains("officer-edit-btn")){
-        const oldBox=row.querySelector(".admin-edit-box");
-        if(oldBox){
-          oldBox.remove();
-          return;
-        }
-
-        const box=document.createElement("div");
-        box.className="admin-edit-box";
-        box.style.cssText="width:100%;margin-top:10px;";
-        box.innerHTML=`
-          <input class="officer-input edit-code-input" type="password"
-                 placeholder="新的密碼（至少 4 碼）"
-                 autocomplete="new-password">
-          <div style="display:flex;gap:8px;margin-top:6px;">
-            <button type="button" class="primary save-code-btn">儲存新管理碼</button>
-            <button type="button" class="secondary cancel-code-btn">取消</button>
-          </div>
-        `;
-        row.appendChild(box);
-
-        box.querySelector(".cancel-code-btn").onclick=()=>box.remove();
-
-        box.querySelector(".save-code-btn").onclick=async()=>{
-          const newCode=box.querySelector(".edit-code-input")?.value || "";
-
-          if(newCode.length<4){
-            showAdminMessage("新的密碼至少 4 碼");
-            return;
-          }
-
-          const saveBtn=box.querySelector(".save-code-btn");
-          saveBtn.disabled=true;
-          showAdminMessage("正在儲存新的密碼…");
-
-          try{
-            const result=await supabaseClient.rpc("simple_change_officer_code",{
-              p_admin_username:session.username,
-              p_admin_code:session.access_code,
-              p_username:username,
-              p_new_code:newCode
-            });
-
-            if(result.error) throw result.error;
-            if(!result.data?.ok) throw new Error(result.data?.message||"修改密碼失敗");
-
-            showToast("密碼修改成功");
-            await renderAdminAccounts(el);
-          }catch(e){
-            saveBtn.disabled=false;
-            showAdminMessage("修改失敗：" + (e?.message||"未知錯誤"));
-          }
-        };
-        return;
-      }
-
-      // 啟用／停用：每次只確認一次
-      if(target.classList.contains("officer-toggle-btn")){
-        const currentlyActive=target.dataset.active==="true";
-        const actionText=currentlyActive?"停用":"啟用";
-
-        if(!confirm(`確定${actionText}幹部「${username}」？`)) return;
-
-        target.disabled=true;
-        showAdminMessage(`${actionText}中…`);
-
-        try{
-          const result=await supabaseClient.rpc("simple_update_officer",{
-            p_admin_username:session.username,
-            p_admin_code:session.access_code,
-            p_username:username,
-            p_new_code:null,
-            p_active:!currentlyActive
-          });
-
-          if(result.error) throw result.error;
-          if(!result.data?.ok) throw new Error(result.data?.message||`${actionText}失敗`);
-
-          showToast(currentlyActive?"已停用":"已啟用");
-          await renderAdminAccounts(el);
-        }catch(e){
-          target.disabled=false;
-          showAdminMessage(`${actionText}失敗：`+(e?.message||"未知錯誤"));
-        }
-        return;
-      }
-
-      // 刪除
-      if(target.classList.contains("officer-delete-btn")){
-        if(!confirm(`確定刪除幹部「${username}」？
-刪除後無法使用此帳號登入。`)) return;
-
-        target.disabled=true;
-        showAdminMessage("刪除中…");
-
-        try{
-          const result=await supabaseClient.rpc("simple_delete_officer",{
-            p_admin_username:session.username,
-            p_admin_code:session.access_code,
-            p_username:username
-          });
-
-          if(result.error) throw result.error;
-          if(!result.data?.ok) throw new Error(result.data?.message||"刪除失敗");
-
-          showToast("幹部已刪除");
-          await renderAdminAccounts(el);
-        }catch(e){
-          target.disabled=false;
-          showAdminMessage("刪除失敗：" + (e?.message||"未知錯誤"));
-        }
-      }
-    };
-
-    el.__officerClickHandler=handler;
-    el.addEventListener("click", handler);
-
-  }catch(e){
-    el.innerHTML=`
-      <div class="card">
-        <h2>👥 幹部管理</h2>
-        <p class="hint">讀取失敗：${escapeHtml(e?.message||"未知錯誤")}</p>
-        <button type="button" class="secondary" id="back-admin-error">返回管理後台</button>
-      </div>
-    `;
-    document.getElementById("back-admin-error").onclick=()=>{
-      window.__adminAccountsViewOpen=false;
-      renderAdmin(el);
-    };
-  }
+  }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error").onclick=()=>{window.__adminAccountsViewOpen=false;renderAdmin(el)};}
 }
 
 function renderAdmin(el){
-  if(window.__adminAccountsViewOpen) return;
-
-  if(!adminUnlocked) return renderAdminLock(el);
-
+  if(window.__adminAccountsViewOpen)return;
+  if(!adminUnlocked)return renderAdminLock(el);
   const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const names=allKnownNames();
-  const yearActs=activitiesThisYear();
-  const rows=names.map(n=>({name:n,...annualStats(n)}))
-    .sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
-
-  const pageTitle = {
-    home:"管理者首頁",
-    create:"建立活動",
-    activities:"活動管理",
-    attendance:"出席率"
-  };
-
+  const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
   let content="";
-
-  if(adminPage==="home"){
-    content=`
-      <div class="card">
-        <div class="admin-page-title">
-          <h2 style="margin:0;">管理者功能</h2>
-        </div>
-        <div class="admin-menu">
-          <button class="secondary" data-admin-page="create">
-            <span class="menu-title">➕ 建立活動</span>
-            <span class="menu-hint">${isSuperAdmin() ? "主管理員／幹部皆可建立活動" : "幹部可建立活動"}</span>
-          </button>
-          <button class="secondary" data-admin-page="activities">
-            <span class="menu-title">📋 活動管理</span>
-            <span class="menu-hint">關閉、隱藏、刪除活動</span>
-          </button>
-          <button class="secondary" data-admin-page="attendance">
-            <span class="menu-title">📊 出席率</span>
-            <span class="menu-hint">查看年度出席統計</span>
-          </button>
-          ${isSuperAdmin()?`<button class="secondary" id="admin-accounts-btn">
-            <span class="menu-title">👥 幹部管理</span>
-            <span class="menu-hint">新增、停用、刪除、修改密碼</span>
-          </button>`:""}
-        </div>
-      </div>`;
-  }
-
-  if(adminPage==="create"){
-    content=`
-      <div class="card">
-        <div class="admin-page-title">
-          <button class="secondary back" data-admin-page="home">←</button>
-          <h2 style="margin:0;">建立活動</h2>
-        </div>
-        <p class="hint">可以提前建立未來活動；活動日期到了仍可手動開放或使用計時器。</p>
-        <input type="text" id="new-name" placeholder="活動名稱" value="${escapeHtml(draftName)}" />
-        <label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}" />
-        <div class="activity-options">
-          <div class="activity-option">
-            <label class="field-label">人數限制</label>
-            <input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}" />
-            <div class="hint">留白＝無人數限制</div>
-          </div>
-          <div class="activity-option">
-            <label class="field-label">活動關閉計時器</label>
-            <div class="timer-options">
-              <button type="button" class="secondary timer-btn ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button>
-              <button type="button" class="secondary timer-btn ${draftCloseMinutes===5?'selected':''}" data-timer="5">5分</button>
-              <button type="button" class="secondary timer-btn ${draftCloseMinutes===10?'selected':''}" data-timer="10">10分</button>
-              <button type="button" class="secondary timer-btn ${draftCloseMinutes===20?'selected':''}" data-timer="20">20分</button>
-            </div>
-          </div>
-        </div>
-        <label class="field-label">簽到欄位</label>
-        <div id="draft-fields-wrap">
-          ${draftFields.map((label,i)=>`
-            <div class="field-row">
-              <input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費" />
-              <button class="field-remove" data-remove-field="${i}">×</button>
-            </div>`).join("")}
-        </div>
-        <button class="add-field" id="add-field-btn">＋ 新增欄位</button>
-        <label class="field-label">發布時間</label>
-      <div class="timer-options publish-choice-wrap">
-        <button type="button" class="secondary timer-btn publish-choice selected" data-publish-mode="now">立即</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1day">一天後</button>
-        <button type="button" class="secondary timer-btn publish-choice" data-publish-mode="1week">一個禮拜後</button>
-      </div>
-<button type="button" class="primary" id="create-btn">建立</button>
-        <div class="debug-error-box" id="create-activity-error"></div>
-      </div>`;
-  }
-
+  if(adminPage==="home")content=`<div class="hero"><div class="hero-row"><div><h2>管理者</h2><p>${escapeHtml(getAdminSession()?.username||"—")}</p></div><div class="role"><i data-lucide="${isSuperAdmin()?"crown":"shield-check"}"></i>${isSuperAdmin()?"最高管理者":"幹部"}</div></div></div><div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${Object.values(state.registrations).reduce((n,l)=>n+(l||[]).length,0)}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${rows.length?Math.round(rows.reduce((s,r)=>s+r.rate,0)/rows.length):0}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu"><button class="admin-action" data-admin-page="create"><span class="menu-icon"><i data-lucide="plus"></i></span><span class="menu-text"><strong>建立活動</strong><small>建立新的簽到活動</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button><button class="admin-action" data-admin-page="activities"><span class="menu-icon"><i data-lucide="clipboard-list"></i></span><span class="menu-text"><strong>活動管理</strong><small>查看、關閉、隱藏、刪除活動</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button><button class="admin-action" data-admin-page="attendance"><span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span><span class="menu-text"><strong>出席率</strong><small>查看年度出席統計與 CSV</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button>${isSuperAdmin()?`<button class="admin-action" id="admin-accounts-btn"><span class="menu-icon"><i data-lucide="users"></i></span><span class="menu-text"><strong>幹部管理</strong><small>新增、停用、刪除、修改密碼</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button>`:""}</div>`;
+  if(adminPage==="create")content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>簽到欄位</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發布時間</div><div class="choice-grid"><button type="button" class="choice publish-choice ${publishMode==='now'?'selected':''}" data-publish-mode="now">立即</button><button type="button" class="choice publish-choice ${publishMode==='1day'?'selected':''}" data-publish-mode="1day">一天後</button><button type="button" class="choice publish-choice ${publishMode==='1week'?'selected':''}" data-publish-mode="1week">一個禮拜後</button></div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
-    const visibleActs=acts.filter(a=>!a.hidden);
-    const hiddenActs=acts.filter(a=>a.hidden);
-    content=`
-      <div class="card">
-        <div class="admin-page-title">
-          <button class="secondary back" data-admin-page="home">←</button>
-          <h2 style="margin:0;">活動管理</h2>
-        </div>
-        <p class="hint">活動可以提前建立。關閉＝停止簽到；隱藏＝從隊員活動列表移除；刪除＝刪除活動與其簽到資料。</p>
-        ${visibleActs.length===0?`<div class="empty">目前沒有顯示中的活動</div>`:
-          visibleActs.map(a=>activityAdminRow(a)).join("")}
-      </div>
-      ${hiddenActs.length?`
-      <div class="card">
-        <h2>已隱藏活動（${hiddenActs.length}）</h2>
-        ${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}
-      </div>`:""}
-    `;
+    const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
+    content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
   }
-
-  if(adminPage==="attendance"){
-    content=`
-      <div class="card">
-        <div class="admin-page-title">
-          <button class="secondary back" data-admin-page="home">←</button>
-          <h2 style="margin:0;">年度出席率</h2>
-        </div>
-        <p class="hint">今年共 ${yearActs.length} 場活動。</p>
-        ${rows.length===0?`<div class="empty">還沒有任何簽到紀錄</div>`:`
-          <button class="secondary" id="export-csv-btn" style="margin-top:0;margin-bottom:10px;">匯出 Excel（CSV）</button>
-          <table class="list-table">
-            <thead><tr><th>姓名</th><th>參加場次</th><th style="min-width:110px;">出席率</th></tr></thead>
-            <tbody>${rows.map(r=>`
-              <tr>
-                <td class="name">${escapeHtml(r.name)}</td>
-                <td>${r.attended}/${r.total}</td>
-                <td><div class="rate-bar-wrap"><div class="rate-bar-track"><div class="rate-bar-fill" style="width:${r.rate}%;"></div></div><span class="rate-num">${r.rate}%</span></div></td>
-              </tr>`).join("")}</tbody>
-          </table>`}
-      </div>`;
-  }
-
-  el.innerHTML=`
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span class="status-pill ${isSuperAdmin()?"status-open":"officer-mode-pill"}"><span class="status-dot"></span>${isSuperAdmin()?"管理者模式":"幹部模式"}</span>
-      <span style="font-size:13px;font-weight:700;color:var(--ink-soft);">登入者：${escapeHtml(getAdminSession()?.username||"—")}</span>
-      <button class="secondary" id="lock-btn" style="margin:0;width:auto;">登出</button>
-    </div>
-    ${content}
-  `;
-
-  const lockBtn=document.getElementById("lock-btn"); if(lockBtn) lockBtn.onclick=async()=>{
-    await adminLogout(); adminPage="home"; showToast("已登出管理者"); renderAdmin(el);
-  };
-
-  el.querySelectorAll("[data-admin-page]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      adminPage=btn.dataset.adminPage;
-      renderAdmin(el);
-    });
-  });
-
-  const accountBtn=document.getElementById("admin-accounts-btn");
-  if(accountBtn) accountBtn.onclick=()=>renderAdminAccounts(el);
-
-  if(adminPage==="create") setupCreateActivityPage(el);
-  if(adminPage==="activities") setupActivityManagementPage(el);
-  if(adminPage==="attendance"){
-    const b=document.getElementById("export-csv-btn");
-    if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};
-  }
+  if(adminPage==="attendance")content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map((r,i)=>`<div class="rate-card"><div class="rate-head"><span>${i+1}. ${escapeHtml(r.name)}</span><span>${r.rate}%</span></div><div style="font-size:10px;color:#999;margin-top:4px">${r.attended} / ${r.total} 場</div><div class="rate-bar"><div class="rate-fill" style="width:${r.rate}%"></div></div></div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+  el.innerHTML=`<div class="block tight" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span class="status ${isSuperAdmin()?'open':'closed'}"><span class="dot"></span>${isSuperAdmin()?'管理者模式':'幹部模式'}</span><span style="font-size:12px;color:#777">登入者：${escapeHtml(getAdminSession()?.username||'—')}</span><button class="secondary" id="lock-btn"><i data-lucide="log-out"></i>登出</button></div>${content}`;
+  const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");renderAdmin(el);refreshIcons();};
+  el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;renderAdmin(el);refreshIcons();});
+  const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>renderAdminAccounts(el);
+  if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
+  refreshIcons();
 }
 
-function activityAdminRow(a, hidden=false){
+function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
   const expanded=window.adminAttendanceExpandedId===a.id;
-  const future=a.publishAt && Number.isFinite(new Date(a.publishAt).getTime()) && new Date(a.publishAt).getTime()>Date.now();
-
-  return `
-    <div class="event-row ${hidden?'activity-row-hidden':''}" data-admin-activity-row="${escapeHtml(a.id)}">
-      <div class="row-top">
-        <div>
-          <div class="name">${escapeHtml(a.name)} ${hidden?'<span class="activity-hidden-tag">已隱藏</span>':''}</div>
-          <div class="meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
-          <div class="activity-created-by">
-            ${future
-              ? `發布時間：${new Date(a.publishAt).toLocaleString("zh-TW",{hour12:false})}`
-              : `發布時間：立即`}
-          </div>
-        </div>
-        <span class="status-pill ${future?'status-closed':(a.open?'status-open':'status-closed')}">
-          <span class="status-dot"></span>${future?'未發布':(a.open?'開放中':'已停止')}
-        </span>
-      </div>
-
-      <div class="stat-line">
-        <span><b>${list.length}</b>${a.maxParticipants?` / ${a.maxParticipants}`:""} 人簽到</span>
-        <span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span>
-      </div>
-
-      <div class="activity-actions">
-        <button type="button" class="secondary" data-admin-attendance="${escapeHtml(a.id)}">
-          ${expanded?"隱藏簽到名單":`查看簽到名單（${list.length}）`}
-        </button>
-        <button type="button" class="secondary" data-activity-close="${escapeHtml(a.id)}">
-          ${a.open?"關閉":"開啟"}
-        </button>
-        <button type="button" class="secondary" data-activity-hide="${escapeHtml(a.id)}">
-          ${hidden?"取消隱藏":"隱藏"}
-        </button>
-        <button type="button" class="secondary" data-activity-delete="${escapeHtml(a.id)}">刪除</button>
-      </div>
-
-      ${expanded ? `
-        <div class="admin-attendance-panel">
-          <div class="divider"></div>
-          <div style="font-weight:800;font-size:14px;margin-bottom:8px;">
-            簽到者名單（${list.length} 人）
-          </div>
-          ${list.length===0
-            ? `<div class="empty" style="padding:16px 4px;">目前還沒有人簽到</div>`
-            : `<table class="list-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>姓名</th>
-                    ${(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("")}
-                    <th>簽到時間</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${list.map((r,i)=>`
-                    <tr>
-                      <td>${i+1}</td>
-                      <td class="name">${escapeHtml(r.name)}</td>
-                      ${(a.fields||[]).map(f=>`
-                        <td>${r.fieldValues && r.fieldValues[f.key] ? escapeHtml(r.fieldValues[f.key]) : "—"}</td>
-                      `).join("")}
-                      <td>${r.ts ? new Date(r.ts).toLocaleString("zh-TW",{hour12:false}) : "—"}</td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>`
-          }
-        </div>
-      `:""}
-    </div>`;
+  const future=a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
+  let detail="";
+  if(expanded){
+    const rows=list.map((r,i)=>{
+      const fieldCells=(a.fields||[]).map(f=>`<td>${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</td>`).join("");
+      return `<tr><td>${i+1}</td><td class="name">${escapeHtml(r.name)}</td>${fieldCells}<td>${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</td></tr>`;
+    }).join("");
+    const headers=(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("");
+    detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
+  }
+  const statusClass=future?"future":(a.open?"open":"closed");
+  const statusText=future?"未發布":(a.open?"開放中":"已停止");
+  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}"><i data-lucide="power"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
 }
 
 function rememberCreateDraft(){
@@ -2148,7 +1048,7 @@ function renderAdminLock(el){
     if(!norm(u.value)){showToast("請輸入帳號");return;}
     if(!p.value){showToast("請輸入密碼");return;}
     b.disabled=true;
-    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");render();}
+    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");renderAdmin(el);}
     catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
   };
   if(b) b.onclick=login;
@@ -2187,7 +1087,6 @@ async function init(){
   },6000);
 }
 
-loadAnnouncement();
 init();
 
 window.addEventListener("error",function(ev){
@@ -2204,7 +1103,6 @@ window.showToast = showToast;
 window.updateActivityRemote = updateActivityRemote;
 window.deleteActivityRemote = deleteActivityRemote;
 window.loadData = loadData;
-window.loadAnnouncement = loadAnnouncement;
 window.renderAdmin = renderAdmin;
 
 })().catch(function(e){
