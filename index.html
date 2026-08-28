@@ -529,7 +529,11 @@ async function adminLogin(username, password){
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"帳號或管理碼錯誤");
 
-  window.__haotianAdminSession={username:data.username,role:data.role};
+  window.__haotianAdminSession={
+    username:data.username,
+    role:data.role,
+    access_code:password
+  };
   adminUnlocked=true;
   return data;
 }
@@ -711,7 +715,7 @@ async function loadData(){
     state.adminPin=null;
   }catch(e){
     console.error("Supabase load error:",e);
-    showToast("雲端資料載入失敗："+(e?.message||""),"error");
+    showToast("雲端資料載入失敗："+(e?.message||""));
   }
   loaded=true;
 }
