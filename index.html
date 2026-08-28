@@ -505,6 +505,1634 @@ button.secondary:focus-visible,
   display:inline-block;
 }
 
+
+/* v28 activity-list circular countdown/status */
+.activity-right{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.activity-status-clock{
+  width:48px;height:48px;flex:0 0 48px;
+  position:relative;display:grid;place-items:center;border-radius:50%;
+}
+.activity-status-clock svg{
+  position:absolute;inset:0;width:48px;height:48px;
+  transform:rotate(-90deg);
+}
+.activity-status-clock circle{fill:none;stroke-width:2.8}
+.activity-status-clock .clock-track{stroke:#eadede}
+.activity-status-clock .clock-progress{stroke:var(--accent);stroke-linecap:round}
+.activity-status-clock span{
+  position:relative;z-index:1;color:var(--accent);
+  font-size:9px;font-weight:900;letter-spacing:-.03em;line-height:1;
+}
+.activity-status-clock.open{
+  background:#edf8f0;color:#22a35a;
+}
+.activity-status-clock.open svg{position:static;transform:none;width:22px;height:22px}
+.activity-status-clock.open svg circle{display:none}
+.activity-status-clock.open i{width:22px;height:22px;color:#22a35a}
+.activity-status-clock.closed{
+  background:#f1f1ef;color:var(--ink);
+}
+.activity-status-clock.closed i{width:21px;height:21px;color:var(--ink)}
+@media(max-width:430px){
+  .activity-right{gap:6px}
+  .activity-status-clock{width:44px;height:44px;flex-basis:44px}
+  .activity-status-clock svg{width:44px;height:44px}
+  .activity-status-clock span{font-size:8px}
+}
+
+
+/* v30: activity-list countdown matches check-in countdown block */
+.activity-status-clock.countdown{
+  min-width:78px;
+  width:auto;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown svg{
+  position:static;
+  width:19px;
+  height:19px;
+  transform:none;
+}
+.activity-status-clock.countdown svg circle{display:none}
+.activity-status-clock.countdown i,
+.activity-status-clock.countdown svg{
+  color:#fff;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:72px;
+    height:44px;
+    padding:0 9px;
+  }
+  .activity-status-clock.countdown span{font-size:12px}
+  .activity-status-clock.countdown svg{width:18px;height:18px}
+}
+
+
+/* v31: list countdown = same Timer icon + red time block as check-in */
+.activity-status-clock.countdown{
+  min-width:78px;
+  width:auto;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown svg{
+  position:static;
+  width:19px;
+  height:19px;
+  transform:none;
+}
+.activity-status-clock.countdown svg circle{display:none}
+.activity-status-clock.countdown i{
+  width:19px;
+  height:19px;
+  color:#fff;
+  flex:0 0 auto;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:72px;
+    height:44px;
+    padding:0 9px;
+  }
+  .activity-status-clock.countdown i{width:18px;height:18px}
+  .activity-status-clock.countdown span{font-size:12px}
+}
+
+
+/* v32: activity list countdown = time only */
+.activity-status-clock.countdown{
+  min-width:66px;
+  width:66px;
+  height:42px;
+  padding:0 8px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 66px;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+.activity-status-clock.countdown svg,
+.activity-status-clock.countdown i{display:none}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:62px;
+    width:62px;
+    height:40px;
+    flex-basis:62px;
+  }
+  .activity-status-clock.countdown span{font-size:12px}
+}
+
+/* v33 */
+.field-label .field-slot-no{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:28px;height:22px;margin-left:5px;padding:0 6px;
+  border-radius:8px;background:#f1f1ef;color:var(--ink);
+  font-size:11px;font-weight:900;line-height:1;vertical-align:middle;
+}
+.activity-card.activity-card-open{
+  background:#fff !important;
+  border-color:var(--line) !important;
+}
+.activity-card.activity-card-open .activity-icon{
+  background:#f1f1ef !important;
+  color:var(--ink) !important;
+}
+
+/* v34: show field names above checked-in values */
+.signin-list-head{
+  display:grid;
+  grid-template-columns:38px minmax(90px,1fr) repeat(var(--field-count,1),minmax(60px,auto)) 38px;
+  gap:10px;
+  align-items:center;
+  padding:0 0 9px;
+  margin-bottom:2px;
+  border-bottom:1px solid var(--line);
+  color:#888;
+  font-size:10px;
+  font-weight:850;
+}
+.signin-list-head > div:first-child{grid-column:2}
+.signin-field-value{
+  min-width:0;
+  font-size:12px;
+  color:var(--ink);
+  font-weight:750;
+  text-align:center;
+  word-break:break-word;
+}
+.list-row:has(.signin-field-value){
+  gap:10px;
+}
+@media(max-width:430px){
+  .signin-list-head{
+    gap:6px;
+    font-size:9px;
+  }
+  .signin-field-value{font-size:11px}
+}
+
+
+/* v35: simplified fixed header, aligned sign-in list, smaller status icons */
+.app-header{position:sticky;top:0;z-index:50}
+.top-tabs,.page-tabs{position:static !important;top:auto !important;z-index:auto !important}
+
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  display:grid;
+  grid-template-columns:32px minmax(100px,1.4fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px;
+  gap:8px;
+  align-items:center;
+}
+.signin-list-head{padding:0 10px 9px;margin-bottom:0}
+.signin-list-head > div:first-child{grid-column:2}
+.signin-list-head > div{min-width:0;text-align:center}
+.signin-list-head > div:nth-child(2){text-align:left}
+.block.tight .list-row:has(.signin-field-value){padding:10px}
+.block.tight .list-row:has(.signin-field-value) .list-main{min-width:0}
+.signin-field-value{
+  min-width:0;text-align:center;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.activity-status-clock.open,
+.activity-status-clock.closed{
+  width:34px !important;height:34px !important;flex:0 0 34px !important;
+  border-radius:10px;
+}
+.activity-status-clock.open i,
+.activity-status-clock.closed i{width:17px !important;height:17px !important}
+
+#back-link{
+  width:36px;height:36px;min-width:36px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;border-radius:10px;
+}
+#back-link svg{width:18px;height:18px}
+
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:28px minmax(88px,1.25fr) repeat(var(--field-count,1),minmax(58px,1fr)) 28px;
+    gap:6px;
+  }
+}
+
+/* v35 open status: green icon only */
+.activity-card.activity-card-open{background:#fff !important;border-color:var(--line) !important}
+
+
+/* v36: home-only fixed brand header; child pages use a simple back header */
+.app-header{position:static !important;top:auto !important;z-index:auto !important}
+.home-header{position:sticky !important;top:0 !important;z-index:50}
+.subpage-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:8px 0 12px;
+  background:var(--bg);
+}
+.subpage-header h1{
+  margin:0;
+  font-size:20px;
+  line-height:1.2;
+  font-weight:900;
+}
+.subpage-back{
+  width:36px;height:36px;min-width:36px;
+  border:0;background:transparent;color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:10px;cursor:pointer;padding:0;
+}
+.subpage-back:hover{background:#f1f1ef}
+.subpage-back svg{width:19px;height:19px}
+.admin-child-header{
+  background:transparent !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+  border:0 !important;
+}
+
+
+/* Child-page navigation: icon only */
+#back-link{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center;justify-content:center;
+  border-radius:10px;
+  background:transparent;
+  color:var(--ink);
+}
+#back-link svg{width:18px;height:18px}
+#back-link .back-text{display:none}
+
+
+.admin-page > .admin-hero,
+.admin-child > .admin-hero,
+.admin-content > .admin-hero{
+  background:transparent !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+
+
+/* v37 child-page navigation */
+.top{position:sticky;top:0;z-index:50;background:var(--bg)}
+.tabs{position:static !important;top:auto !important;z-index:auto !important}
+.subpage-header{position:static !important;display:flex;align-items:center;gap:10px;min-height:54px;padding:8px 0 12px;background:var(--bg)}
+.subpage-header h1{margin:0;font-size:20px;line-height:1.2;font-weight:900}
+.subpage-back{width:36px;height:36px;min-width:36px;padding:0;border:0;background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer}
+.subpage-back svg{width:19px;height:19px}
+.subpage-header .subpage-back:last-child{margin-left:auto}
+.admin-role-header{display:none !important}
+.admin-child-header{background:transparent !important;color:var(--ink) !important;box-shadow:none !important;border:0 !important}
+
+/* v38: main home header = team name + permission shield only */
+.home-header .app-title .workbook-title,
+.home-header .app-title .title-sub,
+.home-header .app-title .app-subtitle{
+  display:none !important;
+}
+.home-header .app-title{
+  justify-content:space-between;
+}
+.home-header .app-title .team-title{
+  display:block !important;
+}
+.home-header .app-title .brand-title{
+  display:block !important;
+}
+
+/* Admin landing page keeps its orange/red hero; admin child pages do not. */
+.admin-landing-hero{
+  display:block;
+}
+.admin-child-page .admin-landing-hero,
+.admin-child-page .admin-hero{
+  display:none !important;
+}
+
+/* v38: child page navigation is one arrow only */
+.subpage-back,
+#back-link,
+#back-admin-top{
+  width:36px !important;
+  height:36px !important;
+  min-width:36px !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:var(--ink) !important;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+}
+.subpage-back svg,
+#back-link svg,
+#back-admin-top svg{width:20px;height:20px}
+.subpage-header .subpage-back + h1{display:none}
+
+/* Hide textual back labels in child pages. */
+#back-link .back-text,
+#back-admin-top .back-text{display:none}
+
+/* Checked-in list: center all header labels and values. */
+.signin-list-head,
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value),
+.block.tight .list-row:has(.signin-field-value) .list-index,
+.block.tight .list-row:has(.signin-field-value) .list-main,
+.block.tight .list-row:has(.signin-field-value) .list-name,
+.block.tight .list-row:has(.signin-field-value) .list-meta,
+.signin-field-value{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+
+/* v39 exact header hierarchy */
+body .app-header.home-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+}
+body .app-header:not(.home-header){
+  position:static !important;
+}
+.home-header .app-title .workbook-title,
+.home-header .app-title .app-subtitle,
+.home-header .app-title .title-sub{
+  display:none !important;
+}
+
+/* Child pages: no global header; one compact arrow only. */
+#app.child-view .app-header,
+#app.subpage-view .app-header{
+  display:none !important;
+}
+#app.child-view .back,
+#app.subpage-view .back,
+#app.child-view #back-link,
+#app.subpage-view #back-link,
+#app.child-view #back-admin-top,
+#app.subpage-view #back-admin-top{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 12px 0 !important;
+  border:0 !important;background:transparent !important;
+  display:inline-flex !important;align-items:center;justify-content:center !important;
+  color:var(--ink) !important;
+}
+#app.child-view .back > *:not(svg),
+#app.subpage-view .back > *:not(svg),
+#app.child-view #back-link > *:not(svg),
+#app.subpage-view #back-link > *:not(svg),
+#app.child-view #back-admin-top > *:not(svg),
+#app.subpage-view #back-admin-top > *:not(svg){
+  display:none !important;
+}
+
+/* Admin landing hero is allowed; admin children have no red/orange hero. */
+.admin-landing-header{display:block}
+.admin-child-header{display:none !important}
+.admin-child-page .admin-head,
+.admin-child-page .admin-hero{background:transparent !important;box-shadow:none !important;color:var(--ink) !important}
+
+/* Checked-in list: all text centered, with matching header/value columns. */
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  display:grid !important;
+  grid-template-columns:32px minmax(100px,1.4fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:28px minmax(80px,1.2fr) repeat(var(--field-count,1),minmax(55px,1fr)) 28px !important;
+    gap:6px !important;
+  }
+}
+
+
+/* v40: exact navigation hierarchy */
+.top{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+}
+.child-view .top,
+.child-view .tabs{
+  display:none !important;
+}
+
+/* Main home top header only: team name + shield. */
+.top-brand p{display:none !important}
+
+/* One arrow only on all child pages. */
+.child-view .back,
+.child-view #back-link,
+.child-view #back-admin-top{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 12px 0 !important;
+  border:0 !important;background:transparent !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  color:var(--ink) !important;
+}
+.child-view .back > :not(svg),
+.child-view #back-link > :not(svg),
+.child-view #back-admin-top > :not(svg){
+  display:none !important;
+}
+.child-view .back svg,
+.child-view #back-link svg,
+.child-view #back-admin-top svg{
+  width:20px !important;height:20px !important;
+}
+
+/* Never show a second back control on the same child page. */
+.child-view .subpage-back{display:none !important}
+
+/* Admin landing remains the only place allowed to show its large colored hero. */
+#tab-content.admin-landing .admin-hero,
+#tab-content.admin-landing .admin-head{display:block}
+#tab-content.admin-child .admin-hero,
+#tab-content.admin-child .admin-head{background:transparent !important;box-shadow:none !important}
+
+/* Center checked-in list headings and values. */
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *,
+.signin-field-value{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  align-items:center !important;
+  text-align:center !important;
+}
+
+
+/* v41 final navigation hierarchy */
+.home-fixed-header{position:sticky !important;top:0 !important;z-index:100 !important}
+.home-fixed-header .top-brand p{display:none !important}
+#app.child-view .home-fixed-header,#app.child-view .home-tabs{display:none !important}
+.child-back{
+ width:36px !important;height:36px !important;min-width:36px !important;
+ padding:0 !important;margin:0 0 10px !important;border:0 !important;
+ background:transparent !important;color:var(--ink) !important;
+ display:inline-flex !important;align-items:center !important;justify-content:center !important;
+ border-radius:10px !important;
+}
+.child-back svg{width:20px !important;height:20px !important}
+#app.child-view .admin-hero,#app.child-view .admin-head{display:none !important}
+#app.admin-home-view .admin-hero,#app.admin-home-view .admin-head{display:block !important}
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+ display:grid !important;
+ grid-template-columns:32px minmax(100px,1.35fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px !important;
+ gap:8px !important;align-items:center !important;
+}
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *,
+.signin-field-value{text-align:center !important}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+ display:flex !important;flex-direction:column !important;align-items:center !important;
+}
+
+
+/* v42: child navigation is the actual rendered button; no null back-link */
+.child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;
+  color:var(--ink) !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+.child-back svg{width:20px !important;height:20px !important}
+#app.child-view .admin-hero,
+#app.child-view .admin-head,
+#app.child-view .admin-header,
+#app.child-view .admin-banner{display:none !important}
+#app.admin-home-view .admin-hero,
+#app.admin-home-view .admin-head,
+#app.admin-home-view .admin-header,
+#app.admin-home-view .admin-banner{display:block !important}
+
+
+/* v43: admin accounts child uses the single real child-back button */
+#app.child-view .admin-accounts-hero,
+#app.child-view .admin-accounts-header{display:none !important}
+
+
+/* v44 admin layout */
+.admin-main-hero{
+  margin:0 0 16px;padding:18px 20px;border-radius:18px;
+  color:#fff;background:var(--accent);
+}
+.admin-main-hero.super{background:#171717}
+.admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+.admin-main-hero-shield{
+  width:44px;height:44px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.18)
+}
+.admin-main-hero-shield svg{width:23px;height:23px}
+.admin-main-hero-title{font-size:17px;font-weight:950}
+.admin-main-hero-role{font-size:11px;font-weight:750;opacity:.82;margin-top:3px}
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.admin-square{
+  min-height:145px !important;padding:16px !important;
+  display:flex !important;flex-direction:column !important;
+  align-items:flex-start !important;justify-content:center !important;
+  text-align:left !important;border-radius:16px !important;
+}
+.admin-square .menu-icon{
+  width:42px;height:42px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:#f1f1ef;color:var(--ink)
+}
+.admin-square .menu-icon svg{width:21px;height:21px}
+.admin-square strong{font-size:15px;font-weight:900}
+.admin-square small{margin-top:5px;color:#888;font-size:10px}
+.admin-square .chev{display:none}
+
+
+/* v45: admin menu = four clean square cards */
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+}
+.admin-square{
+  min-height:132px !important;
+  padding:18px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  border-radius:16px !important;
+}
+.admin-square .menu-icon{
+  width:44px;height:44px;margin:0 0 12px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:#f1f1ef;color:var(--ink);
+}
+.admin-square .menu-icon svg{width:22px;height:22px}
+.admin-square strong{font-size:15px;font-weight:900}
+.admin-square small,.admin-square .menu-text,.admin-square .chev{display:none !important}
+
+/* Admin child pages: exactly one arrow, no textual/second back button. */
+#app.child-view .child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;color:var(--ink) !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+#app.child-view .child-back svg{width:20px !important;height:20px !important}
+#app.child-view .back,
+#app.child-view #back-link,
+#app.child-view #back-admin-top,
+#app.child-view .subpage-back{
+  display:none !important;
+}
+
+
+/* v46: management landing header matches the original admin design */
+.admin-main-hero{
+  position:relative;
+  margin:0 0 16px;
+  padding:18px 58px 18px 20px;
+  min-height:74px;
+  box-sizing:border-box;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  color:#fff;
+  background:#f59e0b;
+}
+.admin-main-hero.officer{background:#d71920}
+.admin-main-hero.super{background:#f59e0b}
+.admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+.admin-main-hero-shield{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.16);
+}
+.admin-main-hero-shield svg{width:25px;height:25px}
+.admin-main-hero-title{font-size:22px;font-weight:950;line-height:1.15}
+.admin-main-hero-role{font-size:12px;font-weight:800;opacity:.95;margin-top:4px}
+.admin-main-hero-logout{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.7);
+  background:transparent;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.admin-main-hero-logout svg{width:22px;height:22px}
+
+/* Home fixed top: only team name + shield, no subtitle. */
+.home-fixed-header .top-brand p{display:none !important}
+
+
+/* v47: top-level navigation is always available; only child pages hide it */
+.home-fixed-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+  background:var(--bg) !important;
+}
+.home-fixed-header .top-brand p{display:none !important}
+.home-tabs{
+  position:static !important;
+  display:flex !important;
+}
+#app.child-view .home-fixed-header,
+#app.child-view .home-tabs{
+  display:none !important;
+}
+
+/* Admin home keeps team header + sign/query tabs + admin colored hero. */
+#app.admin-home-view .home-fixed-header,
+#app.admin-home-view .home-tabs{
+  display:flex !important;
+}
+#app.admin-home-view .home-tabs{display:flex !important}
+
+/* Child pages: only their single arrow. */
+#app.child-view .child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;
+  color:var(--ink) !important;display:inline-flex !important;
+  align-items:center !important;justify-content:center !important;
+}
+#app.child-view .child-back svg{width:20px !important;height:20px !important}
+
+
+/* v48: restore large centered top tabs */
+.home-tabs{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:72px !important;
+  padding:4px 10px !important;
+  gap:4px !important;
+}
+.home-tabs button{
+  min-height:62px !important;
+  border:0 !important;
+  background:transparent !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  font-size:15px !important;
+  font-weight:850 !important;
+}
+.home-tabs button svg{
+  width:28px !important;
+  height:28px !important;
+}
+.home-tabs button.active{
+  font-weight:950 !important;
+}
+.home-tabs button.active svg{
+  width:30px !important;
+  height:30px !important;
+}
+
+/* v48: admin functions in one horizontal row */
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.admin-square{
+  min-height:128px !important;
+  padding:14px 8px !important;
+  border-radius:16px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+.admin-square .menu-icon{
+  width:42px !important;
+  height:42px !important;
+  margin:0 0 10px !important;
+}
+.admin-square strong{
+  font-size:14px !important;
+  white-space:nowrap !important;
+}
+.admin-square small{display:none !important}
+
+@media(max-width:520px){
+  .admin-menu-grid{
+    gap:7px !important;
+  }
+  .admin-square{
+    min-height:112px !important;
+    padding:10px 4px !important;
+  }
+  .admin-square .menu-icon{
+    width:36px !important;
+    height:36px !important;
+    margin-bottom:8px !important;
+  }
+  .admin-square .menu-icon svg{
+    width:19px !important;
+    height:19px !important;
+  }
+  .admin-square strong{
+    font-size:12px !important;
+  }
+}
+
+
+/* v49: sign-in / query tabs restore red active state */
+.home-tabs button{
+  color:#777 !important;
+  position:relative !important;
+}
+.home-tabs button svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active{
+  color:#d71920 !important;
+  font-weight:950 !important;
+}
+.home-tabs button.active svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button.active::after{
+  content:"";
+  position:absolute;
+  left:22%;
+  right:22%;
+  bottom:2px;
+  height:3px;
+  border-radius:99px;
+  background:#d71920;
+}
+
+
+/* v50: unified home navigation interaction
+   Sign-in / Query / Login / Admin home share the same visual rules. */
+.home-tabs button{
+  color:#777 !important;
+  transition:color .18s ease, background .18s ease, transform .18s ease !important;
+  border-radius:14px !important;
+}
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button:active{
+  color:#d71920 !important;
+  transform:translateY(1px);
+}
+.home-tabs button.active,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible{
+  color:#d71920 !important;
+  background:transparent !important;
+}
+.home-tabs button.active svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+/* Keep the same red interaction language for the home-page admin shield. */
+.home-fixed-header .top-admin-access{
+  transition:color .18s ease, border-color .18s ease, background .18s ease !important;
+}
+.home-fixed-header .top-admin-access:hover,
+.home-fixed-header .top-admin-access:focus-visible{
+  color:#d71920 !important;
+  border-color:#efb8bb !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-fixed-header .top-admin-access:hover svg,
+.home-fixed-header .top-admin-access:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+/* Login / admin landing use the same page background and spacing baseline. */
+#app.home-view,
+#app.admin-home-view{
+  background:var(--bg) !important;
+}
+
+
+/* v51 — four top-level home states use one unified shell */
+
+/* Shared page width / spacing so switching between home states never squeezes
+   the content area differently. */
+#app.home-view,
+#app.admin-home-view{
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+/* Sign-in / Query: centered, larger, equal-width, compact horizontal tabs. */
+.home-tabs{
+  width:100% !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  padding:8px 12px !important;
+  min-height:64px !important;
+  margin:0 !important;
+}
+.home-tabs button{
+  width:100% !important;
+  min-height:56px !important;
+  padding:8px 12px !important;
+  margin:0 !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  font-size:16px !important;
+  font-weight:900 !important;
+}
+.home-tabs button svg{
+  width:25px !important;
+  height:25px !important;
+  flex:0 0 auto !important;
+}
+.home-tabs button.active::after{
+  left:18% !important;
+  right:18% !important;
+  bottom:1px !important;
+}
+
+/* Keep the exact same shell on the admin landing. The colored admin hero
+   starts after the shared navigation instead of compressing it. */
+#app.admin-home-view .home-tabs{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+}
+#app.admin-home-view .admin-main-hero{
+  margin-top:8px !important;
+}
+
+/* Admin landing hero keeps its original size; four management cards stay
+   in one row on desktop and become four narrow equal cards on mobile. */
+#app.admin-home-view .admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+#app.admin-home-view .admin-square{
+  min-width:0 !important;
+  min-height:128px !important;
+  padding:12px 6px !important;
+}
+#app.admin-home-view .admin-square strong{
+  font-size:14px !important;
+}
+#app.admin-home-view .admin-square .menu-icon{
+  width:40px !important;
+  height:40px !important;
+  margin-bottom:9px !important;
+}
+
+/* Login home uses the same page shell, but has no management hero. */
+#app.home-view .admin-main-hero{
+  display:none !important;
+}
+
+/* Hover / focus / active: one red interaction rule everywhere. */
+.home-tabs button:hover,
+.home-tabs button:focus-visible,
+.home-tabs button:active{
+  color:#d71920 !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg,
+.home-tabs button:active svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+@media(max-width:520px){
+  .home-tabs{
+    padding:6px 8px !important;
+    gap:6px !important;
+  }
+  .home-tabs button{
+    min-height:52px !important;
+    font-size:15px !important;
+    padding:6px 8px !important;
+  }
+  .home-tabs button svg{
+    width:23px !important;
+    height:23px !important;
+  }
+  #app.admin-home-view .admin-menu-grid{
+    gap:6px !important;
+  }
+  #app.admin-home-view .admin-square{
+    min-height:108px !important;
+    padding:9px 3px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon{
+    width:34px !important;
+    height:34px !important;
+    margin-bottom:7px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon svg{
+    width:18px !important;
+    height:18px !important;
+  }
+  #app.admin-home-view .admin-square strong{
+    font-size:11px !important;
+  }
+}
+
+
+/* v53 — V51 baseline; only remove the special red active treatment.
+   Do not alter V51 sizing/layout/spacing. */
+.home-tabs button.active,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible,
+.home-tabs button.active:active{
+  color:#777 !important;
+  background:transparent !important;
+  font-weight:850 !important;
+}
+.home-tabs button.active svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg,
+.home-tabs button.active:active svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active::after{
+  display:none !important;
+}
+
+
+/* v54 — restore cursor feedback on Sign-in / Query without changing layout */
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+/* Active tab itself stays neutral, per v53 request. */
+.home-tabs button.active{
+  color:#777 !important;
+  background:transparent !important;
+  font-weight:850 !important;
+}
+.home-tabs button.active svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active::after{
+  display:none !important;
+}
+
+
+/* v55 — verified pointer feedback */
+.home-tabs button{
+  cursor:pointer !important;
+}
+.home-tabs button.is-pointer,
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+}
+.home-tabs button.is-pointer svg,
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button.active.is-pointer,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+}
+.home-tabs button.active.is-pointer svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+
+/* v56 — restore the earlier admin header typography:
+   boss = large title; permission level = small subtitle. */
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+  letter-spacing:.01em !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+
+
+/* v57 — account name / permission hierarchy
+   Large = logged-in account name; small = permission level. */
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+
+
+/* v58 — restore the earlier admin color-block icon treatment:
+   permission icon stays on the right, like the original v5 design. */
+.admin-main-hero{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+.admin-main-hero-brand{display:flex !important;align-items:center !important}
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+.admin-main-hero-actions{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+.admin-main-hero-permission{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  min-height:32px !important;
+  padding:7px 10px !important;
+  border-radius:999px !important;
+  background:rgba(0,0,0,.16) !important;
+  color:#fff !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+.admin-main-hero-permission svg{
+  width:15px !important;
+  height:15px !important;
+}
+.admin-main-hero-logout{
+  position:static !important;
+  transform:none !important;
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+}
+
+
+/* v59 — admin hero matches supplied reference */
+.admin-main-hero{
+  background:#f59e0b !important;
+  color:#fff !important;
+  min-height:114px !important;
+  padding:20px 22px !important;
+  border-radius:26px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+.admin-main-hero.officer{background:#d71920 !important}
+.admin-main-hero.super{background:#f59e0b !important}
+
+.admin-main-hero-brand{
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+}
+.admin-main-hero-icon{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:15px !important;
+  background:rgba(255,255,255,.16) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.admin-main-hero-icon svg{
+  width:27px !important;
+  height:27px !important;
+  color:#fff !important;
+  stroke:#fff !important;
+}
+.admin-main-hero-title{
+  margin:0 !important;
+  font-size:25px !important;
+  line-height:1.05 !important;
+  font-weight:950 !important;
+  color:#fff !important;
+}
+.admin-main-hero-role{
+  margin-top:6px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  font-weight:750 !important;
+  color:#fff !important;
+  opacity:.95 !important;
+}
+.admin-main-hero-logout{
+  position:static !important;
+  transform:none !important;
+  width:44px !important;
+  height:44px !important;
+  flex:0 0 44px !important;
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.65) !important;
+  background:transparent !important;
+  color:#fff !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.admin-main-hero-logout svg{
+  width:23px !important;
+  height:23px !important;
+}
+.admin-main-hero-actions{display:none !important}
+
+
+/* v60 — exactly one back arrow in every admin child page */
+#app.child-view .admin-child .child-back ~ .child-back,
+#app.child-view .admin-page .child-back ~ .child-back,
+#app.child-view .admin-content .child-back ~ .child-back{
+  display:none !important;
+}
+
+
+/* v61 — recent activity closed/open status X icon: small, no background */
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:16px !important;
+  height:16px !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+/* v62 — status X/check icon matches nearby Lucide icon size, no box */
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:21px !important;
+  height:21px !important;
+  display:block !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+/* v63 — recent activity status uses simple X / check icons */
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:18px !important;
+  height:18px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+/* v64 — open activity date icon is green */
+.activity-card.activity-card-open .activity-icon{
+  color:#22a35a !important;
+}
+.activity-card.activity-card-open .activity-icon svg{
+  color:#22a35a !important;
+  stroke:#22a35a !important;
+}
+
+
+/* v65 — admin login: management color header + clean form */
+.admin-login-page{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:4px 0 24px;
+}
+
+
+.admin-login-hero-icon svg{
+  width:25px;
+  height:25px;
+}
+
+
+.admin-login-card{
+  margin-top:14px;
+  padding:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.admin-login-title{
+  margin:0 0 16px;
+  font-size:18px;
+  font-weight:900;
+}
+.admin-login-card .field{
+  margin-bottom:14px;
+}
+.admin-password-wrap{
+  position:relative;
+}
+.admin-password-wrap input{
+  padding-right:48px !important;
+}
+.admin-password-toggle{
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.admin-password-toggle:hover,
+.admin-password-toggle:focus-visible{
+  color:#d71920;
+  background:#fff1f1;
+  outline:none;
+}
+.admin-password-toggle svg{
+  width:19px;
+  height:19px;
+}
+.admin-login-button{
+  width:100%;
+  margin-top:4px;
+}
+
+
+/* v67 — minimalist admin login */
+.admin-login-page{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:24px 0 32px;
+}
+.admin-login-card{
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+  padding:30px 28px 28px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-sizing:border-box;
+}
+.admin-login-heading{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 24px;
+}
+.admin-login-heading-icon{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:#f1f1ef;
+  color:var(--ink);
+  display:grid;
+  place-items:center;
+  flex:0 0 38px;
+}
+.admin-login-heading-icon svg{
+  width:20px;
+  height:20px;
+}
+.admin-login-heading h1{
+  margin:0;
+  font-size:22px;
+  line-height:1.15;
+  font-weight:950;
+  letter-spacing:-.02em;
+}
+.admin-login-card .field{
+  margin-bottom:16px;
+}
+.admin-login-card .field-label{
+  margin-bottom:7px;
+}
+.admin-password-wrap{
+  position:relative;
+}
+.admin-password-wrap input{
+  padding-right:48px !important;
+}
+.admin-password-toggle{
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.admin-password-toggle:hover,
+.admin-password-toggle:focus-visible{
+  color:var(--accent);
+  background:var(--accent-soft);
+  outline:none;
+}
+.admin-password-toggle svg{
+  width:19px;
+  height:19px;
+}
+.admin-login-button{
+  width:100%;
+  margin-top:6px;
+}
+
+
+/* v69 — remove the closed X icon from the activity list */
+.activity-status-clock.closed{
+  display:none !important;
+}
+
+
+/* v70 — recent activity legend: green = open, black = closed */
+.activity-list-status-legend{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:12px;
+  color:#777;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.activity-list-status-legend > span{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.activity-list-status-legend .dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  display:inline-block;
+}
+.activity-list-status-legend .open-dot{background:#22a35a}
+.activity-list-status-legend .closed-dot{background:#171717}
+@media(max-width:430px){
+  .activity-list-status-legend{gap:9px;font-size:11px}
+}
+
+
+/* v71 — homepage admin icon becomes logout after login;
+   admin hero permission icon block matches announcement icon size. */
+.admin-main-hero-icon{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  border-radius:14px !important;
+}
+.admin-main-hero-icon svg{
+  width:21px !important;
+  height:21px !important;
+}
+
+
+/* v72 — admin color block matches the announcement card height;
+   no logout button inside the block. */
+.admin-main-hero{
+  min-height:70px !important;
+  height:70px !important;
+  padding:14px 16px !important;
+  margin:0 0 12px !important;
+  border-radius:18px !important;
+  box-sizing:border-box !important;
+}
+.admin-main-hero-brand{
+  height:100% !important;
+  gap:12px !important;
+}
+.admin-main-hero-icon{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  border-radius:12px !important;
+}
+.admin-main-hero-icon svg{
+  width:22px !important;
+  height:22px !important;
+}
+.admin-main-hero-title{
+  font-size:21px !important;
+  line-height:1.05 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+}
+.admin-main-hero-logout{
+  display:none !important;
+}
+
+
+/* v73 — 幹部管理新增幹部表單分開、不要黏在一起 */
+#new-officer-user,
+#new-officer-pass{
+  display:block !important;
+  width:100% !important;
+  margin:0 0 12px !important;
+  box-sizing:border-box !important;
+}
+#create-officer{
+  display:flex !important;
+  width:100% !important;
+  margin-top:2px !important;
+}
+#new-officer-pass + #create-officer{
+  margin-top:4px !important;
+}
+
 </style>
 </head>
 <body>
@@ -1010,32 +2638,82 @@ function getPublishAt(){
 }
 
 function render(){
-  if(window.__adminAccountsViewOpen) return;
+  if(window.__adminAccountsViewOpen){
+    const app=document.getElementById("app");
+    app.className="child-view";
+    app.innerHTML=`<div id="tab-content"></div>`;
+    renderAdminAccounts(document.getElementById("tab-content"));
+    refreshIcons();
+    return;
+  }
+
   const app=document.getElementById("app");
-  app.innerHTML=`
-    <header class="top">
-      <div class="top-brand">
-        <div><h1>台中浩天宮四紅哨角隊</h1><p>活動簽到簿</p></div>
-      </div>
-      <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="top-admin-access" aria-label="管理者" title="${adminUnlocked?(isSuperAdmin()?"最高管理者":"幹部"):"管理者登入"}">
-        <i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i>
-      </button>
-    </header>
-    <nav class="tabs">
-      <button data-tab="register" class="${activeTab==='register'?'active':''}"><i data-lucide="circle-check"></i>簽到</button>
-      <button data-tab="query" class="${activeTab==='query'?'active':''}"><i data-lucide="search"></i>查詢</button>
-    </nav>
-    <div id="tab-content"></div>
-  `;
-  const tabsNav=app.querySelector("nav.tabs");
-  if(tabsNav) tabsNav.onclick=(ev)=>{
-    const btn=ev.target.closest("button[data-tab]"); if(!btn)return;
-    ev.preventDefault(); ev.stopPropagation(); activeTab=btn.dataset.tab; openEventId=null; adminExpandedId=null; queryResultVisible=false; render();
+  const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
+  const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
+
+  app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
+
+  if(!isChild){
+    app.innerHTML=`
+      <header class="top home-fixed-header">
+        <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
+        <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
+          type="button" id="top-admin-access" aria-label="管理者"
+          title="${adminUnlocked?"登出管理者":"管理者登入"}">
+          <i data-lucide="${adminUnlocked?"log-out":"shield"}"></i>
+        </button>
+      </header>
+      <nav class="tabs home-tabs">
+        <button data-tab="register" class="${activeTab==='register'?'active':''}">
+          <i data-lucide="check"></i>簽到
+        </button>
+        <button data-tab="query" class="${activeTab==='query'?'active':''}">
+          <i data-lucide="search"></i>查詢
+        </button>
+      </nav>
+      <div id="tab-content"></div>`;
+  }else{
+    app.innerHTML=`<div id="tab-content"></div>`;
+  }
+
+  const homeTabButtons=app.querySelectorAll(".home-tabs button");
+  homeTabButtons.forEach(btn=>{
+    btn.addEventListener("pointerenter",()=>btn.classList.add("is-pointer"));
+    btn.addEventListener("pointerleave",()=>btn.classList.remove("is-pointer"));
+    btn.addEventListener("focus",()=>btn.classList.add("is-pointer"));
+    btn.addEventListener("blur",()=>btn.classList.remove("is-pointer"));
+  });
+
+  const tabs=app.querySelector(".home-tabs");
+  if(tabs)tabs.onclick=(ev)=>{
+    const btn=ev.target.closest("button[data-tab]");
+    if(!btn)return;
+    activeTab=btn.dataset.tab;
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    render();
   };
+
   const adminAccess=app.querySelector("#top-admin-access");
-  if(adminAccess) adminAccess.onclick=()=>{
-    activeTab="admin"; openEventId=null; adminExpandedId=null; queryResultVisible=false; render();
+  if(adminAccess)adminAccess.onclick=async()=>{
+    if(adminUnlocked){
+      await adminLogout();
+      adminPage="home";
+      openEventId=null;
+      adminExpandedId=null;
+      queryResultVisible=false;
+      showToast("已登出管理者");
+      render();
+      return;
+    }
+    activeTab="admin";
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    render();
   };
+
   renderTab();
 }
 function refreshIcons(){
@@ -1043,6 +2721,8 @@ function refreshIcons(){
 }
 function renderTab(){
   const el=document.getElementById("tab-content"); if(!el)return;
+  el.classList.toggle("admin-landing",activeTab==="admin" && adminUnlocked && adminPage==="home");
+  el.classList.toggle("admin-child",activeTab==="admin" && adminUnlocked && adminPage!=="home");
   if(!loaded){el.innerHTML=`<div class="block"><div class="empty">載入中…</div></div>`; refreshIcons(); return;}
   if(activeTab==="register") renderRegister(el);
   else if(activeTab==="query") renderQuery(el);
@@ -1052,8 +2732,10 @@ function renderTab(){
 
 // ---------- REGISTER TAB ----------
 function formatCountdown(ms){
-  const s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
-  return (d?d+"天 ":"")+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+  const total=Math.max(0,Math.floor(ms/1000));
+  const minutes=Math.floor(total/60);
+  const seconds=total%60;
+  return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 }
 function renderCountdown(activity){
   const box=document.getElementById("event-countdown");if(!box)return;
@@ -1093,6 +2775,51 @@ async function refreshActivityRegistrations(activityId){
   return fresh;
 }
 
+
+function activityStatusClock(activity){
+  const end=activity.closeAt?new Date(activity.closeAt).getTime():null;
+  const remaining=end?end-Date.now():0;
+  if(activity.open && end && remaining>0){
+    const total=Math.max(Number(activity.autoCloseMinutes||0)*60000, remaining, 1);
+    const progress=Math.max(0,Math.min(1,remaining/total));
+    const circumference=2*Math.PI*17;
+    return `<div class="activity-status-clock countdown" data-countdown-end="${end}" data-countdown-total="${total}" aria-label="剩餘 ${formatCountdown(remaining)}">
+      <span>${formatCountdown(remaining)}</span>
+    </div>`;
+  }
+  if(activity.open) return `<div class="activity-status-clock open" aria-label="開放中"><i data-lucide="check"></i></div>`;
+  return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
+}
+
+function refreshActivityListClocks(){
+  document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
+    const end=Number(box.dataset.countdownEnd||0);
+    const total=Number(box.dataset.countdownTotal||1);
+    const remaining=end-Date.now();
+    if(remaining<=0){
+      const id=box.closest(".activity-card")?.dataset.open;
+      const a=state.activities.find(x=>String(x.id)===String(id));
+      if(a){ box.outerHTML=activityStatusClock(a); refreshIcons(); }
+      return;
+    }
+    const span=box.querySelector("span"); if(span) span.textContent=formatCountdown(remaining);
+    box.setAttribute("aria-label","剩餘 "+formatCountdown(remaining));
+  });
+}
+
+function displayFieldLabel(label,index){
+  const name=norm(label)||"欄位";
+  return `${escapeHtml(name)} <span class="field-slot-no">${String(index+1).padStart(2,"0")}</span>`;
+}
+
+
+function subpageHeader(title, backLabel="返回"){
+  return ``;
+}
+
+function childBackButton(label){
+  return `<button class="child-back" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i data-lucide="arrow-left"></i></button>`;
+}
 function renderRegister(el){
   const acts=[...recentOrOpenActivities()].sort((a,b)=>{
     const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
@@ -1103,7 +2830,9 @@ function renderRegister(el){
     if(!activity){openEventId=null;return renderRegister(el);}
     const list=regsOf(activity.id), fields=activity.fields||[];
     el.innerHTML=`
-      <button class="back" id="back-link"><i data-lucide="arrow-left"></i>返回活動列表</button>
+      ${childBackButton("返回活動列表")}
+
+      
       <div class="hero checkin-hero">
         <div class="checkin-hero-main">
           <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
@@ -1118,16 +2847,35 @@ function renderRegister(el){
         <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" /></div>
-          ${fields.map(f=>`<div class="field"><label class="field-label">${escapeHtml(f.label)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
-          <button class="primary checkin-button" id="reg-btn"><i data-lucide="circle-check"></i>確認簽到</button>
+          ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
+          <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
         `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
       </div>
       <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
-      <div class="block tight"><div class="list">
-        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:list.map((r,i)=>`<div class="list-row"><div class="list-index">${i+1}</div><div class="list-main"><div class="list-name">${escapeHtml(r.name)}</div><div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div></div>${fields.map(f=>`<span class="list-meta">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):""}</span>`).join("")}${activity.open?`<button class="icon-btn danger" data-delete-reg="${i}" title="刪除簽到"><i data-lucide="trash-2"></i></button>`:`<i class="check" data-lucide="check"></i>`}</div>`).join("")}
+      <div class="block tight" style="--field-count:${Math.max(1,fields.length)}"><div class="list">
+        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:`
+          <div class="signin-list-head">
+            <div>姓名</div>
+            ${fields.map(f=>`<div>${escapeHtml(f.label)}</div>`).join("")}
+            <div></div>
+          </div>
+          ${list.map((r,i)=>`<div class="list-row">
+            <div class="list-index">${i+1}</div>
+            <div class="list-main">
+              <div class="list-name">${escapeHtml(r.name)}</div>
+              <div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div>
+            </div>
+            ${fields.map(f=>`<div class="signin-field-value">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</div>`).join("")}
+            ${activity.open?`<button class="icon-btn danger" data-delete-reg="${i}" title="刪除簽到"><i data-lucide="trash-2"></i></button>`:`<i class="check" data-lucide="check"></i>`}
+          </div>`).join("")}
+        `}
       </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
     `;
-    document.getElementById("back-link").onclick=(ev)=>{ev.preventDefault();openEventId=null;renderRegister(el);refreshIcons();};
+    el.querySelector(".child-back")?.addEventListener("click",(ev)=>{
+      ev.preventDefault();
+      openEventId=null;
+      render();
+    });
     if(activity.open){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
         ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
@@ -1152,11 +2900,28 @@ function renderRegister(el){
     <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div style="flex:1;min-width:0"><h3>公告</h3><p>${escapeHtml(announcementText)}</p></div></div>
     <div class="section-head activity-list-head">
       <h2>近期活動</h2>
-      <span class="activity-list-open-status"><span class="dot"></span>開放中</span>
+      <div class="activity-list-status-legend">
+        <span><span class="dot open-dot"></span>開放中</span>
+        <span><span class="dot closed-dot"></span>已關閉</span>
+      </div>
     </div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}"><div class="activity-top"><div class="activity-icon"><i data-lucide="calendar-days"></i></div><div class="activity-main"><div class="activity-name">${escapeHtml(a.name)}</div><div class="activity-meta">${fmtDate(a.date)}</div></div><div class="activity-right"><span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span><span class="arrow"><i data-lucide="chevron-right"></i></span></div></div></div>`).join("")}</div>
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}">
+  <div class="activity-top">
+    <div class="activity-icon"><i data-lucide="calendar-days"></i></div>
+    <div class="activity-main">
+      <div class="activity-name">${escapeHtml(a.name)}</div>
+      <div class="activity-meta">${fmtDate(a.date)}</div>
+    </div>
+    <div class="activity-right">
+      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
+      ${activityStatusClock(a)}
+      <span class="arrow"><i data-lucide="chevron-right"></i></span>
+    </div>
+  </div>
+</div>`).join("")}</div>
   `;
   el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
+  el.querySelector(".child-back")?.addEventListener("click",()=>{openEventId=null;render();});
 }
 
 // ---------- QUERY TAB ----------
@@ -1170,6 +2935,9 @@ function getAttendanceTone(rate){
 
 function renderQuery(el){
   el.innerHTML=`
+      ${childBackButton("返回首頁")}
+
+    
     <div class="section-head" style="margin-top:0">
       <h2>搜尋資料</h2>
       <span></span>
@@ -1196,6 +2964,8 @@ function renderQuery(el){
   const input=el.querySelector("#query-name");
   const button=el.querySelector("#query-btn");
   const box=el.querySelector("#query-result");
+  const back=el.querySelector("#query-back");
+  if(back)back.onclick=()=>{activeTab="register";openEventId=null;render();};
   if(!input || !button || !box){
     console.error("查詢頁面初始化失敗：找不到查詢元件");
     return;
@@ -1292,6 +3062,7 @@ function renderQuery(el){
   };
 
   refreshIcons();
+  el.querySelector(".child-back")?.addEventListener("click",()=>{activeTab="register";openEventId=null;render();});
 }
 
 // ---------- ADMIN TAB (password gated) ----------
@@ -1303,10 +3074,11 @@ async function renderAdminAccounts(el){
   try{
     const {data,error}=await supabaseClient.rpc("simple_list_admins",{p_admin_username:session.username,p_admin_code:session.access_code});
     if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取幹部失敗");const rows=data.accounts||[];
-    el.innerHTML=`<button class="back" id="back-admin-top"><i data-lucide="arrow-left"></i>返回管理後台</button><div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
+    el.innerHTML=`${childBackButton("返回管理後台")}<div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
     refreshIcons();
     const messageEl=document.getElementById("admin-action-message"),showAdminMessage=msg=>{if(messageEl)messageEl.textContent=msg||""};
-    const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";renderAdmin(el);};document.getElementById("back-admin-top").onclick=goBack;
+    const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";render();};
+    el.querySelector(".child-back")?.addEventListener("click",goBack);
     el.onclick=async ev=>{const target=ev.target.closest("button");if(!target)return;const row=target.closest("[data-officer-username]");const username=row?.dataset.officerUsername;
       if(target.id==="create-officer"){const u=norm(document.getElementById("new-officer-user")?.value),pw=document.getElementById("new-officer-pass")?.value||"";if(!u){showAdminMessage("請輸入帳號");return}if(!pw){showAdminMessage("請輸入密碼");return}target.disabled=true;try{const result=await supabaseClient.rpc("simple_create_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:u,p_code:pw});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"建立失敗");showToast("幹部建立成功");await renderAdminAccounts(el);}catch(e){target.disabled=false;showAdminMessage("新增失敗："+(e?.message||"未知錯誤"));}return;}
       if(!row||!username)return;
@@ -1315,7 +3087,7 @@ async function renderAdminAccounts(el){
       if(target.classList.contains("officer-delete-btn")){if(!confirm(`確定刪除幹部「${username}」？
 刪除後無法使用此帳號登入。`))return;try{const result=await supabaseClient.rpc("simple_delete_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"刪除失敗");showToast("幹部已刪除");await renderAdminAccounts(el);}catch(e){showAdminMessage("刪除失敗："+(e?.message||"未知錯誤"));}}
     };
-  }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error").onclick=()=>{window.__adminAccountsViewOpen=false;renderAdmin(el)};}
+  }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error")?.addEventListener("click",()=>{window.__adminAccountsViewOpen=false;render();});}
 }
 
 async function loadAnnouncementRemote(){
@@ -1338,7 +3110,18 @@ function renderAdmin(el){
   const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
   let content="";
-  if(adminPage==="home")content=`<div class="section-head" style="margin-top:0">
+  if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
+  <div class="admin-main-hero-brand">
+    <div class="admin-main-hero-icon">
+      <i data-lucide="${isSuperAdmin()?"crown":"shield-check"}"></i>
+    </div>
+    <div>
+      <div class="admin-main-hero-title">${escapeHtml(getAdminSession()?.username||"—")}</div>
+      <div class="admin-main-hero-role">${isSuperAdmin()?"最高管理者":"幹部"}</div>
+    </div>
+  </div>
+
+</div><div class="section-head" style="margin-top:0">
   <h2>首頁公告</h2>
   <span></span>
 </div>
@@ -1358,30 +3141,40 @@ function renderAdmin(el){
          </button>
        </div>`}
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${Object.values(state.registrations).reduce((n,l)=>n+(l||[]).length,0)}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${rows.length?Math.round(rows.reduce((s,r)=>s+r.rate,0)/rows.length):0}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu"><button class="admin-action" data-admin-page="create"><span class="menu-icon"><i data-lucide="plus"></i></span><span class="menu-text"><strong>建立活動</strong><small>建立新的簽到活動</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button><button class="admin-action" data-admin-page="activities"><span class="menu-icon"><i data-lucide="clipboard-list"></i></span><span class="menu-text"><strong>活動管理</strong><small>查看、關閉、隱藏、刪除活動</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button><button class="admin-action" data-admin-page="attendance"><span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span><span class="menu-text"><strong>出席率</strong><small>查看年度出席統計與 CSV</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button>${isSuperAdmin()?`<button class="admin-action" id="admin-accounts-btn"><span class="menu-icon"><i data-lucide="users"></i></span><span class="menu-text"><strong>幹部管理</strong><small>新增、停用、刪除、修改密碼</small></span><span class="chev"><i data-lucide="chevron-right"></i></span></button>`:""}</div>`;
-  if(adminPage==="create")content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>簽到欄位</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發布時間</div><div class="choice-grid"><button type="button" class="choice publish-choice ${publishMode==='now'?'selected':''}" data-publish-mode="now">立即</button><button type="button" class="choice publish-choice ${publishMode==='1day'?'selected':''}" data-publish-mode="1day">一天後</button><button type="button" class="choice publish-choice ${publishMode==='1week'?'selected':''}" data-publish-mode="1week">一個禮拜後</button></div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${Object.values(state.registrations).reduce((n,l)=>n+(l||[]).length,0)}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${rows.length?Math.round(rows.reduce((s,r)=>s+r.rate,0)/rows.length):0}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+  <button class="admin-action admin-square" data-admin-page="create">
+    <span class="menu-icon"><i data-lucide="plus"></i></span>
+    <strong>建立活動</strong>
+  </button>
+  <button class="admin-action admin-square" data-admin-page="activities">
+    <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
+    <strong>活動管理</strong>
+  </button>
+  <button class="admin-action admin-square" data-admin-page="attendance">
+    <span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span>
+    <strong>出席率</strong>
+  </button>
+  ${isSuperAdmin()?`<button class="admin-action admin-square" id="admin-accounts-btn">
+    <span class="menu-icon"><i data-lucide="users"></i></span>
+    <strong>幹部管理</strong>
+  </button>`:""}
+</div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>簽到欄位</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發布時間</div><div class="choice-grid"><button type="button" class="choice publish-choice ${publishMode==='now'?'selected':''}" data-publish-mode="now">立即</button><button type="button" class="choice publish-choice ${publishMode==='1day'?'selected':''}" data-publish-mode="1day">一天後</button><button type="button" class="choice publish-choice ${publishMode==='1week'?'selected':''}" data-publish-mode="1week">一個禮拜後</button></div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
-    content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
+    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
   }
-  if(adminPage==="attendance")content=`<button class="back" data-admin-page="home"><i data-lucide="arrow-left"></i>返回管理後台</button><h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map((r,i)=>`<div class="rate-card"><div class="rate-head"><span>${i+1}. ${escapeHtml(r.name)}</span><span>${r.rate}%</span></div><div style="font-size:10px;color:#999;margin-top:4px">${r.attended} / ${r.total} 場</div><div class="rate-bar"><div class="rate-fill" style="width:${r.rate}%"></div></div></div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+  if(adminPage==="attendance")content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map((r,i)=>`<div class="rate-card"><div class="rate-head"><span>${i+1}. ${escapeHtml(r.name)}</span><span>${r.rate}%</span></div><div style="font-size:10px;color:#999;margin-top:4px">${r.attended} / ${r.total} 場</div><div class="rate-bar"><div class="rate-fill" style="width:${r.rate}%"></div></div></div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
   const superAdmin=isSuperAdmin();
   const session=getAdminSession();
   const roleText=superAdmin?"最高管理者":"幹部";
   const roleClass=superAdmin?"super-admin":"officer-admin";
   const accountText=escapeHtml(session?.username||"—");
-  el.innerHTML=`<div class="admin-role-header ${roleClass}">
-    <div class="admin-role-main">
-      <span class="admin-role-icon"><i data-lucide="${superAdmin?"crown":"shield-check"}"></i></span>
-      <div>
-        <div class="admin-role-title">${accountText}</div>
-        <div class="admin-role-user">${roleText}</div>
-      </div>
-    </div>
-    <div class="admin-role-side">
-      <button class="admin-role-logout" id="lock-btn" type="button" aria-label="登出" title="登出"><i data-lucide="log-out"></i></button>
-    </div>
-  </div>${content}`;
+  if(adminPage!=="home") content=childBackButton("返回管理後台")+content;
+  el.innerHTML=`${content}`;
+  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
+  const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
+  const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;renderAdmin(el);refreshIcons();});
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>renderAdminAccounts(el);
@@ -1389,6 +3182,7 @@ function renderAdmin(el){
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
   const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
   if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
+  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
   refreshIcons();
 }
 
@@ -1497,7 +3291,8 @@ function setupCreateActivityPage(el){
       pendingPublishActivity=null;
       showToast(publishAt ? "活動已建立，尚未發布" : "活動已建立並發布");
       adminPage="activities";
-      renderAdmin(el);
+      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants=""; draftCloseMinutes=0; pendingPublishActivity=null; publishMode="now";
+  renderAdmin(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
       if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
@@ -1689,24 +3484,81 @@ function setupActivityManagementPage(el){
 }
 
 function renderAdminLock(el){
-  el.innerHTML=`<div class="card" style="text-align:center;">
-    <div class="lock-icon"><i data-lucide="lock-keyhole"></i></div><h2>管理者登入</h2>
-    
-    <input type="text" id="admin-username" placeholder="帳號" autocomplete="username">
-    <input type="password" id="admin-password" placeholder="密碼" autocomplete="current-password">
-    <button class="primary" id="admin-login-btn">登入管理者</button>
-  </div>`;
-  const b=document.getElementById("admin-login-btn"),u=document.getElementById("admin-username"),p=document.getElementById("admin-password");
+  el.innerHTML=`
+    <div class="admin-login-page">
+      <div class="admin-login-card">
+        <div class="admin-login-heading">
+          <div class="admin-login-heading-icon">
+            <i data-lucide="shield"></i>
+          </div>
+          <h1>管理者登入</h1>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="admin-username">帳號</label>
+          <input type="text" id="admin-username" placeholder="請輸入帳號" autocomplete="username">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="admin-password">密碼</label>
+          <div class="admin-password-wrap">
+            <input type="password" id="admin-password" placeholder="請輸入密碼" autocomplete="current-password">
+            <button type="button" class="admin-password-toggle" id="admin-password-toggle" aria-label="顯示密碼" title="顯示密碼">
+              <i data-lucide="eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button class="primary admin-login-button" id="admin-login-btn" type="button">
+          <i data-lucide="log-in"></i>
+          登入
+        </button>
+      </div>
+    </div>
+  `;
+
+  const b=document.getElementById("admin-login-btn");
+  const u=document.getElementById("admin-username");
+  const p=document.getElementById("admin-password");
+  const toggle=document.getElementById("admin-password-toggle");
+
   const login=async()=>{
-    if(!norm(u.value)){showToast("請輸入帳號");return;}
-    if(!p.value){showToast("請輸入密碼");return;}
-    b.disabled=true;
-    try{await adminLogin(norm(u.value),p.value);showToast("登入成功");render();}
-    catch(e){showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));b.disabled=false;}
+    if(!norm(u?.value||"")){
+      showToast("請輸入帳號");
+      u?.focus();
+      return;
+    }
+    if(!p?.value){
+      showToast("請輸入密碼");
+      p?.focus();
+      return;
+    }
+    if(b)b.disabled=true;
+    try{
+      await adminLogin(norm(u.value),p.value);
+      showToast("登入成功");
+      render();
+    }catch(e){
+      showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));
+      if(b)b.disabled=false;
+    }
   };
-  if(b) b.onclick=login;
+
+  b?.addEventListener("click",login);
+  [u,p].filter(Boolean).forEach(x=>x.addEventListener("keydown",e=>{
+    if(e.key==="Enter")login();
+  }));
+
+  toggle?.addEventListener("click",()=>{
+    const visible=p.type==="text";
+    p.type=visible?"password":"text";
+    toggle.innerHTML=`<i data-lucide="${visible?"eye":"eye-off"}"></i>`;
+    toggle.setAttribute("aria-label",visible?"顯示密碼":"隱藏密碼");
+    toggle.setAttribute("title",visible?"顯示密碼":"隱藏密碼");
+    refreshIcons();
+  });
+
   refreshIcons();
-  [u,p].filter(Boolean).forEach(x=>safeAdd(x,"keydown",e=>{if(e.key==="Enter")login();}));
 }
 
 async function init(){
@@ -1741,6 +3593,7 @@ async function init(){
       await loadData();
     }
   },6000);
+  setInterval(refreshActivityListClocks,1000);
 }
 
 init();
@@ -1921,7 +3774,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：v1.6</div>
+    <div class="version">系統版本：v1.8</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 </body>
