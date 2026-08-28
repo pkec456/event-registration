@@ -408,6 +408,103 @@ button.secondary:focus-visible,
 .admin-role-title{font-size:22px;line-height:1.15;font-weight:900}
 .admin-role-user{font-size:11px;line-height:1.3;margin-top:5px;font-weight:750;opacity:.9}
 
+
+/* v25: countdown icon block contains the remaining time */
+.checkin-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  min-height:104px;
+  box-sizing:border-box;
+}
+.checkin-hero-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.checkin-hero-icon{
+  width:44px;height:44px;border-radius:14px;
+  background:rgba(255,255,255,.18);
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.checkin-hero-icon svg{width:24px;height:24px}
+.checkin-hero h2{font-size:23px;line-height:1.15;font-weight:900;margin:0}
+.checkin-hero p{font-size:13px;margin:5px 0 0;opacity:.9}
+.checkin-countdown{
+  min-width:78px;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+.checkin-countdown svg{width:19px;height:19px;flex:0 0 auto}
+.checkin-countdown.has-countdown{
+  color:#fff;
+  background:var(--accent);
+}
+.checkin-countdown.no-countdown{
+  min-width:48px;
+  width:48px;
+  color:var(--ink);
+  background:#f1f1ef;
+}
+@media(max-width:430px){
+  .checkin-hero{min-height:90px;padding:14px;border-radius:20px}
+  .checkin-hero h2{font-size:20px}
+  .checkin-hero p{font-size:12px}
+  .checkin-hero-icon{width:40px;height:40px}
+  .checkin-countdown{min-width:72px;height:44px;font-size:12px}
+  .checkin-countdown.no-countdown{min-width:44px;width:44px}
+}
+
+
+/* v23: open activities use a soft green card background */
+.activity-card.activity-card-open{
+  background:#edf8f0;
+  border-color:#ccebd4;
+}
+.activity-card.activity-card-open .activity-icon{
+  background:#fff;
+  color:#22a35a;
+}
+.activity-card.activity-card-open .activity-name,
+.activity-card.activity-card-open .activity-meta{
+  color:var(--ink);
+}
+
+
+/* v24: activity section title + open status on one row */
+.activity-list-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.activity-list-open-status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:#22a35a;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.activity-list-open-status .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#22a35a;
+  display:inline-block;
+}
+
 </style>
 </head>
 <body>
@@ -422,7 +519,7 @@ button.secondary:focus-visible,
 const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-const ADMIN_SESSION_KEY = "haotian_admin_session";
+
 
 async function adminLogin(username, password){
   const {data,error}=await supabaseClient.rpc("simple_admin_login",{
@@ -432,27 +529,13 @@ async function adminLogin(username, password){
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"帳號或管理碼錯誤");
 
-  localStorage.setItem(ADMIN_SESSION_KEY,JSON.stringify({
-    username:data.username,
-    role:data.role,
-    access_code:password,
-    at:Date.now()
-  }));
-
+  window.__haotianAdminSession={username:data.username,role:data.role};
   adminUnlocked=true;
   return data;
 }
 
 function getAdminSession(){
-  try{
-    const s=JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)||"null");
-    if(!s?.username || !s?.access_code) return null;
-    if(Date.now()-s.at>12*60*60*1000){
-      localStorage.removeItem(ADMIN_SESSION_KEY);
-      return null;
-    }
-    return s;
-  }catch(e){return null;}
+  return window.__haotianAdminSession || null;
 }
 
 function adminRole(){
@@ -465,29 +548,15 @@ function isSuperAdmin(){
 }
 
 async function adminLogout(){
-  localStorage.removeItem(ADMIN_SESSION_KEY);
+  window.__haotianAdminSession=null;
   adminUnlocked=false;
 }
 
 async function checkAdminSession(){
   const s=getAdminSession();
-  if(!s){
-    adminUnlocked=false;
-    return false;
-  }
-
-  // 重新向資料庫驗證目前管理碼，避免只依賴 localStorage。
-  try{
-    const r=await adminLogin(s.username,s.access_code);
-    adminUnlocked=!!r?.ok;
-    return adminUnlocked;
-  }catch(e){
-    localStorage.removeItem(ADMIN_SESSION_KEY);
-    adminUnlocked=false;
-    return false;
-  }
+  adminUnlocked=!!s?.username;
+  return adminUnlocked;
 }
-
 
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
@@ -506,7 +575,7 @@ let draftMaxParticipants = "";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
 let publishMode = "now";
-let announcementText = localStorage.getItem("haotian_announcement") || "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+let announcementText = "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
 let announcementEditing = false;
 
 
@@ -986,8 +1055,17 @@ function renderCountdown(activity){
   const box=document.getElementById("event-countdown");if(!box)return;
   const timer=()=>{
     const now=Date.now(), end=activity.closeAt?new Date(activity.closeAt).getTime():null;
-    if(end&&end>now) box.innerHTML=`<div class="countdown-box">⏳ 簽到截止倒數：${formatCountdown(end-now)}</div>`;
-    else box.innerHTML="";
+    if(end&&end>now){
+      box.classList.add("has-countdown");
+      box.classList.remove("no-countdown");
+      box.innerHTML=`<i data-lucide="timer"></i><span>${formatCountdown(end-now)}</span>`;
+      refreshIcons();
+    }else{
+      box.classList.remove("has-countdown");
+      box.classList.add("no-countdown");
+      box.innerHTML=`<i data-lucide="timer-off"></i>`;
+      refreshIcons();
+    }
   };
   timer(); clearInterval(activity._countdownTimer); activity._countdownTimer=setInterval(timer,1000);
 }
@@ -1022,12 +1100,18 @@ function renderRegister(el){
     const list=regsOf(activity.id), fields=activity.fields||[];
     el.innerHTML=`
       <button class="back" id="back-link"><i data-lucide="arrow-left"></i>返回活動列表</button>
-      <div class="hero">
-        <div class="hero-row"><div class="hero-icon"><i data-lucide="calendar-days"></i></div><div style="flex:1"><h2>${escapeHtml(activity.name)}</h2><p>${fmtDate(activity.date)}</p></div><i data-lucide="more-horizontal"></i></div>
+      <div class="hero checkin-hero">
+        <div class="checkin-hero-main">
+          <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
+          <div>
+            <h2>${escapeHtml(activity.name)}</h2>
+            <p>${fmtDate(activity.date)}</p>
+          </div>
+        </div>
+        <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
       </div>
       <div class="checkin-card">
         <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
-        <div id="event-countdown"></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" /></div>
           ${fields.map(f=>`<div class="field"><label class="field-label">${escapeHtml(f.label)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
@@ -1062,8 +1146,11 @@ function renderRegister(el){
   }
   el.innerHTML=`
     <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div style="flex:1;min-width:0"><h3>公告</h3><p>${escapeHtml(announcementText)}</p></div></div>
-    <div class="section-head"><h2>近期活動</h2><span>點擊活動直接簽到</span></div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card" data-open="${a.id}"><div class="activity-top"><div class="activity-icon"><i data-lucide="calendar-days"></i></div><div class="activity-main"><div class="activity-name">${escapeHtml(a.name)}</div><div class="activity-meta">${fmtDate(a.date)}</div><div style="margin-top:8px"><span class="status ${a.open?'open':'closed'}"><span class="dot"></span>${a.open?'開放中':'已停止'}</span></div></div><div class="activity-right"><span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span><span class="arrow"><i data-lucide="chevron-right"></i></span></div></div></div>`).join("")}</div>
+    <div class="section-head activity-list-head">
+      <h2>近期活動</h2>
+      <span class="activity-list-open-status"><span class="dot"></span>開放中</span>
+    </div>
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}"><div class="activity-top"><div class="activity-icon"><i data-lucide="calendar-days"></i></div><div class="activity-main"><div class="activity-name">${escapeHtml(a.name)}</div><div class="activity-meta">${fmtDate(a.date)}</div></div><div class="activity-right"><span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span><span class="arrow"><i data-lucide="chevron-right"></i></span></div></div></div>`).join("")}</div>
   `;
   el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
 }
@@ -1227,6 +1314,20 @@ async function renderAdminAccounts(el){
   }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error").onclick=()=>{window.__adminAccountsViewOpen=false;renderAdmin(el)};}
 }
 
+async function loadAnnouncementRemote(){
+  const {data,error}=await supabaseClient.rpc("get_announcement");
+  if(error) throw error;
+  announcementText=(typeof data==="string"?data:(data?.announcement||"")) || "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+  return announcementText;
+}
+async function saveAnnouncementRemote(text){
+  const {data,error}=await supabaseClient.rpc("save_announcement",{p_announcement:text});
+  if(error) throw error;
+  if(data===false || data?.ok===false) throw new Error(data?.message||"公告儲存失敗");
+  announcementText=text;
+  return true;
+}
+
 function renderAdmin(el){
   if(window.__adminAccountsViewOpen)return;
   if(!adminUnlocked)return renderAdminLock(el);
@@ -1281,7 +1382,7 @@ function renderAdmin(el){
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;renderAdmin(el);refreshIcons();});
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>renderAdminAccounts(el);
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
-  const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=()=>{const input=document.getElementById("announcement-input");announcementText=norm(input?.value||"");localStorage.setItem("haotian_announcement",announcementText);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);};
+  const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
   const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
   if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
   refreshIcons();
@@ -1608,6 +1709,8 @@ async function init(){
   render();
   await checkAdminSession();
   await loadData();
+  try{ await loadAnnouncementRemote(); }
+  catch(e){ console.error("公告載入失敗",e); }
   render();
   setInterval(async ()=>{
     if(userIsTyping || activeTab === 'query') return;
