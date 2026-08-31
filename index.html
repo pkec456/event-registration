@@ -7,7 +7,3935 @@
 <title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
 <style>
 :root{
+  --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
+<style>
+:root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
+  --accent:#c9141b; --accent-soft:#fff0f0; --success:#22a35a; --warning:#e59a13; --danger:#b42318;
+  --radius:22px; --small-radius:14px; --btn-h:48px;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;color:inherit}
+button:disabled{opacity:.5;cursor:not-allowed}
+#app{max-width:520px;margin:0 auto;padding:0 16px 92px}
+.top{padding:22px 2px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-brand{display:flex;align-items:center;gap:11px;min-width:0}.top-brand-icon{width:42px;height:42px;border-radius:14px;background:#171717;color:#fff;display:grid;place-items:center;flex:0 0 auto}.top-brand h1{margin:0;font-size:18px;line-height:1.2;font-weight:850}.top-brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.tabs{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:7px;background:rgba(245,245,243,.94);backdrop-filter:blur(12px);margin:0 -16px 16px;padding-left:16px;padding-right:16px;border-bottom:1px solid var(--line)}
+.tabs button{min-height:42px;background:transparent;border-radius:13px;font-size:13px;font-weight:800;color:#777;display:flex;align-items:center;justify-content:center;gap:6px}.tabs button.active{background:var(--accent);color:#fff}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:18px 2px 10px}.section-head h2{margin:0;font-size:16px;font-weight:850}.section-head span{font-size:12px;color:var(--muted)}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.block.tight{padding:14px}.block.soft{background:var(--surface-2);border-color:transparent}
+
+.announcement{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:flex-start}.announcement-icon{width:42px;height:42px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.announcement h3{margin:0 0 4px;font-size:14px}.announcement p{margin:0;color:#666;font-size:13px;line-height:1.5}.announcement-edit{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--accent-soft);color:var(--accent);border:0;border-radius:11px;padding:8px 10px;font-size:11px;font-weight:850}.announcement-edit:hover{background:#ffe1e1}.announcement-admin{margin-top:12px}.announcement-admin textarea{width:100%;min-height:92px;resize:vertical;padding:12px 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;outline:none;font:inherit;font-size:14px;line-height:1.5}.announcement-admin textarea:focus{border-color:#999;box-shadow:0 0 0 3px #eee}
+.activity-grid{display:grid;gap:12px}.activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.activity-card:active{transform:scale(.99)}.activity-top{display:flex;gap:12px;align-items:flex-start}.activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.activity-main{min-width:0;flex:1}.activity-name{font-size:17px;font-weight:850}.activity-meta{margin-top:4px;color:#777;font-size:12px}.activity-right{display:flex;align-items:center;gap:8px}.count{font-size:13px;font-weight:800;white-space:nowrap}.arrow{color:#999}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
+.back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
+.form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+.draft-field{display:flex;gap:8px;margin-bottom:8px}.draft-field input{flex:1}.icon-btn{width:44px;height:48px;border-radius:14px;background:#f7f7f5;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto}.icon-btn.danger{color:var(--danger)}.add-field{width:100%;height:44px;border:1px dashed #ccc;background:transparent;border-radius:13px;color:#555;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
+.primary{width:100%;min-height:var(--btn-h);background:var(--accent);color:#fff;border-radius:15px;font-weight:850;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}.secondary{min-height:44px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:13px;font-weight:800;font-size:13px}.secondary:hover{background:#f7f7f5}.danger-btn{color:var(--danger)}
+.checkin-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px}.checkin-button{margin-top:4px}.list{margin-top:8px}.list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}.list-row:last-child{border-bottom:0}.list-index{width:28px;height:28px;border-radius:10px;background:#f1f1ef;display:grid;place-items:center;font-size:11px;font-weight:850}.list-main{flex:1;min-width:0}.list-name{font-weight:800;font-size:14px}.list-meta{font-size:11px;color:#999;margin-top:2px}.check{color:var(--success)}
+
+.history-status{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
+.history-status svg{width:18px;height:18px;stroke-width:3}
+.history-status.present{color:#22a35a;background:#eaf8ee}
+.history-status.absent{color:#f59e0b;background:#fff4df}
+.query-search-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
+.query-search-label{display:flex;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap;color:var(--text)}
+.query-search-label strong{font-size:14px}
+.query-search-icon{width:36px;height:36px;border-radius:12px;background:#fff0f0;color:var(--primary);display:grid;place-items:center}
+
+
+
+.query-search-input input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(201,20,27,.10)}
+
+
+
+
+
+@media(max-width:430px){
+  .query-search-row{gap:8px;padding:9px}
+  .query-search-label{gap:6px}
+  .query-search-label strong{font-size:13px}
+  .query-search-icon{width:34px;height:34px}
+  
+  
+}
+.search-hero h2{margin:0;font-size:19px}.search-hero p{margin:6px 0 18px;color:#777;font-size:12px}.result-summary{display:flex;align-items:center;justify-content:space-between;gap:12px}.rate-number{font-size:40px;font-weight:900;line-height:1}.rate-label{font-size:11px;color:#777;margin-top:4px}.result-name{font-size:18px;font-weight:900}.result-year{font-size:12px;color:#888;margin-top:3px}
+.admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}.metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.metric b{display:block;font-size:22px}.metric span{font-size:10px;color:#777}.admin-menu{display:grid;gap:10px}.admin-action{min-height:76px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:left}.admin-action .menu-icon{width:42px;height:42px;border-radius:14px;background:#f2f2ef;display:grid;place-items:center;flex:0 0 auto}.admin-action .menu-text{flex:1}.admin-action strong{display:block;font-size:14px}.admin-action small{display:block;margin-top:4px;color:#888;font-size:11px}.admin-action .chev{color:#999}
+.admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-head .actions{display:flex;gap:7px}.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}.activity-admin-card.hidden{opacity:.65}.admin-card-top{display:flex;gap:10px;align-items:flex-start}.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.admin-card-info{flex:1;min-width:0}.admin-card-name{font-weight:900;font-size:15px}.admin-card-meta{font-size:11px;color:#888;margin-top:3px}.admin-card-status{margin-top:8px}.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.admin-actions button.danger{color:var(--danger)}
+.officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.admin-edit-box{margin-top:10px}
+.rate-list{display:grid;gap:9px}.rate-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}.rate-head{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:850}.rate-bar{height:7px;border-radius:99px;background:#eee;margin-top:10px;overflow:hidden}.rate-fill{height:100%;background:var(--accent);border-radius:99px}
+.empty{text-align:center;color:#888;padding:28px 10px;font-size:13px}.debug-error-box{display:none;margin-top:10px;padding:12px;border-radius:14px;background:#fff0f0;border:1px solid #f0b6b6;color:#a00;font-size:12px;white-space:pre-wrap;word-break:break-word}.debug-error-box.show{display:block}.countdown-box{margin-top:12px;padding:10px 12px;border-radius:13px;background:#fff5dd;color:#9b6800;text-align:center;font-size:12px;font-weight:850}.note-shared{font-size:11px;color:#888;background:#f5f5f3;border-radius:13px;padding:10px 12px;line-height:1.5;margin-top:10px}.divider{height:1px;background:var(--line);margin:14px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#171717;color:#fff;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.system-footer{margin-top:28px;padding:10px 0;text-align:center;color:#aaa;font-size:10px;line-height:1.6}.system-footer .version{font-weight:800}.system-footer .maker{margin-top:1px}
+.table-wrap{overflow-x:auto}.list-table{width:100%;border-collapse:collapse;font-size:12px}.list-table th{text-align:left;color:#888;font-size:10px;padding:8px;border-bottom:1px solid var(--line)}.list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.list-table td.name{font-weight:800}.rate-bar-wrap{display:flex;align-items:center;gap:8px}.rate-bar-track{flex:1;height:6px;border-radius:99px;background:#eee;overflow:hidden}.rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}.rate-num{font-weight:850;min-width:38px;text-align:right;font-size:11px}
+@media(max-width:420px){.grid-2{grid-template-columns:1fr}.choice-grid.four{grid-template-columns:repeat(2,1fr)}.admin-actions{grid-template-columns:repeat(2,1fr)}.officer-actions{grid-template-columns:1fr 1fr}.officer-actions button:first-child{grid-column:1/-1}}
+
+.query-person{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.query-person-icon{width:46px;height:46px;border-radius:15px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}
+.result-name{font-size:21px;font-weight:900;line-height:1.2}.result-year{display:flex;align-items:center;gap:5px;font-size:12px;color:#888;margin-top:5px}
+.query-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}.query-metric-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px 10px;text-align:center;min-width:0}.metric-card-title{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:850;margin-bottom:10px}.metric-card-title svg{width:17px;height:17px;color:var(--accent)}
+.donut{width:132px;height:132px;border-radius:50%;margin:2px auto 10px;background:conic-gradient(var(--donut-color) var(--value),#ececea 0);display:grid;place-items:center;position:relative}.donut::before{content:"";position:absolute;inset:10px;background:#fff;border-radius:50%}.donut-center{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center}.donut-center strong{font-size:31px;line-height:1;font-weight:950;color:var(--donut-color)}.donut-center strong small{font-size:17px;margin-left:1px}.donut-center span{font-size:10px;color:#888;margin-top:5px;font-weight:700}
+.metric-badge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 12px;border-radius:999px;background:color-mix(in srgb,var(--badge-color) 13%,white);color:var(--badge-color);font-size:11px;font-weight:900}.signins-badge{--badge-color:var(--success);background:#eaf8ef;color:var(--success)}
+.query-metric-card.red{--badge-color:#d62828}.query-metric-card.orange{--badge-color:#f59e0b}.query-metric-card.green{--badge-color:#22a35a}.query-metric-card.gold{--badge-color:#d99a00}.query-metric-card.red .donut-center strong,.query-metric-card.orange .donut-center strong,.query-metric-card.green .donut-center strong,.query-metric-card.gold .donut-center strong{color:var(--badge-color)}
+.query-history .list-row{padding:14px 4px}.query-history .list-icon{width:36px;height:36px;border-radius:12px;background:#f3f3f0;color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.query-history .status{white-space:nowrap}.query-history .status svg{width:15px;height:15px}
+@media(max-width:420px){.query-metrics{gap:8px}.query-metric-card{padding:14px 7px}.donut{width:116px;height:116px}.donut-center strong{font-size:28px}.donut::before{inset:9px}}
+
+.admin-role-header{
+  width:100%;
+  min-height:104px;
+  box-sizing:border-box;
+  border-radius:24px;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  color:#fff;
+  margin-bottom:14px;
+}
+.admin-role-header.super-admin{
+  background:#f59e0b;
+  box-shadow:0 8px 22px rgba(245,158,11,.16);
+}
+.admin-role-header.officer-admin{
+  background:#c9141b;
+  box-shadow:0 8px 22px rgba(201,20,27,.14);
+}
+.admin-role-main{display:flex;align-items:center;gap:12px;min-width:0}
+.admin-role-icon{
+  width:44px;height:44px;border-radius:14px;
+  background:rgba(255,255,255,.18);
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.admin-role-icon svg{width:24px;height:24px}
+.admin-role-title{font-size:23px;line-height:1.15;font-weight:900}
+.admin-role-user{font-size:13px;margin-top:5px;opacity:.92;overflow:hidden;text-overflow:ellipsis}
+.admin-role-side{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.admin-role-logout{
+  width:40px;height:40px;border:1px solid rgba(255,255,255,.45);
+  border-radius:12px;background:rgba(255,255,255,.12);
+  color:#fff;display:grid;place-items:center;cursor:pointer;
+}
+.admin-role-logout:hover{background:rgba(255,255,255,.22)}
+.admin-role-logout svg{width:20px;height:20px}
+@media(max-width:430px){
+  .admin-role-header{min-height:90px;padding:14px;border-radius:20px}
+  .admin-role-title{font-size:20px}
+  .admin-role-user{font-size:12px}
+  .admin-role-icon{width:40px;height:40px}
+  .admin-role-badge{font-size:11px;padding:0 9px}
+  .admin-role-logout{width:38px;height:38px}
+}
+
+
+.announcement-admin{
+  background:transparent;
+  border:0;
+  padding:0;
+  margin:0 0 18px;
+  box-shadow:none;
+}
+.announcement-simple{
+  min-height:70px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+.announcement-text{
+  min-width:0;
+  flex:1;
+  font-size:14px;
+  line-height:1.6;
+  color:var(--text);
+  word-break:break-word;
+}
+.announcement-edit{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:0 12px;
+  border:0;
+  border-radius:12px;
+  background:#fff0f0;
+  color:var(--primary);
+  font-size:13px;
+  font-weight:850;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.announcement-edit svg{width:17px;height:17px}
+.announcement-edit-area textarea{
+  width:100%;
+  min-height:90px;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  padding:12px;
+  font:inherit;
+  resize:vertical;
+  outline:0;
+}
+.announcement-edit-area textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(201,20,27,.10);
+}
+@media(max-width:430px){
+  .announcement-simple{padding:12px 13px}
+  .announcement-edit{padding:0 10px}
+}
+
+
+/* ===== v16 CSS normalization ===== */
+:root{
+  --bg:#f5f5f3;
+  --surface:#fff;
+  --surface-2:#f0f0ed;
+  --ink:#171717;
+  --muted:#777;
+  --line:#e7e7e3;
+  --accent:#c9141b;
+  --accent-soft:#fff0f0;
+  --success:#22a35a;
+  --warning:#e59a13;
+  --danger:#b42318;
+  --admin-super:#f59e0b;
+  --radius:22px;
+  --small-radius:14px;
+  --btn-h:48px;
+}
+
+/* Header: admin access replaces the bell position. */
+.top-admin-access{
+  width:42px;height:42px;border-radius:14px;
+  background:#fff;border:1px solid var(--line);
+  color:var(--ink);display:grid;place-items:center;
+  flex:0 0 auto;cursor:pointer;
+}
+.top-admin-access svg{width:21px;height:21px;color:var(--ink)}
+.top-admin-access.super{color:var(--admin-super);border-color:#f2d39a}
+.top-admin-access.super svg{color:var(--admin-super)}
+.top-admin-access.officer{color:var(--accent);border-color:#efb8bb}
+.top-admin-access.officer svg{color:var(--accent)}
+.top-admin-access.guest{color:var(--ink)}
+.top-admin-access.guest svg{color:var(--ink)}
+
+/* One input rule for the whole system. */
+input[type=text],
+input[type=date],
+input[type=password],
+input[type=number],
+select,
+textarea,
+.officer-input{
+  width:100%;
+  min-height:48px;
+  padding:0 14px;
+  background:#f7f7f5;
+  border:1px solid var(--line);
+  border-radius:14px;
+  color:var(--ink);
+  outline:none;
+  font:inherit;
+  box-sizing:border-box;
+}
+textarea{padding:12px 14px;line-height:1.5;resize:vertical}
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(201,20,27,.10);
+}
+input::placeholder,
+textarea::placeholder{color:#aaa}
+input[type=number]{appearance:textfield}
+
+/* All action buttons share the same red pressed/selected state. */
+button.primary,
+.choice.selected{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+button.secondary:active,
+.icon-btn:active,
+.add-field:active,
+.admin-actions button:active,
+.officer-actions button:active,
+.query-search-button:active,
+.back:active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+button.primary:active,
+.choice.selected:active{
+  background:#a90f15;
+  border-color:#a90f15;
+}
+button.secondary:focus-visible,
+.icon-btn:focus-visible,
+.add-field:focus-visible,
+.admin-actions button:focus-visible,
+.officer-actions button:focus-visible,
+.query-search-button:focus-visible,
+.back:focus-visible{
+  outline:2px solid rgba(201,20,27,.25);
+  outline-offset:2px;
+}
+
+/* Icons: black by default; announcement and permission icons are explicit exceptions. */
+.top-brand-icon,
+.metric-icon,
+.admin-action .menu-icon,
+.activity-icon,
+.admin-card-icon,
+.officer-icon,
+.form-title .ico,
+.icon-btn,
+.query-search-icon{
+  color:var(--ink);
+}
+.announcement-icon,
+.announcement-edit,
+.announcement-edit svg{
+  color:var(--accent);
+}
+.announcement-icon{background:var(--accent-soft)}
+.query-search-icon{
+  background:#f2f2ef;
+}
+.query-search-button{
+  width:42px;height:42px;
+  border:0;border-radius:12px;
+  background:transparent;
+  color:var(--accent);
+  display:grid;place-items:center;
+  cursor:pointer;flex:0 0 auto;
+}
+.query-search-button svg{width:20px;height:20px;color:var(--accent);stroke-width:2.5}
+
+/* Query row keeps the input itself on the unified input rule. */
+.query-search-row{
+  display:flex;align-items:center;gap:10px;
+  background:#fff;border:1px solid var(--line);
+  border-radius:18px;padding:10px 12px;margin-bottom:14px;
+  box-shadow:0 4px 14px rgba(0,0,0,.04);
+}
+.query-search-label{
+  display:flex;align-items:center;gap:8px;
+  flex:0 0 auto;white-space:nowrap;color:var(--ink);
+}
+.query-search-label strong{font-size:14px}
+.query-search-icon{
+  width:36px;height:36px;border-radius:12px;
+  display:grid;place-items:center;
+}
+.query-search-icon svg{width:19px;height:19px}
+.query-search-input{
+  flex:1;min-width:0;
+  background:transparent;border:0;padding:0;
+}
+.query-search-input input{
+  height:48px;
+  min-height:48px;
+  background:#f7f7f5;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:0 14px;
+}
+.query-search-input input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(201,20,27,.10);
+}
+
+/* Permission header: orange = super admin, red = officer. */
+.admin-role-header.super-admin{
+  background:var(--admin-super);
+}
+.admin-role-header.officer-admin{
+  background:var(--accent);
+}
+.admin-role-header .admin-role-icon,
+.admin-role-header .admin-role-icon svg,
+.admin-role-header .admin-role-badge,
+.admin-role-header .admin-role-logout{
+  color:#fff;
+}
+.officer-role,.role-officer{color:var(--accent)}
+
+@media(max-width:430px){
+  .query-search-row{gap:8px;padding:9px}
+  .query-search-label{gap:6px}
+  .query-search-label strong{font-size:13px}
+  .query-search-icon{width:34px;height:34px}
+  .query-search-input input{height:46px;min-height:46px}
+  .query-search-button{width:40px;height:40px}
+}
+
+.top-brand-icon{display:none}
+.top-admin-access.guest{
+  color:var(--ink);
+  border-color:var(--line);
+  background:#fff;
+}
+.top-admin-access.officer{
+  color:var(--accent);
+  border-color:#efb8bb;
+  background:#fff0f0;
+}
+.top-admin-access.officer svg{color:var(--accent)}
+.top-admin-access.super{
+  color:var(--admin-super);
+  border-color:#f2d39a;
+  background:#fff7e6;
+}
+.top-admin-access.super svg{color:var(--admin-super)}
+
+
+.admin-role-title{font-size:22px;line-height:1.15;font-weight:900}
+.admin-role-user{font-size:11px;line-height:1.3;margin-top:5px;font-weight:750;opacity:.9}
+
+
+.checkin-hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  min-height:104px;
+  box-sizing:border-box;
+}
+.checkin-hero-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.checkin-hero-icon{
+  width:44px;height:44px;border-radius:14px;
+  background:rgba(255,255,255,.18);
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.checkin-hero-icon svg{width:24px;height:24px}
+.checkin-hero h2{font-size:23px;line-height:1.15;font-weight:900;margin:0}
+.checkin-hero p{font-size:13px;margin:5px 0 0;opacity:.9}
+.checkin-countdown{
+  min-width:78px;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+.checkin-countdown svg{width:19px;height:19px;flex:0 0 auto}
+.checkin-countdown.has-countdown{
+  color:#fff;
+  background:var(--accent);
+}
+.checkin-countdown.no-countdown{
+  min-width:48px;
+  width:48px;
+  color:var(--ink);
+  background:#f1f1ef;
+}
+@media(max-width:430px){
+  .checkin-hero{min-height:90px;padding:14px;border-radius:20px}
+  .checkin-hero h2{font-size:20px}
+  .checkin-hero p{font-size:12px}
+  .checkin-hero-icon{width:40px;height:40px}
+  .checkin-countdown{min-width:72px;height:44px;font-size:12px}
+  .checkin-countdown.no-countdown{min-width:44px;width:44px}
+}
+
+
+.activity-card.activity-card-open{
+  background:#edf8f0;
+  border-color:#ccebd4;
+}
+.activity-card.activity-card-open .activity-icon{
+  background:#fff;
+  color:#22a35a;
+}
+.activity-card.activity-card-open .activity-name,
+.activity-card.activity-card-open .activity-meta{
+  color:var(--ink);
+}
+
+
+.activity-list-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.activity-list-open-status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:#22a35a;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.activity-list-open-status .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#22a35a;
+  display:inline-block;
+}
+
+
+.activity-right{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.activity-status-clock{
+  width:48px;height:48px;flex:0 0 48px;
+  position:relative;display:grid;place-items:center;border-radius:50%;
+}
+.activity-status-clock svg{
+  position:absolute;inset:0;width:48px;height:48px;
+  transform:rotate(-90deg);
+}
+.activity-status-clock circle{fill:none;stroke-width:2.8}
+.activity-status-clock .clock-track{stroke:#eadede}
+.activity-status-clock .clock-progress{stroke:var(--accent);stroke-linecap:round}
+.activity-status-clock span{
+  position:relative;z-index:1;color:var(--accent);
+  font-size:9px;font-weight:900;letter-spacing:-.03em;line-height:1;
+}
+.activity-status-clock.open{
+  background:#edf8f0;color:#22a35a;
+}
+.activity-status-clock.open svg{position:static;transform:none;width:22px;height:22px}
+.activity-status-clock.open svg circle{display:none}
+.activity-status-clock.open i{width:22px;height:22px;color:#22a35a}
+.activity-status-clock.closed{
+  background:#f1f1ef;color:var(--ink);
+}
+.activity-status-clock.closed i{width:21px;height:21px;color:var(--ink)}
+@media(max-width:430px){
+  .activity-right{gap:6px}
+  .activity-status-clock{width:44px;height:44px;flex-basis:44px}
+  .activity-status-clock svg{width:44px;height:44px}
+  .activity-status-clock span{font-size:8px}
+}
+
+
+.activity-status-clock.countdown{
+  min-width:78px;
+  width:auto;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown svg{
+  position:static;
+  width:19px;
+  height:19px;
+  transform:none;
+}
+.activity-status-clock.countdown svg circle{display:none}
+.activity-status-clock.countdown i,
+.activity-status-clock.countdown svg{
+  color:#fff;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:72px;
+    height:44px;
+    padding:0 9px;
+  }
+  .activity-status-clock.countdown span{font-size:12px}
+  .activity-status-clock.countdown svg{width:18px;height:18px}
+}
+
+
+.activity-status-clock.countdown{
+  min-width:78px;
+  width:auto;
+  height:48px;
+  padding:0 10px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 0 auto;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown svg{
+  position:static;
+  width:19px;
+  height:19px;
+  transform:none;
+}
+.activity-status-clock.countdown svg circle{display:none}
+.activity-status-clock.countdown i{
+  width:19px;
+  height:19px;
+  color:#fff;
+  flex:0 0 auto;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:72px;
+    height:44px;
+    padding:0 9px;
+  }
+  .activity-status-clock.countdown i{width:18px;height:18px}
+  .activity-status-clock.countdown span{font-size:12px}
+}
+
+
+.activity-status-clock.countdown{
+  min-width:66px;
+  width:66px;
+  height:42px;
+  padding:0 8px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 66px;
+  box-sizing:border-box;
+  background:var(--accent);
+  color:#fff;
+}
+.activity-status-clock.countdown span{
+  position:static;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+}
+.activity-status-clock.countdown svg,
+.activity-status-clock.countdown i{display:none}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:62px;
+    width:62px;
+    height:40px;
+    flex-basis:62px;
+  }
+  .activity-status-clock.countdown span{font-size:12px}
+}
+
+.field-label .field-slot-no{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:28px;height:22px;margin-left:5px;padding:0 6px;
+  border-radius:8px;background:#f1f1ef;color:var(--ink);
+  font-size:11px;font-weight:900;line-height:1;vertical-align:middle;
+}
+.activity-card.activity-card-open{
+  background:#fff !important;
+  border-color:var(--line) !important;
+}
+.activity-card.activity-card-open .activity-icon{
+  background:#f1f1ef !important;
+  color:var(--ink) !important;
+}
+
+.signin-list-head{
+  display:grid;
+  grid-template-columns:38px minmax(90px,1fr) repeat(var(--field-count,1),minmax(60px,auto)) 38px;
+  gap:10px;
+  align-items:center;
+  padding:0 0 9px;
+  margin-bottom:2px;
+  border-bottom:1px solid var(--line);
+  color:#888;
+  font-size:10px;
+  font-weight:850;
+}
+.signin-list-head > div:first-child{grid-column:2}
+.signin-field-value{
+  min-width:0;
+  font-size:12px;
+  color:var(--ink);
+  font-weight:750;
+  text-align:center;
+  word-break:break-word;
+}
+.list-row:has(.signin-field-value){
+  gap:10px;
+}
+@media(max-width:430px){
+  .signin-list-head{
+    gap:6px;
+    font-size:9px;
+  }
+  .signin-field-value{font-size:11px}
+}
+
+
+.app-header{position:sticky;top:0;z-index:50}
+.top-tabs,.page-tabs{position:static !important;top:auto !important;z-index:auto !important}
+
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  display:grid;
+  grid-template-columns:32px minmax(100px,1.4fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px;
+  gap:8px;
+  align-items:center;
+}
+.signin-list-head{padding:0 10px 9px;margin-bottom:0}
+.signin-list-head > div:first-child{grid-column:2}
+.signin-list-head > div{min-width:0;text-align:center}
+.signin-list-head > div:nth-child(2){text-align:left}
+.block.tight .list-row:has(.signin-field-value){padding:10px}
+.block.tight .list-row:has(.signin-field-value) .list-main{min-width:0}
+.signin-field-value{
+  min-width:0;text-align:center;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.activity-status-clock.open,
+.activity-status-clock.closed{
+  width:34px !important;height:34px !important;flex:0 0 34px !important;
+  border-radius:10px;
+}
+.activity-status-clock.open i,
+.activity-status-clock.closed i{width:17px !important;height:17px !important}
+
+#back-link{
+  width:36px;height:36px;min-width:36px;padding:0;
+  display:inline-flex;align-items:center;justify-content:center;border-radius:10px;
+}
+#back-link svg{width:18px;height:18px}
+
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:28px minmax(88px,1.25fr) repeat(var(--field-count,1),minmax(58px,1fr)) 28px;
+    gap:6px;
+  }
+}
+
+.activity-card.activity-card-open{background:#fff !important;border-color:var(--line) !important}
+
+
+.app-header{position:static !important;top:auto !important;z-index:auto !important}
+.home-header{position:sticky !important;top:0 !important;z-index:50}
+.subpage-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:8px 0 12px;
+  background:var(--bg);
+}
+.subpage-header h1{
+  margin:0;
+  font-size:20px;
+  line-height:1.2;
+  font-weight:900;
+}
+.subpage-back{
+  width:36px;height:36px;min-width:36px;
+  border:0;background:transparent;color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:10px;cursor:pointer;padding:0;
+}
+.subpage-back:hover{background:#f1f1ef}
+.subpage-back svg{width:19px;height:19px}
+.admin-child-header{
+  background:transparent !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+  border:0 !important;
+}
+
+
+/* Child-page navigation: icon only */
+#back-link{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center;justify-content:center;
+  border-radius:10px;
+  background:transparent;
+  color:var(--ink);
+}
+#back-link svg{width:18px;height:18px}
+#back-link .back-text{display:none}
+
+
+.admin-page > .admin-hero,
+.admin-child > .admin-hero,
+.admin-content > .admin-hero{
+  background:transparent !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+
+
+.top{position:sticky;top:0;z-index:50;background:var(--bg)}
+.tabs{position:static !important;top:auto !important;z-index:auto !important}
+.subpage-header{position:static !important;display:flex;align-items:center;gap:10px;min-height:54px;padding:8px 0 12px;background:var(--bg)}
+.subpage-header h1{margin:0;font-size:20px;line-height:1.2;font-weight:900}
+.subpage-back{width:36px;height:36px;min-width:36px;padding:0;border:0;background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer}
+.subpage-back svg{width:19px;height:19px}
+.subpage-header .subpage-back:last-child{margin-left:auto}
+.admin-role-header{display:none !important}
+.admin-child-header{background:transparent !important;color:var(--ink) !important;box-shadow:none !important;border:0 !important}
+
+.home-header .app-title .workbook-title,
+.home-header .app-title .title-sub,
+.home-header .app-title .app-subtitle{
+  display:none !important;
+}
+.home-header .app-title{
+  justify-content:space-between;
+}
+.home-header .app-title .team-title{
+  display:block !important;
+}
+.home-header .app-title .brand-title{
+  display:block !important;
+}
+
+/* Admin landing page keeps its orange/red hero; admin child pages do not. */
+.admin-landing-hero{
+  display:block;
+}
+.admin-child-page .admin-landing-hero,
+.admin-child-page .admin-hero{
+  display:none !important;
+}
+
+.subpage-back,
+#back-link,
+#back-admin-top{
+  width:36px !important;
+  height:36px !important;
+  min-width:36px !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:var(--ink) !important;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+}
+.subpage-back svg,
+#back-link svg,
+#back-admin-top svg{width:20px;height:20px}
+.subpage-header .subpage-back + h1{display:none}
+
+/* Hide textual back labels in child pages. */
+#back-link .back-text,
+#back-admin-top .back-text{display:none}
+
+/* Checked-in list: center all header labels and values. */
+.signin-list-head,
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value),
+.block.tight .list-row:has(.signin-field-value) .list-index,
+.block.tight .list-row:has(.signin-field-value) .list-main,
+.block.tight .list-row:has(.signin-field-value) .list-name,
+.block.tight .list-row:has(.signin-field-value) .list-meta,
+.signin-field-value{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+
+body .app-header.home-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+}
+body .app-header:not(.home-header){
+  position:static !important;
+}
+.home-header .app-title .workbook-title,
+.home-header .app-title .app-subtitle,
+.home-header .app-title .title-sub{
+  display:none !important;
+}
+
+/* Child pages: no global header; one compact arrow only. */
+#app.child-view .app-header,
+#app.subpage-view .app-header{
+  display:none !important;
+}
+#app.child-view .back,
+#app.subpage-view .back,
+#app.child-view #back-link,
+#app.subpage-view #back-link,
+#app.child-view #back-admin-top,
+#app.subpage-view #back-admin-top{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 12px 0 !important;
+  border:0 !important;background:transparent !important;
+  display:inline-flex !important;align-items:center;justify-content:center !important;
+  color:var(--ink) !important;
+}
+#app.child-view .back > *:not(svg),
+#app.subpage-view .back > *:not(svg),
+#app.child-view #back-link > *:not(svg),
+#app.subpage-view #back-link > *:not(svg),
+#app.child-view #back-admin-top > *:not(svg),
+#app.subpage-view #back-admin-top > *:not(svg){
+  display:none !important;
+}
+
+/* Admin landing hero is allowed; admin children have no red/orange hero. */
+.admin-landing-header{display:block}
+.admin-child-header{display:none !important}
+.admin-child-page .admin-head,
+.admin-child-page .admin-hero{background:transparent !important;box-shadow:none !important;color:var(--ink) !important}
+
+/* Checked-in list: all text centered, with matching header/value columns. */
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  display:grid !important;
+  grid-template-columns:32px minmax(100px,1.4fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:28px minmax(80px,1.2fr) repeat(var(--field-count,1),minmax(55px,1fr)) 28px !important;
+    gap:6px !important;
+  }
+}
+
+
+.top{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+}
+.child-view .top,
+.child-view .tabs{
+  display:none !important;
+}
+
+/* Main home top header only: team name + shield. */
+.top-brand p{display:none !important}
+
+/* One arrow only on all child pages. */
+.child-view .back,
+.child-view #back-link,
+.child-view #back-admin-top{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 12px 0 !important;
+  border:0 !important;background:transparent !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  color:var(--ink) !important;
+}
+.child-view .back > :not(svg),
+.child-view #back-link > :not(svg),
+.child-view #back-admin-top > :not(svg){
+  display:none !important;
+}
+.child-view .back svg,
+.child-view #back-link svg,
+.child-view #back-admin-top svg{
+  width:20px !important;height:20px !important;
+}
+
+/* Never show a second back control on the same child page. */
+.child-view .subpage-back{display:none !important}
+
+/* Admin landing remains the only place allowed to show its large colored hero. */
+#tab-content.admin-landing .admin-hero,
+#tab-content.admin-landing .admin-head{display:block}
+#tab-content.admin-child .admin-hero,
+#tab-content.admin-child .admin-head{background:transparent !important;box-shadow:none !important}
+
+/* Center checked-in list headings and values. */
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *,
+.signin-field-value{
+  text-align:center !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+  align-items:center !important;
+  text-align:center !important;
+}
+
+
+.home-fixed-header{position:sticky !important;top:0 !important;z-index:100 !important}
+.home-fixed-header .top-brand p{display:none !important}
+#app.child-view .home-fixed-header,#app.child-view .home-tabs{display:none !important}
+.child-back{
+ width:36px !important;height:36px !important;min-width:36px !important;
+ padding:0 !important;margin:0 0 10px !important;border:0 !important;
+ background:transparent !important;color:var(--ink) !important;
+ display:inline-flex !important;align-items:center !important;justify-content:center !important;
+ border-radius:10px !important;
+}
+.child-back svg{width:20px !important;height:20px !important}
+#app.child-view .admin-hero,#app.child-view .admin-head{display:none !important}
+#app.admin-home-view .admin-hero,#app.admin-home-view .admin-head{display:block !important}
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+ display:grid !important;
+ grid-template-columns:32px minmax(100px,1.35fr) repeat(var(--field-count,1),minmax(70px,1fr)) 32px !important;
+ gap:8px !important;align-items:center !important;
+}
+.signin-list-head > div,
+.block.tight .list-row:has(.signin-field-value) > *,
+.signin-field-value{text-align:center !important}
+.block.tight .list-row:has(.signin-field-value) .list-main{
+ display:flex !important;flex-direction:column !important;align-items:center !important;
+}
+
+
+.child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;
+  color:var(--ink) !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+.child-back svg{width:20px !important;height:20px !important}
+#app.child-view .admin-hero,
+#app.child-view .admin-head,
+#app.child-view .admin-header,
+#app.child-view .admin-banner{display:none !important}
+#app.admin-home-view .admin-hero,
+#app.admin-home-view .admin-head,
+#app.admin-home-view .admin-header,
+#app.admin-home-view .admin-banner{display:block !important}
+
+
+#app.child-view .admin-accounts-hero,
+#app.child-view .admin-accounts-header{display:none !important}
+
+
+.admin-main-hero{
+  margin:0 0 16px;padding:18px 20px;border-radius:18px;
+  color:#fff;background:var(--accent);
+}
+.admin-main-hero.super{background:#171717}
+.admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+.admin-main-hero-shield{
+  width:44px;height:44px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.18)
+}
+.admin-main-hero-shield svg{width:23px;height:23px}
+.admin-main-hero-title{font-size:17px;font-weight:950}
+.admin-main-hero-role{font-size:11px;font-weight:750;opacity:.82;margin-top:3px}
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.admin-square{
+  min-height:145px !important;padding:16px !important;
+  display:flex !important;flex-direction:column !important;
+  align-items:flex-start !important;justify-content:center !important;
+  text-align:left !important;border-radius:16px !important;
+}
+.admin-square .menu-icon{
+  width:42px;height:42px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:#f1f1ef;color:var(--ink)
+}
+.admin-square .menu-icon svg{width:21px;height:21px}
+.admin-square strong{font-size:15px;font-weight:900}
+.admin-square small{margin-top:5px;color:#888;font-size:10px}
+.admin-square .chev{display:none}
+
+
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+}
+.admin-square{
+  min-height:132px !important;
+  padding:18px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  border-radius:16px !important;
+}
+.admin-square .menu-icon{
+  width:44px;height:44px;margin:0 0 12px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:#f1f1ef;color:var(--ink);
+}
+.admin-square .menu-icon svg{width:22px;height:22px}
+.admin-square strong{font-size:15px;font-weight:900}
+.admin-square small,.admin-square .menu-text,.admin-square .chev{display:none !important}
+
+/* Admin child pages: exactly one arrow, no textual/second back button. */
+#app.child-view .child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;color:var(--ink) !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+#app.child-view .child-back svg{width:20px !important;height:20px !important}
+#app.child-view .back,
+#app.child-view #back-link,
+#app.child-view #back-admin-top,
+#app.child-view .subpage-back{
+  display:none !important;
+}
+
+
+.admin-main-hero{
+  position:relative;
+  margin:0 0 16px;
+  padding:18px 58px 18px 20px;
+  min-height:74px;
+  box-sizing:border-box;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  color:#fff;
+  background:#f59e0b;
+}
+.admin-main-hero.officer{background:#d71920}
+.admin-main-hero.super{background:#f59e0b}
+.admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+.admin-main-hero-shield{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.16);
+}
+.admin-main-hero-shield svg{width:25px;height:25px}
+.admin-main-hero-title{font-size:22px;font-weight:950;line-height:1.15}
+.admin-main-hero-role{font-size:12px;font-weight:800;opacity:.95;margin-top:4px}
+.admin-main-hero-logout{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.7);
+  background:transparent;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.admin-main-hero-logout svg{width:22px;height:22px}
+
+/* Home fixed top: only team name + shield, no subtitle. */
+.home-fixed-header .top-brand p{display:none !important}
+
+
+.home-fixed-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+  background:var(--bg) !important;
+}
+.home-fixed-header .top-brand p{display:none !important}
+.home-tabs{
+  position:static !important;
+  display:flex !important;
+}
+#app.child-view .home-fixed-header,
+#app.child-view .home-tabs{
+  display:none !important;
+}
+
+/* Admin home keeps team header + sign/query tabs + admin colored hero. */
+#app.admin-home-view .home-fixed-header,
+#app.admin-home-view .home-tabs{
+  display:flex !important;
+}
+#app.admin-home-view .home-tabs{display:flex !important}
+
+/* Child pages: only their single arrow. */
+#app.child-view .child-back{
+  width:36px !important;height:36px !important;min-width:36px !important;
+  padding:0 !important;margin:0 0 10px !important;
+  border:0 !important;background:transparent !important;
+  color:var(--ink) !important;display:inline-flex !important;
+  align-items:center !important;justify-content:center !important;
+}
+#app.child-view .child-back svg{width:20px !important;height:20px !important}
+
+
+.home-tabs{
+  width:100% !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:72px !important;
+  padding:4px 10px !important;
+  gap:4px !important;
+}
+.home-tabs button{
+  min-height:62px !important;
+  border:0 !important;
+  background:transparent !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  font-size:15px !important;
+  font-weight:850 !important;
+}
+.home-tabs button svg{
+  width:28px !important;
+  height:28px !important;
+}
+.home-tabs button.active{
+  font-weight:950 !important;
+}
+.home-tabs button.active svg{
+  width:30px !important;
+  height:30px !important;
+}
+
+.admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+.admin-square{
+  min-height:128px !important;
+  padding:14px 8px !important;
+  border-radius:16px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+.admin-square .menu-icon{
+  width:42px !important;
+  height:42px !important;
+  margin:0 0 10px !important;
+}
+.admin-square strong{
+  font-size:14px !important;
+  white-space:nowrap !important;
+}
+.admin-square small{display:none !important}
+
+@media(max-width:520px){
+  .admin-menu-grid{
+    gap:7px !important;
+  }
+  .admin-square{
+    min-height:112px !important;
+    padding:10px 4px !important;
+  }
+  .admin-square .menu-icon{
+    width:36px !important;
+    height:36px !important;
+    margin-bottom:8px !important;
+  }
+  .admin-square .menu-icon svg{
+    width:19px !important;
+    height:19px !important;
+  }
+  .admin-square strong{
+    font-size:12px !important;
+  }
+}
+
+
+.home-tabs button{
+  color:#777 !important;
+  position:relative !important;
+}
+.home-tabs button svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active{
+  color:#d71920 !important;
+  font-weight:950 !important;
+}
+.home-tabs button.active svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button.active::after{
+  content:"";
+  position:absolute;
+  left:22%;
+  right:22%;
+  bottom:2px;
+  height:3px;
+  border-radius:99px;
+  background:#d71920;
+}
+
+
+.home-tabs button{
+  color:#777 !important;
+  transition:color .18s ease, background .18s ease, transform .18s ease !important;
+  border-radius:14px !important;
+}
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button:active{
+  color:#d71920 !important;
+  transform:translateY(1px);
+}
+.home-tabs button.active,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible{
+  color:#d71920 !important;
+  background:transparent !important;
+}
+.home-tabs button.active svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+/* Keep the same red interaction language for the home-page admin shield. */
+.home-fixed-header .top-admin-access{
+  transition:color .18s ease, border-color .18s ease, background .18s ease !important;
+}
+.home-fixed-header .top-admin-access:hover,
+.home-fixed-header .top-admin-access:focus-visible{
+  color:#d71920 !important;
+  border-color:#efb8bb !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-fixed-header .top-admin-access:hover svg,
+.home-fixed-header .top-admin-access:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+/* Login / admin landing use the same page background and spacing baseline. */
+#app.home-view,
+#app.admin-home-view{
+  background:var(--bg) !important;
+}
+
+
+/* Shared page width / spacing so switching between home states never squeezes
+   the content area differently. */
+#app.home-view,
+#app.admin-home-view{
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+/* Sign-in / Query: centered, larger, equal-width, compact horizontal tabs. */
+.home-tabs{
+  width:100% !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  padding:8px 12px !important;
+  min-height:64px !important;
+  margin:0 !important;
+}
+.home-tabs button{
+  width:100% !important;
+  min-height:56px !important;
+  padding:8px 12px !important;
+  margin:0 !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  font-size:16px !important;
+  font-weight:900 !important;
+}
+.home-tabs button svg{
+  width:25px !important;
+  height:25px !important;
+  flex:0 0 auto !important;
+}
+.home-tabs button.active::after{
+  left:18% !important;
+  right:18% !important;
+  bottom:1px !important;
+}
+
+/* Keep the exact same shell on the admin landing. The colored admin hero
+   starts after the shared navigation instead of compressing it. */
+#app.admin-home-view .home-tabs{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+}
+#app.admin-home-view .admin-main-hero{
+  margin-top:8px !important;
+}
+
+/* Admin landing hero keeps its original size; four management cards stay
+   in one row on desktop and become four narrow equal cards on mobile. */
+#app.admin-home-view .admin-menu-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+#app.admin-home-view .admin-square{
+  min-width:0 !important;
+  min-height:128px !important;
+  padding:12px 6px !important;
+}
+#app.admin-home-view .admin-square strong{
+  font-size:14px !important;
+}
+#app.admin-home-view .admin-square .menu-icon{
+  width:40px !important;
+  height:40px !important;
+  margin-bottom:9px !important;
+}
+
+/* Login home uses the same page shell, but has no management hero. */
+#app.home-view .admin-main-hero{
+  display:none !important;
+}
+
+/* Hover / focus / active: one red interaction rule everywhere. */
+.home-tabs button:hover,
+.home-tabs button:focus-visible,
+.home-tabs button:active{
+  color:#d71920 !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg,
+.home-tabs button:active svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+@media(max-width:520px){
+  .home-tabs{
+    padding:6px 8px !important;
+    gap:6px !important;
+  }
+  .home-tabs button{
+    min-height:52px !important;
+    font-size:15px !important;
+    padding:6px 8px !important;
+  }
+  .home-tabs button svg{
+    width:23px !important;
+    height:23px !important;
+  }
+  #app.admin-home-view .admin-menu-grid{
+    gap:6px !important;
+  }
+  #app.admin-home-view .admin-square{
+    min-height:108px !important;
+    padding:9px 3px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon{
+    width:34px !important;
+    height:34px !important;
+    margin-bottom:7px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon svg{
+    width:18px !important;
+    height:18px !important;
+  }
+  #app.admin-home-view .admin-square strong{
+    font-size:11px !important;
+  }
+}
+
+
+.home-tabs button.active,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible,
+.home-tabs button.active:active{
+  color:#777 !important;
+  background:transparent !important;
+  font-weight:850 !important;
+}
+.home-tabs button.active svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg,
+.home-tabs button.active:active svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active::after{
+  display:none !important;
+}
+
+
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+/* Active tab itself stays neutral, per v53 request. */
+.home-tabs button.active{
+  color:#777 !important;
+  background:transparent !important;
+  font-weight:850 !important;
+}
+.home-tabs button.active svg{
+  color:#777 !important;
+  stroke:#777 !important;
+}
+.home-tabs button.active::after{
+  display:none !important;
+}
+
+
+.home-tabs button{
+  cursor:pointer !important;
+}
+.home-tabs button.is-pointer,
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+}
+.home-tabs button.is-pointer svg,
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+.home-tabs button.active.is-pointer,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible{
+  color:#d71920 !important;
+  background:#fff1f1 !important;
+}
+.home-tabs button.active.is-pointer svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg{
+  color:#d71920 !important;
+  stroke:#d71920 !important;
+}
+
+
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+  letter-spacing:.01em !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+
+
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+
+
+.admin-main-hero{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+.admin-main-hero-brand{display:flex !important;align-items:center !important}
+.admin-main-hero-title{
+  font-size:22px !important;
+  line-height:1.15 !important;
+  font-weight:950 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.2 !important;
+  font-weight:750 !important;
+  opacity:.9 !important;
+}
+.admin-main-hero-actions{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+}
+.admin-main-hero-permission{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  min-height:32px !important;
+  padding:7px 10px !important;
+  border-radius:999px !important;
+  background:rgba(0,0,0,.16) !important;
+  color:#fff !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+.admin-main-hero-permission svg{
+  width:15px !important;
+  height:15px !important;
+}
+.admin-main-hero-logout{
+  position:static !important;
+  transform:none !important;
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+}
+
+
+.admin-main-hero{
+  background:#f59e0b !important;
+  color:#fff !important;
+  min-height:114px !important;
+  padding:20px 22px !important;
+  border-radius:26px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+.admin-main-hero.officer{background:#d71920 !important}
+.admin-main-hero.super{background:#f59e0b !important}
+
+.admin-main-hero-brand{
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+}
+.admin-main-hero-icon{
+  width:48px !important;
+  height:48px !important;
+  flex:0 0 48px !important;
+  border-radius:15px !important;
+  background:rgba(255,255,255,.16) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.admin-main-hero-icon svg{
+  width:27px !important;
+  height:27px !important;
+  color:#fff !important;
+  stroke:#fff !important;
+}
+.admin-main-hero-title{
+  margin:0 !important;
+  font-size:25px !important;
+  line-height:1.05 !important;
+  font-weight:950 !important;
+  color:#fff !important;
+}
+.admin-main-hero-role{
+  margin-top:6px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  font-weight:750 !important;
+  color:#fff !important;
+  opacity:.95 !important;
+}
+.admin-main-hero-logout{
+  position:static !important;
+  transform:none !important;
+  width:44px !important;
+  height:44px !important;
+  flex:0 0 44px !important;
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.65) !important;
+  background:transparent !important;
+  color:#fff !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.admin-main-hero-logout svg{
+  width:23px !important;
+  height:23px !important;
+}
+.admin-main-hero-actions{display:none !important}
+
+
+#app.child-view .admin-child .child-back ~ .child-back,
+#app.child-view .admin-page .child-back ~ .child-back,
+#app.child-view .admin-content .child-back ~ .child-back{
+  display:none !important;
+}
+
+
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:16px !important;
+  height:16px !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:21px !important;
+  height:21px !important;
+  display:block !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+.activity-status-clock.closed,
+.activity-status-clock.open{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  flex:0 0 28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-status-clock.closed i,
+.activity-status-clock.open i{
+  width:18px !important;
+  height:18px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.activity-status-clock.closed{
+  color:#171717 !important;
+}
+.activity-status-clock.open{
+  color:#22a35a !important;
+}
+
+
+.activity-card.activity-card-open .activity-icon{
+  color:#22a35a !important;
+}
+.activity-card.activity-card-open .activity-icon svg{
+  color:#22a35a !important;
+  stroke:#22a35a !important;
+}
+
+
+.admin-login-page{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:4px 0 24px;
+}
+
+
+.admin-login-hero-icon svg{
+  width:25px;
+  height:25px;
+}
+
+
+.admin-login-card{
+  margin-top:14px;
+  padding:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.admin-login-title{
+  margin:0 0 16px;
+  font-size:18px;
+  font-weight:900;
+}
+.admin-login-card .field{
+  margin-bottom:14px;
+}
+.admin-password-wrap{
+  position:relative;
+}
+.admin-password-wrap input{
+  padding-right:48px !important;
+}
+.admin-password-toggle{
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.admin-password-toggle:hover,
+.admin-password-toggle:focus-visible{
+  color:#d71920;
+  background:#fff1f1;
+  outline:none;
+}
+.admin-password-toggle svg{
+  width:19px;
+  height:19px;
+}
+.admin-login-button{
+  width:100%;
+  margin-top:4px;
+}
+
+
+.admin-login-page{
+  width:100%;
+  max-width:520px;
+  margin:0 auto;
+  padding:24px 0 32px;
+}
+.admin-login-card{
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+  padding:30px 28px 28px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-sizing:border-box;
+}
+.admin-login-heading{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 24px;
+}
+.admin-login-heading-icon{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:#f1f1ef;
+  color:var(--ink);
+  display:grid;
+  place-items:center;
+  flex:0 0 38px;
+}
+.admin-login-heading-icon svg{
+  width:20px;
+  height:20px;
+}
+.admin-login-heading h1{
+  margin:0;
+  font-size:22px;
+  line-height:1.15;
+  font-weight:950;
+  letter-spacing:-.02em;
+}
+.admin-login-card .field{
+  margin-bottom:16px;
+}
+.admin-login-card .field-label{
+  margin-bottom:7px;
+}
+.admin-password-wrap{
+  position:relative;
+}
+.admin-password-wrap input{
+  padding-right:48px !important;
+}
+.admin-password-toggle{
+  position:absolute;
+  right:5px;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.admin-password-toggle:hover,
+.admin-password-toggle:focus-visible{
+  color:var(--accent);
+  background:var(--accent-soft);
+  outline:none;
+}
+.admin-password-toggle svg{
+  width:19px;
+  height:19px;
+}
+.admin-login-button{
+  width:100%;
+  margin-top:6px;
+}
+
+
+.activity-status-clock.closed{
+  display:none !important;
+}
+
+
+.activity-list-status-legend{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:12px;
+  color:#777;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+}
+.activity-list-status-legend > span{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+.activity-list-status-legend .dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  display:inline-block;
+}
+.activity-list-status-legend .open-dot{background:#22a35a}
+.activity-list-status-legend .closed-dot{background:#171717}
+@media(max-width:430px){
+  .activity-list-status-legend{gap:9px;font-size:11px}
+}
+
+
+.admin-main-hero-icon{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  border-radius:14px !important;
+}
+.admin-main-hero-icon svg{
+  width:21px !important;
+  height:21px !important;
+}
+
+
+.admin-main-hero{
+  min-height:70px !important;
+  height:70px !important;
+  padding:14px 16px !important;
+  margin:0 0 12px !important;
+  border-radius:18px !important;
+  box-sizing:border-box !important;
+}
+.admin-main-hero-brand{
+  height:100% !important;
+  gap:12px !important;
+}
+.admin-main-hero-icon{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  border-radius:12px !important;
+}
+.admin-main-hero-icon svg{
+  width:22px !important;
+  height:22px !important;
+}
+.admin-main-hero-title{
+  font-size:21px !important;
+  line-height:1.05 !important;
+}
+.admin-main-hero-role{
+  margin-top:4px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+}
+.admin-main-hero-logout{
+  display:none !important;
+}
+
+
+#new-officer-user,
+#new-officer-pass{
+  display:block !important;
+  width:100% !important;
+  margin:0 0 12px !important;
+  box-sizing:border-box !important;
+}
+#create-officer{
+  display:flex !important;
+  width:100% !important;
+  margin-top:2px !important;
+}
+#new-officer-pass + #create-officer{
+  margin-top:4px !important;
+}
+
+
+.home-fixed-header .top-admin-access{
+  cursor:pointer !important;
+}
+.home-fixed-header .top-admin-access{
+  color:var(--ink) !important;
+}
+.home-fixed-header .top-admin-access svg{
+  color:inherit !important;
+  stroke:currentColor !important;
+}
+.admin-main-hero-logout{
+  display:flex !important;
+}
+
+
+.top-admin-actions{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+}
+.top-admin-access,
+.top-admin-logout{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  border-radius:14px !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 42px !important;
+  cursor:pointer !important;
+}
+.top-admin-logout{
+  border:1px solid var(--line) !important;
+  background:#fff !important;
+  color:var(--ink) !important;
+}
+.top-admin-logout:hover,
+.top-admin-logout:focus-visible{
+  color:#d71920 !important;
+  border-color:#efb8bb !important;
+  background:#fff1f1 !important;
+  outline:none !important;
+}
+.top-admin-logout svg{
+  width:20px !important;
+  height:20px !important;
+}
+
+
+.signin-list-head,
+.block.tight .list-row:has(.signin-field-value){
+  grid-template-columns:
+    24px
+    minmax(72px,1.05fr)
+    repeat(var(--field-count,1),minmax(48px,.9fr))
+    30px !important;
+  gap:5px !important;
+}
+.signin-list-head{
+  padding-left:4px !important;
+  padding-right:4px !important;
+}
+.block.tight .list-row:has(.signin-field-value){
+  padding:9px 4px !important;
+}
+.signin-list-head > div,
+.signin-field-value{
+  font-size:10px !important;
+}
+.block.tight .list-row:has(.signin-field-value) .list-name{
+  font-size:12px !important;
+}
+@media(max-width:600px){
+  .signin-list-head,
+  .block.tight .list-row:has(.signin-field-value){
+    grid-template-columns:
+      22px
+      minmax(64px,1fr)
+      repeat(var(--field-count,1),minmax(44px,.9fr))
+      28px !important;
+    gap:4px !important;
+  }
+  .signin-list-head > div,
+  .signin-field-value{font-size:9px !important}
+}
+
+
+.signin-delete-btn{
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  color:#171717 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:0 !important;
+  cursor:pointer !important;
+}
+.signin-delete-btn:hover,
+.signin-delete-btn:focus-visible{
+  background:transparent !important;
+  color:#d71920 !important;
+  outline:none !important;
+}
+.signin-delete-btn svg{
+  width:18px !important;
+  height:18px !important;
+}
+
+
+.activity-status-clock.countdown{
+  font-variant-numeric:tabular-nums;
+}
+
+
+.register-name-input{
+  ime-mode:active;
+}
+
+/* v86: cleaned baseline; UI and behavior preserved */
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>/*__APP_ASYNC_IIFE__*/
+(async function(){
+
+const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+
+async function adminLogin(username, password){
+  const {data,error}=await supabaseClient.rpc("simple_admin_login",{
+    p_username:username,
+    p_access_code:password
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"帳號或管理碼錯誤");
+
+  window.__haotianAdminSession={
+    username:data.username,
+    role:data.role,
+    access_code:password
+  };
+  adminUnlocked=true;
+  return data;
+}
+
+function getAdminSession(){
+  return window.__haotianAdminSession || null;
+}
+
+function adminRole(){
+  const s=getAdminSession();
+  return s?s.role:null;
+}
+
+function isSuperAdmin(){
+  return adminRole()==="super_admin";
+}
+
+async function adminLogout(){
+  window.__haotianAdminSession=null;
+  adminUnlocked=false;
+}
+
+async function checkAdminSession(){
+  const s=getAdminSession();
+  adminUnlocked=!!s?.username;
+  return adminUnlocked;
+}
+
+const STORAGE_KEY = "event-registration-data";
+let state = { activities: [], registrations: {}, adminPin: null };
+let activeTab = "register";
+let queryResultVisible = false;
+let loaded = false;
+let openEventId = null;      // which event card is expanded in register view
+let adminExpandedId = null;  // which event's registrant list is expanded in admin tab
+let adminUnlocked = false;   // in-memory only, resets on reload
+let userIsTyping = false;    // true while an input/textarea/password field has focus
+let pendingDeleteIdx = null; // index of registrant pending an in-page delete confirmation
+let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
+let draftName = "";
+let draftDate = "";
+let draftMaxParticipants = "";
+let draftCloseMinutes = 0;
+let pendingPublishActivity = null;
+let publishMode = "now";
+let announcementText = "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+let announcementEditing = false;
+
+
+let adminPage = "home";
+
+document.addEventListener("focusin", (e)=>{
+  const tag = e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = true; }
+});
+document.addEventListener("focusout", (e)=>{
+  const tag = e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
+});
+
+function safeAdd(el,event,handler){
+  if(el && typeof el.addEventListener==="function") el.addEventListener(event,handler);
+  return el;
+}
+function safeAddById(id,event,handler){
+  return safeAdd(document.getElementById(id),event,handler);
+}
+function safeOn(selector,event,handler,root=document){
+  const el=root.querySelector(selector);
+  if(el) el.addEventListener(event,handler);
+  return el;
+}
+function uid(){
+  if(window.crypto && typeof window.crypto.randomUUID === "function"){
+    return window.crypto.randomUUID();
+  }
+  // UUID v4 fallback for older browsers
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+    const r = Math.random()*16|0, v = c === "x" ? r : (r&3|8);
+    return v.toString(16);
+  });
+}
+function norm(s){ return (s||"").trim().replace(/\s+/g," "); }
+function keyOf(name){ return norm(name).toLowerCase(); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function fmtDate(iso){
+  try{ return new Date(iso).toLocaleDateString('zh-TW',{year:'numeric',month:'numeric',day:'numeric'}); }
+  catch(e){ return iso; }
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
+}
+
+async function loadData(){
+  startActivityExpiryWatcher();
+  try{
+    let acts = [];
+
+    if(adminUnlocked){
+      const session=getAdminSession();
+      const {data: adminData,error:adminErr}=await supabaseClient.rpc("simple_admin_list_activities",{
+        p_admin_username:session.username,
+        p_admin_code:session.access_code
+      });
+      if(adminErr) throw adminErr;
+      if(!adminData?.ok) throw new Error(adminData?.message||"管理者活動資料讀取失敗");
+      acts=adminData.activities||[];
+    }else{
+      const {data: publicActs,error:aErr}=await supabaseClient
+        .from("activities")
+        .select("*")
+        .eq("hidden",false)
+        .order("date",{ascending:false});
+      if(aErr) throw aErr;
+      acts=(publicActs||[]).filter(a=>!a.publish_at || new Date(a.publish_at).getTime()<=Date.now());
+    }
+
+    state.activities=(acts||[]).map(a=>({
+      id:a.id,
+      name:a.name,
+      date:a.date,
+      fields:Array.isArray(a.fields)?a.fields:[],
+      open:!!a.open,
+      maxParticipants:a.max_participants==null?null:Number(a.max_participants),
+      createdBy:a.created_by||"",
+      closeAt:a.close_at||null,
+      autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
+      hidden:!!a.hidden,
+      publishAt:a.publish_at||null
+    }));
+
+    state.registrations={};
+
+    // 管理者使用安全 RPC；隊員頁只讀取公開簽到名單。
+    // 簽到頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
+    if(adminUnlocked){
+      const session=getAdminSession();
+      const {data: regData,error:rErr}=await supabaseClient.rpc("simple_admin_list_registrations",{
+        p_admin_username:session.username,
+        p_admin_code:session.access_code
+      });
+      if(rErr) throw rErr;
+      if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
+      (regData.registrations||[]).forEach(r=>{
+        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
+        state.registrations[r.activity_id].push({
+          id:r.id,
+          activity_id:r.activity_id,
+          name:r.name,
+          fieldValues:r.field_values||{},
+          ts:r.created_at
+        });
+      });
+    }else{
+      const {data: regData,error:rErr}=await supabaseClient
+        .from("registrations")
+        .select("id,activity_id,name,field_values,created_at")
+        .order("created_at",{ascending:true});
+      if(rErr) throw rErr;
+
+      (regData||[]).forEach(r=>{
+        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
+        state.registrations[r.activity_id].push({
+          id:r.id,
+          activity_id:r.activity_id,
+          name:r.name,
+          fieldValues:r.field_values||{},
+          ts:r.created_at
+        });
+      });
+    }
+
+    state.adminPin=null;
+  }catch(e){
+    console.error("Supabase load error:",e);
+    showToast("雲端資料載入失敗："+(e?.message||""));
+  }
+  loaded=true;
+}
+async function saveData(){
+  // 保留舊函式名稱，實際資料由各操作直接寫入 Supabase。
+  return true;
+}
+
+async function createActivityRemote(activity){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+
+  const {data,error}=await supabaseClient.rpc("simple_admin_create_activity",{
+    p_admin_username:session.username,
+    p_admin_code:session.access_code,
+    p_id:activity.id,
+    p_name:activity.name,
+    p_date:activity.date,
+    p_fields:activity.fields,
+    p_open:activity.open,
+    p_max_participants:activity.maxParticipants,
+    p_created_by:activity.createdBy||session.username,
+    p_close_at:activity.closeAt,
+    p_auto_close_minutes:activity.autoCloseMinutes||0,
+    p_hidden:!!activity.hidden,
+    p_publish_at:activity.publishAt||null
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"建立活動失敗");
+
+  // 相容舊／新 SQL 回傳格式：
+  // 舊版可能回傳 data.activity；部分 SQL 只回傳 data.id。
+  // 前端不能直接讀 undefined.id，因此永遠整理成完整 activity。
+  const raw=data.activity || data;
+  return {
+    ...activity,
+    ...(raw && typeof raw === "object" ? raw : {}),
+    id: raw?.id || activity.id,
+    name: raw?.name ?? activity.name,
+    date: raw?.date ?? activity.date,
+    fields: Array.isArray(raw?.fields) ? raw.fields : activity.fields,
+    open: typeof raw?.open === "boolean" ? raw.open : activity.open,
+    maxParticipants: raw?.max_participants !== undefined
+      ? (raw.max_participants == null ? null : Number(raw.max_participants))
+      : (raw?.maxParticipants !== undefined ? raw.maxParticipants : activity.maxParticipants),
+    createdBy: raw?.created_by ?? raw?.createdBy ?? activity.createdBy,
+    closeAt: raw?.close_at ?? raw?.closeAt ?? activity.closeAt,
+    autoCloseMinutes: raw?.auto_close_minutes !== undefined
+      ? Number(raw.auto_close_minutes || 0)
+      : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
+    hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
+    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
+  };
+}
+
+function normalizeActivityForRPC(activity){
+  const x={...activity};
+
+  // PostgreSQL date parameter: accept Date, ISO timestamp, YYYY/M/D and
+  // YYYY-MM-DD, and always send a valid YYYY-MM-DD when possible.
+  if(x.date instanceof Date && !isNaN(x.date.getTime())){
+    x.date=x.date.toISOString().slice(0,10);
+  }else if(typeof x.date==="string"){
+    const s=x.date.trim();
+    let m=s.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+    if(m){
+      x.date=`${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
+    }else{
+      const d=new Date(s);
+      if(!isNaN(d.getTime())) x.date=d.toISOString().slice(0,10);
+    }
+  }
+
+  x.fields=Array.isArray(x.fields)?x.fields:[];
+  x.maxParticipants =
+    x.maxParticipants==null || x.maxParticipants==="" ? null :
+    Number(x.maxParticipants);
+  if(x.maxParticipants!==null && !Number.isFinite(x.maxParticipants))
+    x.maxParticipants=null;
+
+  x.autoCloseMinutes=Number(x.autoCloseMinutes||0);
+  if(!Number.isFinite(x.autoCloseMinutes)) x.autoCloseMinutes=0;
+
+  x.closeAt=x.closeAt||null;
+  x.publishAt=x.publishAt||null;
+  x.open=!!x.open;
+  x.hidden=!!x.hidden;
+  return x;
+}
+
+async function updateActivityRemote(activity){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+
+  const a=normalizeActivityForRPC(activity);
+  const {data,error}=await supabaseClient.rpc("simple_admin_update_activity",{
+    p_admin_username:String(session.username||""),
+    p_admin_code:String(session.access_code||""),
+    p_id:String(a.id||""),
+    p_name:String(a.name||""),
+    p_date:a.date,
+    p_fields:Array.isArray(a.fields)?a.fields:[],
+    p_open:!!a.open,
+    p_max_participants:a.maxParticipants==null?null:Number(a.maxParticipants),
+    p_created_by:String(a.createdBy||session.username||""),
+    p_close_at:a.closeAt||null,
+    p_auto_close_minutes:Number(a.autoCloseMinutes||0),
+    p_hidden:!!a.hidden,
+    p_publish_at:a.publishAt||null
+  });
+
+  if(error){
+    const detail=[error.message,error.details,error.hint,error.code]
+      .filter(Boolean).join(" | ");
+    throw new Error(detail||"活動更新失敗");
+  }
+  if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
+
+  const raw=data.activity||null;
+  return {
+    ...a,
+    ...(raw&&typeof raw==="object"?raw:{})
+  };
+}
+
+async function deleteActivityRemote(activityId){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+
+  const {data,error}=await supabaseClient.rpc("simple_admin_delete_activity",{
+    p_admin_username:session.username,
+    p_admin_code:session.access_code,
+    p_activity_id:activityId
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"刪除活動失敗");
+  return data;
+}
+async function createRegistrationRemote(activityId, registration){
+  // 隊員簽到改走公開 RPC。
+  // 不直接 INSERT registrations，避免被 Supabase RLS 擋住。
+  const { data, error } = await supabaseClient.rpc("public_create_registration", {
+    p_activity_id: activityId,
+    p_name: registration.name,
+    p_field_values: registration.fieldValues || {}
+  });
+
+  if(error) throw error;
+
+  if(!data?.ok){
+    throw new Error(data?.message || "簽到失敗");
+  }
+
+  return data.registration || data;
+}
+
+async function deleteRegistrationRemote(registrationId){
+  // 直接刪除後必須確認資料庫真的消失。
+  const direct=await supabaseClient.from("registrations").delete().eq("id",registrationId);
+  if(!direct.error){
+    const verify=await supabaseClient.from("registrations")
+      .select("id").eq("id",registrationId).maybeSingle();
+    if(!verify.error && !verify.data) return true;
+  }
+
+  console.warn("直接刪除未確認成功，嘗試公開刪除 RPC：",direct.error);
+
+  const rpc=await supabaseClient.rpc("public_delete_registration",{
+    p_registration_id:registrationId
+  });
+
+  if(rpc.error) throw rpc.error;
+  if(rpc.data && rpc.data.ok===false){
+    throw new Error(rpc.data.message||"刪除簽到失敗");
+  }
+
+  const verify2=await supabaseClient.from("registrations")
+    .select("id").eq("id",registrationId).maybeSingle();
+  if(verify2.error) throw verify2.error;
+  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
+
+  return true;
+}
+
+async function renameRegistrationRemote(registrationId, name){
+  const { error } = await supabaseClient.from("registrations")
+    .update({ name }).eq("id", registrationId);
+  if(error) throw error;
+}
+
+async function saveAdminPinRemote(pin){ return true; }
+
+
+async function testSupabaseConnection(){
+  try{
+    const { error } = await supabaseClient
+      .from("activities")
+      .select("id")
+      .limit(1);
+    if(error) throw error;
+    return { ok:true };
+  }catch(e){
+    console.error("Supabase connection test:", e);
+    return {
+      ok:false,
+      message:e?.message || "未知錯誤",
+      code:e?.code || "",
+      details:e?.details || "",
+      hint:e?.hint || ""
+    };
+  }
+}
+
+const SIGNED_LOCAL_KEY="haotian_signed_names_v1";
+function getLocalSignedMap(){
+  try{return JSON.parse(localStorage.getItem(SIGNED_LOCAL_KEY)||"{}")||{};}
+  catch(e){return {};}
+}
+function hasLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  const arr=Array.isArray(map[activityId])?map[activityId]:[];
+  return arr.some(n=>keyOf(n)===keyOf(name));
+}
+function rememberLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  if(!Array.isArray(map[activityId])) map[activityId]=[];
+  if(!map[activityId].some(n=>keyOf(n)===keyOf(name))) map[activityId].push(norm(name));
+  localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
+}
+function forgetLocalSigned(activityId,name){
+  const map=getLocalSignedMap();
+  if(Array.isArray(map[activityId])){
+    map[activityId]=map[activityId].filter(n=>keyOf(n)!==keyOf(name));
+    localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
+  }
+}
+
+function regsOf(activityId){ return state.registrations[activityId] || (state.registrations[activityId] = []); }
+
+function filledCount(activity){
+  const list = regsOf(activity.id);
+  // count registrants who filled in at least one field with a non-empty value
+  return list.filter(r => (activity.fields||[]).some(f => norm((r.fieldValues||{})[f.key]) !== "")).length;
+}
+
+function allKnownNames(){
+  const set = new Set();
+  Object.values(state.registrations).forEach(list=>{
+    (list||[]).forEach(r => set.add(norm(r.name)));
+  });
+  return Array.from(set).sort((a,b)=> a.localeCompare(b,'zh-Hant'));
+}
+
+function activitiesThisYear(){
+  const y = new Date().getFullYear();
+  const now = Date.now();
+
+  // 「未發布」活動不納入查詢／出席率計算。
+  // publishAt 為 null 代表立即發布；只有發布時間尚未到的活動才排除。
+  return state.activities.filter(a => {
+    if(new Date(a.date).getFullYear() !== y) return false;
+
+    const publishTs = a.publishAt ? new Date(a.publishAt).getTime() : null;
+    if(Number.isFinite(publishTs) && publishTs > now) return false;
+
+    return true;
+  });
+}
+
+function recentOrOpenActivities(){
+  const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
+  return state.activities.filter(a=>{
+    if(a.hidden) return false;
+    const ts = a.publishAt ? new Date(a.publishAt).getTime() : null;
+    if(Number.isFinite(ts) && ts > Date.now()) return false;
+    return a.open || new Date(a.date).getTime() >= sevenDaysAgo;
+  });
+}
+
+function annualStats(name){
+  const k = keyOf(name);
+  const acts = activitiesThisYear();
+  let attended = 0;
+  const detail = acts.map(a=>{
+    const present = regsOf(a.id).some(r => keyOf(r.name) === k);
+    if(present) attended++;
+    return { activity: a, present };
+  });
+  const total = acts.length;
+  const rate = total === 0 ? 0 : Math.round((attended/total)*1000)/10;
+  return { attended, total, rate, detail };
+}
+
+function exportAnnualCSV(rows, year){
+  const escapeCsv = (v)=>{
+    const s=String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+  };
+  let csv="\uFEFF"+["姓名","參加場次","總場次","出席率(%)"].join(",")+"\n";
+  rows.forEach(r=>{
+    csv += [escapeCsv(r.name),r.attended,r.total,r.rate].join(",")+"\n";
+  });
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`年度出席率總表_${year}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function getPublishAt(){
+  if(publishMode === "1day") return new Date(Date.now()+24*60*60*1000).toISOString();
+  if(publishMode === "1week") return new Date(Date.now()+7*24*60*60*1000).toISOString();
+  return null;
+}
+
+function render(){
+  if(window.__adminAccountsViewOpen){
+    const app=document.getElementById("app");
+    app.className="child-view";
+    app.innerHTML=`<div id="tab-content"></div>`;
+    renderAdminAccounts(document.getElementById("tab-content"));
+    refreshIcons();
+    return;
+  }
+
+  const app=document.getElementById("app");
+  const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
+  const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
+
+  app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
+
+  if(!isChild){
+    app.innerHTML=`
+      <header class="top home-fixed-header">
+        <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
+        <div class="top-admin-actions">
+        <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
+          type="button" id="top-admin-access" aria-label="管理者"
+          title="${adminUnlocked?"進入管理者":"管理者登入"}">
+          <i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i>
+        </button>
+        ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
+      </div>
+      </header>
+      <nav class="tabs home-tabs">
+        <button data-tab="register" class="${activeTab==='register'?'active':''}">
+          <i data-lucide="check"></i>簽到
+        </button>
+        <button data-tab="query" class="${activeTab==='query'?'active':''}">
+          <i data-lucide="search"></i>查詢
+        </button>
+      </nav>
+      <div id="tab-content"></div>`;
+  }else{
+    app.innerHTML=`<div id="tab-content"></div>`;
+  }
+
+  const homeTabButtons=app.querySelectorAll(".home-tabs button");
+  homeTabButtons.forEach(btn=>{
+    btn.addEventListener("pointerenter",()=>btn.classList.add("is-pointer"));
+    btn.addEventListener("pointerleave",()=>btn.classList.remove("is-pointer"));
+    btn.addEventListener("focus",()=>btn.classList.add("is-pointer"));
+    btn.addEventListener("blur",()=>btn.classList.remove("is-pointer"));
+  });
+
+  const tabs=app.querySelector(".home-tabs");
+  if(tabs)tabs.onclick=(ev)=>{
+    const btn=ev.target.closest("button[data-tab]");
+    if(!btn)return;
+    activeTab=btn.dataset.tab;
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    render();
+  };
+
+  const adminAccess=app.querySelector("#top-admin-access");
+  if(adminAccess)adminAccess.onclick=()=>{
+    activeTab="admin";
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    render();
+  };
+
+  const topAdminLogout=app.querySelector("#top-admin-logout");
+  if(topAdminLogout)topAdminLogout.onclick=async()=>{
+    await adminLogout();
+    adminPage="home";
+    openEventId=null;
+    adminExpandedId=null;
+    queryResultVisible=false;
+    showToast("已登出管理者");
+    render();
+  };
+
+  renderTab();
+}
+function refreshIcons(){
+  if(window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons({attrs:{"stroke-width":2}});
+}
+function renderTab(){
+  const el=document.getElementById("tab-content"); if(!el)return;
+  el.classList.toggle("admin-landing",activeTab==="admin" && adminUnlocked && adminPage==="home");
+  el.classList.toggle("admin-child",activeTab==="admin" && adminUnlocked && adminPage!=="home");
+  if(!loaded){el.innerHTML=`<div class="block"><div class="empty">載入中…</div></div>`; refreshIcons(); return;}
+  if(activeTab==="register") renderRegister(el);
+  else if(activeTab==="query") renderQuery(el);
+  else if(activeTab==="admin") renderAdmin(el);
+  refreshIcons();
+}
+
+// ---------- REGISTER TAB ----------
+function formatCountdown(ms){
+  const total=Math.max(0,Math.floor(ms/1000));
+  const minutes=Math.floor(total/60);
+  const seconds=total%60;
+  return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+}
+function renderCountdown(activity){
+  const box=document.getElementById("event-countdown");if(!box)return;
+  const timer=()=>{
+    const now=Date.now(), end=activity.closeAt?new Date(activity.closeAt).getTime():null;
+    if(end&&end>now){
+      box.classList.add("has-countdown");
+      box.classList.remove("no-countdown");
+      box.innerHTML=`<i data-lucide="timer"></i><span>${formatCountdown(end-now)}</span>`;
+      refreshIcons();
+    }else{
+      box.classList.remove("has-countdown");
+      box.classList.add("no-countdown");
+      box.innerHTML=`<i data-lucide="timer-off"></i>`;
+      refreshIcons();
+    }
+  };
+  timer(); clearInterval(activity._countdownTimer); activity._countdownTimer=setInterval(timer,1000);
+}
+
+async function refreshActivityRegistrations(activityId){
+  const {data,error}=await supabaseClient
+    .from("registrations")
+    .select("id,activity_id,name,field_values,created_at")
+    .eq("activity_id",activityId)
+    .order("created_at",{ascending:true});
+  if(error) throw error;
+
+  const fresh=(data||[]).map(r=>({
+    id:r.id,
+    activity_id:r.activity_id,
+    name:r.name,
+    fieldValues:r.field_values||{},
+    ts:r.created_at
+  }));
+  state.registrations[activityId]=fresh;
+  return fresh;
+}
+
+
+function activityStatusClock(activity){
+  const end=activity.closeAt?new Date(activity.closeAt).getTime():null;
+  const remaining=end?end-Date.now():0;
+  if(activity.open && end && remaining>0){
+    const total=Math.max(Number(activity.autoCloseMinutes||0)*60000, remaining, 1);
+    const progress=Math.max(0,Math.min(1,remaining/total));
+    const circumference=2*Math.PI*17;
+    return `<div class="activity-status-clock countdown" data-countdown-end="${end}" data-countdown-total="${total}" aria-label="剩餘 ${formatCountdown(remaining)}">
+      <span>${formatCountdown(remaining)}</span>
+    </div>`;
+  }
+  if(activity.open) return `<div class="activity-status-clock open" aria-label="開放中"><i data-lucide="check"></i></div>`;
+  return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
+}
+
+
+let activityExpiryTimer=null;
+const v93CountdownDeadlines=new Map();
+
+function startActivityExpiryWatcher(){
+  if(activityExpiryTimer)clearInterval(activityExpiryTimer);
+  activityExpiryTimer=setInterval(async()=>{
+    if(!Array.isArray(state.activities))return;
+    const now=Date.now();
+    const expired=state.activities.filter(a=>{
+      const end=a.closeAt?new Date(a.closeAt).getTime():0;
+      return a.open && end && end<=now;
+    });
+    if(!expired.length)return;
+
+    for(const a of expired){
+      // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
+      const oldCloseAt=a.closeAt;
+      const oldAuto=a.autoCloseMinutes;
+      a.open=false;
+      a.closeAt=null;
+      a.autoCloseMinutes=0;
+
+      try{
+        await updateActivityRemote({
+          id:a.id,
+          name:a.name,
+          date:a.date,
+          fields:a.fields||[],
+          open:false,
+          maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
+          createdBy:a.createdBy||"",
+          closeAt:null,
+          autoCloseMinutes:0,
+          hidden:!!a.hidden,
+          publishAt:a.publishAt||null
+        });
+        console.log("[活動管理] 30 秒到，自動關閉活動",a.name);
+      }catch(e){
+        // 更新失敗時恢復本機狀態，避免畫面與資料庫不一致。
+        a.open=true;
+        a.closeAt=oldCloseAt;
+        a.autoCloseMinutes=oldAuto;
+        console.error("[活動管理] 30 秒自動關閉失敗",e);
+      }
+    }
+
+    if(typeof render==="function")render();
+    if(typeof window.refreshActivityListClocks==="function"){
+      window.refreshActivityListClocks();
+    }
+  },1000);
+}
+
+startActivityExpiryWatcher();
+
+function saveState(){
+  if(!window.state || !Array.isArray(window.state.activities)) return;
+  window.state.activities.forEach(a=>{
+    if(a && !a.open){ a.closeAt=null; a.autoCloseMinutes=0; }
+  });
+}
+
+function refreshActivityListClocks(){
+  const now=Date.now();
+
+  document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
+    const id=box.closest(".activity-card")?.dataset.open;
+    const mapped=v93CountdownDeadlines.get(String(id));
+    const end=mapped||Number(box.dataset.countdownEnd||0);
+    const remaining=end-now;
+
+    if(remaining<=0){
+      const a=state.activities.find(x=>String(x.id)===String(id));
+      if(a){
+        a.open=false;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        v93CountdownDeadlines.delete(String(a.id));
+        box.outerHTML=activityStatusClock(a);
+        if(typeof refreshIcons==="function")refreshIcons();
+      }
+      return;
+    }
+
+    const span=box.querySelector("span");
+    if(span)span.textContent=formatCountdown(remaining);
+    box.setAttribute("aria-label","剩餘 "+formatCountdown(remaining));
+  });
+
+  const eventBox=document.getElementById("event-countdown");
+  if(eventBox && openEventId){
+    const activity=state.activities.find(x=>String(x.id)===String(openEventId));
+    if(activity && activity.open){
+      const mapped=v93CountdownDeadlines.get(String(activity.id));
+      const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
+      const remaining=end-now;
+      if(end && remaining>0){
+        eventBox.innerHTML=`<span class="countdown">${formatCountdown(remaining)}</span>`;
+        eventBox.style.display="";
+      }else if(end && remaining<=0){
+        eventBox.textContent="00:00";
+      }
+    }else{
+      eventBox.textContent="";
+    }
+  }
+}
+
+
+window.refreshActivityListClocks=refreshActivityListClocks;
+
+
+function displayFieldLabel(label,index){
+  const name=norm(label)||"欄位";
+  return `${escapeHtml(name)} <span class="field-slot-no">${String(index+1).padStart(2,"0")}</span>`;
+}
+
+
+function subpageHeader(title, backLabel="返回"){
+  return ``;
+}
+
+function childBackButton(label){
+  return `<button class="child-back" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i data-lucide="arrow-left"></i></button>`;
+}
+function renderRegister(el){
+  const acts=[...recentOrOpenActivities()].sort((a,b)=>{
+    const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
+    const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
+  });
+  if(openEventId){
+    const activity=acts.find(a=>a.id===openEventId);
+    if(!activity){openEventId=null;return renderRegister(el);}
+    const list=regsOf(activity.id), fields=activity.fields||[];
+    el.innerHTML=`
+      ${childBackButton("返回活動列表")}
+
+      
+      <div class="hero checkin-hero">
+        <div class="checkin-hero-main">
+          <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
+          <div>
+            <h2>${escapeHtml(activity.name)}</h2>
+            <p>${fmtDate(activity.date)}</p>
+          </div>
+        </div>
+        <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
+      </div>
+      <div class="checkin-card">
+        <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
+          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
+          ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
+          <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
+        `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
+      </div>
+      <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
+      <div class="block tight" style="--field-count:${Math.max(1,fields.length)}"><div class="list">
+        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:`
+          <div class="signin-list-head">
+            <div>姓名</div>
+            ${fields.map(f=>`<div>${escapeHtml(f.label)}</div>`).join("")}
+            <div></div>
+          </div>
+          ${list.map((r,i)=>`<div class="list-row">
+            <div class="list-index">${i+1}</div>
+            <div class="list-main">
+              <div class="list-name">${escapeHtml(r.name)}</div>
+              <div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div>
+            </div>
+            ${fields.map(f=>`<div class="signin-field-value">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</div>`).join("")}
+            ${activity.open?`<button class="signin-delete-btn" data-delete-reg="${i}" title="刪除簽到" aria-label="刪除簽到"><i data-lucide="x"></i></button>`:`<i class="check" data-lucide="check"></i>`}
+          </div>`).join("")}
+        `}
+      </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
+    `;
+    el.querySelector(".child-back")?.addEventListener("click",(ev)=>{
+      ev.preventDefault();
+      openEventId=null;
+      render();
+    });
+    if(activity.open){
+      el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
+        ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
+        try{await deleteRegistrationRemote(reg.id);const fresh=await refreshActivityRegistrations(activity.id);if(fresh.some(x=>String(x.id)===String(reg.id)))throw new Error("資料庫仍存在這筆簽到紀錄");state.registrations[activity.id]=fresh;forgetLocalSigned(activity.id,reg.name);showToast("已刪除");}catch(e){console.error(e);showToast("刪除失敗："+(e?.message||"未知錯誤"));}renderRegister(el);refreshIcons();
+      });
+      const btn=document.getElementById("reg-btn"),nameInput=document.getElementById("reg-name");
+      if(btn&&nameInput){
+        const doRegister=async()=>{
+          const name=norm(nameInput.value);if(!name){showToast("請輸入姓名");return;}
+          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
+          if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
+          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
+          const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
+          btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
+          try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id,name:remote.name||name,fieldValues:remote.field_values||fieldValues,ts:remote.created_at||new Date().toISOString()};state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);state.registrations[activity.id].push(newReg);rememberLocalSigned(activity.id,name);showToast(`${name} 簽到成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
+        };btn.onclick=doRegister;nameInput.onkeydown=e=>{if(e.key==="Enter")doRegister();};
+      }
+    }
+    renderCountdown(activity);refreshIcons();return;
+  }
+  el.innerHTML=`
+    <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div style="flex:1;min-width:0"><h3>公告</h3><p>${escapeHtml(announcementText)}</p></div></div>
+    <div class="section-head activity-list-head">
+      <h2>近期活動</h2>
+      <div class="activity-list-status-legend">
+        <span><span class="dot open-dot"></span>開放中</span>
+        <span><span class="dot closed-dot"></span>已關閉</span>
+      </div>
+    </div>
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}">
+  <div class="activity-top">
+    <div class="activity-icon"><i data-lucide="calendar-days"></i></div>
+    <div class="activity-main">
+      <div class="activity-name">${escapeHtml(a.name)}</div>
+      <div class="activity-meta">${fmtDate(a.date)}</div>
+    </div>
+    <div class="activity-right">
+      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
+      ${activityStatusClock(a)}
+      <span class="arrow"><i data-lucide="chevron-right"></i></span>
+    </div>
+  </div>
+</div>`).join("")}</div>
+  `;
+  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
+  el.querySelector(".child-back")?.addEventListener("click",()=>{openEventId=null;render();});
+}
+
+// ---------- QUERY TAB ----------
+function getAttendanceTone(rate){
+  const n=Number(rate)||0;
+  if(n<=10) return {name:'red',color:'#d62828',label:'需要加油'};
+  if(n<60) return {name:'orange',color:'#f59e0b',label:'持續努力'};
+  if(n<90) return {name:'green',color:'#22a35a',label:'表現良好'};
+  return {name:'gold',color:'#d99a00',label:'表現優異'};
+}
+
+function renderQuery(el){
+  el.innerHTML=`
+      ${childBackButton("返回首頁")}
+
+    
+    <div class="section-head" style="margin-top:0">
+      <h2>搜尋資料</h2>
+      <span></span>
+    </div>
+
+    <div class="query-search-row">
+      <div class="query-search-label">
+        <span class="query-search-icon"><i data-lucide="chart-no-axes-combined"></i></span>
+        <strong>出席率</strong>
+      </div>
+
+      <div class="query-search-input">
+        <input type="text" id="query-name" class="reg-name-input" placeholder="輸入姓名" autocomplete="off">
+      </div>
+
+      <button type="button" class="query-search-button" id="query-btn" aria-label="搜尋" title="搜尋">
+        <i data-lucide="search"></i>
+      </button>
+    </div>
+
+    <div id="query-result"></div>
+  `;
+
+  const input=el.querySelector("#query-name");
+  const button=el.querySelector("#query-btn");
+  const box=el.querySelector("#query-result");
+  const back=el.querySelector("#query-back");
+  if(back)back.onclick=()=>{activeTab="register";openEventId=null;render();};
+  if(!input || !button || !box){
+    console.error("查詢頁面初始化失敗：找不到查詢元件");
+    return;
+  }
+
+  const doQuery=()=>{
+    const name=norm(input.value);
+    if(!name){
+      showToast("請輸入姓名");
+      input.focus();
+      return;
+    }
+
+    const acts=activitiesThisYear();
+    if(!acts.length){
+      box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
+      refreshIcons();
+      return;
+    }
+
+    const s=annualStats(name);
+    const rate=Math.max(0,Math.min(100,Number(s.rate)||0));
+    const attended=Math.max(0,Number(s.attended)||0);
+    const total=Math.max(0,Number(s.total)||0);
+    const tone=getAttendanceTone(rate);
+    const attendancePercent=total>0 ? Math.max(0,Math.min(100,(attended/total)*100)) : 0;
+
+    box.innerHTML=`
+      <div class="query-person">
+        <div class="query-person-icon"><i data-lucide="user-round"></i></div>
+        <div>
+          <div class="result-name">${escapeHtml(name)}</div>
+          <div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div>
+        </div>
+      </div>
+
+      <div class="query-metrics">
+        <div class="query-metric-card attendance-metric ${tone.name}">
+          <div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div>
+          <div class="donut" style="--value:${rate}%;--donut-color:${tone.color}">
+            <div class="donut-center">
+              <strong>${rate}<small>%</small></strong>
+              <span>出席率</span>
+            </div>
+          </div>
+          <div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div>
+        </div>
+
+        <div class="query-metric-card attendance-metric signins">
+          <div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div>
+          <div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)">
+            <div class="donut-center">
+              <strong>${attended}</strong>
+              <span>/ ${total} 場</span>
+            </div>
+          </div>
+          <div class="metric-badge signins-badge">已簽到 ${attended} 場</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h2>活動紀錄</h2>
+        <span>${total} 場</span>
+      </div>
+
+      <div class="block tight query-history">
+        <div class="list">
+          ${s.detail.slice().reverse().map(d=>`
+            <div class="list-row">
+              <div class="list-icon"><i data-lucide="calendar-days"></i></div>
+              <div class="list-main">
+                <div class="list-name">${escapeHtml(d.activity.name)}</div>
+                <div class="list-meta">${fmtDate(d.activity.date)}</div>
+              </div>
+              ${d.present
+                ? `<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`
+                : `<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`
+              }
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+
+    refreshIcons();
+  };
+
+  button.onclick=doQuery;
+  input.onkeydown=(e)=>{
+    if(e.key==="Enter"){
+      e.preventDefault();
+      doQuery();
+    }
+  };
+
+  refreshIcons();
+  el.querySelector(".child-back")?.addEventListener("click",()=>{activeTab="register";openEventId=null;render();});
+}
+
+// ---------- ADMIN TAB (password gated) ----------
+
+async function renderAdminAccounts(el){
+  window.__adminAccountsViewOpen=true;
+  if(!isSuperAdmin()){showToast("只有主管理員可以管理幹部");return;}
+  const session=getAdminSession();if(!session){showToast("管理者登入已失效");return;}
+  try{
+    const {data,error}=await supabaseClient.rpc("simple_list_admins",{p_admin_username:session.username,p_admin_code:session.access_code});
+    if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取幹部失敗");const rows=data.accounts||[];
+    el.innerHTML=`${childBackButton("返回管理後台")}<div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
+    refreshIcons();
+    const messageEl=document.getElementById("admin-action-message"),showAdminMessage=msg=>{if(messageEl)messageEl.textContent=msg||""};
+    const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";render();};
+    el.querySelector(".child-back")?.addEventListener("click",goBack);
+    el.onclick=async ev=>{const target=ev.target.closest("button");if(!target)return;const row=target.closest("[data-officer-username]");const username=row?.dataset.officerUsername;
+      if(target.id==="create-officer"){const u=norm(document.getElementById("new-officer-user")?.value),pw=document.getElementById("new-officer-pass")?.value||"";if(!u){showAdminMessage("請輸入帳號");return}if(!pw){showAdminMessage("請輸入密碼");return}target.disabled=true;try{const result=await supabaseClient.rpc("simple_create_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:u,p_code:pw});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"建立失敗");showToast("幹部建立成功");await renderAdminAccounts(el);}catch(e){target.disabled=false;showAdminMessage("新增失敗："+(e?.message||"未知錯誤"));}return;}
+      if(!row||!username)return;
+      if(target.classList.contains("officer-edit-btn")){const old=row.querySelector(".admin-edit-box");if(old){old.remove();return}const box=document.createElement("div");box.className="admin-edit-box";box.innerHTML=`<input class="officer-input edit-code-input" type="password" placeholder="新的密碼（至少 4 碼）"><div style="display:flex;gap:7px"><button class="primary save-code-btn" type="button">儲存</button><button class="secondary cancel-code-btn" type="button">取消</button></div>`;row.appendChild(box);box.querySelector(".cancel-code-btn").onclick=()=>box.remove();box.querySelector(".save-code-btn").onclick=async()=>{const newCode=box.querySelector(".edit-code-input")?.value||"";if(newCode.length<4){showAdminMessage("新的密碼至少 4 碼");return}try{const result=await supabaseClient.rpc("simple_change_officer_code",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:newCode});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"修改密碼失敗");showToast("密碼修改成功");await renderAdminAccounts(el);}catch(e){showAdminMessage("修改失敗："+(e?.message||"未知錯誤"));}};return;}
+      if(target.classList.contains("officer-toggle-btn")){const active=target.dataset.active==="true",action=active?"停用":"啟用";if(!confirm(`確定${action}幹部「${username}」？`))return;try{const result=await supabaseClient.rpc("simple_update_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:null,p_active:!active});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||`${action}失敗`);showToast(active?"已停用":"已啟用");await renderAdminAccounts(el);}catch(e){showAdminMessage(`${action}失敗：`+(e?.message||"未知錯誤"));}return;}
+      if(target.classList.contains("officer-delete-btn")){if(!confirm(`確定刪除幹部「${username}」？
+刪除後無法使用此帳號登入。`))return;try{const result=await supabaseClient.rpc("simple_delete_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"刪除失敗");showToast("幹部已刪除");await renderAdminAccounts(el);}catch(e){showAdminMessage("刪除失敗："+(e?.message||"未知錯誤"));}}
+    };
+  }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error")?.addEventListener("click",()=>{window.__adminAccountsViewOpen=false;render();});}
+}
+
+async function loadAnnouncementRemote(){
+  const {data,error}=await supabaseClient.rpc("get_announcement");
+  if(error) throw error;
+  announcementText=(typeof data==="string"?data:(data?.announcement||"")) || "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+  return announcementText;
+}
+async function saveAnnouncementRemote(text){
+  const {data,error}=await supabaseClient.rpc("save_announcement",{p_announcement:text});
+  if(error) throw error;
+  if(data===false || data?.ok===false) throw new Error(data?.message||"公告儲存失敗");
+  announcementText=text;
+  return true;
+}
+
+function renderAdmin(el){
+  if(window.__adminAccountsViewOpen)return;
+  if(!adminUnlocked)return renderAdminLock(el);
+  const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
+  let content="";
+  if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
+  <div class="admin-main-hero-brand">
+    <div class="admin-main-hero-icon">
+      <i data-lucide="${isSuperAdmin()?"crown":"shield-check"}"></i>
+    </div>
+    <div>
+      <div class="admin-main-hero-title">${escapeHtml(getAdminSession()?.username||"—")}</div>
+      <div class="admin-main-hero-role">${isSuperAdmin()?"最高管理者":"幹部"}</div>
+    </div>
+  </div>
+
+</div><div class="section-head" style="margin-top:0">
+  <h2>首頁公告</h2>
+  <span></span>
+</div>
+<div class="announcement-admin">
+  ${announcementEditing
+    ? `<div class="announcement-edit-area">
+         <textarea id="announcement-input">${escapeHtml(announcementText)}</textarea>
+         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+           <button class="primary" id="save-announcement-btn"><i data-lucide="save"></i>儲存</button>
+           <button class="secondary" id="cancel-announcement-btn"><i data-lucide="x"></i>取消</button>
+         </div>
+       </div>`
+    : `<div class="announcement-simple">
+         <div class="announcement-text">${escapeHtml(announcementText)}</div>
+         <button class="announcement-edit" id="edit-announcement-btn">
+           <i data-lucide="pencil"></i>編輯
+         </button>
+       </div>`}
+</div>
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${Object.values(state.registrations).reduce((n,l)=>n+(l||[]).length,0)}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${rows.length?Math.round(rows.reduce((s,r)=>s+r.rate,0)/rows.length):0}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+  <button class="admin-action admin-square" data-admin-page="create">
+    <span class="menu-icon"><i data-lucide="plus"></i></span>
+    <strong>建立活動</strong>
+  </button>
+  <button class="admin-action admin-square" data-admin-page="activities">
+    <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
+    <strong>活動管理</strong>
+  </button>
+  <button class="admin-action admin-square" data-admin-page="attendance">
+    <span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span>
+    <strong>出席率</strong>
+  </button>
+  ${isSuperAdmin()?`<button class="admin-action admin-square" id="admin-accounts-btn">
+    <span class="menu-icon"><i data-lucide="users"></i></span>
+    <strong>幹部管理</strong>
+  </button>`:""}
+</div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>簽到欄位</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發布時間</div><div class="choice-grid"><button type="button" class="choice publish-choice ${publishMode==='now'?'selected':''}" data-publish-mode="now">立即</button><button type="button" class="choice publish-choice ${publishMode==='1day'?'selected':''}" data-publish-mode="1day">一天後</button><button type="button" class="choice publish-choice ${publishMode==='1week'?'selected':''}" data-publish-mode="1week">一個禮拜後</button></div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="activities"){
+    const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
+    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
+  }
+  if(adminPage==="attendance")content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map((r,i)=>`<div class="rate-card"><div class="rate-head"><span>${i+1}. ${escapeHtml(r.name)}</span><span>${r.rate}%</span></div><div style="font-size:10px;color:#999;margin-top:4px">${r.attended} / ${r.total} 場</div><div class="rate-bar"><div class="rate-fill" style="width:${r.rate}%"></div></div></div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+  const superAdmin=isSuperAdmin();
+  const session=getAdminSession();
+  const roleText=superAdmin?"最高管理者":"幹部";
+  const roleClass=superAdmin?"super-admin":"officer-admin";
+  const accountText=escapeHtml(session?.username||"—");
+  if(adminPage!=="home") content=childBackButton("返回管理後台")+content;
+  el.innerHTML=`${content}`;
+  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
+  const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
+  const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
+  const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
+  el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;renderAdmin(el);refreshIcons();});
+  const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>renderAdminAccounts(el);
+  const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
+  const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
+  const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
+  if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
+  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
+  refreshIcons();
+}
+
+function activityAdminRow(a,hidden=false){
+  const list=regsOf(a.id);
+  const expanded=window.adminAttendanceExpandedId===a.id;
+  const future=a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
+  let detail="";
+  if(expanded){
+    const rows=list.map((r,i)=>{
+      const fieldCells=(a.fields||[]).map(f=>`<td>${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</td>`).join("");
+      return `<tr><td>${i+1}</td><td class="name">${escapeHtml(r.name)}</td>${fieldCells}<td>${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</td></tr>`;
+    }).join("");
+    const headers=(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("");
+    detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
+  }
+  const statusClass=future?"future":(a.open?"open":"closed");
+  const statusText=future?"未發布":(a.open?"開放中":"已停止");
+  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}"><i data-lucide="power"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
+}
+
+function rememberCreateDraft(){
+  const n=document.getElementById("new-name");
+  const d=document.getElementById("new-date");
+  const m=document.getElementById("new-max-participants");
+  if(n) draftName=n.value;
+  if(d) draftDate=d.value;
+  if(m) draftMaxParticipants=m.value;
+  document.querySelectorAll(".draft-field-input").forEach(inp=>{
+    const i=Number(inp.dataset.idx);
+    if(Number.isFinite(i)) draftFields[i]=inp.value;
+  });
+}
+function setupCreateActivityPage(el){
+  function syncDraftFieldsFromDom(){
+    draftName=document.getElementById("new-name")?.value||"";
+    draftDate=document.getElementById("new-date")?.value||"";
+    const max=document.getElementById("new-max-participants");
+    draftMaxParticipants=max?max.value:"";
+    document.querySelectorAll(".draft-field-input").forEach(inp=>draftFields[Number(inp.dataset.idx)]=inp.value);
+  }
+
+  ["new-name","new-date","new-max-participants"].forEach(id=>{
+    const input=document.getElementById(id);
+    if(input){
+      input.addEventListener("input",rememberCreateDraft);
+      input.addEventListener("change",rememberCreateDraft);
+    }
+  });
+  el.querySelectorAll(".draft-field-input").forEach(input=>{
+    input.addEventListener("input",rememberCreateDraft);
+    input.addEventListener("change",rememberCreateDraft);
+  });
+
+  const addFieldBtn=document.getElementById("add-field-btn"); if(addFieldBtn) addFieldBtn.onclick=()=>{
+    syncDraftFieldsFromDom(); draftFields.push(""); renderAdmin(el);
+  };
+  el.querySelectorAll("[data-remove-field]").forEach(btn=>{
+    btn.onclick=()=>{syncDraftFieldsFromDom();draftFields.splice(Number(btn.dataset.removeField),1);renderAdmin(el);};
+  });
+  el.querySelectorAll("[data-timer]").forEach(btn=>{
+    btn.onclick=(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      draftCloseMinutes=Number(btn.dataset.timer || 0);
+      el.querySelectorAll("[data-timer]").forEach(b=>{
+        b.classList.toggle("selected", Number(b.dataset.timer||0)===draftCloseMinutes);
+      });
+    };
+  });
+  el.querySelectorAll(".publish-choice").forEach(btn=>{
+    btn.onclick=(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      publishMode=btn.dataset.publishMode || "now";
+      el.querySelectorAll(".publish-choice").forEach(b=>b.classList.toggle("selected",b===btn));
+      rememberCreateDraft();
+    };
+  });
+
+  const createBtn=document.getElementById("create-btn"); if(createBtn) createBtn.onclick=async()=>{
+    const createBtn=document.getElementById("create-btn"), errBox=document.getElementById("create-activity-error");
+    syncDraftFieldsFromDom();
+    const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
+    const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
+    const publishAt =
+      publishMode==="1day" ? new Date(Date.now()+24*60*60*1000).toISOString() :
+      publishMode==="1week" ? new Date(Date.now()+7*24*60*60*1000).toISOString() :
+      null;
+    if(!name){showToast("請輸入活動名稱");return;}
+    if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
+    const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
+    const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
+    const session=getAdminSession();
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt};
+    createBtn.disabled=true;
+    try{
+      const saved=await createActivityRemote(activity);
+      state.activities.push({
+        ...activity,
+        ...(saved || {}),
+        id:saved?.id||activity.id,
+        publishAt:saved?.publish_at ?? saved?.publishAt ?? activity.publishAt ?? null
+      });
+      state.registrations[activity.id]=[];
+      pendingPublishActivity=null;
+      showToast(publishAt ? "活動已建立，尚未發布" : "活動已建立並發布");
+      adminPage="activities";
+      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants=""; draftCloseMinutes=0; pendingPublishActivity=null; publishMode="now";
+  renderAdmin(el);
+    }catch(e){
+      const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
+      if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
+      showToast("建立活動失敗","error");createBtn.disabled=false;
+    }
+  };
+}
+
+
+function showPublishChooser(el){
+  pendingPublishActivity=null;
+  adminPage="activities";
+  renderAdmin(el);
+}
+
+function safeQuerySelectorAll(root, selector){
+  if(!root || !selector || !String(selector).trim()) return [];
+  try{return root.querySelectorAll(selector);}catch(e){
+    console.warn("忽略無效 selector:",selector,e);
+    return [];
+  }
+}
+
+function setupActivityManagementPage(el){
+  // 活動管理：查看／隱藏簽到名單
+  el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
+    btn.onclick=async(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      const id=btn.getAttribute("data-admin-attendance");
+      window.adminAttendanceExpandedId =
+        window.adminAttendanceExpandedId===id ? null : id;
+
+      // 若目前 state 沒有該活動的簽到資料，重新載入一次。
+      const a=state.activities.find(x=>String(x.id)===String(id));
+      if(a && (!state.registrations[a.id] || state.registrations[a.id].length===0)){
+        try{
+          await loadData();
+        }catch(e){
+          console.error("讀取簽到名單失敗",e);
+        }
+      }
+      renderAdmin(el);
+    };
+  });
+
+}
+
+function renderAdminLock(el){
+  el.innerHTML=`
+    <div class="admin-login-page">
+      <div class="admin-login-card">
+        <div class="admin-login-heading">
+          <div class="admin-login-heading-icon">
+            <i data-lucide="shield"></i>
+          </div>
+          <h1>管理者登入</h1>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="admin-username">帳號</label>
+          <input type="text" id="admin-username" placeholder="請輸入帳號" autocomplete="username">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="admin-password">密碼</label>
+          <div class="admin-password-wrap">
+            <input type="password" id="admin-password" placeholder="請輸入密碼" autocomplete="current-password">
+            <button type="button" class="admin-password-toggle" id="admin-password-toggle" aria-label="顯示密碼" title="顯示密碼">
+              <i data-lucide="eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button class="primary admin-login-button" id="admin-login-btn" type="button">
+          <i data-lucide="log-in"></i>
+          登入
+        </button>
+      </div>
+    </div>
+  `;
+
+  const b=document.getElementById("admin-login-btn");
+  const u=document.getElementById("admin-username");
+  const p=document.getElementById("admin-password");
+  const toggle=document.getElementById("admin-password-toggle");
+
+  const login=async()=>{
+    if(!norm(u?.value||"")){
+      showToast("請輸入帳號");
+      u?.focus();
+      return;
+    }
+    if(!p?.value){
+      showToast("請輸入密碼");
+      p?.focus();
+      return;
+    }
+    if(b)b.disabled=true;
+    try{
+      await adminLogin(norm(u.value),p.value);
+      showToast("登入成功");
+      render();
+    }catch(e){
+      showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));
+      if(b)b.disabled=false;
+    }
+  };
+
+  b?.addEventListener("click",login);
+  [u,p].filter(Boolean).forEach(x=>x.addEventListener("keydown",e=>{
+    if(e.key==="Enter")login();
+  }));
+
+  toggle?.addEventListener("click",()=>{
+    const visible=p.type==="text";
+    p.type=visible?"password":"text";
+    toggle.innerHTML=`<i data-lucide="${visible?"eye":"eye-off"}"></i>`;
+    toggle.setAttribute("aria-label",visible?"顯示密碼":"隱藏密碼");
+    toggle.setAttribute("title",visible?"顯示密碼":"隱藏密碼");
+    refreshIcons();
+  });
+
+  refreshIcons();
+}
+
+async function init(){
+  render();
+  await checkAdminSession();
+  await loadData();
+  try{ await loadAnnouncementRemote(); }
+  catch(e){ console.error("公告載入失敗",e); }
+  render();
+  setInterval(async ()=>{
+    if(userIsTyping || activeTab === 'query') return;
+
+    // 自動關閉計時器：到時間後將活動設為停止簽到
+    const now = Date.now();
+    const expired = state.activities.filter(a => a.open && a.closeAt && new Date(a.closeAt).getTime() <= now);
+
+    for(const a of expired){
+      try{
+        a.open = false;
+        await updateActivityRemote(a);
+      }catch(e){
+        console.error("活動自動關閉失敗", e);
+        a.open = true;
+      }
+    }
+
+    if(activeTab !== "admin"){
+      await loadData();
+      if(!userIsTyping) renderTab();
+    }else if(!userIsTyping){
+      // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
+      await loadData();
+    }
+  },6000);
+  refreshActivityListClocks();
+setInterval(refreshActivityListClocks,1000);
+}
+
+init();
+
+window.addEventListener("error",function(ev){
+  console.error("前端錯誤：",ev.error||ev.message);
+  const app=document.getElementById("app");
+  if(app && !app.innerHTML.trim()){
+    app.innerHTML='<div class="card"><h2>頁面載入錯誤</h2><p class="hint">請重新整理頁面；若仍空白，請開啟瀏覽器主控台查看錯誤。</p><pre style="white-space:pre-wrap;">'+escapeHtml(ev.message||"JavaScript error")+'</pre></div>';
+  }
+});
+
+
+window.state = state;
+window.showToast = showToast;
+window.updateActivityRemote = updateActivityRemote;
+window.deleteActivityRemote = deleteActivityRemote;
+window.loadData = loadData;
+window.renderAdmin = renderAdmin;
+
+})().catch(function(e){
+  console.error("JavaScript 錯誤：",e);
+  try{
+    const box=document.getElementById("debug-error");
+    if(box){box.textContent="JavaScript 錯誤："+(e&&e.message?e.message:e);}
+  }catch(_){}
+});
+</script>
+
+<div id="runtime-debug" style="display:none;position:fixed;inset:12px;z-index:9999;background:#fff;border:2px solid #9C2B1D;border-radius:14px;padding:16px;overflow:auto;color:#3B2416;font:13px/1.5 monospace;box-shadow:0 12px 40px rgba(0,0,0,.2);"><b>程式除錯訊息</b><pre id="runtime-debug-text" style="white-space:pre-wrap;word-break:break-word;"></pre></div>
+<script>
+function showRuntimeError(title,reason){
+ var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");
+ if(b&&x){b.style.display="block";x.textContent=title+"："+String(reason&&reason.message||reason||"未知錯誤")+(reason&&reason.stack?"\n\n"+reason.stack:"");}
+}
+window.addEventListener("error",function(e){showRuntimeError("JavaScript 錯誤",e.error||e.message);});
+window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promise 錯誤",e.reason);});
+</script>
+
+<script>
+/* ===== 活動管理最終除錯層 ===== */
+(function(){
+  async function activityButtonHandler(ev){
+    const btn=ev.target && ev.target.closest &&
+      ev.target.closest("[data-activity-close],[data-activity-hide],[data-activity-delete]");
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    const id=btn.getAttribute("data-activity-close") ||
+             btn.getAttribute("data-activity-hide") ||
+             btn.getAttribute("data-activity-delete");
+
+    console.log("[活動管理] 按鈕被點擊", {
+      id:id,
+      close:btn.getAttribute("data-activity-close"),
+      hide:btn.getAttribute("data-activity-hide"),
+      delete:btn.getAttribute("data-activity-delete")
+    });
+
+    let a=(window.state && Array.isArray(state.activities))
+      ? state.activities.find(x=>String(x.id)===String(id))
+      : null;
+
+    // state 可能因頁面重繪尚未同步；直接以按鈕上的 UUID 查資料庫。
+    if(!a){
+      try{
+        const {data:remoteActivity,error:remoteError}=await supabaseClient
+          .from("activities")
+          .select("*")
+          .eq("id",id)
+          .maybeSingle();
+
+        if(remoteError) throw remoteError;
+
+        if(remoteActivity){
+          a={
+            id:remoteActivity.id,
+            name:remoteActivity.name,
+            date:remoteActivity.date,
+            fields:Array.isArray(remoteActivity.fields)?remoteActivity.fields:[],
+            open:!!remoteActivity.open,
+            maxParticipants:remoteActivity.max_participants==null?null:Number(remoteActivity.max_participants),
+            createdBy:remoteActivity.created_by||"",
+            closeAt:remoteActivity.close_at||null,
+            autoCloseMinutes:remoteActivity.auto_close_minutes==null?0:Number(remoteActivity.auto_close_minutes),
+            hidden:!!remoteActivity.hidden,
+            publishAt:remoteActivity.publish_at||null
+          };
+
+          if(window.state){
+            window.state.activities=Array.isArray(window.state.activities)?window.state.activities:[];
+            const idx=window.state.activities.findIndex(x=>String(x.id)===String(id));
+            if(idx>=0) window.state.activities[idx]=a;
+            else window.state.activities.push(a);
+          }
+        }
+      }catch(dbErr){
+        console.error("[活動管理] 直接查詢活動失敗",dbErr);
+        window.showToast("讀取活動失敗："+(dbErr.message||dbErr),"error");
+        return;
+      }
+    }
+
+    if(!a){
+      window.showToast("資料庫找不到此活動："+id,"error");
+      console.error("[活動管理] 資料庫也找不到活動",id);
+      return;
+    }
+
+    if(btn.hasAttribute("data-activity-close")){
+      activityActionClose(a,btn);
+    }else if(btn.hasAttribute("data-activity-hide")){
+      activityActionHide(a,btn);
+    }else{
+      activityActionDelete(a,btn);
+    }
+  }
+
+  async function activityActionClose(a,btn){
+    const next=!a.open;
+    if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
+    btn.disabled=true;
+    const old=a.open;
+
+    // 第一階段：只執行已確認正常的開／關 RPC。
+    a.open=next;
+    try{
+      await window.updateActivityRemote(a);
+    }catch(e){
+      a.open=old;
+      console.error("[活動管理] 開啟/關閉 RPC 失敗",e);
+      window.showToast("活動更新失敗："+(e.message||e),"error");
+      btn.disabled=false;
+      return;
+    }
+
+    // 第二階段：只有開啟成功後，才建立本機 30 秒倒數。
+    // 倒數欄位不送進開啟 RPC，避免影響已正常的開啟功能。
+    if(next){
+      a.closeAt=new Date(Date.now()+30000).toISOString();
+      a.autoCloseMinutes=0.5;
+      v93CountdownDeadlines.set(String(a.id),new Date(a.closeAt).getTime());
+      window.showToast("活動已開啟，30 秒後關閉簽到");
+    }else{
+      a.closeAt=null;
+      a.autoCloseMinutes=0;
+      v93CountdownDeadlines.delete(String(a.id));
+      window.showToast("活動已關閉");
+    }
+
+    // 資料重新載入失敗不能再被誤報成「活動更新失敗」。
+    try{
+      await window.loadData();
+    }catch(e){
+      console.error("[活動管理] 重新載入資料失敗",e);
+    }
+
+    // loadData 後把本次成功開啟的倒數重新套回本機狀態。
+    if(next && window.state && Array.isArray(window.state.activities)){
+      const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+      const deadline=v93CountdownDeadlines.get(String(a.id));
+      if(local && deadline){
+        local.open=true;
+        local.closeAt=new Date(deadline).toISOString();
+        local.autoCloseMinutes=0.5;
+        a.closeAt=local.closeAt;
+      }
+    }
+
+    if(typeof renderAdmin==="function"){
+      const tab=document.getElementById("tab-content");
+      if(tab) window.renderAdmin(tab);
+    }
+    btn.disabled=false;
+    if(next && typeof window.refreshActivityListClocks==="function"){
+      window.refreshActivityListClocks();
+    }
+    if(typeof refreshIcons==="function") refreshIcons();
+  }
+
+  async function activityActionHide(a,btn){
+    const next=!a.hidden;
+    if(!confirm(next?"確定隱藏「"+a.name+"」？":"確定取消隱藏「"+a.name+"」？")) return;
+    btn.disabled=true;
+    const old=!!a.hidden;
+    a.hidden=next;
+    try{
+      await window.updateActivityRemote(a);
+      window.showToast(next?"活動已隱藏":"已取消隱藏");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
+    }catch(e){
+      a.hidden=old;
+      console.error("[活動管理] 隱藏失敗",e);
+      window.showToast("隱藏更新失敗："+(e.message||e),"error");
+      btn.disabled=false;
+    }
+  }
+
+  async function activityActionDelete(a,btn){
+    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的簽到資料也會刪除，無法復原。")) return;
+    btn.disabled=true;
+    try{
+      await window.deleteActivityRemote(a.id);
+      window.state.activities=window.state.activities.filter(x=>String(x.id)!==String(a.id));
+      delete window.state.registrations[a.id];
+      window.showToast("活動已刪除");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
+    }catch(e){
+      console.error("[活動管理] 刪除失敗",e);
+      window.showToast("刪除失敗："+(e.message||e),"error");
+      btn.disabled=false;
+    }
+  }
+
+  document.addEventListener("click",async(ev)=>{
+    const btn=ev.target.closest("[data-admin-edit-registration]");
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const activityId=btn.getAttribute("data-activity-id");
+    const registrationId=btn.getAttribute("data-registration-id");
+    const a=state.activities.find(x=>String(x.id)===String(activityId));
+    if(!a || !a.open){
+      showToast("活動已關閉，無法修改名單");
+      return;
+    }
+    const r=(state.registrations[a.id]||[]).find(x=>String(x.id)===String(registrationId));
+    if(!r) return;
+    const name=prompt("修改姓名",r.name||"");
+    if(name===null) return;
+    const clean=norm(name);
+    if(!clean){ showToast("姓名不可空白"); return; }
+    try{
+      await renameRegistrationRemote(registrationId,clean);
+      await loadData();
+      renderAdmin(document.getElementById("tab-content"));
+      showToast("已修改簽到資料");
+    }catch(e){
+      console.error("修改簽到失敗",e);
+      showToast("修改失敗："+(e?.message||e),"error");
+    }
+  },true);
+
+  // capture=true：在任何其他 click handler 前攔截活動按鈕。
+  document.addEventListener("click",activityButtonHandler,true);
+})();
+</script>
+
+  <footer class="system-footer" aria-label="系統資訊">
+    <div class="version">系統版本：v1.8</div>
+    <div class="maker">製作者：小樂</div>
+  </footer>
+
+<script>
+(function(){
+  document.addEventListener("input",function(ev){
+    const el=ev.target;
+    if(!el || !el.classList || !el.classList.contains("register-name-input")) return;
+    const old=el.value;
+    const cleaned=old.replace(/[0-9０-９]/g,"");
+    if(old!==cleaned){
+      const p=el.selectionStart;
+      el.value=cleaned;
+      if(typeof p==="number"){
+        try{el.setSelectionRange(Math.max(0,p-1),Math.max(0,p-1));}catch(e){}
+      }
+    }
+  },true);
+})();
+</script>
+
+</body>
+
+
+
+
+
+</html>line:#e7e7e3;
   --accent:#c9141b; --accent-soft:#fff0f0; --success:#22a35a; --warning:#e59a13; --danger:#b42318;
   --radius:22px; --small-radius:14px; --btn-h:48px;
 }
