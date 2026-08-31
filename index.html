@@ -2889,7 +2889,7 @@ function activityStatusClock(activity){
 
 
 let activityExpiryTimer=null;
-const v93CountdownDeadlines=new Map();
+window.v93CountdownDeadlines=window.v93CountdownDeadlines||new Map();
 
 function startActivityExpiryWatcher(){
   if(activityExpiryTimer)clearInterval(activityExpiryTimer);
@@ -2955,7 +2955,7 @@ function refreshActivityListClocks(){
 
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
-    const mapped=v93CountdownDeadlines.get(String(id));
+    const mapped=window.v93CountdownDeadlines.get(String(id));
     const end=mapped||Number(box.dataset.countdownEnd||0);
     const remaining=end-now;
 
@@ -2965,7 +2965,7 @@ function refreshActivityListClocks(){
         a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
-        v93CountdownDeadlines.delete(String(a.id));
+        window.v93CountdownDeadlines.delete(String(a.id));
         box.outerHTML=activityStatusClock(a);
         if(typeof refreshIcons==="function")refreshIcons();
       }
@@ -2981,7 +2981,7 @@ function refreshActivityListClocks(){
   if(eventBox && openEventId){
     const activity=state.activities.find(x=>String(x.id)===String(openEventId));
     if(activity && activity.open){
-      const mapped=v93CountdownDeadlines.get(String(activity.id));
+      const mapped=window.v93CountdownDeadlines.get(String(activity.id));
       const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
       const remaining=end-now;
       if(end && remaining>0){
@@ -3788,12 +3788,12 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(next){
       a.closeAt=new Date(Date.now()+30000).toISOString();
       a.autoCloseMinutes=0.5;
-      v93CountdownDeadlines.set(String(a.id),new Date(a.closeAt).getTime());
+      window.v93CountdownDeadlines.set(String(a.id),new Date(a.closeAt).getTime());
       window.showToast("活動已開啟，30 秒後關閉簽到");
     }else{
       a.closeAt=null;
       a.autoCloseMinutes=0;
-      v93CountdownDeadlines.delete(String(a.id));
+      window.v93CountdownDeadlines.delete(String(a.id));
       window.showToast("活動已關閉");
     }
 
@@ -3807,7 +3807,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     // loadData 後把本次成功開啟的倒數重新套回本機狀態。
     if(next && window.state && Array.isArray(window.state.activities)){
       const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-      const deadline=v93CountdownDeadlines.get(String(a.id));
+      const deadline=window.v93CountdownDeadlines.get(String(a.id));
       if(local && deadline){
         local.open=true;
         local.closeAt=new Date(deadline).toISOString();
