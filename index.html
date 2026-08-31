@@ -2940,6 +2940,8 @@ function refreshActivityListClocks(){
   });
 }
 
+window.refreshActivityListClocks=refreshActivityListClocks;
+
 function displayFieldLabel(label,index){
   const name=norm(label)||"欄位";
   return `${escapeHtml(name)} <span class="field-slot-no">${String(index+1).padStart(2,"0")}</span>`;
@@ -3756,7 +3758,9 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       if(tab) window.renderAdmin(tab);
     }
     btn.disabled=false;
-    refreshActivityListClocks();
+    if(typeof window.refreshActivityListClocks==="function"){
+      window.refreshActivityListClocks();
+    }
     if(typeof refreshIcons==="function") refreshIcons();
   }
 
