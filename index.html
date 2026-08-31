@@ -3069,7 +3069,8 @@ function refreshActivityListClocks(){
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
     const mapped=window.v93CountdownDeadlines?.get(String(id));
-    const end=mapped||Number(box.dataset.countdownEnd||0);
+    const dbEnd=Number(box.dataset.countdownEnd||0);
+    const end=dbEnd||mapped;
     const remaining=end-now;
     if(remaining<=0)return;
 
@@ -3734,7 +3735,7 @@ async function init(){
       active.tagName==="TEXTAREA" ||
       active.tagName==="SELECT"
     );
-    if(fieldFocused || userIsTyping || activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
+    if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
 
     // 自動關閉計時器：到時間後將活動設為停止簽到
     const now = Date.now();
