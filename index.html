@@ -3881,73 +3881,71 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   async function activityActionClose(a,btn){
     const next=!a.open;
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
-    btn.disabled=true;
-    const old=a.open;
 
-    // 先執行原本正常的開／關 RPC。
-    a.open=next;
+    btn.disabled=true;
+    const oldOpen=a.open;
+    const oldCloseAt=a.closeAt;
+    const oldAuto=a.autoCloseMinutes;
+
     try{
-      await window.updateActivityRemote(a);
+      if(next){
+        // 先用原本已正常的 RPC 開啟活動。
+        a.open=true;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
+        // 開啟成功後才開始 30 秒。
+        // closeAt 是資料庫共享的絕對截止時間，所有裝置讀同一個時間。
+        const deadline=Date.now()+30000;
+        const reopenCloseAt=new Date(deadline).toISOString();
+        a.closeAt=reopenCloseAt;
+        a.autoCloseMinutes=0.5;
+
+        await window.updateActivityRemote(a);
+
+        // 本機立即顯示；手機之後從 DB 的 close_at 取得相同 deadline。
+        window.v93CountdownDeadlines.set(String(a.id),deadline);
+
+        await window.loadData();
+        const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+        if(local){
+          local.open=true;
+          local.closeAt=reopenCloseAt;
+          local.autoCloseMinutes=0.5;
+        }
+
+        window.showToast("活動已開啟，30 秒後關閉簽到");
+      }else{
+        a.open=false;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
+        window.v93CountdownDeadlines.delete(String(a.id));
+        window.showToast("活動已關閉");
+        await window.loadData();
+      }
+
+      if(typeof renderAdmin==="function"){
+        const tab=document.getElementById("tab-content");
+        if(tab) window.renderAdmin(tab);
+      }
+      btn.disabled=false;
+      if(typeof window.refreshActivityListClocks==="function"){
+        window.refreshActivityListClocks();
+      }
+      if(typeof refreshIcons==="function") refreshIcons();
+
     }catch(e){
-      a.open=old;
-      console.error("[活動管理] 開啟/關閉 RPC 失敗",e);
+      console.error("[活動管理] 開啟／關閉失敗",e);
+      a.open=oldOpen;
+      a.closeAt=oldCloseAt;
+      a.autoCloseMinutes=oldAuto;
       window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
-      return;
     }
-
-    if(next){
-      // RPC 開啟成功後才開始 30 秒。
-      // closeAt 是絕對時間，直接寫入活動資料庫；
-      // 手機與電腦因此會使用同一個 deadline。
-      const deadline=Date.now()+30000;
-      a.closeAt=new Date(deadline).toISOString();
-      a.autoCloseMinutes=0.5;
-      window.v93CountdownDeadlines.set(String(a.id),deadline);
-
-      try{
-        await window.updateActivityRemote(a);
-      }catch(e){
-        console.error("[活動管理] 儲存 30 秒截止時間失敗",e);
-        // 開啟已成功；倒數仍使用本機 deadline，不回滾開啟狀態。
-      }
-      window.showToast("活動已開啟，30 秒後關閉簽到");
-    }else{
-      a.closeAt=null;
-      a.autoCloseMinutes=0;
-      window.v93CountdownDeadlines.delete(String(a.id));
-      window.showToast("活動已關閉");
-    }
-
-    // 資料重新載入失敗不能再被誤報成「活動更新失敗」。
-    try{
-      await window.loadData();
-    }catch(e){
-      console.error("[活動管理] 重新載入資料失敗",e);
-    }
-
-    // loadData 後保留同一個絕對截止時間。
-    if(next && window.state && Array.isArray(window.state.activities)){
-      const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-      const deadline=window.v93CountdownDeadlines.get(String(a.id));
-      if(local && deadline){
-        local.open=true;
-        local.closeAt=new Date(deadline).toISOString();
-        local.autoCloseMinutes=0.5;
-      }
-    }
-
-    if(typeof renderAdmin==="function"){
-      const tab=document.getElementById("tab-content");
-      if(tab) window.renderAdmin(tab);
-    }
-    btn.disabled=false;
-    if(next && typeof window.refreshActivityListClocks==="function"){
-      window.refreshActivityListClocks();
-    }
-    if(typeof refreshIcons==="function") refreshIcons();
   }
-
   async function activityActionHide(a,btn){
     const next=!a.hidden;
     if(!confirm(next?"確定隱藏「"+a.name+"」？":"確定取消隱藏「"+a.name+"」？")) return;
