@@ -2360,7 +2360,12 @@ document.addEventListener("focusin", (e)=>{
 });
 document.addEventListener("focusout", (e)=>{
   const tag = e.target.tagName;
-  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = false; }
+  if(tag === "INPUT" || tag === "TEXTAREA"){
+    requestAnimationFrame(()=>{
+      const active=document.activeElement;
+      userIsTyping=!!active && (active.tagName==="INPUT" || active.tagName==="TEXTAREA");
+    });
+  }
 });
 
 function safeAdd(el,event,handler){
@@ -2915,26 +2920,29 @@ function renderCountdown(activity){
 
   const timer=()=>{
     const now=Date.now();
-    const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+
+    // 建立活動原本就是從 activity.closeAt 倒數；
+    // 二次開啟只在這裡多一個本機 30 秒 deadline，不改原本 CSS。
+    const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
+    const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
+    const end=localDeadline||dbDeadline;
 
     if(end && end>now){
       box.classList.add("has-countdown");
       box.classList.remove("no-countdown");
 
-      // 不重建 DOM、不重新呼叫 Lucide；只更新數字。
       let span=box.querySelector(".countdown-text");
       if(!span){
         box.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
         refreshIcons();
-        span=box.querySelector(".countdown-text");
       }else{
+        // 舊版寫法的核心：每秒只改數字。
         span.textContent=formatCountdown(end-now);
       }
     }else{
       box.classList.remove("has-countdown");
       box.classList.add("no-countdown");
 
-      // 只有狀態第一次切換時才建立 timer-off icon。
       if(!box.querySelector("[data-lucide='timer-off']")){
         box.innerHTML=`<i data-lucide="timer-off"></i>`;
         refreshIcons();
@@ -2968,8 +2976,13 @@ async function refreshActivityRegistrations(activityId){
 
 
 function activityStatusClock(activity){
-  const end=activity.closeAt?new Date(activity.closeAt).getTime():null;
+  // 正常建立活動：使用 activity.closeAt。
+  // 二次開啟：只額外從本機 deadline 取得 30 秒，不改既有 CSS。
+  const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
+  const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
+  const end=localDeadline||dbDeadline||null;
   const remaining=end?end-Date.now():0;
+
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
   }
@@ -2986,7 +2999,9 @@ function startActivityExpiryWatcher(){
     if(!Array.isArray(state.activities))return;
     const now=Date.now();
     const expired=state.activities.filter(a=>{
-      const end=a.closeAt?new Date(a.closeAt).getTime():0;
+      const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
+      const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
+      const end=localEnd||dbEnd;
       return a.open && end && end<=now;
     });
     if(!expired.length)return;
@@ -2995,9 +3010,11 @@ function startActivityExpiryWatcher(){
       // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
       const oldCloseAt=a.closeAt;
       const oldAuto=a.autoCloseMinutes;
+      const localDeadline=window.v93CountdownDeadlines?.get(String(a.id))||0;
       a.open=false;
       a.closeAt=null;
       a.autoCloseMinutes=0;
+      window.v93CountdownDeadlines?.delete(String(a.id));
 
       try{
         await updateActivityRemote({
@@ -3019,12 +3036,14 @@ function startActivityExpiryWatcher(){
         a.open=true;
         a.closeAt=oldCloseAt;
         a.autoCloseMinutes=oldAuto;
+        if(localDeadline) window.v93CountdownDeadlines?.set(String(a.id),localDeadline);
         console.error("[活動管理] 30 秒自動關閉失敗",e);
       }
     }
 
-    if(typeof render==="function")render();
-    if(typeof window.refreshActivityListClocks==="function"){
+    // 倒數每秒只更新既有數字，不重建整個頁面。
+    // 只有真的到 0 秒並成功關閉活動後，才需要 render 一次。
+    if(expired.length===0 && typeof window.refreshActivityListClocks==="function"){
       window.refreshActivityListClocks();
     }
   },1000);
@@ -3034,9 +3053,6 @@ startActivityExpiryWatcher();
 
 function saveState(){
   if(!window.state || !Array.isArray(window.state.activities)) return;
-  window.state.activities.forEach(a=>{
-    if(a && !a.open){ a.closeAt=null; a.autoCloseMinutes=0; }
-  });
 }
 
 function refreshActivityListClocks(){
@@ -3492,13 +3508,23 @@ function setupCreateActivityPage(el){
   ["new-name","new-date","new-max-participants"].forEach(id=>{
     const input=document.getElementById(id);
     if(input){
+      input.addEventListener("focus",()=>{ userIsTyping=true; });
       input.addEventListener("input",rememberCreateDraft);
       input.addEventListener("change",rememberCreateDraft);
+      input.addEventListener("blur",()=>{ 
+        rememberCreateDraft();
+        userIsTyping=false;
+      });
     }
   });
   el.querySelectorAll(".draft-field-input").forEach(input=>{
+    input.addEventListener("focus",()=>{ userIsTyping=true; });
     input.addEventListener("input",rememberCreateDraft);
     input.addEventListener("change",rememberCreateDraft);
+    input.addEventListener("blur",()=>{
+      rememberCreateDraft();
+      userIsTyping=false;
+    });
   });
 
   const addFieldBtn=document.getElementById("add-field-btn"); if(addFieldBtn) addFieldBtn.onclick=()=>{
@@ -3691,11 +3717,27 @@ async function init(){
   catch(e){ console.error("公告載入失敗",e); }
   render();
   setInterval(async ()=>{
-    if(userIsTyping || activeTab === 'query') return;
+    // 任何輸入框正在使用時，禁止背景資料刷新／DOM 重建。
+    // 30 秒倒數本身不需要 render，只有真的到 0 秒才重建一次。
+    const active=document.activeElement;
+    const fieldFocused=!!active && (
+      active.tagName==="INPUT" ||
+      active.tagName==="TEXTAREA" ||
+      active.tagName==="SELECT"
+    );
+    if(fieldFocused || userIsTyping || activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
 
     // 自動關閉計時器：到時間後將活動設為停止簽到
     const now = Date.now();
-    const expired = state.activities.filter(a => a.open && a.closeAt && new Date(a.closeAt).getTime() <= now);
+    // 原本建立活動的 close_at 自動關閉保留。
+    // 「重新開啟 30 秒」由 startActivityExpiryWatcher 單獨處理，
+    // 避免 loadData 每 6 秒把本機 30 秒 deadline 洗掉。
+    const expired = state.activities.filter(a =>
+      a.open &&
+      a.closeAt &&
+      !window.v93CountdownDeadlines?.has(String(a.id)) &&
+      new Date(a.closeAt).getTime() <= now
+    );
 
     for(const a of expired){
       try{
@@ -3875,17 +3917,15 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       console.error("[活動管理] 重新載入資料失敗",e);
     }
 
-    // loadData 後把本次成功開啟的倒數重新套回本機狀態。
+    // loadData 會重新讀 DB；30 秒 deadline 不寫回 DB，
+    // 所以只需要把活動維持為 open，倒數本身一律從 Map 取得。
     if(next && window.state && Array.isArray(window.state.activities)){
       const local=window.state.activities.find(x=>String(x.id)===String(a.id));
       const deadline=window.v93CountdownDeadlines.get(String(a.id));
       if(local && deadline){
         local.open=true;
-        local.closeAt=new Date(deadline).toISOString();
-        local.autoCloseMinutes=0.5;
-        local.closeAt=new Date(deadline).toISOString();
-        local.autoCloseMinutes=0.5;
-        a.closeAt=local.closeAt;
+        local.closeAt=null;
+        local.autoCloseMinutes=0;
       }
     }
 
