@@ -2198,6 +2198,32 @@ body .app-header:not(.home-header){
 }
 
 /* v86: cleaned baseline; UI and behavior preserved */
+
+/* V93：沿用舊版倒數樣式，icon 固定，只更新數字 */
+.checkin-countdown.has-countdown,
+.checkin-countdown.no-countdown{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.checkin-countdown.has-countdown svg,
+.activity-status-clock.countdown svg{
+  width:18px !important;
+  height:18px !important;
+  flex:none !important;
+}
+.checkin-countdown .countdown-text,
+.activity-status-clock.countdown .countdown-text{
+  white-space:nowrap !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.activity-status-clock.countdown{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  font-variant-numeric:tabular-nums !important;
+}
 </style>
 </head>
 <body>
@@ -2876,17 +2902,11 @@ function activityStatusClock(activity){
   const end=activity.closeAt?new Date(activity.closeAt).getTime():null;
   const remaining=end?end-Date.now():0;
   if(activity.open && end && remaining>0){
-    const total=Math.max(Number(activity.autoCloseMinutes||0)*60000, remaining, 1);
-    const progress=Math.max(0,Math.min(1,remaining/total));
-    const circumference=2*Math.PI*17;
-    return `<div class="activity-status-clock countdown" data-countdown-end="${end}" data-countdown-total="${total}" aria-label="剩餘 ${formatCountdown(remaining)}">
-      <span>${formatCountdown(remaining)}</span>
-    </div>`;
+    return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
   }
   if(activity.open) return `<div class="activity-status-clock open" aria-label="開放中"><i data-lucide="check"></i></div>`;
   return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
 }
-
 
 let activityExpiryTimer=null;
 window.v93CountdownDeadlines=window.v93CountdownDeadlines||new Map();
@@ -2955,43 +2975,31 @@ function refreshActivityListClocks(){
 
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
-    const mapped=window.v93CountdownDeadlines.get(String(id));
+    const mapped=window.v93CountdownDeadlines?.get(String(id));
     const end=mapped||Number(box.dataset.countdownEnd||0);
     const remaining=end-now;
-
-    if(remaining<=0){
-      const a=state.activities.find(x=>String(x.id)===String(id));
-      if(a){
-        a.open=false;
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-        window.v93CountdownDeadlines.delete(String(a.id));
-        box.outerHTML=activityStatusClock(a);
-        if(typeof refreshIcons==="function")refreshIcons();
-      }
-      return;
-    }
-
-    const span=box.querySelector("span");
+    if(remaining<=0)return;
+    const span=box.querySelector(".countdown-text");
     if(span)span.textContent=formatCountdown(remaining);
-    box.setAttribute("aria-label","剩餘 "+formatCountdown(remaining));
   });
 
   const eventBox=document.getElementById("event-countdown");
   if(eventBox && openEventId){
     const activity=state.activities.find(x=>String(x.id)===String(openEventId));
     if(activity && activity.open){
-      const mapped=window.v93CountdownDeadlines.get(String(activity.id));
+      const mapped=window.v93CountdownDeadlines?.get(String(activity.id));
       const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
-      const remaining=end-now;
-      if(end && remaining>0){
-        eventBox.innerHTML=`<span class="countdown">${formatCountdown(remaining)}</span>`;
-        eventBox.style.display="";
-      }else if(end && remaining<=0){
-        eventBox.textContent="00:00";
+      if(end && end>now){
+        const span=eventBox.querySelector(".countdown-text");
+        if(span){
+          span.textContent=formatCountdown(end-now);
+        }else{
+          eventBox.classList.add("has-countdown");
+          eventBox.classList.remove("no-countdown");
+          eventBox.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
+          refreshIcons();
+        }
       }
-    }else{
-      eventBox.textContent="";
     }
   }
 }
