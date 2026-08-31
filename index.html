@@ -2889,6 +2889,8 @@ function activityStatusClock(activity){
 
 
 let activityExpiryTimer=null;
+const v93CountdownDeadlines=new Map();
+
 function startActivityExpiryWatcher(){
   if(activityExpiryTimer)clearInterval(activityExpiryTimer);
   activityExpiryTimer=setInterval(async()=>{
@@ -2951,37 +2953,41 @@ function saveState(){
 function refreshActivityListClocks(){
   const now=Date.now();
 
-  // 管理者／活動列表卡片上的倒數
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
-    const end=Number(box.dataset.countdownEnd||0);
+    const id=box.closest(".activity-card")?.dataset.open;
+    const mapped=v93CountdownDeadlines.get(String(id));
+    const end=mapped||Number(box.dataset.countdownEnd||0);
     const remaining=end-now;
+
     if(remaining<=0){
-      const id=box.closest(".activity-card")?.dataset.open;
       const a=state.activities.find(x=>String(x.id)===String(id));
       if(a){
         a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
+        v93CountdownDeadlines.delete(String(a.id));
         box.outerHTML=activityStatusClock(a);
         if(typeof refreshIcons==="function")refreshIcons();
       }
       return;
     }
+
     const span=box.querySelector("span");
     if(span)span.textContent=formatCountdown(remaining);
     box.setAttribute("aria-label","剩餘 "+formatCountdown(remaining));
   });
 
-  // 簽到活動頁的倒數，沿用原本 event-countdown 位置。
   const eventBox=document.getElementById("event-countdown");
   if(eventBox && openEventId){
     const activity=state.activities.find(x=>String(x.id)===String(openEventId));
-    if(activity && activity.open && activity.closeAt){
-      const remaining=new Date(activity.closeAt).getTime()-now;
-      if(remaining>0){
+    if(activity && activity.open){
+      const mapped=v93CountdownDeadlines.get(String(activity.id));
+      const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
+      const remaining=end-now;
+      if(end && remaining>0){
         eventBox.innerHTML=`<span class="countdown">${formatCountdown(remaining)}</span>`;
         eventBox.style.display="";
-      }else{
+      }else if(end && remaining<=0){
         eventBox.textContent="00:00";
       }
     }else{
@@ -3782,10 +3788,12 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(next){
       a.closeAt=new Date(Date.now()+30000).toISOString();
       a.autoCloseMinutes=0.5;
+      v93CountdownDeadlines.set(String(a.id),new Date(a.closeAt).getTime());
       window.showToast("活動已開啟，30 秒後關閉簽到");
     }else{
       a.closeAt=null;
       a.autoCloseMinutes=0;
+      v93CountdownDeadlines.delete(String(a.id));
       window.showToast("活動已關閉");
     }
 
@@ -3799,10 +3807,12 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     // loadData 後把本次成功開啟的倒數重新套回本機狀態。
     if(next && window.state && Array.isArray(window.state.activities)){
       const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-      if(local){
+      const deadline=v93CountdownDeadlines.get(String(a.id));
+      if(local && deadline){
         local.open=true;
-        local.closeAt=a.closeAt;
+        local.closeAt=new Date(deadline).toISOString();
         local.autoCloseMinutes=0.5;
+        a.closeAt=local.closeAt;
       }
     }
 
