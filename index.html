@@ -3709,37 +3709,55 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
     btn.disabled=true;
     const old=a.open;
+
+    // 第一階段：只執行已確認正常的開／關 RPC。
     a.open=next;
     try{
       await window.updateActivityRemote(a);
-
-      if(next){
-        // 開啟成功後才啟動 30 秒補簽倒數。
-        a.closeAt=new Date(Date.now()+30000).toISOString();
-        a.autoCloseMinutes=0.5;
-        window.state.activities=Array.isArray(window.state.activities)?window.state.activities:[];
-        const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-        if(local){
-          local.open=true;
-          local.closeAt=a.closeAt;
-          local.autoCloseMinutes=0.5;
-        }
-        window.showToast("活動已開啟，30 秒後關閉簽到");
-        refreshActivityListClocks();
-      }else{
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-        window.showToast("活動已關閉");
-      }
-
-      await window.loadData();
-      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
       a.open=old;
-      console.error("[活動管理] 開啟/關閉失敗",e);
+      console.error("[活動管理] 開啟/關閉 RPC 失敗",e);
       window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
+      return;
     }
+
+    // 第二階段：只有開啟成功後，才建立本機 30 秒倒數。
+    // 倒數欄位不送進開啟 RPC，避免影響已正常的開啟功能。
+    if(next){
+      a.closeAt=new Date(Date.now()+30000).toISOString();
+      a.autoCloseMinutes=0.5;
+      window.showToast("活動已開啟，30 秒後關閉簽到");
+    }else{
+      a.closeAt=null;
+      a.autoCloseMinutes=0;
+      window.showToast("活動已關閉");
+    }
+
+    // 資料重新載入失敗不能再被誤報成「活動更新失敗」。
+    try{
+      await window.loadData();
+    }catch(e){
+      console.error("[活動管理] 重新載入資料失敗",e);
+    }
+
+    // loadData 後把本次成功開啟的倒數重新套回本機狀態。
+    if(next && window.state && Array.isArray(window.state.activities)){
+      const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+      if(local){
+        local.open=true;
+        local.closeAt=a.closeAt;
+        local.autoCloseMinutes=0.5;
+      }
+    }
+
+    if(typeof renderAdmin==="function"){
+      const tab=document.getElementById("tab-content");
+      if(tab) window.renderAdmin(tab);
+    }
+    btn.disabled=false;
+    refreshActivityListClocks();
+    if(typeof refreshIcons==="function") refreshIcons();
   }
 
   async function activityActionHide(a,btn){
