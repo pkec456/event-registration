@@ -80,7 +80,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .query-history .list-row{padding:14px 4px}.query-history .list-icon{width:36px;height:36px;border-radius:12px;background:#f3f3f0;color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.query-history .status{white-space:nowrap}.query-history .status svg{width:15px;height:15px}
 @media(max-width:420px){.query-metrics{gap:8px}.query-metric-card{padding:14px 7px}.donut{width:116px;height:116px}.donut-center strong{font-size:28px}.donut::before{inset:9px}}
 
-/* v12: merged administrator header and role colors */
 .admin-role-header{
   width:100%;
   min-height:104px;
@@ -129,7 +128,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
 }
 
 
-/* v13: announcement follows the same text-first section pattern as dashboard sections */
 .announcement-admin{
   background:transparent;
   border:0;
@@ -383,7 +381,6 @@ button.secondary:focus-visible,
   .query-search-button{width:40px;height:40px}
 }
 
-/* v17: clean brand header + permission-aware administrator shield */
 .top-brand-icon{display:none}
 .top-admin-access.guest{
   color:var(--ink);
@@ -404,12 +401,10 @@ button.secondary:focus-visible,
 .top-admin-access.super svg{color:var(--admin-super)}
 
 
-/* v20: account + permission hierarchy */
 .admin-role-title{font-size:22px;line-height:1.15;font-weight:900}
 .admin-role-user{font-size:11px;line-height:1.3;margin-top:5px;font-weight:750;opacity:.9}
 
 
-/* v25: countdown icon block contains the remaining time */
 .checkin-hero{
   display:flex;
   align-items:center;
@@ -468,7 +463,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v23: open activities use a soft green card background */
 .activity-card.activity-card-open{
   background:#edf8f0;
   border-color:#ccebd4;
@@ -483,7 +477,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v24: activity section title + open status on one row */
 .activity-list-head{
   display:flex;
   align-items:center;
@@ -506,7 +499,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v28 activity-list circular countdown/status */
 .activity-right{display:flex;align-items:center;gap:9px;flex:0 0 auto}
 .activity-status-clock{
   width:48px;height:48px;flex:0 0 48px;
@@ -541,7 +533,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v30: activity-list countdown matches check-in countdown block */
 .activity-status-clock.countdown{
   min-width:78px;
   width:auto;
@@ -587,7 +578,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v31: list countdown = same Timer icon + red time block as check-in */
 .activity-status-clock.countdown{
   min-width:78px;
   width:auto;
@@ -635,7 +625,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v32: activity list countdown = time only */
 .activity-status-clock.countdown{
   min-width:66px;
   width:66px;
@@ -670,7 +659,6 @@ button.secondary:focus-visible,
   .activity-status-clock.countdown span{font-size:12px}
 }
 
-/* v33 */
 .field-label .field-slot-no{
   display:inline-flex;align-items:center;justify-content:center;
   min-width:28px;height:22px;margin-left:5px;padding:0 6px;
@@ -686,7 +674,6 @@ button.secondary:focus-visible,
   color:var(--ink) !important;
 }
 
-/* v34: show field names above checked-in values */
 .signin-list-head{
   display:grid;
   grid-template-columns:38px minmax(90px,1fr) repeat(var(--field-count,1),minmax(60px,auto)) 38px;
@@ -720,7 +707,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v35: simplified fixed header, aligned sign-in list, smaller status icons */
 .app-header{position:sticky;top:0;z-index:50}
 .top-tabs,.page-tabs{position:static !important;top:auto !important;z-index:auto !important}
 
@@ -763,11 +749,9 @@ button.secondary:focus-visible,
   }
 }
 
-/* v35 open status: green icon only */
 .activity-card.activity-card-open{background:#fff !important;border-color:var(--line) !important}
 
 
-/* v36: home-only fixed brand header; child pages use a simple back header */
 .app-header{position:static !important;top:auto !important;z-index:auto !important}
 .home-header{position:sticky !important;top:0 !important;z-index:50}
 .subpage-header{
@@ -823,7 +807,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v37 child-page navigation */
 .top{position:sticky;top:0;z-index:50;background:var(--bg)}
 .tabs{position:static !important;top:auto !important;z-index:auto !important}
 .subpage-header{position:static !important;display:flex;align-items:center;gap:10px;min-height:54px;padding:8px 0 12px;background:var(--bg)}
@@ -834,7 +817,6 @@ button.secondary:focus-visible,
 .admin-role-header{display:none !important}
 .admin-child-header{background:transparent !important;color:var(--ink) !important;box-shadow:none !important;border:0 !important}
 
-/* v38: main home header = team name + permission shield only */
 .home-header .app-title .workbook-title,
 .home-header .app-title .title-sub,
 .home-header .app-title .app-subtitle{
@@ -859,7 +841,6 @@ button.secondary:focus-visible,
   display:none !important;
 }
 
-/* v38: child page navigation is one arrow only */
 .subpage-back,
 #back-link,
 #back-admin-top{
@@ -901,7 +882,6 @@ button.secondary:focus-visible,
 }
 
 
-/* v39 exact header hierarchy */
 body .app-header.home-header{
   position:sticky !important;
   top:0 !important;
@@ -975,7 +955,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v40: exact navigation hierarchy */
 .top{
   position:sticky !important;
   top:0 !important;
@@ -1031,7 +1010,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v41 final navigation hierarchy */
 .home-fixed-header{position:sticky !important;top:0 !important;z-index:100 !important}
 .home-fixed-header .top-brand p{display:none !important}
 #app.child-view .home-fixed-header,#app.child-view .home-tabs{display:none !important}
@@ -1059,7 +1037,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v42: child navigation is the actual rendered button; no null back-link */
 .child-back{
   width:36px !important;height:36px !important;min-width:36px !important;
   padding:0 !important;margin:0 0 10px !important;
@@ -1078,12 +1055,10 @@ body .app-header:not(.home-header){
 #app.admin-home-view .admin-banner{display:block !important}
 
 
-/* v43: admin accounts child uses the single real child-back button */
 #app.child-view .admin-accounts-hero,
 #app.child-view .admin-accounts-header{display:none !important}
 
 
-/* v44 admin layout */
 .admin-main-hero{
   margin:0 0 16px;padding:18px 20px;border-radius:18px;
   color:#fff;background:var(--accent);
@@ -1120,7 +1095,6 @@ body .app-header:not(.home-header){
 .admin-square .chev{display:none}
 
 
-/* v45: admin menu = four clean square cards */
 .admin-menu-grid{
   display:grid !important;
   grid-template-columns:repeat(2,minmax(0,1fr)) !important;
@@ -1161,7 +1135,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v46: management landing header matches the original admin design */
 .admin-main-hero{
   position:relative;
   margin:0 0 16px;
@@ -1199,7 +1172,6 @@ body .app-header:not(.home-header){
 .home-fixed-header .top-brand p{display:none !important}
 
 
-/* v47: top-level navigation is always available; only child pages hide it */
 .home-fixed-header{
   position:sticky !important;
   top:0 !important;
@@ -1234,7 +1206,6 @@ body .app-header:not(.home-header){
 #app.child-view .child-back svg{width:20px !important;height:20px !important}
 
 
-/* v48: restore large centered top tabs */
 .home-tabs{
   width:100% !important;
   display:grid !important;
@@ -1269,7 +1240,6 @@ body .app-header:not(.home-header){
   height:30px !important;
 }
 
-/* v48: admin functions in one horizontal row */
 .admin-menu-grid{
   display:grid !important;
   grid-template-columns:repeat(4,minmax(0,1fr)) !important;
@@ -1319,7 +1289,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v49: sign-in / query tabs restore red active state */
 .home-tabs button{
   color:#777 !important;
   position:relative !important;
@@ -1348,8 +1317,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v50: unified home navigation interaction
-   Sign-in / Query / Login / Admin home share the same visual rules. */
 .home-tabs button{
   color:#777 !important;
   transition:color .18s ease, background .18s ease, transform .18s ease !important;
@@ -1406,8 +1373,6 @@ body .app-header:not(.home-header){
   background:var(--bg) !important;
 }
 
-
-/* v51 — four top-level home states use one unified shell */
 
 /* Shared page width / spacing so switching between home states never squeezes
    the content area differently. */
@@ -1537,8 +1502,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v53 — V51 baseline; only remove the special red active treatment.
-   Do not alter V51 sizing/layout/spacing. */
 .home-tabs button.active,
 .home-tabs button.active:hover,
 .home-tabs button.active:focus-visible,
@@ -1559,7 +1522,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v54 — restore cursor feedback on Sign-in / Query without changing layout */
 .home-tabs button:hover,
 .home-tabs button:focus-visible{
   color:#d71920 !important;
@@ -1586,7 +1548,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v55 — verified pointer feedback */
 .home-tabs button{
   cursor:pointer !important;
 }
@@ -1616,8 +1577,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v56 — restore the earlier admin header typography:
-   boss = large title; permission level = small subtitle. */
 .admin-main-hero-title{
   font-size:22px !important;
   line-height:1.15 !important;
@@ -1633,8 +1592,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v57 — account name / permission hierarchy
-   Large = logged-in account name; small = permission level. */
 .admin-main-hero-title{
   font-size:22px !important;
   line-height:1.15 !important;
@@ -1649,8 +1606,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v58 — restore the earlier admin color-block icon treatment:
-   permission icon stays on the right, like the original v5 design. */
 .admin-main-hero{
   display:flex !important;
   align-items:center !important;
@@ -1700,7 +1655,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v59 — admin hero matches supplied reference */
 .admin-main-hero{
   background:#f59e0b !important;
   color:#fff !important;
@@ -1772,7 +1726,6 @@ body .app-header:not(.home-header){
 .admin-main-hero-actions{display:none !important}
 
 
-/* v60 — exactly one back arrow in every admin child page */
 #app.child-view .admin-child .child-back ~ .child-back,
 #app.child-view .admin-page .child-back ~ .child-back,
 #app.child-view .admin-content .child-back ~ .child-back{
@@ -1780,7 +1733,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v61 — recent activity closed/open status X icon: small, no background */
 .activity-status-clock.closed,
 .activity-status-clock.open{
   width:28px !important;
@@ -1804,7 +1756,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v62 — status X/check icon matches nearby Lucide icon size, no box */
 .activity-status-clock.closed,
 .activity-status-clock.open{
   width:28px !important;
@@ -1833,7 +1784,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v63 — recent activity status uses simple X / check icons */
 .activity-status-clock.closed,
 .activity-status-clock.open{
   width:28px !important;
@@ -1863,7 +1813,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v64 — open activity date icon is green */
 .activity-card.activity-card-open .activity-icon{
   color:#22a35a !important;
 }
@@ -1873,7 +1822,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v65 — admin login: management color header + clean form */
 .admin-login-page{
   width:100%;
   max-width:520px;
@@ -1941,7 +1889,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v67 — minimalist admin login */
 .admin-login-page{
   width:100%;
   max-width:520px;
@@ -2029,13 +1976,11 @@ body .app-header:not(.home-header){
 }
 
 
-/* v69 — remove the closed X icon from the activity list */
 .activity-status-clock.closed{
   display:none !important;
 }
 
 
-/* v70 — recent activity legend: green = open, black = closed */
 .activity-list-status-legend{
   display:flex;
   align-items:center;
@@ -2064,8 +2009,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v71 — homepage admin icon becomes logout after login;
-   admin hero permission icon block matches announcement icon size. */
 .admin-main-hero-icon{
   width:42px !important;
   height:42px !important;
@@ -2078,8 +2021,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v72 — admin color block matches the announcement card height;
-   no logout button inside the block. */
 .admin-main-hero{
   min-height:70px !important;
   height:70px !important;
@@ -2116,7 +2057,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v73 — 幹部管理新增幹部表單分開、不要黏在一起 */
 #new-officer-user,
 #new-officer-pass{
   display:block !important;
@@ -2134,7 +2074,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v75 — logout is exclusive to the administrator area */
 .home-fixed-header .top-admin-access{
   cursor:pointer !important;
 }
@@ -2150,7 +2089,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v76 — when logged in, show shield + logout side-by-side on the home */
 .top-admin-actions{
   display:flex !important;
   align-items:center !important;
@@ -2185,7 +2123,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v78 — compress checked-in list columns without removing any function */
 .signin-list-head,
 .block.tight .list-row:has(.signin-field-value){
   grid-template-columns:
@@ -2224,7 +2161,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* v79 — checked-in list delete = plain X, no background */
 .signin-delete-btn{
   width:28px !important;
   height:28px !important;
@@ -2251,6 +2187,17 @@ body .app-header:not(.home-header){
   height:18px !important;
 }
 
+
+.activity-status-clock.countdown{
+  font-variant-numeric:tabular-nums;
+}
+
+
+.register-name-input{
+  ime-mode:active;
+}
+
+/* v86: cleaned baseline; UI and behavior preserved */
 </style>
 </head>
 <body>
@@ -2381,6 +2328,7 @@ function showToast(msg){
 }
 
 async function loadData(){
+  startActivityExpiryWatcher();
   try{
     let acts = [];
 
@@ -2913,6 +2861,37 @@ function activityStatusClock(activity){
   return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
 }
 
+
+let activityExpiryTimer=null;
+function startActivityExpiryWatcher(){
+  if(activityExpiryTimer)clearInterval(activityExpiryTimer);
+  activityExpiryTimer=setInterval(()=>{
+    if(!Array.isArray(state.activities))return;
+    const now=Date.now();
+    const expired=state.activities.filter(a=>a.open && a.closeAt && new Date(a.closeAt).getTime()<=now);
+    if(!expired.length)return;
+    expired.forEach(a=>{
+      a.open=false; a.closeAt=null; a.autoCloseMinutes=0;
+      updateActivityRemote({
+        id:a.id,name:a.name,date:a.date,fields:a.fields||[],
+        open:false,maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
+        createdBy:a.createdBy||"",closeAt:null,autoCloseMinutes:0,
+        hidden:!!a.hidden,publishAt:a.publishAt||null
+      }).catch(e=>console.error("自動關閉活動同步失敗",e));
+    });
+    saveState();
+    if(typeof render==="function")render();
+  },1000);
+}
+startActivityExpiryWatcher();
+
+function saveState(){
+  if(!window.state || !Array.isArray(window.state.activities)) return;
+  window.state.activities.forEach(a=>{
+    if(a && !a.open){ a.closeAt=null; a.autoCloseMinutes=0; }
+  });
+}
+
 function refreshActivityListClocks(){
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const end=Number(box.dataset.countdownEnd||0);
@@ -2921,7 +2900,13 @@ function refreshActivityListClocks(){
     if(remaining<=0){
       const id=box.closest(".activity-card")?.dataset.open;
       const a=state.activities.find(x=>String(x.id)===String(id));
-      if(a){ box.outerHTML=activityStatusClock(a); refreshIcons(); }
+      if(a){
+        a.open=false;
+        a.closeAt=null;
+        box.outerHTML=activityStatusClock(a);
+        refreshIcons();
+        saveState();
+      }
       return;
     }
     const span=box.querySelector("span"); if(span) span.textContent=formatCountdown(remaining);
@@ -2968,7 +2953,7 @@ function renderRegister(el){
       <div class="checkin-card">
         <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
-          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" /></div>
+          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
           <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
         `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
@@ -3456,7 +3441,7 @@ function setupActivityManagementPage(el){
   // 活動管理：直接對「目前畫面上的按鈕」綁定 onclick。
   // 不再依賴事件委派，避免被其他 DOM 事件攔截。
   const buttons = el.querySelectorAll(
-    "[data-activity-close],[data-activity-hide],[data-activity-delete]"
+    ""
   );
 
   buttons.forEach(btn=>{
@@ -3840,16 +3825,44 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
     btn.disabled=true;
     const old=a.open;
-    a.open=next;
+    const payload={
+      id:a.id,
+      name:a.name,
+      date:a.date,
+      fields:Array.isArray(a.fields)?a.fields:[],
+      open:next,
+      maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
+      createdBy:a.createdBy||"",
+      closeAt:next?new Date(Date.now()+30000).toISOString():null,
+      autoCloseMinutes:next?0.5:0,
+      hidden:!!a.hidden,
+      publishAt:a.publishAt||null
+    };
     try{
-      await window.updateActivityRemote(a);
-      window.showToast(next?"活動已開啟":"活動已關閉");
+      const result=await window.updateActivityRemote(payload);
+      a.open=next;
+      if(next){
+        a.closeAt=new Date(Date.now()+30000).toISOString();
+        a.autoCloseMinutes=0.5;
+      }else{
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+      }
+      if(result && typeof result==="object"){
+        Object.assign(a,result);
+        if(next){
+          a.closeAt=new Date(Date.now()+30000).toISOString();
+          a.autoCloseMinutes=0.5;
+        }
+      }
       await window.loadData();
-      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
+      window.showToast(next?"活動已開啟":"活動已關閉");
+      const tab=document.getElementById("tab-content");
+      if(tab && typeof renderAdmin==="function") renderAdmin(tab);
     }catch(e){
       a.open=old;
       console.error("[活動管理] 開啟/關閉失敗",e);
-      window.showToast("活動更新失敗："+(e.message||e),"error");
+      window.showToast("活動更新失敗："+(e?.message||e),"error");
       btn.disabled=false;
     }
   }
@@ -3899,6 +3912,25 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     <div class="version">系統版本：v1.8</div>
     <div class="maker">製作者：小樂</div>
   </footer>
+
+<script>
+(function(){
+  document.addEventListener("input",function(ev){
+    const el=ev.target;
+    if(!el || !el.classList || !el.classList.contains("register-name-input")) return;
+    const old=el.value;
+    const cleaned=old.replace(/[0-9０-９]/g,"");
+    if(old!==cleaned){
+      const p=el.selectionStart;
+      el.value=cleaned;
+      if(typeof p==="number"){
+        try{el.setSelectionRange(Math.max(0,p-1),Math.max(0,p-1));}catch(e){}
+      }
+    }
+  },true);
+})();
+</script>
+
 </body>
 
 
