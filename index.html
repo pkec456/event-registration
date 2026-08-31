@@ -3247,10 +3247,10 @@ function renderRegister(el){
 // ---------- QUERY TAB ----------
 function getAttendanceTone(rate){
   const n=Number(rate)||0;
-  if(n<=10) return {name:'red',color:'#d62828',label:'需要加油'};
-  if(n<60) return {name:'orange',color:'#f59e0b',label:'持續努力'};
-  if(n<90) return {name:'green',color:'#22a35a',label:'表現良好'};
-  return {name:'gold',color:'#d99a00',label:'表現優異'};
+  if(n<60) return {name:'red',color:'#DC2626',label:'需要加油'};
+  if(n<80) return {name:'orange',color:'#EA580C',label:'持續努力'};
+  if(n<90) return {name:'blue',color:'#2563EB',label:'表現良好'};
+  return {name:'green',color:'#16A34A',label:'表現優異'};
 }
 
 function renderQuery(el){
@@ -4071,7 +4071,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：v1.8</div>
+    <div class="version">系統版本：v1.9</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
