@@ -2951,7 +2951,7 @@ function saveState(){
 function refreshActivityListClocks(){
   const now=Date.now();
 
-  // 活動列表／管理者活動卡片
+  // 管理者／活動列表卡片上的倒數
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const end=Number(box.dataset.countdownEnd||0);
     const remaining=end-now;
@@ -2972,7 +2972,7 @@ function refreshActivityListClocks(){
     box.setAttribute("aria-label","剩餘 "+formatCountdown(remaining));
   });
 
-  // 簽到活動頁：固定顯示在原本的 event-countdown 位置
+  // 簽到活動頁的倒數，沿用原本 event-countdown 位置。
   const eventBox=document.getElementById("event-countdown");
   if(eventBox && openEventId){
     const activity=state.activities.find(x=>String(x.id)===String(openEventId));
@@ -2984,11 +2984,12 @@ function refreshActivityListClocks(){
       }else{
         eventBox.textContent="00:00";
       }
-    }else if(activity && !activity.open){
+    }else{
       eventBox.textContent="";
     }
   }
 }
+
 
 window.refreshActivityListClocks=refreshActivityListClocks;
 
@@ -3637,7 +3638,8 @@ async function init(){
       await loadData();
     }
   },6000);
-  setInterval(refreshActivityListClocks,1000);
+  refreshActivityListClocks();
+setInterval(refreshActivityListClocks,1000);
 }
 
 init();
@@ -3809,7 +3811,10 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       if(tab) window.renderAdmin(tab);
     }
     btn.disabled=false;
-if(typeof refreshIcons==="function") refreshIcons();
+    if(next && typeof window.refreshActivityListClocks==="function"){
+      window.refreshActivityListClocks();
+    }
+    if(typeof refreshIcons==="function") refreshIcons();
   }
 
   async function activityActionHide(a,btn){
