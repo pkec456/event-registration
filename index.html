@@ -3901,43 +3901,36 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     const oldAuto=a.autoCloseMinutes;
 
     try{
+      a.open=next;
+
+      // 只呼叫原本已正常的開／關 RPC 一次。
+      await window.updateActivityRemote(a);
+
       if(next){
-        // 先用原本已正常的 RPC 開啟活動。
-        a.open=true;
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-        await window.updateActivityRemote(a);
-
-        // 開啟成功後才開始 30 秒。
-        // closeAt 是資料庫共享的絕對截止時間，所有裝置讀同一個時間。
+        // RPC 成功後才開始 30 秒；不再次呼叫 RPC，避免「活動更新失敗」。
         const deadline=Date.now()+30000;
-        const reopenCloseAt=new Date(deadline).toISOString();
-        a.closeAt=reopenCloseAt;
-        a.autoCloseMinutes=0.5;
-
-        await window.updateActivityRemote(a);
-
-        // 本機立即顯示；手機之後從 DB 的 close_at 取得相同 deadline。
         window.v93CountdownDeadlines.set(String(a.id),deadline);
 
-        await window.loadData();
-        const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-        if(local){
-          local.open=true;
-          local.closeAt=reopenCloseAt;
-          local.autoCloseMinutes=0.5;
+        // 本機活動狀態帶入相同 closeAt，供原本倒數 CSS/邏輯使用。
+        a.closeAt=new Date(deadline).toISOString();
+        a.autoCloseMinutes=0.5;
+
+        // 只更新目前管理者畫面，不重新載入 DB，避免把剛建立的 deadline 洗掉。
+        if(window.state && Array.isArray(window.state.activities)){
+          const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+          if(local){
+            local.open=true;
+            local.closeAt=a.closeAt;
+            local.autoCloseMinutes=0.5;
+          }
         }
 
         window.showToast("活動已開啟，30 秒後關閉簽到");
       }else{
-        a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
-        await window.updateActivityRemote(a);
-
         window.v93CountdownDeadlines.delete(String(a.id));
         window.showToast("活動已關閉");
-        await window.loadData();
       }
 
       if(typeof renderAdmin==="function"){
@@ -4058,4 +4051,4 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 
 
-</html>
+</html>ㄋ
