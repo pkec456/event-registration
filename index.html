@@ -3706,41 +3706,19 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
   async function activityActionClose(a,btn){
     const next=!a.open;
-    if(!confirm(next?"確定重新開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
-
+    if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
     btn.disabled=true;
-    const oldOpen=!!a.open;
-    const oldCloseAt=a.closeAt||null;
-    const oldAuto=Number(a.autoCloseMinutes||0);
-
-    // 這一步只負責「開／關」；30 秒倒數在成功開啟後才開始。
-    // 這樣 RPC 失敗時不會誤啟動倒數。
-    const reopenCloseAt=next?new Date(Date.now()+30000).toISOString():null;
-    const payload=normalizeActivityForRPC({
-      ...a,
-      open:next,
-      closeAt:reopenCloseAt,
-      autoCloseMinutes:next?0.5:0
-    });
-
+    const old=a.open;
+    a.open=next;
     try{
-      const result=await updateActivityRemote(payload);
-      Object.assign(a,result||payload);
-      a.open=next;
-      a.closeAt=next?reopenCloseAt:null;
-      a.autoCloseMinutes=next?0.5:0;
-
-      await loadData();
-      showToast(next?"活動已重新開啟":"活動已關閉");
-
-      const tab=document.getElementById("tab-content");
-      if(tab && typeof renderAdmin==="function") renderAdmin(tab);
+      await window.updateActivityRemote(a);
+      window.showToast(next?"活動已開啟":"活動已關閉");
+      await window.loadData();
+      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
-      a.open=oldOpen;
-      a.closeAt=oldCloseAt;
-      a.autoCloseMinutes=oldAuto;
-      console.error("[活動管理] 開／關失敗",e);
-      showToast("活動更新失敗："+(e?.message||e));
+      a.open=old;
+      console.error("[活動管理] 開啟/關閉失敗",e);
+      window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
   }
