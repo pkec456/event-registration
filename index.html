@@ -3682,43 +3682,38 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     const next=!a.open;
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
     btn.disabled=true;
-    const old=a.open;
-    const payload={
-      id:a.id,
-      name:a.name,
-      date:a.date,
-      fields:Array.isArray(a.fields)?a.fields:[],
-      open:next,
-      maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
-      createdBy:a.createdBy||"",
-      closeAt:next?new Date(Date.now()+30000).toISOString():null,
-      autoCloseMinutes:next?0.5:0,
-      hidden:!!a.hidden,
-      publishAt:a.publishAt||null
+    const old={
+      open:a.open, closeAt:a.closeAt, autoCloseMinutes:a.autoCloseMinutes
     };
+
+    // 開啟：從按下的當下重新給 30 秒。
+    // 關閉：清除倒數。
+    a.open=next;
+    a.closeAt=next?new Date(Date.now()+30000).toISOString():null;
+    a.autoCloseMinutes=next?0.5:0;
+
     try{
+      // 先使用現有遠端更新函式的原活動物件，避免送入不相容的額外欄位。
+      const payload=Object.assign({},a,{
+        open:a.open,
+        closeAt:a.closeAt,
+        autoCloseMinutes:a.autoCloseMinutes
+      });
       const result=await window.updateActivityRemote(payload);
-      a.open=next;
-      if(next){
-        a.closeAt=new Date(Date.now()+30000).toISOString();
-        a.autoCloseMinutes=0.5;
-      }else{
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
+
+      // 某些舊版更新函式沒有回傳值；只要沒有 throw 就視為成功。
+      if(result===false){
+        throw new Error("遠端更新未成功");
       }
-      if(result && typeof result==="object"){
-        Object.assign(a,result);
-        if(next){
-          a.closeAt=new Date(Date.now()+30000).toISOString();
-          a.autoCloseMinutes=0.5;
-        }
-      }
+
       await window.loadData();
       window.showToast(next?"活動已開啟":"活動已關閉");
       const tab=document.getElementById("tab-content");
       if(tab && typeof renderAdmin==="function") renderAdmin(tab);
     }catch(e){
-      a.open=old;
+      a.open=old.open;
+      a.closeAt=old.closeAt;
+      a.autoCloseMinutes=old.autoCloseMinutes;
       console.error("[活動管理] 開啟/關閉失敗",e);
       window.showToast("活動更新失敗："+(e?.message||e),"error");
       btn.disabled=false;
