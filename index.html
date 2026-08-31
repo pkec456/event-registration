@@ -2914,6 +2914,14 @@ function formatCountdown(ms){
   const seconds=total%60;
   return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 }
+
+function ensurePublicCountdown(activity){
+  if(!activity || !activity.open)return;
+  const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+  if(!end || end<=Date.now())return;
+  // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
+  if(typeof renderCountdown==="function") renderCountdown(activity);
+}
 function renderCountdown(activity){
   const box=document.getElementById("event-countdown");
   if(!box)return;
@@ -3202,6 +3210,7 @@ function renderRegister(el){
   `;
   el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
   el.querySelector(".child-back")?.addEventListener("click",()=>{openEventId=null;render();});
+
 }
 
 // ---------- QUERY TAB ----------
@@ -3752,6 +3761,10 @@ async function init(){
     if(activeTab !== "admin"){
       await loadData();
       if(!userIsTyping) renderTab();
+      if(openEventId){
+        const publicActivity=state.activities.find(x=>String(x.id)===String(openEventId));
+        if(publicActivity) ensurePublicCountdown(publicActivity);
+      }
     }else if(!userIsTyping){
       // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
       await loadData();
