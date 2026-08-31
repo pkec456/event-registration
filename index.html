@@ -2505,21 +2505,20 @@ async function updateActivityRemote(activity){
   if(!session) throw new Error("管理者登入已失效");
 
   const a=normalizeActivityForRPC(activity);
-
   const {data,error}=await supabaseClient.rpc("simple_admin_update_activity",{
-    p_admin_username:session.username,
-    p_admin_code:session.access_code,
-    p_id:a.id,
+    p_admin_username:String(session.username||""),
+    p_admin_code:String(session.access_code||""),
+    p_id:String(a.id||""),
     p_name:String(a.name||""),
     p_date:a.date,
-    p_fields:a.fields,
-    p_open:a.open,
-    p_max_participants:a.maxParticipants,
-    p_created_by:String(a.createdBy||session.username),
-    p_close_at:a.closeAt,
-    p_auto_close_minutes:a.autoCloseMinutes,
-    p_hidden:a.hidden,
-    p_publish_at:a.publishAt
+    p_fields:Array.isArray(a.fields)?a.fields:[],
+    p_open:!!a.open,
+    p_max_participants:a.maxParticipants==null?null:Number(a.maxParticipants),
+    p_created_by:String(a.createdBy||session.username||""),
+    p_close_at:a.closeAt||null,
+    p_auto_close_minutes:Number(a.autoCloseMinutes||0),
+    p_hidden:!!a.hidden,
+    p_publish_at:a.publishAt||null
   });
 
   if(error){
@@ -2527,31 +2526,12 @@ async function updateActivityRemote(activity){
       .filter(Boolean).join(" | ");
     throw new Error(detail||"活動更新失敗");
   }
-  if(!data?.ok){
-    const detail=[data?.message,data?.details,data?.hint,data?.code]
-      .filter(Boolean).join(" | ");
-    throw new Error(detail||"活動更新失敗");
-  }
+  if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
 
-  const raw=data.activity||data;
+  const raw=data.activity||null;
   return {
-    ...activity,
-    ...(raw&&typeof raw==="object"?raw:{}),
-    id:raw?.id||activity.id,
-    name:raw?.name??activity.name,
-    date:raw?.date??activity.date,
-    fields:Array.isArray(raw?.fields)?raw.fields:activity.fields,
-    open:typeof raw?.open==="boolean"?raw.open:activity.open,
-    maxParticipants:raw?.max_participants!==undefined
-      ? (raw.max_participants==null?null:Number(raw.max_participants))
-      : (raw?.maxParticipants!==undefined?raw.maxParticipants:activity.maxParticipants),
-    createdBy:raw?.created_by??raw?.createdBy??activity.createdBy,
-    closeAt:raw?.close_at??raw?.closeAt??activity.closeAt,
-    autoCloseMinutes:raw?.auto_close_minutes!==undefined
-      ? Number(raw.auto_close_minutes||0)
-      : Number(raw?.autoCloseMinutes??activity.autoCloseMinutes??0),
-    hidden:typeof raw?.hidden==="boolean"?raw.hidden:activity.hidden,
-    publishAt:raw?.publish_at??raw?.publishAt??activity.publishAt??null
+    ...a,
+    ...(raw&&typeof raw==="object"?raw:{})
   };
 }
 
@@ -3726,54 +3706,41 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
   async function activityActionClose(a,btn){
     const next=!a.open;
-    if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
-    btn.disabled=true;
+    if(!confirm(next?"確定重新開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
 
+    btn.disabled=true;
     const oldOpen=!!a.open;
     const oldCloseAt=a.closeAt||null;
     const oldAuto=Number(a.autoCloseMinutes||0);
 
-    // Re-open always starts a fresh 30-second server-side countdown.
-    const nextCloseAt=next ? new Date(Date.now()+30000).toISOString() : null;
-    const payload={
-      id:a.id,
-      name:String(a.name||""),
-      date:a.date,
-      fields:Array.isArray(a.fields)?a.fields:[],
+    // 這一步只負責「開／關」；30 秒倒數在成功開啟後才開始。
+    // 這樣 RPC 失敗時不會誤啟動倒數。
+    const reopenCloseAt=next?new Date(Date.now()+30000).toISOString():null;
+    const payload=normalizeActivityForRPC({
+      ...a,
       open:next,
-      maxParticipants:a.maxParticipants==null?null:Number(a.maxParticipants),
-      createdBy:a.createdBy||getAdminSession()?.username||"",
-      closeAt:nextCloseAt,
-      autoCloseMinutes:next?0.5:0,
-      hidden:!!a.hidden,
-      publishAt:a.publishAt||null
-    };
+      closeAt:reopenCloseAt,
+      autoCloseMinutes:next?0.5:0
+    });
 
     try{
-      const result=await window.updateActivityRemote(normalizeActivityForRPC(payload));
-      // Use the RPC-normalized result as the local source of truth.
+      const result=await updateActivityRemote(payload);
       Object.assign(a,result||payload);
-      if(next){
-        // If the RPC doesn't echo close_at, retain the timestamp we sent.
-        a.closeAt=(result&&result.closeAt)||nextCloseAt;
-        a.autoCloseMinutes=0.5;
-        a.open=true;
-      }else{
-        a.open=false;
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-      }
+      a.open=next;
+      a.closeAt=next?reopenCloseAt:null;
+      a.autoCloseMinutes=next?0.5:0;
 
-      await window.loadData();
-      window.showToast(next?"活動已開啟（30秒）":"活動已關閉");
+      await loadData();
+      showToast(next?"活動已重新開啟":"活動已關閉");
+
       const tab=document.getElementById("tab-content");
       if(tab && typeof renderAdmin==="function") renderAdmin(tab);
     }catch(e){
       a.open=oldOpen;
       a.closeAt=oldCloseAt;
       a.autoCloseMinutes=oldAuto;
-      console.error("[活動管理] 開啟/關閉失敗",e);
-      window.showToast("活動更新失敗："+(e?.message||e),"error");
+      console.error("[活動管理] 開／關失敗",e);
+      showToast("活動更新失敗："+(e?.message||e));
       btn.disabled=false;
     }
   }
@@ -3813,6 +3780,35 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       btn.disabled=false;
     }
   }
+
+  document.addEventListener("click",async(ev)=>{
+    const btn=ev.target.closest("[data-admin-edit-registration]");
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const activityId=btn.getAttribute("data-activity-id");
+    const registrationId=btn.getAttribute("data-registration-id");
+    const a=state.activities.find(x=>String(x.id)===String(activityId));
+    if(!a || !a.open){
+      showToast("活動已關閉，無法修改名單");
+      return;
+    }
+    const r=(state.registrations[a.id]||[]).find(x=>String(x.id)===String(registrationId));
+    if(!r) return;
+    const name=prompt("修改姓名",r.name||"");
+    if(name===null) return;
+    const clean=norm(name);
+    if(!clean){ showToast("姓名不可空白"); return; }
+    try{
+      await renameRegistrationRemote(registrationId,clean);
+      await loadData();
+      renderAdmin(document.getElementById("tab-content"));
+      showToast("已修改簽到資料");
+    }catch(e){
+      console.error("修改簽到失敗",e);
+      showToast("修改失敗："+(e?.message||e),"error");
+    }
+  },true);
 
   // capture=true：在任何其他 click handler 前攔截活動按鈕。
   document.addEventListener("click",activityButtonHandler,true);
