@@ -3712,7 +3712,26 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     a.open=next;
     try{
       await window.updateActivityRemote(a);
-      window.showToast(next?"活動已開啟":"活動已關閉");
+
+      if(next){
+        // 開啟成功後才啟動 30 秒補簽倒數。
+        a.closeAt=new Date(Date.now()+30000).toISOString();
+        a.autoCloseMinutes=0.5;
+        window.state.activities=Array.isArray(window.state.activities)?window.state.activities:[];
+        const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+        if(local){
+          local.open=true;
+          local.closeAt=a.closeAt;
+          local.autoCloseMinutes=0.5;
+        }
+        window.showToast("活動已開啟，30 秒後關閉簽到");
+        refreshActivityListClocks();
+      }else{
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        window.showToast("活動已關閉");
+      }
+
       await window.loadData();
       if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
     }catch(e){
