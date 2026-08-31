@@ -3901,34 +3901,49 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     const oldAuto=a.autoCloseMinutes;
 
     try{
-      a.open=next;
-
-      // 只呼叫原本已正常的開／關 RPC 一次。
-      await window.updateActivityRemote(a);
-
       if(next){
-        // RPC 成功後才開始 30 秒；不再次呼叫 RPC，避免「活動更新失敗」。
+        // 第一次 RPC：只負責把活動正常開啟。
+        a.open=true;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
+        // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
+        // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
         const deadline=Date.now()+30000;
+        const sharedCloseAt=new Date(deadline).toISOString();
+
+        const sharedActivity={
+          ...a,
+          open:true,
+          closeAt:sharedCloseAt,
+          autoCloseMinutes:0
+        };
+
+        // 將同一個絕對時間寫入 DB；所有手機／電腦都從 close_at 讀取。
+        await window.updateActivityRemote(sharedActivity);
+
+        a.closeAt=sharedCloseAt;
+        a.autoCloseMinutes=0;
         window.v93CountdownDeadlines.set(String(a.id),deadline);
 
-        // 本機活動狀態帶入相同 closeAt，供原本倒數 CSS/邏輯使用。
-        a.closeAt=new Date(deadline).toISOString();
-        a.autoCloseMinutes=0.5;
-
-        // 只更新目前管理者畫面，不重新載入 DB，避免把剛建立的 deadline 洗掉。
+        // 更新本機 state，但不重新 loadData，避免輸入框／倒數被重建。
         if(window.state && Array.isArray(window.state.activities)){
           const local=window.state.activities.find(x=>String(x.id)===String(a.id));
           if(local){
             local.open=true;
-            local.closeAt=a.closeAt;
-            local.autoCloseMinutes=0.5;
+            local.closeAt=sharedCloseAt;
+            local.autoCloseMinutes=0;
           }
         }
 
         window.showToast("活動已開啟，30 秒後關閉簽到");
       }else{
+        a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
         window.v93CountdownDeadlines.delete(String(a.id));
         window.showToast("活動已關閉");
       }
@@ -3948,6 +3963,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       a.open=oldOpen;
       a.closeAt=oldCloseAt;
       a.autoCloseMinutes=oldAuto;
+      window.v93CountdownDeadlines.delete(String(a.id));
       window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
@@ -4051,4 +4067,4 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 
 
-</html>ㄋ
+</html>
