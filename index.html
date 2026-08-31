@@ -2464,54 +2464,94 @@ async function createActivityRemote(activity){
     publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
   };
 }
+
+function normalizeActivityForRPC(activity){
+  const x={...activity};
+
+  // PostgreSQL date parameter: accept Date, ISO timestamp, YYYY/M/D and
+  // YYYY-MM-DD, and always send a valid YYYY-MM-DD when possible.
+  if(x.date instanceof Date && !isNaN(x.date.getTime())){
+    x.date=x.date.toISOString().slice(0,10);
+  }else if(typeof x.date==="string"){
+    const s=x.date.trim();
+    let m=s.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
+    if(m){
+      x.date=`${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
+    }else{
+      const d=new Date(s);
+      if(!isNaN(d.getTime())) x.date=d.toISOString().slice(0,10);
+    }
+  }
+
+  x.fields=Array.isArray(x.fields)?x.fields:[];
+  x.maxParticipants =
+    x.maxParticipants==null || x.maxParticipants==="" ? null :
+    Number(x.maxParticipants);
+  if(x.maxParticipants!==null && !Number.isFinite(x.maxParticipants))
+    x.maxParticipants=null;
+
+  x.autoCloseMinutes=Number(x.autoCloseMinutes||0);
+  if(!Number.isFinite(x.autoCloseMinutes)) x.autoCloseMinutes=0;
+
+  x.closeAt=x.closeAt||null;
+  x.publishAt=x.publishAt||null;
+  x.open=!!x.open;
+  x.hidden=!!x.hidden;
+  return x;
+}
+
 async function updateActivityRemote(activity){
   const session=getAdminSession();
   if(!session) throw new Error("管理者登入已失效");
 
+  const a=normalizeActivityForRPC(activity);
+
   const {data,error}=await supabaseClient.rpc("simple_admin_update_activity",{
     p_admin_username:session.username,
     p_admin_code:session.access_code,
-    p_id:activity.id,
-    p_name:activity.name,
-    p_date:activity.date,
-    p_fields:activity.fields,
-    p_open:activity.open,
-    p_max_participants:activity.maxParticipants,
-    p_created_by:activity.createdBy||session.username,
-    p_close_at:activity.closeAt,
-    p_auto_close_minutes:activity.autoCloseMinutes||0,
-    p_hidden:!!activity.hidden,
-    p_publish_at:activity.publishAt||null
+    p_id:a.id,
+    p_name:String(a.name||""),
+    p_date:a.date,
+    p_fields:a.fields,
+    p_open:a.open,
+    p_max_participants:a.maxParticipants,
+    p_created_by:String(a.createdBy||session.username),
+    p_close_at:a.closeAt,
+    p_auto_close_minutes:a.autoCloseMinutes,
+    p_hidden:a.hidden,
+    p_publish_at:a.publishAt
   });
+
   if(error){
-    const detail=[error.message,error.details,error.hint,error.code].filter(Boolean).join(" | ");
+    const detail=[error.message,error.details,error.hint,error.code]
+      .filter(Boolean).join(" | ");
     throw new Error(detail||"活動更新失敗");
   }
   if(!data?.ok){
-    const detail=[data?.message,data?.details,data?.hint,data?.code].filter(Boolean).join(" | ");
+    const detail=[data?.message,data?.details,data?.hint,data?.code]
+      .filter(Boolean).join(" | ");
     throw new Error(detail||"活動更新失敗");
   }
 
-  // 與建立活動相同：相容 data.activity 與只回傳欄位／id 的 SQL。
-  const raw=data.activity || data;
+  const raw=data.activity||data;
   return {
     ...activity,
-    ...(raw && typeof raw === "object" ? raw : {}),
-    id: raw?.id || activity.id,
-    name: raw?.name ?? activity.name,
-    date: raw?.date ?? activity.date,
-    fields: Array.isArray(raw?.fields) ? raw.fields : activity.fields,
-    open: typeof raw?.open === "boolean" ? raw.open : activity.open,
-    maxParticipants: raw?.max_participants !== undefined
-      ? (raw.max_participants == null ? null : Number(raw.max_participants))
-      : (raw?.maxParticipants !== undefined ? raw.maxParticipants : activity.maxParticipants),
-    createdBy: raw?.created_by ?? raw?.createdBy ?? activity.createdBy,
-    closeAt: raw?.close_at ?? raw?.closeAt ?? activity.closeAt,
-    autoCloseMinutes: raw?.auto_close_minutes !== undefined
-      ? Number(raw.auto_close_minutes || 0)
-      : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
-    hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
-    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
+    ...(raw&&typeof raw==="object"?raw:{}),
+    id:raw?.id||activity.id,
+    name:raw?.name??activity.name,
+    date:raw?.date??activity.date,
+    fields:Array.isArray(raw?.fields)?raw.fields:activity.fields,
+    open:typeof raw?.open==="boolean"?raw.open:activity.open,
+    maxParticipants:raw?.max_participants!==undefined
+      ? (raw.max_participants==null?null:Number(raw.max_participants))
+      : (raw?.maxParticipants!==undefined?raw.maxParticipants:activity.maxParticipants),
+    createdBy:raw?.created_by??raw?.createdBy??activity.createdBy,
+    closeAt:raw?.close_at??raw?.closeAt??activity.closeAt,
+    autoCloseMinutes:raw?.auto_close_minutes!==undefined
+      ? Number(raw.auto_close_minutes||0)
+      : Number(raw?.autoCloseMinutes??activity.autoCloseMinutes??0),
+    hidden:typeof raw?.hidden==="boolean"?raw.hidden:activity.hidden,
+    publishAt:raw?.publish_at??raw?.publishAt??activity.publishAt??null
   };
 }
 
@@ -3710,7 +3750,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     };
 
     try{
-      const result=await window.updateActivityRemote(payload);
+      const result=await window.updateActivityRemote(normalizeActivityForRPC(payload));
       // Use the RPC-normalized result as the local source of truth.
       Object.assign(a,result||payload);
       if(next){
