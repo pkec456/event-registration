@@ -3758,10 +3758,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       if(tab) window.renderAdmin(tab);
     }
     btn.disabled=false;
-    if(typeof window.refreshActivityListClocks==="function"){
-      window.refreshActivityListClocks();
-    }
-    if(typeof refreshIcons==="function") refreshIcons();
+if(typeof refreshIcons==="function") refreshIcons();
   }
 
   async function activityActionHide(a,btn){
