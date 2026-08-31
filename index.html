@@ -2224,6 +2224,56 @@ body .app-header:not(.home-header){
   gap:5px !important;
   font-variant-numeric:tabular-nums !important;
 }
+
+/* V93 FIX：活動列表倒數完全沿用建立活動／簽到頁既有倒數外觀 */
+.activity-status-clock.countdown{
+  min-width:78px !important;
+  width:auto !important;
+  height:48px !important;
+  padding:0 10px !important;
+  border-radius:14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:7px !important;
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  background:var(--accent) !important;
+  color:#fff !important;
+}
+.activity-status-clock.countdown svg{
+  position:static !important;
+  width:19px !important;
+  height:19px !important;
+  transform:none !important;
+  flex:0 0 auto !important;
+}
+.activity-status-clock.countdown span{
+  position:static !important;
+  color:#fff !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  letter-spacing:.02em !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.checkin-countdown.has-countdown{
+  font-variant-numeric:tabular-nums !important;
+}
+.checkin-countdown .countdown-text{
+  white-space:nowrap !important;
+  font-variant-numeric:tabular-nums !important;
+}
+@media(max-width:430px){
+  .activity-status-clock.countdown{
+    min-width:72px !important;
+    height:44px !important;
+    padding:0 9px !important;
+  }
+  .activity-status-clock.countdown span{font-size:12px !important}
+  .activity-status-clock.countdown svg{width:18px !important;height:18px !important}
+}
 </style>
 </head>
 <body>
@@ -2860,22 +2910,41 @@ function formatCountdown(ms){
   return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 }
 function renderCountdown(activity){
-  const box=document.getElementById("event-countdown");if(!box)return;
+  const box=document.getElementById("event-countdown");
+  if(!box)return;
+
   const timer=()=>{
-    const now=Date.now(), end=activity.closeAt?new Date(activity.closeAt).getTime():null;
-    if(end&&end>now){
+    const now=Date.now();
+    const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+
+    if(end && end>now){
       box.classList.add("has-countdown");
       box.classList.remove("no-countdown");
-      box.innerHTML=`<i data-lucide="timer"></i><span>${formatCountdown(end-now)}</span>`;
-      refreshIcons();
+
+      // 不重建 DOM、不重新呼叫 Lucide；只更新數字。
+      let span=box.querySelector(".countdown-text");
+      if(!span){
+        box.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
+        refreshIcons();
+        span=box.querySelector(".countdown-text");
+      }else{
+        span.textContent=formatCountdown(end-now);
+      }
     }else{
       box.classList.remove("has-countdown");
       box.classList.add("no-countdown");
-      box.innerHTML=`<i data-lucide="timer-off"></i>`;
-      refreshIcons();
+
+      // 只有狀態第一次切換時才建立 timer-off icon。
+      if(!box.querySelector("[data-lucide='timer-off']")){
+        box.innerHTML=`<i data-lucide="timer-off"></i>`;
+        refreshIcons();
+      }
     }
   };
-  timer(); clearInterval(activity._countdownTimer); activity._countdownTimer=setInterval(timer,1000);
+
+  clearInterval(activity._countdownTimer);
+  timer();
+  activity._countdownTimer=setInterval(timer,1000);
 }
 
 async function refreshActivityRegistrations(activityId){
@@ -2979,6 +3048,7 @@ function refreshActivityListClocks(){
     const end=mapped||Number(box.dataset.countdownEnd||0);
     const remaining=end-now;
     if(remaining<=0)return;
+
     const span=box.querySelector(".countdown-text");
     if(span)span.textContent=formatCountdown(remaining);
   });
@@ -2991,14 +3061,7 @@ function refreshActivityListClocks(){
       const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
       if(end && end>now){
         const span=eventBox.querySelector(".countdown-text");
-        if(span){
-          span.textContent=formatCountdown(end-now);
-        }else{
-          eventBox.classList.add("has-countdown");
-          eventBox.classList.remove("no-countdown");
-          eventBox.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
-          refreshIcons();
-        }
+        if(span)span.textContent=formatCountdown(end-now);
       }
     }
   }
@@ -3818,6 +3881,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       const deadline=window.v93CountdownDeadlines.get(String(a.id));
       if(local && deadline){
         local.open=true;
+        local.closeAt=new Date(deadline).toISOString();
+        local.autoCloseMinutes=0.5;
         local.closeAt=new Date(deadline).toISOString();
         local.autoCloseMinutes=0.5;
         a.closeAt=local.closeAt;
