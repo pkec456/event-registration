@@ -3415,6 +3415,14 @@ function showPublishChooser(el){
   renderAdmin(el);
 }
 
+function safeQuerySelectorAll(root, selector){
+  if(!root || !selector || !String(selector).trim()) return [];
+  try{return root.querySelectorAll(selector);}catch(e){
+    console.warn("忽略無效 selector:",selector,e);
+    return [];
+  }
+}
+
 function setupActivityManagementPage(el){
   // 活動管理：查看／隱藏簽到名單
   el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
