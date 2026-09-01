@@ -3270,6 +3270,19 @@ function renderQuery(el){
     }
 
     const acts=activitiesThisYear();
+
+    // 只有姓名存在於歷史簽到紀錄中，才顯示個人資料。
+    // 查不到任何歷史紀錄時，不建立 0% / 0 場的虛假資料卡。
+    const hasHistory = Object.values(state.registrations).some(list =>
+      (list || []).some(r => keyOf(r.name) === keyOf(name))
+    );
+
+    if(!hasHistory){
+      box.innerHTML=`<div class="block"><div class="empty">查無此人</div></div>`;
+      refreshIcons();
+      return;
+    }
+
     if(!acts.length){
       box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
       refreshIcons();
@@ -4040,7 +4053,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：v1.9</div>
+    <div class="version">系統版本：v1.9.1</div>
     <div class="maker">製作者：北屯張震</div>
   </footer>
 
