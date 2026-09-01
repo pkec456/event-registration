@@ -2326,36 +2326,6 @@ body .app-header:not(.home-header){
   color:#111827;
 }
 
-
-/* V95 查詢無此人 */
-.query-no-person{
-  min-height:220px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  padding:28px 20px;
-  border:1px solid var(--line,#e5e7eb);
-  border-radius:16px;
-  background:var(--surface,#fff);
-  text-align:center;
-}
-.query-no-person svg{
-  width:56px;
-  height:56px;
-  stroke-width:1.8;
-}
-.query-no-person-title{
-  font-size:20px;
-  font-weight:900;
-  letter-spacing:.02em;
-}
-.query-no-person-hint{
-  color:var(--muted,#64748b);
-  font-size:13px;
-}
-
 </style>
 </head>
 <body>
@@ -3363,22 +3333,6 @@ function renderQuery(el){
     }
 
     const acts=activitiesThisYear();
-
-    // 姓名完全不存在於歷史簽到紀錄時，不顯示 0% 等虛假資料。
-    const hasHistory = Object.values(state.registrations).some(list =>
-      (list || []).some(r => keyOf(r.name) === keyOf(name))
-    );
-
-    if(!hasHistory){
-      box.innerHTML=`<div class="query-no-person">
-        <i data-lucide="user-round-x"></i>
-        <div class="query-no-person-title">查無此人</div>
-        <div class="query-no-person-hint">找不到此姓名的歷史簽到紀錄</div>
-      </div>`;
-      refreshIcons();
-      return;
-    }
-
     if(!acts.length){
       box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
       refreshIcons();
@@ -3508,6 +3462,17 @@ function renderAdmin(el){
   if(!adminUnlocked)return renderAdminLock(el);
   const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
+  const todayKey=new Date().toLocaleDateString('sv-SE');
+  const todayActs=acts.filter(a=>String(a.date||'').slice(0,10)===todayKey);
+  const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
+  const todayRates=todayActs.map(a=>{
+    const limit=Number(a.maxParticipants)||0;
+    const signed=regsOf(a.id).length;
+    return limit>0 ? Math.min(100,(signed/limit)*100) : (signed>0 ? 100 : 0);
+  });
+  const todayAverageRate=todayRates.length
+    ? Math.round((todayRates.reduce((sum,r)=>sum+r,0)/todayRates.length)*10)/10
+    : 0;
   let content="";
   if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
   <div class="admin-main-hero-brand">
@@ -3540,7 +3505,7 @@ function renderAdmin(el){
          </button>
        </div>`}
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${Object.values(state.registrations).reduce((n,l)=>n+(l||[]).length,0)}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${rows.length?Math.round(rows.reduce((s,r)=>s+r.rate,0)/rows.length):0}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${todayActs.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${todayAverageRate}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
