@@ -2907,6 +2907,36 @@ function renderTab(){
   refreshIcons();
 }
 
+// V93：跨裝置倒數使用伺服器時間校正，避免手機／電腦系統時間不同造成秒數不同步。
+let serverClockOffsetMs=0;
+let serverClockSynced=false;
+
+async function syncServerClock(){
+  try{
+    // Supabase REST endpoint 回應的 Date 是同一個伺服器時間基準。
+    const url=(window.SUPABASE_URL||"").replace(/\/$/,"")+"/rest/v1/activities?select=id&limit=1&_clock="+Date.now();
+    if(!url.startsWith("http"))return;
+    const t0=Date.now();
+    const res=await fetch(url,{method:"GET",cache:"no-store"});
+    const dateHeader=res.headers.get("date");
+    if(dateHeader){
+      const serverMs=new Date(dateHeader).getTime();
+      const t1=Date.now();
+      if(Number.isFinite(serverMs)){
+        // 取請求往返中點，降低網路延遲造成的誤差。
+        serverClockOffsetMs=serverMs-((t0+t1)/2);
+        serverClockSynced=true;
+      }
+    }
+  }catch(e){
+    console.warn("[V93] 無法取得伺服器時間，使用裝置時間",e);
+  }
+}
+
+function syncedNow(){
+  return Date.now()+serverClockOffsetMs;
+}
+
 // ---------- REGISTER TAB ----------
 function formatCountdown(ms){
   const total=Math.max(0,Math.floor(ms/1000));
@@ -2914,12 +2944,20 @@ function formatCountdown(ms){
   const seconds=total%60;
   return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 }
+
+function ensurePublicCountdown(activity){
+  if(!activity || !activity.open)return;
+  const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+  if(!end || end<=syncedNow())return;
+  // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
+  if(typeof renderCountdown==="function") renderCountdown(activity);
+}
 function renderCountdown(activity){
   const box=document.getElementById("event-countdown");
   if(!box)return;
 
   const timer=()=>{
-    const now=Date.now();
+    const now=syncedNow();
 
     // 建立活動原本就是從 activity.closeAt 倒數；
     // 二次開啟只在這裡多一個本機 30 秒 deadline，不改原本 CSS。
@@ -2981,7 +3019,7 @@ function activityStatusClock(activity){
   const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
   const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
   const end=localDeadline||dbDeadline||null;
-  const remaining=end?end-Date.now():0;
+  const remaining=end?end-syncedNow():0;
 
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
@@ -3056,12 +3094,13 @@ function saveState(){
 }
 
 function refreshActivityListClocks(){
-  const now=Date.now();
+  const now=syncedNow();
 
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
     const mapped=window.v93CountdownDeadlines?.get(String(id));
-    const end=mapped||Number(box.dataset.countdownEnd||0);
+    const dbEnd=Number(box.dataset.countdownEnd||0);
+    const end=dbEnd||mapped;
     const remaining=end-now;
     if(remaining<=0)return;
 
@@ -3202,6 +3241,7 @@ function renderRegister(el){
   `;
   el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
   el.querySelector(".child-back")?.addEventListener("click",()=>{openEventId=null;render();});
+
 }
 
 // ---------- QUERY TAB ----------
@@ -3725,7 +3765,7 @@ async function init(){
       active.tagName==="TEXTAREA" ||
       active.tagName==="SELECT"
     );
-    if(fieldFocused || userIsTyping || activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
+    if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
 
     // 自動關閉計時器：到時間後將活動設為停止簽到
     const now = Date.now();
@@ -3752,6 +3792,10 @@ async function init(){
     if(activeTab !== "admin"){
       await loadData();
       if(!userIsTyping) renderTab();
+      if(openEventId){
+        const publicActivity=state.activities.find(x=>String(x.id)===String(openEventId));
+        if(publicActivity) ensurePublicCountdown(publicActivity);
+      }
     }else if(!userIsTyping){
       // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
       await loadData();
@@ -3761,6 +3805,7 @@ async function init(){
 setInterval(refreshActivityListClocks,1000);
 }
 
+syncServerClock().then(()=>{ if(typeof window.refreshActivityListClocks==='function') window.refreshActivityListClocks(); });
 init();
 
 window.addEventListener("error",function(ev){
@@ -3881,65 +3926,80 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   async function activityActionClose(a,btn){
     const next=!a.open;
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
-    btn.disabled=true;
-    const old=a.open;
 
-    // 第一階段：只執行已確認正常的開／關 RPC。
-    a.open=next;
+    btn.disabled=true;
+    const oldOpen=a.open;
+    const oldCloseAt=a.closeAt;
+    const oldAuto=a.autoCloseMinutes;
+
     try{
-      await window.updateActivityRemote(a);
+      if(next){
+        // 第一次 RPC：只負責把活動正常開啟。
+        a.open=true;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
+        // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
+        // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
+        const deadline=syncedNow()+30000;
+        const sharedCloseAt=new Date(deadline).toISOString();
+
+        const sharedActivity={
+          ...a,
+          open:true,
+          closeAt:sharedCloseAt,
+          autoCloseMinutes:0
+        };
+
+        // 將同一個絕對時間寫入 DB；所有手機／電腦都從 close_at 讀取。
+        await window.updateActivityRemote(sharedActivity);
+
+        a.closeAt=sharedCloseAt;
+        a.autoCloseMinutes=0;
+        window.v93CountdownDeadlines.set(String(a.id),deadline);
+
+        // 更新本機 state，但不重新 loadData，避免輸入框／倒數被重建。
+        if(window.state && Array.isArray(window.state.activities)){
+          const local=window.state.activities.find(x=>String(x.id)===String(a.id));
+          if(local){
+            local.open=true;
+            local.closeAt=sharedCloseAt;
+            local.autoCloseMinutes=0;
+          }
+        }
+
+        window.showToast("活動已開啟，30 秒後關閉簽到");
+      }else{
+        a.open=false;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        await window.updateActivityRemote(a);
+
+        window.v93CountdownDeadlines.delete(String(a.id));
+        window.showToast("活動已關閉");
+      }
+
+      if(typeof renderAdmin==="function"){
+        const tab=document.getElementById("tab-content");
+        if(tab) window.renderAdmin(tab);
+      }
+      btn.disabled=false;
+      if(typeof window.refreshActivityListClocks==="function"){
+        window.refreshActivityListClocks();
+      }
+      if(typeof refreshIcons==="function") refreshIcons();
+
     }catch(e){
-      a.open=old;
-      console.error("[活動管理] 開啟/關閉 RPC 失敗",e);
+      console.error("[活動管理] 開啟／關閉失敗",e);
+      a.open=oldOpen;
+      a.closeAt=oldCloseAt;
+      a.autoCloseMinutes=oldAuto;
+      window.v93CountdownDeadlines.delete(String(a.id));
       window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
-      return;
     }
-
-    // 第二階段：只有開啟成功後，才建立本機 30 秒倒數。
-    // 倒數欄位不送進開啟 RPC，避免影響已正常的開啟功能。
-    if(next){
-      a.closeAt=new Date(Date.now()+30000).toISOString();
-      a.autoCloseMinutes=0.5;
-      window.v93CountdownDeadlines.set(String(a.id),new Date(a.closeAt).getTime());
-      window.showToast("活動已開啟，30 秒後關閉簽到");
-    }else{
-      a.closeAt=null;
-      a.autoCloseMinutes=0;
-      window.v93CountdownDeadlines.delete(String(a.id));
-      window.showToast("活動已關閉");
-    }
-
-    // 資料重新載入失敗不能再被誤報成「活動更新失敗」。
-    try{
-      await window.loadData();
-    }catch(e){
-      console.error("[活動管理] 重新載入資料失敗",e);
-    }
-
-    // loadData 會重新讀 DB；30 秒 deadline 不寫回 DB，
-    // 所以只需要把活動維持為 open，倒數本身一律從 Map 取得。
-    if(next && window.state && Array.isArray(window.state.activities)){
-      const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-      const deadline=window.v93CountdownDeadlines.get(String(a.id));
-      if(local && deadline){
-        local.open=true;
-        local.closeAt=null;
-        local.autoCloseMinutes=0;
-      }
-    }
-
-    if(typeof renderAdmin==="function"){
-      const tab=document.getElementById("tab-content");
-      if(tab) window.renderAdmin(tab);
-    }
-    btn.disabled=false;
-    if(next && typeof window.refreshActivityListClocks==="function"){
-      window.refreshActivityListClocks();
-    }
-    if(typeof refreshIcons==="function") refreshIcons();
   }
-
   async function activityActionHide(a,btn){
     const next=!a.hidden;
     if(!confirm(next?"確定隱藏「"+a.name+"」？":"確定取消隱藏「"+a.name+"」？")) return;
