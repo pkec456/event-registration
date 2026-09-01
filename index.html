@@ -29,7 +29,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .activity-grid{display:grid;gap:12px}.activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.activity-card:active{transform:scale(.99)}.activity-top{display:flex;gap:12px;align-items:flex-start}.activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.activity-main{min-width:0;flex:1}.activity-name{font-size:17px;font-weight:850}.activity-meta{margin-top:4px;color:#777;font-size:12px}.activity-right{display:flex;align-items:center;gap:8px}.count{font-size:13px;font-weight:800;white-space:nowrap}.arrow{color:#999}
 .status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
 .back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
-.form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
+.form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=time],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 .draft-field{display:flex;gap:8px;margin-bottom:8px}.draft-field input{flex:1}.icon-btn{width:44px;height:48px;border-radius:14px;background:#f7f7f5;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto}.icon-btn.danger{color:var(--danger)}.add-field{width:100%;height:44px;border:1px dashed #ccc;background:transparent;border-radius:13px;color:#555;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
 .primary{width:100%;min-height:var(--btn-h);background:var(--accent);color:#fff;border-radius:15px;font-weight:850;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}.secondary{min-height:44px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:13px;font-weight:800;font-size:13px}.secondary:hover{background:#f7f7f5}.danger-btn{color:var(--danger)}
@@ -2274,6 +2274,32 @@ body .app-header:not(.home-header){
   .activity-status-clock.countdown span{font-size:12px !important}
   .activity-status-clock.countdown svg{width:18px !important;height:18px !important}
 }
+
+/* V95 publish countdown style */
+.publish-countdown{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-left:6px;
+  padding:3px 8px;
+  border:1px solid var(--line,#e5e7eb);
+  border-radius:999px;
+  background:var(--surface,#f8fafc);
+  color:var(--muted,#64748b);
+  font-size:11px;
+  font-weight:800;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.publish-countdown::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:currentColor;
+  opacity:.75;
+}
+
 </style>
 </head>
 <body>
@@ -2347,7 +2373,7 @@ let draftDate = "";
 let draftMaxParticipants = "";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
-let publishMode = "now";
+let draftPublishAt = "";
 let announcementText = "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
 let announcementEditing = false;
 
@@ -2748,8 +2774,8 @@ function activitiesThisYear(){
   const y = new Date().getFullYear();
   const now = Date.now();
 
-  // 「未發布」活動不納入查詢／出席率計算。
-  // publishAt 為 null 代表立即發布；只有發布時間尚未到的活動才排除。
+  // 「未發佈」活動不納入查詢／出席率計算。
+  // publishAt 為 null 代表立即發佈；只有發佈時間尚未到的活動才排除。
   return state.activities.filter(a => {
     if(new Date(a.date).getFullYear() !== y) return false;
 
@@ -3066,6 +3092,17 @@ function saveState(){
 function refreshActivityListClocks(){
   const now=Date.now();
 
+  document.querySelectorAll(".publish-countdown").forEach(box=>{
+    const publishAt=new Date(box.dataset.publishAt||"").getTime();
+    if(!Number.isFinite(publishAt)) return;
+    const remaining=publishAt-now;
+    if(remaining>0){
+      box.textContent=`距離發佈 ${formatCountdown(remaining)}`;
+    }else{
+      box.textContent="即將發佈";
+    }
+  });
+
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
     const mapped=window.v93CountdownDeadlines?.get(String(id));
@@ -3270,19 +3307,6 @@ function renderQuery(el){
     }
 
     const acts=activitiesThisYear();
-
-    // 只有姓名存在於歷史簽到紀錄中，才顯示個人資料。
-    // 查不到任何歷史紀錄時，不建立 0% / 0 場的虛假資料卡。
-    const hasHistory = Object.values(state.registrations).some(list =>
-      (list || []).some(r => keyOf(r.name) === keyOf(name))
-    );
-
-    if(!hasHistory){
-      box.innerHTML=`<div class="block"><div class="empty">查無此人</div></div>`;
-      refreshIcons();
-      return;
-    }
-
     if(!acts.length){
       box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
       refreshIcons();
@@ -3462,7 +3486,7 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
 </div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>簽到欄位</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發布時間</div><div class="choice-grid"><button type="button" class="choice publish-choice ${publishMode==='now'?'selected':''}" data-publish-mode="now">立即</button><button type="button" class="choice publish-choice ${publishMode==='1day'?'selected':''}" data-publish-mode="1day">一天後</button><button type="button" class="choice publish-choice ${publishMode==='1week'?'selected':''}" data-publish-mode="1week">一個禮拜後</button></div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
@@ -3503,8 +3527,8 @@ function activityAdminRow(a,hidden=false){
     detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
   }
   const statusClass=future?"future":(a.open?"open":"closed");
-  const statusText=future?"未發布":(a.open?"開放中":"已停止");
-  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}"><i data-lucide="power"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
+  const statusText=future?"未發佈":(a.open?"開放中":"已停止");
+  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}"><i data-lucide="power"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
 }
 
 function rememberCreateDraft(){
@@ -3514,6 +3538,9 @@ function rememberCreateDraft(){
   if(n) draftName=n.value;
   if(d) draftDate=d.value;
   if(m) draftMaxParticipants=m.value;
+  const pd=document.getElementById("new-publish-date");
+  const pt=document.getElementById("new-publish-time");
+  if(pd && pt) draftPublishAt=(pd.value && pt.value) ? `${pd.value}T${pt.value}` : "";
   document.querySelectorAll(".draft-field-input").forEach(inp=>{
     const i=Number(inp.dataset.idx);
     if(Number.isFinite(i)) draftFields[i]=inp.value;
@@ -3535,6 +3562,18 @@ function setupCreateActivityPage(el){
       input.addEventListener("input",rememberCreateDraft);
       input.addEventListener("change",rememberCreateDraft);
       input.addEventListener("blur",()=>{ 
+        rememberCreateDraft();
+        userIsTyping=false;
+      });
+    }
+  });
+  ["new-publish-date","new-publish-time"].forEach(id=>{
+    const input=document.getElementById(id);
+    if(input){
+      input.addEventListener("focus",()=>{ userIsTyping=true; });
+      input.addEventListener("input",rememberCreateDraft);
+      input.addEventListener("change",rememberCreateDraft);
+      input.addEventListener("blur",()=>{
         rememberCreateDraft();
         userIsTyping=false;
       });
@@ -3581,10 +3620,13 @@ function setupCreateActivityPage(el){
     syncDraftFieldsFromDom();
     const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
     const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
-    const publishAt =
-      publishMode==="1day" ? new Date(Date.now()+24*60*60*1000).toISOString() :
-      publishMode==="1week" ? new Date(Date.now()+7*24*60*60*1000).toISOString() :
-      null;
+    const publishAt = draftPublishAt
+      ? new Date(draftPublishAt).toISOString()
+      : null;
+    if(draftPublishAt && (!Number.isFinite(new Date(draftPublishAt).getTime()) || new Date(draftPublishAt).getTime() <= Date.now())){
+      showToast("預先發佈時間必須晚於現在");
+      return;
+    }
     if(!name){showToast("請輸入活動名稱");return;}
     if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
@@ -3602,9 +3644,9 @@ function setupCreateActivityPage(el){
       });
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
-      showToast(publishAt ? "活動已建立，尚未發布" : "活動已建立並發布");
+      showToast(publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈");
       adminPage="activities";
-      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants=""; draftCloseMinutes=0; pendingPublishActivity=null; publishMode="now";
+      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants=""; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
   renderAdmin(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
@@ -4053,8 +4095,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：v1.9.1</div>
-    <div class="maker">製作者：北屯張震</div>
+    <div class="version">系統版本：2.0</div>
+    <div class="maker">製作者：小樂</div>
   </footer>
 
 <script>
