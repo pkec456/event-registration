@@ -2907,36 +2907,6 @@ function renderTab(){
   refreshIcons();
 }
 
-// V93：跨裝置倒數使用伺服器時間校正，避免手機／電腦系統時間不同造成秒數不同步。
-let serverClockOffsetMs=0;
-let serverClockSynced=false;
-
-async function syncServerClock(){
-  try{
-    // Supabase REST endpoint 回應的 Date 是同一個伺服器時間基準。
-    const url=(window.SUPABASE_URL||"").replace(/\/$/,"")+"/rest/v1/activities?select=id&limit=1&_clock="+Date.now();
-    if(!url.startsWith("http"))return;
-    const t0=Date.now();
-    const res=await fetch(url,{method:"GET",cache:"no-store"});
-    const dateHeader=res.headers.get("date");
-    if(dateHeader){
-      const serverMs=new Date(dateHeader).getTime();
-      const t1=Date.now();
-      if(Number.isFinite(serverMs)){
-        // 取請求往返中點，降低網路延遲造成的誤差。
-        serverClockOffsetMs=serverMs-((t0+t1)/2);
-        serverClockSynced=true;
-      }
-    }
-  }catch(e){
-    console.warn("[V93] 無法取得伺服器時間，使用裝置時間",e);
-  }
-}
-
-function syncedNow(){
-  return Date.now()+serverClockOffsetMs;
-}
-
 // ---------- REGISTER TAB ----------
 function formatCountdown(ms){
   const total=Math.max(0,Math.floor(ms/1000));
@@ -2948,7 +2918,7 @@ function formatCountdown(ms){
 function ensurePublicCountdown(activity){
   if(!activity || !activity.open)return;
   const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
-  if(!end || end<=syncedNow())return;
+  if(!end || end<=Date.now())return;
   // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
   if(typeof renderCountdown==="function") renderCountdown(activity);
 }
@@ -2957,7 +2927,7 @@ function renderCountdown(activity){
   if(!box)return;
 
   const timer=()=>{
-    const now=syncedNow();
+    const now=Date.now();
 
     // 建立活動原本就是從 activity.closeAt 倒數；
     // 二次開啟只在這裡多一個本機 30 秒 deadline，不改原本 CSS。
@@ -3019,7 +2989,7 @@ function activityStatusClock(activity){
   const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
   const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
   const end=localDeadline||dbDeadline||null;
-  const remaining=end?end-syncedNow():0;
+  const remaining=end?end-Date.now():0;
 
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
@@ -3094,7 +3064,7 @@ function saveState(){
 }
 
 function refreshActivityListClocks(){
-  const now=syncedNow();
+  const now=Date.now();
 
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
     const id=box.closest(".activity-card")?.dataset.open;
@@ -3805,7 +3775,6 @@ async function init(){
 setInterval(refreshActivityListClocks,1000);
 }
 
-syncServerClock().then(()=>{ if(typeof window.refreshActivityListClocks==='function') window.refreshActivityListClocks(); });
 init();
 
 window.addEventListener("error",function(ev){
@@ -3942,7 +3911,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
         // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
         // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
-        const deadline=syncedNow()+30000;
+        const deadline=Date.now()+30000;
         const sharedCloseAt=new Date(deadline).toISOString();
 
         const sharedActivity={
