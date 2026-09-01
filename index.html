@@ -2300,6 +2300,13 @@ body .app-header:not(.home-header){
   opacity:.75;
 }
 
+
+/* V95 power icon: open / close */
+.admin-actions [data-activity-close] svg{
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+}
 </style>
 </head>
 <body>
@@ -3528,7 +3535,7 @@ function activityAdminRow(a,hidden=false){
   }
   const statusClass=future?"future":(a.open?"open":"closed");
   const statusText=future?"未發佈":(a.open?"開放中":"已停止");
-  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}"><i data-lucide="power"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
+  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"power-off":"power"}"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
 }
 
 function rememberCreateDraft(){
