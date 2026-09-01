@@ -2907,36 +2907,6 @@ function renderTab(){
   refreshIcons();
 }
 
-// V93：跨裝置倒數使用伺服器時間校正，避免手機／電腦系統時間不同造成秒數不同步。
-let serverClockOffsetMs=0;
-let serverClockSynced=false;
-
-async function syncServerClock(){
-  try{
-    // Supabase REST endpoint 回應的 Date 是同一個伺服器時間基準。
-    const url=(window.SUPABASE_URL||"").replace(/\/$/,"")+"/rest/v1/activities?select=id&limit=1&_clock="+Date.now();
-    if(!url.startsWith("http"))return;
-    const t0=Date.now();
-    const res=await fetch(url,{method:"GET",cache:"no-store"});
-    const dateHeader=res.headers.get("date");
-    if(dateHeader){
-      const serverMs=new Date(dateHeader).getTime();
-      const t1=Date.now();
-      if(Number.isFinite(serverMs)){
-        // 取請求往返中點，降低網路延遲造成的誤差。
-        serverClockOffsetMs=serverMs-((t0+t1)/2);
-        serverClockSynced=true;
-      }
-    }
-  }catch(e){
-    console.warn("[V93] 無法取得伺服器時間，使用裝置時間",e);
-  }
-}
-
-function syncedNow(){
-  return Date.now()+serverClockOffsetMs;
-}
-
 // ---------- REGISTER TAB ----------
 function formatCountdown(ms){
   const total=Math.max(0,Math.floor(ms/1000));
@@ -2948,21 +2918,24 @@ function formatCountdown(ms){
 function ensurePublicCountdown(activity){
   if(!activity || !activity.open)return;
   const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
-  if(!end || end<=syncedNow())return;
-  // V93：公開頁只使用資料庫的 closeAt。
-  // 不使用管理者本機 Map，確保手機／電腦讀到同一個絕對截止時間。
+  if(!end || end<=Date.now())return;
+  // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
   if(typeof renderCountdown==="function") renderCountdown(activity);
 }
-
 function renderCountdown(activity){
   const box=document.getElementById("event-countdown");
   if(!box)return;
 
   const timer=()=>{
-    const now=syncedNow();
-    const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+    const now=Date.now();
 
-    if(activity.open && end && end>now){
+    // 建立活動原本就是從 activity.closeAt 倒數；
+    // 二次開啟只在這裡多一個本機 30 秒 deadline，不改原本 CSS。
+    const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
+    const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
+    const end=localDeadline||dbDeadline;
+
+    if(end && end>now){
       box.classList.add("has-countdown");
       box.classList.remove("no-countdown");
 
@@ -2971,11 +2944,13 @@ function renderCountdown(activity){
         box.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
         refreshIcons();
       }else{
+        // 舊版寫法的核心：每秒只改數字。
         span.textContent=formatCountdown(end-now);
       }
     }else{
       box.classList.remove("has-countdown");
       box.classList.add("no-countdown");
+
       if(!box.querySelector("[data-lucide='timer-off']")){
         box.innerHTML=`<i data-lucide="timer-off"></i>`;
         refreshIcons();
@@ -3009,8 +2984,12 @@ async function refreshActivityRegistrations(activityId){
 
 
 function activityStatusClock(activity){
-  const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
-  const remaining=end?end-syncedNow():0;
+  // 正常建立活動：使用 activity.closeAt。
+  // 二次開啟：只額外從本機 deadline 取得 30 秒，不改既有 CSS。
+  const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
+  const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
+  const end=localDeadline||dbDeadline||null;
+  const remaining=end?end-Date.now():0;
 
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
@@ -3020,27 +2999,30 @@ function activityStatusClock(activity){
 }
 
 let activityExpiryTimer=null;
+window.v93CountdownDeadlines=window.v93CountdownDeadlines||new Map();
 
 function startActivityExpiryWatcher(){
   if(activityExpiryTimer)clearInterval(activityExpiryTimer);
   activityExpiryTimer=setInterval(async()=>{
     if(!Array.isArray(state.activities))return;
-
-    const now=syncedNow();
+    const now=Date.now();
     const expired=state.activities.filter(a=>{
-      const end=a.closeAt?new Date(a.closeAt).getTime():0;
+      const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
+      const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
+      const end=localEnd||dbEnd;
       return a.open && end && end<=now;
     });
     if(!expired.length)return;
 
     for(const a of expired){
-      const oldOpen=a.open;
+      // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
       const oldCloseAt=a.closeAt;
       const oldAuto=a.autoCloseMinutes;
-
+      const localDeadline=window.v93CountdownDeadlines?.get(String(a.id))||0;
       a.open=false;
       a.closeAt=null;
       a.autoCloseMinutes=0;
+      window.v93CountdownDeadlines?.delete(String(a.id));
 
       try{
         await updateActivityRemote({
@@ -3056,17 +3038,22 @@ function startActivityExpiryWatcher(){
           hidden:!!a.hidden,
           publishAt:a.publishAt||null
         });
-        console.log("[V93] 30 秒到，自動關閉活動",a.name);
+        console.log("[活動管理] 30 秒到，自動關閉活動",a.name);
       }catch(e){
-        a.open=oldOpen;
+        // 更新失敗時恢復本機狀態，避免畫面與資料庫不一致。
+        a.open=true;
         a.closeAt=oldCloseAt;
         a.autoCloseMinutes=oldAuto;
-        console.error("[V93] 自動關閉失敗",e);
+        if(localDeadline) window.v93CountdownDeadlines?.set(String(a.id),localDeadline);
+        console.error("[活動管理] 30 秒自動關閉失敗",e);
       }
     }
 
-    if(typeof render==="function")render();
-    if(typeof window.refreshActivityListClocks==="function")window.refreshActivityListClocks();
+    // 倒數每秒只更新既有數字，不重建整個頁面。
+    // 只有真的到 0 秒並成功關閉活動後，才需要 render 一次。
+    if(expired.length===0 && typeof window.refreshActivityListClocks==="function"){
+      window.refreshActivityListClocks();
+    }
   },1000);
 }
 
@@ -3077,20 +3064,26 @@ function saveState(){
 }
 
 function refreshActivityListClocks(){
-  const now=syncedNow();
+  const now=Date.now();
 
   document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
+    const id=box.closest(".activity-card")?.dataset.open;
+    const mapped=window.v93CountdownDeadlines?.get(String(id));
     const dbEnd=Number(box.dataset.countdownEnd||0);
-    const remaining=dbEnd-now;
+    const end=dbEnd||mapped;
+    const remaining=end-now;
+    if(remaining<=0)return;
+
     const span=box.querySelector(".countdown-text");
-    if(span && remaining>0)span.textContent=formatCountdown(remaining);
+    if(span)span.textContent=formatCountdown(remaining);
   });
 
   const eventBox=document.getElementById("event-countdown");
   if(eventBox && openEventId){
     const activity=state.activities.find(x=>String(x.id)===String(openEventId));
     if(activity && activity.open){
-      const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
+      const mapped=window.v93CountdownDeadlines?.get(String(activity.id));
+      const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
       if(end && end>now){
         const span=eventBox.querySelector(".countdown-text");
         if(span)span.textContent=formatCountdown(end-now);
@@ -3744,6 +3737,28 @@ async function init(){
     );
     if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
 
+    // 自動關閉計時器：到時間後將活動設為停止簽到
+    const now = Date.now();
+    // 原本建立活動的 close_at 自動關閉保留。
+    // 「重新開啟 30 秒」由 startActivityExpiryWatcher 單獨處理，
+    // 避免 loadData 每 6 秒把本機 30 秒 deadline 洗掉。
+    const expired = state.activities.filter(a =>
+      a.open &&
+      a.closeAt &&
+      !window.v93CountdownDeadlines?.has(String(a.id)) &&
+      new Date(a.closeAt).getTime() <= now
+    );
+
+    for(const a of expired){
+      try{
+        a.open = false;
+        await updateActivityRemote(a);
+      }catch(e){
+        console.error("活動自動關閉失敗", e);
+        a.open = true;
+      }
+    }
+
     if(activeTab !== "admin"){
       await loadData();
       if(!userIsTyping) renderTab();
@@ -3760,7 +3775,6 @@ async function init(){
 setInterval(refreshActivityListClocks,1000);
 }
 
-syncServerClock().then(()=>{ if(typeof window.refreshActivityListClocks==='function') window.refreshActivityListClocks(); });
 init();
 
 window.addEventListener("error",function(ev){
@@ -3889,31 +3903,32 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
     try{
       if(next){
-        // 第一階段：只做原本已確認正常的「開啟活動」。
-        // 不在這次 RPC 帶入 30 秒欄位，避免影響既有開啟流程。
+        // 第一次 RPC：只負責把活動正常開啟。
         a.open=true;
         a.closeAt=null;
         a.autoCloseMinutes=0;
         await window.updateActivityRemote(a);
 
-        // 第二階段：開啟成功後，以伺服器校正時間建立唯一的絕對截止時間。
-        // closeAt 寫入資料庫，手機／電腦之後全部讀同一個 deadline。
-        const deadline=syncedNow()+30000;
+        // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
+        // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
+        const deadline=Date.now()+30000;
         const sharedCloseAt=new Date(deadline).toISOString();
+
         const sharedActivity={
           ...a,
           open:true,
           closeAt:sharedCloseAt,
-          // 不使用 0.5，避免 auto_close_minutes 為 integer 時發生型別錯誤。
           autoCloseMinutes:0
         };
 
+        // 將同一個絕對時間寫入 DB；所有手機／電腦都從 close_at 讀取。
         await window.updateActivityRemote(sharedActivity);
 
-        a.open=true;
         a.closeAt=sharedCloseAt;
         a.autoCloseMinutes=0;
+        window.v93CountdownDeadlines.set(String(a.id),deadline);
 
+        // 更新本機 state，但不重新 loadData，避免輸入框／倒數被重建。
         if(window.state && Array.isArray(window.state.activities)){
           const local=window.state.activities.find(x=>String(x.id)===String(a.id));
           if(local){
@@ -3925,11 +3940,12 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
         window.showToast("活動已開啟，30 秒後關閉簽到");
       }else{
-        // 關閉時清除共享截止時間。
         a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
         await window.updateActivityRemote(a);
+
+        window.v93CountdownDeadlines.delete(String(a.id));
         window.showToast("活動已關閉");
       }
 
@@ -3938,14 +3954,17 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
         if(tab) window.renderAdmin(tab);
       }
       btn.disabled=false;
-      if(typeof window.refreshActivityListClocks==="function")window.refreshActivityListClocks();
-      if(typeof refreshIcons==="function")refreshIcons();
+      if(typeof window.refreshActivityListClocks==="function"){
+        window.refreshActivityListClocks();
+      }
+      if(typeof refreshIcons==="function") refreshIcons();
 
     }catch(e){
-      console.error("[V93] 開啟／關閉失敗",e);
+      console.error("[活動管理] 開啟／關閉失敗",e);
       a.open=oldOpen;
       a.closeAt=oldCloseAt;
       a.autoCloseMinutes=oldAuto;
+      window.v93CountdownDeadlines.delete(String(a.id));
       window.showToast("活動更新失敗："+(e.message||e),"error");
       btn.disabled=false;
     }
