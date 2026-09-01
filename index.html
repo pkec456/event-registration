@@ -2307,6 +2307,45 @@ body .app-header:not(.home-header){
   height:16px;
   flex:0 0 auto;
 }
+
+/* V95 toggle preview */
+.admin-actions .activity-toggle-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+.admin-actions .activity-toggle{
+  position:relative;
+  width:34px;
+  height:20px;
+  flex:0 0 34px;
+  border-radius:999px;
+  background:#cbd5e1;
+  transition:background .18s ease;
+}
+.admin-actions .activity-toggle-knob{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  transition:transform .18s ease;
+}
+.admin-actions .activity-toggle-btn:has(.activity-toggle) .activity-toggle{}
+
+.admin-actions .activity-toggle-btn.is-on .activity-toggle{
+  background:#16a34a;
+}
+.admin-actions .activity-toggle-btn.is-on .activity-toggle-knob{
+  transform:translateX(14px);
+}
+.admin-actions .activity-toggle-btn.is-off .activity-toggle{
+  background:#cbd5e1;
+}
+
 </style>
 </head>
 <body>
@@ -3535,7 +3574,7 @@ function activityAdminRow(a,hidden=false){
   }
   const statusClass=future?"future":(a.open?"open":"closed");
   const statusText=future?"未發佈":(a.open?"開放中":"已停止");
-  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"power-off":"power"}"></i>${a.open?"關閉":"開啟"}</button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
+  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}"><div class="admin-card-top"><div class="admin-card-icon"><i data-lucide="calendar-days"></i></div><div class="admin-card-info"><div class="admin-card-name">${escapeHtml(a.name)}</div><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div><div class="admin-card-status"><span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}</div></div><div style="font-size:12px;font-weight:850">${list.length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div></div><div class="stat-row"><span><b>${list.length}</b> 人簽到</span><span>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</span></div><div class="admin-actions"><button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button><button class="activity-toggle-btn ${a.open?"is-on":"is-off"}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><span class="activity-toggle" aria-hidden="true"><span class="activity-toggle-knob"></span></span><span>${a.open?"開放中":"已停止"}</span></button><button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button><button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button></div>${detail}</div>`;
 }
 
 function rememberCreateDraft(){
