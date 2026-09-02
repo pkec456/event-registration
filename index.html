@@ -65,7 +65,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-head .actions{display:flex;gap:7px}.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}.activity-admin-card.hidden{opacity:.65}.admin-card-top{display:flex;gap:10px;align-items:flex-start}.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.admin-card-info{flex:1;min-width:0}.admin-card-name{font-weight:900;font-size:15px}.admin-card-meta{font-size:11px;color:#888;margin-top:3px}.admin-card-status{margin-top:8px}.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.admin-actions button.danger{color:var(--danger)}
 .officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.admin-edit-box{margin-top:10px}
 /* V95 出席率 4 格卡片＋圓形進度 */
-.rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.rate-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 5px 10px;text-align:center;min-width:0;overflow:hidden}
 .rate-head{display:flex;align-items:center;justify-content:center;gap:3px;min-height:30px;font-size:11px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rate-head-name{overflow:hidden;text-overflow:ellipsis}
@@ -2380,6 +2380,89 @@ body .app-header:not(.home-header){
 .query-no-person-hint{
   color:var(--muted,#64748b);
   font-size:13px;
+}
+
+
+/* V95：姓名旁排名 Icon 放大 */
+.ranking-icon,
+.person-ranking-icon,
+.attendance-ranking-icon {
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px;
+  stroke-width: 2.4;
+}
+
+
+/* V95：姓名旁排名 Icon 明顯放大 */
+.ranking-icon,
+.person-ranking-icon,
+.attendance-ranking-icon {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  flex: 0 0 32px !important;
+  stroke-width: 2.6 !important;
+}
+
+
+/* V95：姓名＋排名 Icon 放大，不改卡片尺寸 */
+.ranking-icon,
+.person-ranking-icon,
+.attendance-ranking-icon {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  flex: 0 0 28px !important;
+  stroke-width: 2.7 !important;
+}
+.ranking-name,
+.person-name,
+.attendance-name,
+.attendee-name {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+
+
+/* V95：排名 Icon＋姓名，與活動列表文字視覺尺寸一致 */
+.ranking-name,
+.person-name,
+.attendance-name,
+.attendee-name {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+.ranking-icon,
+.person-ranking-icon,
+.attendance-ranking-icon {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex: 0 0 22px !important;
+  stroke-width: 2.4 !important;
+}
+
+
+/* V95：姓名＋排名 Icon 尺寸微調 */
+.ranking-name,
+.person-name,
+.attendance-name,
+.attendee-name {
+  font-size: 18px !important;
+}
+.ranking-icon,
+.person-ranking-icon,
+.attendance-ranking-icon {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  flex: 0 0 24px !important;
 }
 
 </style>
