@@ -64,7 +64,33 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}.metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.metric b{display:block;font-size:22px}.metric span{font-size:10px;color:#777}.admin-menu{display:grid;gap:10px}.admin-action{min-height:76px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:12px;text-align:left}.admin-action .menu-icon{width:42px;height:42px;border-radius:14px;background:#f2f2ef;display:grid;place-items:center;flex:0 0 auto}.admin-action .menu-text{flex:1}.admin-action strong{display:block;font-size:14px}.admin-action small{display:block;margin-top:4px;color:#888;font-size:11px}.admin-action .chev{color:#999}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-head .actions{display:flex;gap:7px}.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}.activity-admin-card.hidden{opacity:.65}.admin-card-top{display:flex;gap:10px;align-items:flex-start}.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.admin-card-info{flex:1;min-width:0}.admin-card-name{font-weight:900;font-size:15px}.admin-card-meta{font-size:11px;color:#888;margin-top:3px}.admin-card-status{margin-top:8px}.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.admin-actions button.danger{color:var(--danger)}
 .officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.admin-edit-box{margin-top:10px}
-.rate-list{display:grid;gap:9px}.rate-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}.rate-head{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:850}.rate-bar{height:7px;border-radius:99px;background:#eee;margin-top:10px;overflow:hidden}.rate-fill{height:100%;background:var(--accent);border-radius:99px}
+/* V95 出席率 4 格卡片＋圓形進度 */
+.rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 5px 10px;text-align:center;min-width:0;overflow:hidden}
+.rate-head{display:flex;align-items:center;justify-content:center;gap:3px;min-height:30px;font-size:11px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rate-head-name{overflow:hidden;text-overflow:ellipsis}
+.rate-rank-icon{width:15px;height:15px;flex:0 0 15px;stroke-width:2.5}
+.rate-rank-icon.champion{color:#d97706}
+.rate-rank-icon.up{color:#16a34a}
+.rate-rank-icon.down{color:#dc2626}
+.rate-ring{width:62px;height:62px;margin:4px auto 5px;position:relative}
+.rate-ring svg{width:62px;height:62px;transform:rotate(-90deg)}
+.rate-ring .ring-bg{fill:none;stroke:#e5e7eb;stroke-width:7}
+.rate-ring .ring-fill{fill:none;stroke-width:7;stroke-linecap:round}
+.rate-ring-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:950}
+.rate-detail{font-size:9px;color:#64748b;font-weight:750;white-space:nowrap}
+@media(max-width:600px){
+  .rate-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .rate-card{border-radius:12px;padding:7px 2px 8px}
+  .rate-head{font-size:9px;min-height:27px}
+  .rate-rank-icon{width:13px;height:13px;flex-basis:13px}
+  .rate-ring,.rate-ring svg{width:52px;height:52px}
+  .rate-ring{margin:3px auto 4px}
+  .rate-ring .ring-bg,.rate-ring .ring-fill{stroke-width:6}
+  .rate-ring-value{font-size:12px}
+  .rate-detail{font-size:8px}
+}
+
 .empty{text-align:center;color:#888;padding:28px 10px;font-size:13px}.debug-error-box{display:none;margin-top:10px;padding:12px;border-radius:14px;background:#fff0f0;border:1px solid #f0b6b6;color:#a00;font-size:12px;white-space:pre-wrap;word-break:break-word}.debug-error-box.show{display:block}.countdown-box{margin-top:12px;padding:10px 12px;border-radius:13px;background:#fff5dd;color:#9b6800;text-align:center;font-size:12px;font-weight:850}.note-shared{font-size:11px;color:#888;background:#f5f5f3;border-radius:13px;padding:10px 12px;line-height:1.5;margin-top:10px}.divider{height:1px;background:var(--line);margin:14px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#171717;color:#fff;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
 .system-footer{margin-top:28px;padding:10px 0;text-align:center;color:#aaa;font-size:10px;line-height:1.6}.system-footer .version{font-weight:800}.system-footer .maker{margin-top:1px}
 .table-wrap{overflow-x:auto}.list-table{width:100%;border-collapse:collapse;font-size:12px}.list-table th{text-align:left;color:#888;font-size:10px;padding:8px;border-bottom:1px solid var(--line)}.list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.list-table td.name{font-weight:800}.rate-bar-wrap{display:flex;align-items:center;gap:8px}.rate-bar-track{flex:1;height:6px;border-radius:99px;background:#eee;overflow:hidden}.rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}.rate-num{font-weight:850;min-width:38px;text-align:right;font-size:11px}
@@ -3572,7 +3598,48 @@ function renderAdmin(el){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
   }
-  if(adminPage==="attendance")content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map((r,i)=>`<div class="rate-card"><div class="rate-head"><span>${i+1}. ${escapeHtml(r.name)}</span><span>${r.rate}%</span></div><div style="font-size:10px;color:#999;margin-top:4px">${r.attended} / ${r.total} 場</div><div class="rate-bar"><div class="rate-fill" style="width:${r.rate}%"></div></div></div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+  if(adminPage==="attendance"){
+    const now=new Date();
+    const month=now.getMonth();
+    const recentStart=new Date(now.getFullYear(),Math.max(0,month-2),1);
+    const previousStart=new Date(now.getFullYear(),Math.max(0,month-5),1);
+    const previousEnd=new Date(recentStart.getTime()-1);
+    const trendFor=(name)=>{
+      const k=keyOf(name);
+      const recentActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=recentStart;});
+      const prevActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=previousStart&&d<=previousEnd;});
+      const rateOf=(arr)=>{
+        if(!arr.length)return null;
+        const attended=arr.filter(a=>regsOf(a.id).some(r=>keyOf(r.name)===k)).length;
+        return attended/arr.length*100;
+      };
+      const rr=rateOf(recentActs),pr=rateOf(prevActs);
+      if(rr!==null&&pr!==null&&rr>pr+0.1)return 'up';
+      if(rr!==null&&pr!==null&&rr<pr-0.1)return 'down';
+      return '';
+    };
+    const championRate=rows.length?Math.max(...rows.map(r=>Number(r.rate)||0)):-1;
+    const ring=(r)=>{
+      const rate=Math.max(0,Math.min(100,Number(r.rate)||0));
+      const tone=getAttendanceTone(rate);
+      const c=2*Math.PI*22, offset=c*(1-rate/100);
+      const trend=trendFor(r.name);
+      const champion=Number(r.rate)===championRate&&championRate>=0;
+      const icon=champion?'trophy':trend==='up'?'trending-up':trend==='down'?'trending-down':'';
+      return `<div class="rate-card">
+        <div class="rate-head">${icon?`<i class="rate-rank-icon ${champion?'champion':trend}" data-lucide="${icon}" title="${champion?'總冠軍':trend==='up'?'上升':'下降'}"></i>`:''}<span class="rate-head-name">${escapeHtml(r.name)}</span></div>
+        <div class="rate-ring">
+          <svg viewBox="0 0 52 52" aria-label="${r.rate}%">
+            <circle class="ring-bg" cx="26" cy="26" r="22"></circle>
+            <circle class="ring-fill" cx="26" cy="26" r="22" stroke="${tone.color}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"></circle>
+          </svg>
+          <div class="rate-ring-value" style="color:${tone.color}">${r.rate}%</div>
+        </div>
+        <div class="rate-detail">${r.attended} / ${r.total} 場</div>
+      </div>`;
+    };
+    content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map(r=>ring(r)).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+  }
   const superAdmin=isSuperAdmin();
   const session=getAdminSession();
   const roleText=superAdmin?"最高管理者":"幹部";
