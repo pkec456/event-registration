@@ -2453,12 +2453,104 @@ body .app-header:not(.home-header){
 .top.home-fixed-header .top-brand{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 120px);justify-content:center;text-align:center;}
 .top.home-fixed-header .top-brand h1{text-align:center;}
 @media(max-width:430px){
-  .top.home-fixed-header .top-brand{max-width:calc(100% - 105px) !important;}
+  /* 手機 Header 依照查詢頁的左右保留區，避免標題與右側管理按鈕重疊 */
+  .top.home-fixed-header{
+    display:grid !important;
+    grid-template-columns:42px minmax(0,1fr) auto !important;
+    align-items:center !important;
+    column-gap:8px !important;
+  }
+  .top.home-fixed-header .top-brand{
+    position:static !important;
+    left:auto !important;
+    transform:none !important;
+    grid-column:2 !important;
+    width:auto !important;
+    max-width:none !important;
+    min-width:0 !important;
+    justify-content:center !important;
+    text-align:center !important;
+  }
+  .top.home-fixed-header .top-brand h1{
+    width:100% !important;
+    min-width:0 !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    font-size:18px !important;
+  }
+  .top.home-fixed-header .top-admin-actions{
+    grid-column:3 !important;
+    margin-left:0 !important;
+    position:static !important;
+    z-index:2 !important;
+    gap:6px !important;
+  }
 }
 
-/* 首頁：只固定標題置中，管理盾牌維持原本最右側位置 */
+/* 首頁：標題置中；右側管理按鈕維持原本位置，手機不與標題重疊 */
 .top.home-fixed-header{position:relative !important;}
 .top.home-fixed-header .top-admin-actions{margin-left:auto !important;position:relative !important;z-index:2 !important;}
+
+/* V95 Header：首頁／子頁手機間距、文字、Icon 統一；盾牌登入後改為實心色 */
+.top.home-fixed-header,
+.subpage-fixed-header{
+  gap:8px !important;
+}
+.top.home-fixed-header .top-brand h1,
+.subpage-fixed-header .subpage-title{
+  font-size:18px !important;
+  line-height:1.2 !important;
+  font-weight:900 !important;
+}
+.top.home-fixed-header .top-admin-actions,
+.subpage-fixed-header .subpage-actions{
+  gap:6px !important;
+}
+.top.home-fixed-header .top-admin-access,
+.top.home-fixed-header .top-admin-logout,
+.subpage-fixed-header .top-admin-access,
+.subpage-fixed-header .top-admin-logout,
+.subpage-fixed-header .subpage-back-top{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  flex:0 0 42px !important;
+}
+.top.home-fixed-header .top-admin-access svg,
+.top.home-fixed-header .top-admin-logout svg,
+.subpage-fixed-header .top-admin-access svg,
+.subpage-fixed-header .top-admin-logout svg,
+.subpage-fixed-header .subpage-back-top svg{
+  width:20px !important;
+  height:20px !important;
+}
+/* 登入後盾牌：保留原本主管理員／幹部顏色，但盾牌本體改實心 */
+.top-admin-access.super svg,
+.subpage-fixed-header .top-admin-access.super svg{
+  color:var(--admin-super) !important;
+  fill:var(--admin-super) !important;
+  stroke:var(--surface) !important;
+}
+.top-admin-access.officer svg,
+.subpage-fixed-header .top-admin-access.officer svg{
+  color:var(--accent) !important;
+  fill:var(--accent) !important;
+  stroke:var(--surface) !important;
+}
+@media(max-width:430px){
+  .top.home-fixed-header{
+    column-gap:8px !important;
+  }
+  .top.home-fixed-header .top-brand h1{
+    font-size:18px !important;
+  }
+  .top.home-fixed-header .top-admin-actions,
+  .subpage-fixed-header .subpage-actions{
+    gap:6px !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -4321,7 +4413,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.1</div>
+    <div class="version">系統版本：2.0</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
