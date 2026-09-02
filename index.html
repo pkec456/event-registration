@@ -2465,6 +2465,19 @@ body .app-header:not(.home-header){
   flex: 0 0 24px !important;
 }
 
+
+/* V95：出席率排名卡片手機固定 2 格一排 */
+@media (max-width: 600px){
+  .attendance-grid,
+  .ranking-grid,
+  .people-grid,
+  .admin-attendance-grid,
+  .attendance-cards,
+  .ranking-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
 </style>
 </head>
 <body>
