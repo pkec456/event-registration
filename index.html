@@ -66,28 +66,26 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.admin-edit-box{margin-top:10px}
 /* V95 出席率 4 格卡片＋圓形進度 */
 .rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 5px 10px;text-align:center;min-width:0;overflow:hidden}
-.rate-head{display:flex;align-items:center;justify-content:center;gap:3px;min-height:30px;font-size:11px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rate-head-name{overflow:hidden;text-overflow:ellipsis}
-.rate-rank-icon{width:15px;height:15px;flex:0 0 15px;stroke-width:2.5}
+.rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 10px 11px;text-align:left;min-width:0;overflow:hidden}
+.rate-head{display:flex;align-items:center;gap:6px;min-height:30px;font-size:20px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rate-head-name{font-size:16px;font-weight:400;overflow:hidden;text-overflow:ellipsis}
+.rate-rank-icon{width:18px;height:18px;flex:0 0 18px;stroke-width:2.5}
 .rate-rank-icon.champion{color:#d97706}
 .rate-rank-icon.up{color:#16a34a}
 .rate-rank-icon.down{color:#dc2626}
-.rate-ring{width:62px;height:62px;margin:4px auto 5px;position:relative}
-.rate-ring svg{width:62px;height:62px;transform:rotate(-90deg)}
-.rate-ring .ring-bg{fill:none;stroke:#e5e7eb;stroke-width:7}
-.rate-ring .ring-fill{fill:none;stroke-width:7;stroke-linecap:round}
-.rate-ring-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:950}
+.rate-bar{height:6px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:7px 0 6px}
+.rate-bar-fill{height:100%;border-radius:999px;transition:width .2s ease}
+.rate-percent{font-size:20px;font-weight:950;line-height:1.1}
+.rate-detail{font-size:12px;color:var(--muted);font-weight:700}
 .rate-detail{font-size:9px;color:#64748b;font-weight:750;white-space:nowrap}
 @media(max-width:600px){
   .rate-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .rate-card{border-radius:12px;padding:7px 2px 8px}
-  .rate-head{font-size:9px;min-height:27px}
-  .rate-rank-icon{width:13px;height:13px;flex-basis:13px}
-  .rate-ring,.rate-ring svg{width:52px;height:52px}
-  .rate-ring{margin:3px auto 4px}
-  .rate-ring .ring-bg,.rate-ring .ring-fill{stroke-width:6}
-  .rate-ring-value{font-size:12px}
+  .rate-card{border-radius:12px;padding:8px 8px 9px}
+  .rate-head{font-size:20px;gap:5px;min-height:29px}
+  .rate-rank-icon{width:18px;height:18px;flex-basis:18px}
+  .rate-bar{height:5px;margin:6px 0 5px}
+  .rate-percent{font-size:20px}
+  .rate-detail{font-size:11px}
   .rate-detail{font-size:8px}
 }
 
@@ -2426,47 +2424,7 @@ body .app-header:not(.home-header){
   font-weight: 900 !important;
 }
 
-
-/* V95：排名 Icon＋姓名，與活動列表文字視覺尺寸一致 */
-.ranking-name,
-.person-name,
-.attendance-name,
-.attendee-name {
-  font-size: 16px !important;
-  font-weight: 800 !important;
-  line-height: 1.35 !important;
-}
-.ranking-icon,
-.person-ranking-icon,
-.attendance-ranking-icon {
-  width: 22px !important;
-  height: 22px !important;
-  min-width: 22px !important;
-  min-height: 22px !important;
-  flex: 0 0 22px !important;
-  stroke-width: 2.4 !important;
-}
-
-
-/* V95：姓名＋排名 Icon 尺寸微調 */
-.ranking-name,
-.person-name,
-.attendance-name,
-.attendee-name {
-  font-size: 18px !important;
-}
-.ranking-icon,
-.person-ranking-icon,
-.attendance-ranking-icon {
-  width: 24px !important;
-  height: 24px !important;
-  min-width: 24px !important;
-  min-height: 24px !important;
-  flex: 0 0 24px !important;
-}
-
-
-
+.rate-head-name{font-size:16px !important;font-weight:400 !important;}
 </style>
 </head>
 <body>
@@ -3707,19 +3665,13 @@ function renderAdmin(el){
     const ring=(r)=>{
       const rate=Math.max(0,Math.min(100,Number(r.rate)||0));
       const tone=getAttendanceTone(rate);
-      const c=2*Math.PI*22, offset=c*(1-rate/100);
       const trend=trendFor(r.name);
       const champion=Number(r.rate)===championRate&&championRate>=0;
       const icon=champion?'trophy':trend==='up'?'trending-up':trend==='down'?'trending-down':'';
       return `<div class="rate-card">
         <div class="rate-head">${icon?`<i class="rate-rank-icon ${champion?'champion':trend}" data-lucide="${icon}" title="${champion?'總冠軍':trend==='up'?'上升':'下降'}"></i>`:''}<span class="rate-head-name">${escapeHtml(r.name)}</span></div>
-        <div class="rate-ring">
-          <svg viewBox="0 0 52 52" aria-label="${r.rate}%">
-            <circle class="ring-bg" cx="26" cy="26" r="22"></circle>
-            <circle class="ring-fill" cx="26" cy="26" r="22" stroke="${tone.color}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"></circle>
-          </svg>
-          <div class="rate-ring-value" style="color:${tone.color}">${r.rate}%</div>
-        </div>
+        <div class="rate-percent" style="color:${tone.color}">${r.rate}%</div>
+        <div class="rate-bar"><div class="rate-bar-fill" style="width:${rate}%;background:${tone.color}"></div></div>
         <div class="rate-detail">${r.attended} / ${r.total} 場</div>
       </div>`;
     };
