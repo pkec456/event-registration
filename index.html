@@ -65,7 +65,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.admin-head .actions{display:flex;gap:7px}.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}.activity-admin-card.hidden{opacity:.65}.admin-card-top{display:flex;gap:10px;align-items:flex-start}.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.admin-card-info{flex:1;min-width:0}.admin-card-name{font-weight:900;font-size:15px}.admin-card-meta{font-size:11px;color:#888;margin-top:3px}.admin-card-status{margin-top:8px}.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.admin-actions button.danger{color:var(--danger)}
 .officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}.officer-top{display:flex;align-items:center;gap:11px}.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}.officer-info{flex:1}.officer-name{font-weight:900;font-size:14px}.officer-role{font-size:11px;color:#888;margin-top:3px}.officer-state{font-size:10px;font-weight:800;color:var(--success)}.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.officer-actions button{min-height:40px;font-size:11px}.admin-edit-box{margin-top:10px}
 /* V95 出席率 4 格卡片＋圓形進度 */
-.rate-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 5px 10px;text-align:center;min-width:0;overflow:hidden}
 .rate-head{display:flex;align-items:center;justify-content:center;gap:3px;min-height:30px;font-size:11px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rate-head-name{overflow:hidden;text-overflow:ellipsis}
@@ -80,7 +80,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .rate-ring-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:950}
 .rate-detail{font-size:9px;color:#64748b;font-weight:750;white-space:nowrap}
 @media(max-width:600px){
-  .rate-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .rate-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .rate-card{border-radius:12px;padding:7px 2px 8px}
   .rate-head{font-size:9px;min-height:27px}
   .rate-rank-icon{width:13px;height:13px;flex-basis:13px}
@@ -2466,17 +2466,6 @@ body .app-header:not(.home-header){
 }
 
 
-/* V95：出席率排名卡片手機固定 2 格一排 */
-@media (max-width: 600px){
-  .attendance-grid,
-  .ranking-grid,
-  .people-grid,
-  .admin-attendance-grid,
-  .attendance-cards,
-  .ranking-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
 
 </style>
 </head>
