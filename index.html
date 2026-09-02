@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿｜活動管理修正版</title>
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.1</title>
 <style>
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
@@ -2526,6 +2526,44 @@ body .app-header:not(.home-header){
   width:20px !important;
   height:20px !important;
 }
+/* V2.1：首頁左側預留位置改為「首頁」Icon，點擊回到簽到首頁 */
+.home-header-left-slot{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  flex:0 0 42px !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.home-header-left-slot .home-link{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  color:var(--ink) !important;
+  display:grid !important;
+  place-items:center !important;
+  padding:0 !important;
+  cursor:pointer !important;
+}
+.home-header-left-slot .home-link svg{
+  width:20px !important;
+  height:20px !important;
+}
+.home-header-left-slot .home-link:hover,
+.home-header-left-slot .home-link:focus-visible{
+  background:#f7f7f5 !important;
+}
+@media(max-width:430px){
+  .home-header-left-slot{
+    grid-column:1 !important;
+    width:42px !important;
+    min-width:42px !important;
+  }
+}
+
 /* 登入後盾牌：保留原本主管理員／幹部顏色，但盾牌本體改實心 */
 .top-admin-access.super svg,
 .subpage-fixed-header .top-admin-access.super svg{
@@ -2790,6 +2828,53 @@ body{overflow-y:scroll !important;}
 .subpage-fixed-header{
   isolation:isolate !important;
 }
+
+/* V2.1 FINAL：首頁左側預留區顯示首頁 Icon */
+.home-header-left-slot{visibility:visible !important;}
+
+/* V2.1 Header：手機版標題以整個 Header 真正置中，不縮小文字 */
+.home-fixed-header,
+.subpage-fixed-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+}
+.home-fixed-header .top-brand,
+.subpage-fixed-header .subpage-title{
+  position:absolute !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:max-content !important;
+  max-width:calc(100% - 100px) !important;
+  margin:0 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.home-fixed-header .top-admin-actions,
+.subpage-fixed-header .subpage-actions{
+  position:absolute !important;
+  right:0 !important;
+  margin:0 !important;
+  z-index:3 !important;
+}
+.home-fixed-header .home-icon,
+.subpage-fixed-header .subpage-back-top{
+  position:absolute !important;
+  left:0 !important;
+  z-index:3 !important;
+}
+@media(max-width:430px){
+  .home-fixed-header, .subpage-fixed-header{
+    min-height:62px !important;
+  }
+  .home-fixed-header .top-brand h1,
+  .subpage-fixed-header .subpage-title{
+    font-size:18px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2798,7 +2883,9 @@ body{overflow-y:scroll !important;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<script>/*__APP_ASYNC_IIFE__*/
+<script>
+const SYSTEM_VERSION="2.1";
+/*__APP_ASYNC_IIFE__*/
 (async function(){
 
 const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
@@ -3336,7 +3423,7 @@ function render(){
   if(!isChild && !window.__adminAccountsViewOpen){
     app.innerHTML=`
       <header class="top home-fixed-header">
-        <div class="home-header-left-slot" aria-hidden="true"></div>
+        <div class="home-header-left-slot"><button class="home-link" type="button" id="home-signin-link" aria-label="簽到首頁" title="簽到首頁"><i data-lucide="house"></i></button></div>
         <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
         <div class="top-admin-actions">
         <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
@@ -3414,6 +3501,16 @@ function render(){
     openEventId=null;
     adminExpandedId=null;
     queryResultVisible=false;
+    render();
+  };
+
+  const homeSigninLink=app.querySelector("#home-signin-link");
+  if(homeSigninLink)homeSigninLink.onclick=()=>{
+    activeTab="register";
+    openEventId=null;
+    adminPage="home";
+    queryResultVisible=false;
+    window.__adminAccountsViewOpen=false;
     render();
   };
 
@@ -4653,7 +4750,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.0</div>
+    <div class="version">系統版本：2.1</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
