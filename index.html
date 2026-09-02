@@ -1219,6 +1219,19 @@ body .app-header:not(.home-header){
 }
 #app.admin-home-view .home-tabs{display:flex !important}
 
+/* 首頁簽到／查詢固定在畫面底部；僅調整位置，不改原按鈕樣式。 */
+#app.home-view .home-tabs,
+#app.admin-home-view .home-tabs{
+  position:fixed !important;
+  left:50% !important;
+  bottom:0 !important;
+  top:auto !important;
+  transform:translateX(-50%) !important;
+  width:min(520px,100vw) !important;
+  margin:0 !important;
+  z-index:1000 !important;
+}
+
 /* Child pages: only their single arrow. */
 #app.child-view .child-back{
   width:36px !important;height:36px !important;min-width:36px !important;
@@ -2425,6 +2438,27 @@ body .app-header:not(.home-header){
 }
 
 .rate-head-name{font-size:18px !important;font-weight:400 !important;}
+
+/* V95 unified subpage header: original back action moved to the top */
+.subpage-fixed-header{position:sticky !important;top:0 !important;z-index:100 !important;background:var(--bg) !important;padding:10px 2px !important;display:grid !important;grid-template-columns:42px 1fr auto !important;align-items:center !important;gap:10px !important;min-height:62px !important;border-bottom:1px solid var(--line) !important;}
+.subpage-fixed-header .subpage-back-top{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--line);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;}
+.subpage-fixed-header .subpage-back-top svg{width:21px;height:21px;}
+.subpage-fixed-header .subpage-title{margin:0;text-align:center;font-size:18px;line-height:1.2;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.subpage-fixed-header .subpage-actions{display:flex;align-items:center;gap:7px;justify-content:flex-end;}
+.subpage-fixed-header .top-admin-logout{width:42px;height:42px;border-radius:14px;}
+#app.child-view .child-back{display:none !important;}
+
+/* V95：只將首頁 Header 標題固定真正置中 */
+.top.home-fixed-header{position:relative;}
+.top.home-fixed-header .top-brand{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 120px);justify-content:center;text-align:center;}
+.top.home-fixed-header .top-brand h1{text-align:center;}
+@media(max-width:430px){
+  .top.home-fixed-header .top-brand{max-width:calc(100% - 105px) !important;}
+}
+
+/* 首頁：只固定標題置中，管理盾牌維持原本最右側位置 */
+.top.home-fixed-header{position:relative !important;}
+.top.home-fixed-header .top-admin-actions{margin-left:auto !important;position:relative !important;z-index:2 !important;}
 </style>
 </head>
 <body>
@@ -2962,22 +2996,13 @@ function getPublishAt(){
 }
 
 function render(){
-  if(window.__adminAccountsViewOpen){
-    const app=document.getElementById("app");
-    app.className="child-view";
-    app.innerHTML=`<div id="tab-content"></div>`;
-    renderAdminAccounts(document.getElementById("tab-content"));
-    refreshIcons();
-    return;
-  }
-
   const app=document.getElementById("app");
   const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
   app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
 
-  if(!isChild){
+  if(!isChild && !window.__adminAccountsViewOpen){
     app.innerHTML=`
       <header class="top home-fixed-header">
         <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
@@ -3000,7 +3025,36 @@ function render(){
       </nav>
       <div id="tab-content"></div>`;
   }else{
-    app.innerHTML=`<div id="tab-content"></div>`;
+    const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(activeTab==="query"?"返回首頁":"返回管理後台"));
+    app.innerHTML=`
+      <header class="subpage-fixed-header">
+        <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="arrow-left"></i></button>
+        <h1 class="subpage-title">台中浩天宮四紅哨角隊</h1>
+        <div class="subpage-actions">
+          <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="subpage-admin-access" aria-label="管理者" title="${adminUnlocked?"進入管理者":"管理者登入"}"><i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i></button>
+          ${adminUnlocked?`<button class="top-admin-logout" type="button" id="subpage-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
+        </div>
+      </header>
+      <div id="tab-content"></div>`;
+  }
+
+  const subpageBack=app.querySelector(".subpage-back-top");
+  if(subpageBack)subpageBack.onclick=()=>{
+    if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
+    if(openEventId){openEventId=null;render();return;}
+    if(activeTab==="query"){activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
+    if(activeTab==="admin" && adminUnlocked){adminPage="home";render();return;}
+    activeTab="register";openEventId=null;render();
+  };
+  const subpageAdminAccess=app.querySelector("#subpage-admin-access");
+  if(subpageAdminAccess)subpageAdminAccess.onclick=()=>{activeTab="admin";openEventId=null;queryResultVisible=false;if(adminUnlocked)adminPage="home";render();};
+  const subpageAdminLogout=app.querySelector("#subpage-admin-logout");
+  if(subpageAdminLogout)subpageAdminLogout.onclick=async()=>{await adminLogout();adminPage="home";openEventId=null;queryResultVisible=false;showToast("已登出管理者");render();};
+
+  if(window.__adminAccountsViewOpen){
+    renderAdminAccounts(document.getElementById("tab-content"));
+    refreshIcons();
+    return;
   }
 
   const homeTabButtons=app.querySelectorAll(".home-tabs button");
@@ -3281,7 +3335,6 @@ function renderRegister(el){
     if(!activity){openEventId=null;return renderRegister(el);}
     const list=regsOf(activity.id), fields=activity.fields||[];
     el.innerHTML=`
-      ${childBackButton("返回活動列表")}
 
       
       <div class="hero checkin-hero">
@@ -3322,11 +3375,6 @@ function renderRegister(el){
         `}
       </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
     `;
-    el.querySelector(".child-back")?.addEventListener("click",(ev)=>{
-      ev.preventDefault();
-      openEventId=null;
-      render();
-    });
     if(activity.open){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
         ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
@@ -3371,8 +3419,7 @@ function renderRegister(el){
   </div>
 </div>`).join("")}</div>
   `;
-  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;renderRegister(el);refreshIcons();});refreshIcons();
-  el.querySelector(".child-back")?.addEventListener("click",()=>{openEventId=null;render();});
+  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;render();});refreshIcons();
 
 }
 
@@ -3387,7 +3434,6 @@ function getAttendanceTone(rate){
 
 function renderQuery(el){
   el.innerHTML=`
-      ${childBackButton("返回首頁")}
 
     
     <div class="section-head" style="margin-top:0">
@@ -3528,7 +3574,6 @@ function renderQuery(el){
   };
 
   refreshIcons();
-  el.querySelector(".child-back")?.addEventListener("click",()=>{activeTab="register";openEventId=null;render();});
 }
 
 // ---------- ADMIN TAB (password gated) ----------
@@ -3540,11 +3585,10 @@ async function renderAdminAccounts(el){
   try{
     const {data,error}=await supabaseClient.rpc("simple_list_admins",{p_admin_username:session.username,p_admin_code:session.access_code});
     if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取幹部失敗");const rows=data.accounts||[];
-    el.innerHTML=`${childBackButton("返回管理後台")}<div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
+    el.innerHTML=`<div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
     refreshIcons();
     const messageEl=document.getElementById("admin-action-message"),showAdminMessage=msg=>{if(messageEl)messageEl.textContent=msg||""};
     const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";render();};
-    el.querySelector(".child-back")?.addEventListener("click",goBack);
     el.onclick=async ev=>{const target=ev.target.closest("button");if(!target)return;const row=target.closest("[data-officer-username]");const username=row?.dataset.officerUsername;
       if(target.id==="create-officer"){const u=norm(document.getElementById("new-officer-user")?.value),pw=document.getElementById("new-officer-pass")?.value||"";if(!u){showAdminMessage("請輸入帳號");return}if(!pw){showAdminMessage("請輸入密碼");return}target.disabled=true;try{const result=await supabaseClient.rpc("simple_create_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:u,p_code:pw});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"建立失敗");showToast("幹部建立成功");await renderAdminAccounts(el);}catch(e){target.disabled=false;showAdminMessage("新增失敗："+(e?.message||"未知錯誤"));}return;}
       if(!row||!username)return;
@@ -3682,19 +3726,16 @@ function renderAdmin(el){
   const roleText=superAdmin?"最高管理者":"幹部";
   const roleClass=superAdmin?"super-admin":"officer-admin";
   const accountText=escapeHtml(session?.username||"—");
-  if(adminPage!=="home") content=childBackButton("返回管理後台")+content;
   el.innerHTML=`${content}`;
-  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
   const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
   const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
-  el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;renderAdmin(el);refreshIcons();});
-  const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>renderAdminAccounts(el);
+  el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
+  const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
   const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
   if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
-  el.querySelector(".child-back")?.addEventListener("click",()=>{adminPage="home";render();});
   refreshIcons();
 }
 
@@ -3845,7 +3886,7 @@ function setupCreateActivityPage(el){
 function showPublishChooser(el){
   pendingPublishActivity=null;
   adminPage="activities";
-  renderAdmin(el);
+  render();
 }
 
 function safeQuerySelectorAll(root, selector){
@@ -4280,7 +4321,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.0</div>
+    <div class="version">系統版本：2.1</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
