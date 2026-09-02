@@ -2326,6 +2326,36 @@ body .app-header:not(.home-header){
   color:#111827;
 }
 
+
+/* V95 查詢無此人 */
+.query-no-person{
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:28px 20px;
+  border:1px solid var(--line,#e5e7eb);
+  border-radius:16px;
+  background:var(--surface,#fff);
+  text-align:center;
+}
+.query-no-person svg{
+  width:56px;
+  height:56px;
+  stroke-width:1.8;
+}
+.query-no-person-title{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+.query-no-person-hint{
+  color:var(--muted,#64748b);
+  font-size:13px;
+}
+
 </style>
 </head>
 <body>
@@ -3335,6 +3365,20 @@ function renderQuery(el){
     const acts=activitiesThisYear();
     if(!acts.length){
       box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
+      refreshIcons();
+      return;
+    }
+
+    const hasHistory = Object.values(state.registrations).some(list =>
+      (list || []).some(r => keyOf(r.name) === keyOf(name))
+    );
+
+    if(!hasHistory){
+      box.innerHTML=`<div class="query-no-person">
+        <i data-lucide="user-round-x"></i>
+        <div class="query-no-person-title">查無此人</div>
+        <div class="query-no-person-hint">找不到此姓名的歷史簽到紀錄</div>
+      </div>`;
       refreshIcons();
       return;
     }
