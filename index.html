@@ -2770,62 +2770,35 @@ body{overflow-y:scroll;}
 }
 </style>
 
-<style id="v21-header-scroll-stability">
-/* V2.1：固定垂直捲軸空間，避免查詢頁內容高度改變造成 Header 位移 */
-html{
-  overflow-y:scroll;
-}
-</style>
-
-
-<style id="v21-admin-header-scroll-stability">
-/* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
-html{
-  overflow-y:scroll;
-}
-body{
-  overflow-y:scroll;
-}
-</style>
-
-
-<style id="v21-fixed-header">
-/* V2.1：Header 改為固定定位，避免切換首頁／查詢／管理時跳動 */
-header.top,
-header.subpage-fixed-header,
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:fixed !important;
-  top:0 !important;
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  z-index:1000 !important;
-  width:min(520px,100vw) !important;
-  box-sizing:border-box !important;
-}
-
-/* 為固定 Header 預留空間，避免內容被 Header 蓋住 */
-#app{
-  padding-top:74px !important;
-}
-</style>
-
-
-<style id="v21-signin-status-count-final">
-/* V2.1：簽到頁「開放狀態／人數」固定左右排列，僅調整這一列 */
-.signin-status-count-row{
+<style id="v21-checkin-status-count-position">
+/* V2.1：只調整「簽到頁面」開放狀態／人數同一排，其他 Header 與功能完全沿用本版 */
+.checkin-card .hero-row{
   display:flex !important;
   align-items:center !important;
   justify-content:space-between !important;
   gap:10px !important;
   width:100% !important;
 }
-.signin-status-count-row > div{flex:0 0 auto !important}
-.signin-status-count-row > strong{
-  margin-left:auto !important;
+.checkin-card .hero-row > div{
+  display:flex !important;
+  align-items:center !important;
+  min-width:0 !important;
+}
+.checkin-card .hero-row > strong{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:4px !important;
+  flex:0 0 auto !important;
   white-space:nowrap !important;
 }
+.checkin-card .hero-row > strong svg{
+  width:16px !important;
+  height:16px !important;
+  flex:0 0 auto !important;
+}
 </style>
+
 </head>
 <body>
 <div id="app"></div>
@@ -3314,12 +3287,15 @@ function activitiesThisYear(){
 }
 
 function recentOrOpenActivities(){
-  const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
+  const todayKey = new Date().toLocaleDateString("sv-SE");
   return state.activities.filter(a=>{
     if(a.hidden) return false;
     const ts = a.publishAt ? new Date(a.publishAt).getTime() : null;
     if(Number.isFinite(ts) && ts > Date.now()) return false;
-    return a.open || new Date(a.date).getTime() >= sevenDaysAgo;
+    // 活動日期已經過去，就不再顯示於公開活動列表。
+    const activityDate = String(a.date||"").slice(0,10);
+    if(activityDate && activityDate < todayKey) return false;
+    return true;
   });
 }
 
@@ -3727,7 +3703,7 @@ function renderRegister(el){
         <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
       </div>
       <div class="checkin-card">
-        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
@@ -4059,7 +4035,7 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
 </div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${new Date().toLocaleDateString('sv-SE')}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${new Date().toLocaleDateString('sv-SE')}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
@@ -4228,13 +4204,20 @@ function setupCreateActivityPage(el){
     const publishAt = draftPublishAt
       ? new Date(draftPublishAt).toISOString()
       : null;
-    if(draftPublishAt && (!Number.isFinite(new Date(draftPublishAt).getTime()) || new Date(draftPublishAt).getTime() <= Date.now())){
-      showToast("預先發佈時間必須晚於現在");
-      return;
+    const todayKey=new Date().toLocaleDateString("sv-SE");
+    if(draftDate && draftDate < todayKey){showToast("活動日期不能早於今天");return;}
+    if(draftPublishAt){
+      const publishDate=draftPublishAt.slice(0,10);
+      if(publishDate < todayKey){showToast("發佈日期不能早於今天");return;}
+      if(!Number.isFinite(new Date(draftPublishAt).getTime()) || new Date(draftPublishAt).getTime() <= Date.now()){
+        showToast("預先發佈時間必須晚於現在");
+        return;
+      }
     }
     if(!name){showToast("請輸入活動名稱");return;}
     if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
-    const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
+    if(!draftDate || draftDate < todayKey){showToast("活動日期不能早於今天");return;}
+    const date=new Date(draftDate+"T00:00:00").toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
     const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt};
