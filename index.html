@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿</title>
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.1</title>
 <style>
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
@@ -2830,13 +2830,53 @@ header.subpage-fixed-header,
 }
 </style>
 
-<style id="v21-overview-admin-icons-32px">
-/* V2.1：今日概況／管理功能 icon 統一 32×32 */
-#app.admin-home-view .overview-icon svg,
-#app.admin-home-view .menu-icon svg,
+<style id="v21-overview-admin-icons-32px-corrected">
+/* V2.1：今日概況／管理功能 Icon 統一 32×32 */
+#app.admin-home-view .metric-icon svg,
+#app.admin-home-view .admin-action .menu-icon svg,
 #app.admin-home-view .admin-square .menu-icon svg{
   width:32px !important;
   height:32px !important;
+}
+</style>
+
+
+<style id="v21-overview-admin-icon-frame-40">
+/* V2.1：今日概況／管理功能 Icon 外框統一 40×40 */
+#app.admin-home-view .metric-icon,
+#app.admin-home-view .admin-action .menu-icon,
+#app.admin-home-view .admin-square .menu-icon{
+  width:40px !important;
+  height:40px !important;
+}
+</style>
+
+
+<style id="v211-overview-admin-icons-unified">
+/* V2.1.1：今日概況／管理功能 Icon 完全統一 */
+#app.admin-home-view .metric-icon,
+#app.admin-home-view .admin-square .menu-icon{
+  width:40px !important;
+  height:40px !important;
+  min-width:40px !important;
+  min-height:40px !important;
+  max-width:40px !important;
+  max-height:40px !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 40px !important;
+}
+#app.admin-home-view .metric-icon svg,
+#app.admin-home-view .admin-square .menu-icon svg{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  max-width:32px !important;
+  max-height:32px !important;
+  margin:0 !important;
+  flex:0 0 32px !important;
 }
 </style>
 
@@ -4751,8 +4791,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.1.1</div>
-    <div class="maker">製作者：北屯張震</div>
+    <div class="version">系統版本：2.1</div>
+    <div class="maker">製作者：小樂</div>
   </footer>
 
 <script>
