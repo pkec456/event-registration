@@ -2902,8 +2902,8 @@ header.subpage-fixed-header,
 </style>
 
 
-<style id="v2-1-1-admin-activity-safe-layout">
-/* 只調整活動卡片視覺，不修改任何功能 */
+<style id="admin-activity-summary-final">
+/* 活動管理卡片右上資訊：統一尺寸，避免重複 CSS 覆蓋 */
 #app.admin-home-view .activity-admin-card{
   position:relative!important;
 }
@@ -2913,88 +2913,6 @@ header.subpage-fixed-header,
   padding-right:120px!important;
 }
 
-#app.admin-home-view .activity-admin-card .admin-card-summary{
-  position:absolute!important;
-  top:0!important;
-  right:0!important;
-  width:110px!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:flex-end!important;
-  gap:4px!important;
-  margin:0!important;
-  padding:0!important;
-  text-align:right!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-limit{
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-  font-size:8px!important;
-  line-height:12px!important;
-  font-weight:850!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-checkins{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:flex-end!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  gap:3px!important;
-  white-space:nowrap!important;
-  text-align:right!important;
-  font-size:8px!important;
-  line-height:12px!important;
-  font-weight:850!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-checkins > svg,
-#app.admin-home-view .activity-admin-card .admin-card-checkins > i{
-  width:8px!important;
-  height:8px!important;
-  min-width:8px!important;
-  min-height:8px!important;
-  max-width:8px!important;
-  max-height:8px!important;
-  flex:0 0 8px!important;
-  margin:0!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-checkins > span{
-  font-size:8px!important;
-  line-height:12px!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-}
-
-@media(max-width:560px){
-  #app.admin-home-view .activity-admin-card .admin-card-top{
-    padding-right:95px!important;
-  }
-  #app.admin-home-view .activity-admin-card .admin-card-summary{
-    width:90px!important;
-    right:0!important;
-  }
-}
-</style>
-
-<style id="v2-1-1-admin-activity-summary-clean">
-/* V2.1.1｜活動卡片右上資訊：單一 CSS 規則，避免尺寸互相覆蓋 */
-#app.admin-home-view .activity-admin-card{
-  position:relative!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-top{
-  position:relative!important;
-  padding-right:120px!important;
-}
-
-/* 右上資訊區 */
 #app.admin-home-view .activity-admin-card .admin-card-summary{
   position:absolute!important;
   top:0!important;
@@ -3010,94 +2928,86 @@ header.subpage-fixed-header,
   text-align:right!important;
 }
 
-/* 「上限 5 人／無人數限制」 */
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit{
-  display:block!important;
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
+  box-sizing:border-box!important;
   width:100%!important;
   margin:0!important;
   padding:0!important;
   font-family:inherit!important;
-  font-size:8px!important;
-  line-height:10px!important;
+  font-size:12px!important;
+  line-height:16px!important;
   font-weight:850!important;
   color:#171717!important;
   text-align:right!important;
   white-space:nowrap!important;
 }
 
-/* 「SVG + 1 人簽到」 */
 #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
   display:flex!important;
   align-items:center!important;
   justify-content:flex-end!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  gap:3px!important;
-  font-family:inherit!important;
-  font-size:8px!important;
-  line-height:10px!important;
-  font-weight:850!important;
-  color:#171717!important;
-  text-align:right!important;
-  white-space:nowrap!important;
+  gap:4px!important;
 }
 
-/* Lucide 轉換後的 SVG */
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins [data-lucide="users"]{
-  width:8px!important;
-  height:8px!important;
-  min-width:8px!important;
-  min-height:8px!important;
-  max-width:8px!important;
-  max-height:8px!important;
-  flex:0 0 8px!important;
-  margin:0!important;
-  padding:0!important;
-}
-
-/* 「1 人簽到」文字 */
 #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins > span{
   display:block!important;
   width:auto!important;
   margin:0!important;
   padding:0!important;
   font-family:inherit!important;
-  font-size:8px!important;
-  line-height:10px!important;
+  font-size:12px!important;
+  line-height:16px!important;
   font-weight:850!important;
   color:#171717!important;
   text-align:right!important;
   white-space:nowrap!important;
 }
 
-/* 兩行共用同一個右側基準線 */
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
-  box-sizing:border-box!important;
-  text-align:right!important;
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins [data-lucide="users"]{
+  width:14px!important;
+  height:14px!important;
+  min-width:14px!important;
+  min-height:14px!important;
+  max-width:14px!important;
+  max-height:14px!important;
+  flex:0 0 14px!important;
+  margin:0!important;
+  padding:0!important;
 }
 
-/* 手機版只縮小右側保留空間，不改文字尺寸 */
 @media(max-width:560px){
   #app.admin-home-view .activity-admin-card .admin-card-top{
-    padding-right:95px!important;
+    padding-right:105px!important;
   }
-
   #app.admin-home-view .activity-admin-card .admin-card-summary{
-    width:90px!important;
+    width:100px!important;
     right:0!important;
   }
-
   #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
-  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
-    font-size:8px!important;
-    line-height:10px!important;
+  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins,
+  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins > span{
+    font-size:12px!important;
+    line-height:16px!important;
   }
 }
 </style>
 
+<style id="admin-card-summary-hard-override">
+/* 最終固定：活動管理卡片右上人數文字一律 12px */
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins span{
+  font-size:12px !important;
+  line-height:16px !important;
+  font-weight:850 !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins i{
+  width:14px !important; height:14px !important; min-width:14px !important; min-height:14px !important;
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -3169,7 +3079,7 @@ let pendingDeleteIdx = null; // index of registrant pending an in-page delete co
 let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
 let draftName = "";
 let draftDate = "";
-let draftMaxParticipants = "";
+let draftMaxParticipants = "10";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
 let draftPublishAt = "";
@@ -4337,10 +4247,10 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
 </div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="預設無限制" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">留白＝無人數限制</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "10")}"><div class="field-hint">預設上限 10 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
-    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${hiddenActs.length?`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.map(a=>activityAdminRow(a,true)).join("")}`:""}`;
+    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.length?hiddenActs.map(a=>activityAdminRow(a,true)).join(""):`<div class="block"><div class="empty">目前沒有已隱藏的活動</div></div>`}`}`;
   }
   if(adminPage==="attendance"){
     const now=new Date();
@@ -4424,8 +4334,8 @@ function activityAdminRow(a,hidden=false){
       </div>
     </div>
     <div class="admin-card-summary">
-      <div class="admin-card-limit">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
-      <div class="admin-card-checkins"><i data-lucide="users"></i><span>${list.length} 人簽到</span></div>
+      <div class="admin-card-limit" style="font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;text-align:right!important;">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
+      <div class="admin-card-checkins" style="display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;text-align:right!important;"><i data-lucide="users" style="width:14px!important;height:14px!important;min-width:14px!important;flex:0 0 14px!important;"></i><span style="font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;">${list.length} 人簽到</span></div>
     </div>
   </div>
   <div class="admin-actions">
@@ -4582,7 +4492,7 @@ function setupCreateActivityPage(el){
       pendingPublishActivity=null;
       showToast(publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈");
       adminPage="activities";
-      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants=""; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
+      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants="10"; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
   renderAdmin(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
