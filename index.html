@@ -2990,7 +2990,7 @@ let pendingDeleteIdx = null; // index of registrant pending an in-page delete co
 let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
 let draftName = "";
 let draftDate = "";
-let draftMaxParticipants = "10";
+let draftMaxParticipants = "0";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
 let draftPublishAt = "";
@@ -3054,6 +3054,16 @@ function showToast(msg){
   t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
 }
 
+function isActivityDateExpired(activity, now=Date.now()){
+  // 活動日期為 YYYY-MM-DD；隔日 00:00 起視為「已過一天」。
+  // 沒有有效日期時不介入，避免影響既有活動。
+  const raw=String(activity?.date||"").trim();
+  const m=raw.match(/^(\\d{4})[-\\/](\\d{1,2})[-\\/](\\d{1,2})/);
+  if(!m) return false;
+  const end=new Date(Number(m[1]),Number(m[2])-1,Number(m[3])+1,0,0,0,0).getTime();
+  return Number.isFinite(end) && now>=end;
+}
+
 async function loadData(){
   startActivityExpiryWatcher();
   try{
@@ -3089,7 +3099,7 @@ async function loadData(){
       name:a.name,
       date:a.date,
       fields:Array.isArray(a.fields)?a.fields:[],
-      open:!!a.open,
+      open:(!adminUnlocked && isActivityDateExpired(a)) ? false : !!a.open,
       maxParticipants:a.max_participants==null?null:Number(a.max_participants),
       createdBy:a.created_by||"",
       closeAt:a.close_at||null,
@@ -3701,7 +3711,10 @@ function startActivityExpiryWatcher(){
       const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
       const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
       const end=localEnd||dbEnd;
-      return a.open && end && end<=now;
+      return a.open && (
+        (end && end<=now) ||
+        isActivityDateExpired(a, now)
+      );
     });
     if(!expired.length)return;
 
@@ -4166,7 +4179,7 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
 </div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "10")}"><div class="field-hint">預設上限 10 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "0")}"><div class="field-hint">預設上限 0 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.length?hiddenActs.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有已隱藏的活動</div></div>`}`;
@@ -4564,14 +4577,19 @@ async function init(){
     // 避免 loadData 每 6 秒把本機 30 秒 deadline 洗掉。
     const expired = state.activities.filter(a =>
       a.open &&
-      a.closeAt &&
       !window.v93CountdownDeadlines?.has(String(a.id)) &&
-      new Date(a.closeAt).getTime() <= now
+      (
+        (a.closeAt && new Date(a.closeAt).getTime() <= now) ||
+        isActivityDateExpired(a, now)
+      )
     );
 
     for(const a of expired){
       try{
         a.open = false;
+        a.closeAt = null;
+        a.autoCloseMinutes = 0;
+        window.v93CountdownDeadlines?.delete(String(a.id));
         await updateActivityRemote(a);
       }catch(e){
         console.error("活動自動關閉失敗", e);
