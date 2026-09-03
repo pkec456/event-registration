@@ -2643,7 +2643,7 @@ body .app-header:not(.home-header){
 <style id="v21-final-header-alignment">
 /* ===== V2.1 FINAL HEADER ALIGNMENT ===== */
 .top.home-fixed-header,.subpage-fixed-header{position:sticky!important;top:0!important;z-index:100!important;width:100%!important;height:58px!important;min-height:58px!important;max-height:58px!important;padding:8px 0!important;margin:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;align-items:center!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important}
-.top.home-fixed-header .home-header-left-slot{width:42px!important;height:42px!important;min-width:42px!important;visibility:hidden!important}
+.top.home-fixed-header .home-header-left-slot{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;visibility:visible!important;display:flex!important;align-items:center!important;justify-content:flex-start!important}
 .top.home-fixed-header .top-brand,.subpage-fixed-header .subpage-title{grid-column:2!important;grid-row:1!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important;text-align:center!important;justify-self:stretch!important;align-self:center!important}
 .top.home-fixed-header .top-brand h1,.subpage-fixed-header .subpage-title{margin:0!important;padding:0!important;font-size:18px!important;line-height:1.2!important;font-weight:900!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 .top.home-fixed-header .top-admin-actions,.subpage-fixed-header .subpage-actions{grid-column:3!important;grid-row:1!important;width:90px!important;min-width:90px!important;height:42px!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:6px!important;margin:0!important;padding:0!important}
@@ -2767,6 +2767,63 @@ body{overflow-y:scroll;}
     max-height:58px !important;
     padding:8px 0 !important;
   }
+}
+</style>
+
+<style id="v21-header-scroll-stability">
+/* V2.1：固定垂直捲軸空間，避免查詢頁內容高度改變造成 Header 位移 */
+html{
+  overflow-y:scroll;
+}
+</style>
+
+
+<style id="v21-admin-header-scroll-stability">
+/* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
+html{
+  overflow-y:scroll;
+}
+body{
+  overflow-y:scroll;
+}
+</style>
+
+
+<style id="v21-fixed-header">
+/* V2.1：Header 改為固定定位，避免切換首頁／查詢／管理時跳動 */
+header.top,
+header.subpage-fixed-header,
+.top.home-fixed-header,
+.subpage-fixed-header{
+  position:fixed !important;
+  top:0 !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  z-index:1000 !important;
+  width:min(520px,100vw) !important;
+  box-sizing:border-box !important;
+}
+
+/* 為固定 Header 預留空間，避免內容被 Header 蓋住 */
+#app{
+  padding-top:74px !important;
+}
+</style>
+
+
+<style id="v21-signin-status-count-final">
+/* V2.1：簽到頁「開放狀態／人數」固定左右排列，僅調整這一列 */
+.signin-status-count-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  width:100% !important;
+}
+.signin-status-count-row > div{flex:0 0 auto !important}
+.signin-status-count-row > strong{
+  margin-left:auto !important;
+  white-space:nowrap !important;
 }
 </style>
 </head>
@@ -3670,7 +3727,7 @@ function renderRegister(el){
         <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
       </div>
       <div class="checkin-card">
-        <div class="hero-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open?'open':'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
@@ -3734,8 +3791,8 @@ function renderRegister(el){
       <div class="activity-meta">${fmtDate(a.date)}</div>
     </div>
     <div class="activity-right">
-      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
       ${activityStatusClock(a)}
+      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
       <span class="arrow"><i data-lucide="chevron-right"></i></span>
     </div>
   </div>
