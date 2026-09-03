@@ -30,7 +30,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 .announcement{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:flex-start}.announcement-icon{width:42px;height:42px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.announcement h3{margin:0 0 4px;font-size:14px}.announcement p{margin:0;color:#666;font-size:13px;line-height:1.5}.announcement-edit{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--accent-soft);color:var(--accent);border:0;border-radius:11px;padding:8px 10px;font-size:11px;font-weight:850}.announcement-edit:hover{background:#ffe1e1}.announcement-admin{margin-top:12px}.announcement-admin textarea{width:100%;min-height:92px;resize:vertical;padding:12px 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;outline:none;font:inherit;font-size:14px;line-height:1.5}.announcement-admin textarea:focus{border-color:#999;box-shadow:0 0 0 3px #eee}
 .activity-grid{display:grid;gap:12px}.activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.activity-card:active{transform:scale(.99)}.activity-top{display:flex;gap:12px;align-items:flex-start}.activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.activity-main{min-width:0;flex:1}.activity-name{font-size:17px;font-weight:850}.activity-meta{margin-top:4px;color:#777;font-size:12px}.activity-right{display:flex;align-items:center;gap:8px}.count{font-size:13px;font-weight:800;white-space:nowrap}.arrow{color:#999}
-.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status svg{width:14px!important;height:14px!important;min-width:14px!important;flex:0 0 14px!important;stroke-width:2.5}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
 .back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
 .form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=time],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -2355,9 +2355,16 @@ body .app-header:not(.home-header){
   gap:6px;
 }
 .admin-actions .activity-toggle-btn svg{
-  width:30px;
-  height:22px;
-  flex:0 0 auto;
+  width:16px!important;
+  height:16px!important;
+  min-width:16px!important;
+  flex:0 0 16px!important;
+}
+.admin-card-status .status.closed svg{
+  width:16px!important;
+  height:16px!important;
+  min-width:16px!important;
+  flex:0 0 16px!important;
 }
 .admin-actions .activity-toggle-btn.is-on{
   color:#16a34a;
@@ -2629,7 +2636,6 @@ body .app-header:not(.home-header){
   }
 }
 </style>
-
 <style id="remove-legacy-subpage-back">
 /* 舊子頁返回鍵：直接移除，不佔版面空間 */
 .child-view .back,
@@ -2900,113 +2906,18 @@ header.subpage-fixed-header,
   white-space:nowrap !important;
 }
 </style>
-
-
-<style id="admin-activity-summary-final">
-/* 活動管理卡片右上資訊：統一尺寸，避免重複 CSS 覆蓋 */
-#app.admin-home-view .activity-admin-card{
-  position:relative!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-top{
-  position:relative!important;
-  padding-right:120px!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-summary{
-  position:absolute!important;
-  top:0!important;
-  right:0!important;
-  width:110px!important;
-  margin:0!important;
-  padding:0!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:flex-end!important;
-  justify-content:flex-start!important;
-  gap:4px!important;
-  text-align:right!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
-  box-sizing:border-box!important;
-  width:100%!important;
-  margin:0!important;
-  padding:0!important;
-  font-family:inherit!important;
-  font-size:12px!important;
-  line-height:16px!important;
-  font-weight:850!important;
-  color:#171717!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:flex-end!important;
-  gap:4px!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins > span{
-  display:block!important;
-  width:auto!important;
-  margin:0!important;
-  padding:0!important;
-  font-family:inherit!important;
-  font-size:12px!important;
-  line-height:16px!important;
-  font-weight:850!important;
-  color:#171717!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-}
-
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins [data-lucide="users"]{
-  width:14px!important;
-  height:14px!important;
-  min-width:14px!important;
-  min-height:14px!important;
-  max-width:14px!important;
-  max-height:14px!important;
-  flex:0 0 14px!important;
-  margin:0!important;
-  padding:0!important;
-}
-
-@media(max-width:560px){
-  #app.admin-home-view .activity-admin-card .admin-card-top{
-    padding-right:105px!important;
-  }
-  #app.admin-home-view .activity-admin-card .admin-card-summary{
-    width:100px!important;
-    right:0!important;
-  }
-  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
-  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins,
-  #app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins > span{
-    font-size:12px!important;
-    line-height:16px!important;
-  }
+<style id="admin-activity-hide-status-notes">
+.activity-admin-card .admin-card-status .status.closed{
+  display:none !important;
 }
 </style>
 
-<style id="admin-card-summary-hard-override">
-/* 最終固定：活動管理卡片右上人數文字一律 12px */
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins span{
-  font-size:12px !important;
-  line-height:16px !important;
-  font-weight:850 !important;
-}
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins i{
-  width:14px !important; height:14px !important; min-width:14px !important; min-height:14px !important;
-}
+
+<style id="css-cleanup-final">
+/* ===== CSS 統一修正版：僅統一使用者指定文字尺寸，不改變其他功能 ===== */
+.form-title{font-size:18px!important;line-height:1.25!important;}
+.field-label{font-size:18px!important;line-height:1.25!important;}
+.section-head h2{font-size:18px!important;line-height:1.25!important;}
 </style>
 </head>
 <body>
@@ -3157,6 +3068,12 @@ async function loadData(){
       if(adminErr) throw adminErr;
       if(!adminData?.ok) throw new Error(adminData?.message||"管理者活動資料讀取失敗");
       acts=adminData.activities||[];
+      if(typeof acts==="string"){try{acts=JSON.parse(acts);}catch(_){acts=[];}}
+      acts=(Array.isArray(acts)?acts:[]).map(a=>({
+        ...a,
+        hidden:Object.prototype.hasOwnProperty.call(a,"hidden") ? !!a.hidden :
+          (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false)
+      }));
     }else{
       const {data: publicActs,error:aErr}=await supabaseClient
         .from("activities")
@@ -3177,7 +3094,9 @@ async function loadData(){
       createdBy:a.created_by||"",
       closeAt:a.close_at||null,
       autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
-      hidden:!!a.hidden,
+      hidden:Object.prototype.hasOwnProperty.call(a,"hidden") ? !!a.hidden :
+
+        (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false),
       publishAt:a.publish_at||null
     }));
 
@@ -4250,7 +4169,7 @@ function renderAdmin(el){
   if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "10")}"><div class="field-hint">預設上限 10 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
-    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}${`<div class="section-head"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.length?hiddenActs.map(a=>activityAdminRow(a,true)).join(""):`<div class="block"><div class="empty">目前沒有已隱藏的活動</div></div>`}`}`;
+    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.length?hiddenActs.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有已隱藏的活動</div></div>`}`;
   }
   if(adminPage==="attendance"){
     const now=new Date();
@@ -4334,8 +4253,8 @@ function activityAdminRow(a,hidden=false){
       </div>
     </div>
     <div class="admin-card-summary">
-      <div class="admin-card-limit" style="font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;text-align:right!important;">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
-      <div class="admin-card-checkins" style="display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;text-align:right!important;"><i data-lucide="users" style="width:14px!important;height:14px!important;min-width:14px!important;flex:0 0 14px!important;"></i><span style="font-size:12px!important;line-height:16px!important;font-weight:850!important;white-space:nowrap!important;">${list.length} 人簽到</span></div>
+      <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
+      <div class="admin-card-meta">${list.length} 人簽到</div>
     </div>
   </div>
   <div class="admin-actions">
@@ -4878,9 +4797,25 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     a.hidden=next;
     try{
       await window.updateActivityRemote(a);
+      if(window.state && Array.isArray(window.state.activities)){
+        const idx=window.state.activities.findIndex(x=>String(x.id)===String(a.id));
+        if(idx>=0) window.state.activities[idx].hidden=next;
+      }
+      a.hidden=next;
       window.showToast(next?"活動已隱藏":"已取消隱藏");
-      await window.loadData();
-      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
+      if(typeof renderAdmin==="function"){
+        const tab=document.getElementById("tab-content");
+        if(tab){
+          window.renderAdmin(tab);
+          if(next){
+            setTimeout(function(){
+              const section=document.getElementById("hidden-activities-section");
+              if(section) section.scrollIntoView({behavior:"smooth",block:"start"});
+            },50);
+          }
+        }
+      }
+      if(typeof refreshIcons==="function") refreshIcons();
     }catch(e){
       a.hidden=old;
       console.error("[活動管理] 隱藏失敗",e);
@@ -4962,6 +4897,66 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   },true);
 })();
 </script>
+<style id="admin-summary-exact-two-row-layout">
+/* 活動管理卡片：左側名稱／日期與右側上限／簽到採完全相同的兩列基準線 */
+.activity-admin-card .admin-card-top{
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr) 110px!important;
+  column-gap:10px!important;
+  align-items:start!important;
+}
+.activity-admin-card .admin-card-icon{
+  grid-column:1;
+  grid-row:1;
+}
+.activity-admin-card .admin-card-info{
+  grid-column:2;
+  grid-row:1;
+  min-width:0!important;
+}
+.activity-admin-card .admin-card-name{
+  height:18px!important;
+  line-height:18px!important;
+  margin:0!important;
+}
+.activity-admin-card .admin-card-info > .admin-card-meta{
+  height:14px!important;
+  line-height:14px!important;
+  margin-top:3px!important;
+}
+.activity-admin-card .admin-card-summary{
+  grid-column:3;
+  grid-row:1;
+  width:110px!important;
+  min-width:110px!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-rows:18px 14px!important;
+  row-gap:3px!important;
+  align-content:start!important;
+  justify-items:stretch!important;
+}
+.activity-admin-card .admin-card-summary .admin-card-meta{
+  width:110px!important;
+  height:14px!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  display:block!important;
+  font-family:inherit!important;
+  font-size:12px!important;
+  line-height:14px!important;
+  font-weight:850!important;
+  color:#171717!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.activity-admin-card .admin-card-summary .admin-card-meta:first-child{
+  height:18px!important;
+  line-height:18px!important;
+}
+</style>
 
 </body>
 
