@@ -2439,94 +2439,26 @@ body .app-header:not(.home-header){
 
 .rate-head-name{font-size:18px !important;font-weight:400 !important;}
 
-/* V95 unified subpage header: original back action moved to the top */
-.subpage-fixed-header{position:sticky !important;top:0 !important;z-index:100 !important;background:var(--bg) !important;padding:10px 2px !important;display:grid !important;grid-template-columns:42px 1fr auto !important;align-items:center !important;gap:10px !important;min-height:62px !important;border-bottom:1px solid var(--line) !important;}
-.subpage-fixed-header .subpage-back-top{width:42px;height:42px;border-radius:14px;background:#fff;border:1px solid var(--line);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;}
-.subpage-fixed-header .subpage-back-top svg{width:21px;height:21px;}
-.subpage-fixed-header .subpage-title{margin:0;text-align:center;font-size:18px;line-height:1.2;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.subpage-fixed-header .subpage-actions{display:flex;align-items:center;gap:7px;justify-content:flex-end;}
-.subpage-fixed-header .top-admin-logout{width:42px;height:42px;border-radius:14px;}
-#app.child-view .child-back{display:none !important;}
-
-/* V95：只將首頁 Header 標題固定真正置中 */
-.top.home-fixed-header{position:relative;}
-.top.home-fixed-header .top-brand{position:absolute;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 120px);justify-content:center;text-align:center;}
-.top.home-fixed-header .top-brand h1{text-align:center;}
-@media(max-width:430px){
-  /* 手機 Header 依照查詢頁的左右保留區，避免標題與右側管理按鈕重疊 */
-  .top.home-fixed-header{
-    display:grid !important;
-    grid-template-columns:42px minmax(0,1fr) auto !important;
-    align-items:center !important;
-    column-gap:8px !important;
-  }
-  .top.home-fixed-header .top-brand{
-    position:static !important;
-    left:auto !important;
-    transform:none !important;
-    grid-column:2 !important;
-    width:auto !important;
-    max-width:none !important;
-    min-width:0 !important;
-    justify-content:center !important;
-    text-align:center !important;
-  }
-  .top.home-fixed-header .top-brand h1{
-    width:100% !important;
-    min-width:0 !important;
-    text-align:center !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-    font-size:18px !important;
-  }
-  .top.home-fixed-header .top-admin-actions{
-    grid-column:3 !important;
-    margin-left:0 !important;
-    position:static !important;
-    z-index:2 !important;
-    gap:6px !important;
-  }
-}
-
-/* 首頁：標題置中；右側管理按鈕維持原本位置，手機不與標題重疊 */
-.top.home-fixed-header{position:relative !important;}
-.top.home-fixed-header .top-admin-actions{margin-left:auto !important;position:relative !important;z-index:2 !important;}
-
-/* V95 Header：首頁／子頁手機間距、文字、Icon 統一；盾牌登入後改為實心色 */
+/* ===== V2.1 Header：所有頁面共用同一個 Header 幾何 ===== */
 .top.home-fixed-header,
 .subpage-fixed-header{
-  gap:8px !important;
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+  width:100% !important;
+  min-height:58px !important;
+  margin:0 !important;
+  padding:8px 0 !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:42px minmax(0,1fr) auto !important;
+  align-items:center !important;
+  column-gap:8px !important;
+  background:var(--bg) !important;
+  border-bottom:1px solid var(--line) !important;
 }
-.top.home-fixed-header .top-brand h1,
-.subpage-fixed-header .subpage-title{
-  font-size:18px !important;
-  line-height:1.2 !important;
-  font-weight:900 !important;
-}
-.top.home-fixed-header .top-admin-actions,
-.subpage-fixed-header .subpage-actions{
-  gap:6px !important;
-}
-.top.home-fixed-header .top-admin-access,
-.top.home-fixed-header .top-admin-logout,
-.subpage-fixed-header .top-admin-access,
-.subpage-fixed-header .top-admin-logout,
-.subpage-fixed-header .subpage-back-top{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  flex:0 0 42px !important;
-}
-.top.home-fixed-header .top-admin-access svg,
-.top.home-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .top-admin-access svg,
-.subpage-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .subpage-back-top svg{
-  width:20px !important;
-  height:20px !important;
-}
-/* V2.1：首頁左側預留位置改為「首頁」Icon，點擊回到簽到首頁 */
+
+/* 首頁左側保留與子頁返回鍵完全相同的 42px 位置；首頁顯示房屋 Icon */
 .home-header-left-slot{
   width:42px !important;
   height:42px !important;
@@ -2534,6 +2466,7 @@ body .app-header:not(.home-header){
   flex:0 0 42px !important;
   display:grid !important;
   place-items:center !important;
+  visibility:visible !important;
 }
 .home-header-left-slot .home-link{
   width:42px !important;
@@ -2556,15 +2489,95 @@ body .app-header:not(.home-header){
 .home-header-left-slot .home-link:focus-visible{
   background:#f7f7f5 !important;
 }
-@media(max-width:430px){
-  .home-header-left-slot{
-    grid-column:1 !important;
-    width:42px !important;
-    min-width:42px !important;
-  }
+
+/* 子頁左側返回鍵：只保留 Icon，不再顯示原本子頁內容內的返回按鈕 */
+.subpage-fixed-header .subpage-back-top{
+  grid-column:1 !important;
+  grid-row:1 !important;
+  justify-self:start !important;
+  align-self:center !important;
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  color:var(--ink) !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.subpage-fixed-header .subpage-back-top svg{
+  width:20px !important;
+  height:20px !important;
 }
 
-/* 登入後盾牌：保留原本主管理員／幹部顏色，但盾牌本體改實心 */
+/* 標題固定在中間欄；首頁與所有子頁完全相同位置 */
+.top.home-fixed-header .top-brand,
+.subpage-fixed-header .subpage-title{
+  grid-column:2 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  text-align:center !important;
+  justify-self:stretch !important;
+  align-self:center !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.top.home-fixed-header .top-brand h1,
+.subpage-fixed-header .subpage-title{
+  margin:0 !important;
+  font-size:18px !important;
+  line-height:1.2 !important;
+  font-weight:900 !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* 右側管理 Icon 固定在第三欄，不因換頁改變標題位置 */
+.top.home-fixed-header .top-admin-actions,
+.subpage-fixed-header .subpage-actions{
+  grid-column:3 !important;
+  grid-row:1 !important;
+  justify-self:end !important;
+  align-self:center !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  margin:0 !important;
+  padding:0 !important;
+  position:static !important;
+  flex:0 0 auto !important;
+}
+.top.home-fixed-header .top-admin-access,
+.top.home-fixed-header .top-admin-logout,
+.subpage-fixed-header .top-admin-access,
+.subpage-fixed-header .top-admin-logout{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  flex:0 0 42px !important;
+}
+.top.home-fixed-header .top-admin-access svg,
+.top.home-fixed-header .top-admin-logout svg,
+.subpage-fixed-header .top-admin-access svg,
+.subpage-fixed-header .top-admin-logout svg{
+  width:20px !important;
+  height:20px !important;
+}
+
+/* 登入後盾牌：主管理員橘色、幹部紅色，盾牌本體為實心色 */
 .top-admin-access.super svg,
 .subpage-fixed-header .top-admin-access.super svg{
   color:var(--admin-super) !important;
@@ -2577,111 +2590,22 @@ body .app-header:not(.home-header){
   fill:var(--accent) !important;
   stroke:var(--surface) !important;
 }
-@media(max-width:430px){
-  .top.home-fixed-header{
-    column-gap:8px !important;
-  }
-  .top.home-fixed-header .top-brand h1{
-    font-size:18px !important;
-  }
-  .top.home-fixed-header .top-admin-actions,
-  .subpage-fixed-header .subpage-actions{
-    gap:6px !important;
-  }
+
+/* 子頁內容中的舊返回鍵全部隱藏，只使用 Header 左側箭頭 */
+#app.child-view .back,
+#app.subpage-view .back,
+#app.child-view #back-link,
+#app.subpage-view #back-link,
+#app.child-view #back-admin-top,
+#app.subpage-view #back-admin-top,
+#app.child-view .child-back{
+  display:none !important;
 }
 
-/* V95 FINAL：首頁／子頁 Header 固定同一個幾何位置
-   只統一 Header 排版，不改按鈕外觀。 */
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  z-index:1000 !important;
-  width:100% !important;
-  min-height:58px !important;
-  box-sizing:border-box !important;
-  display:grid !important;
-  grid-template-columns:42px minmax(0,1fr) auto !important;
-  align-items:center !important;
-  column-gap:8px !important;
-  padding:8px 0 !important;
-  background:var(--bg) !important;
-}
-
-/* 標題永遠佔中間欄，不因右側盾牌／登出數量改變位置 */
-.top.home-fixed-header .top-brand,
-.subpage-fixed-header .subpage-title{
-  grid-column:2 !important;
-  grid-row:1 !important;
-  width:100% !important;
-  min-width:0 !important;
-  max-width:none !important;
-  margin:0 !important;
-  padding:0 !important;
-  text-align:center !important;
-  justify-self:stretch !important;
-  align-self:center !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-
-.top.home-fixed-header .top-brand h1,
-.subpage-fixed-header .subpage-title{
-  margin:0 !important;
-  text-align:center !important;
-  font-size:18px !important;
-  line-height:1.2 !important;
-  font-weight:900 !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-
-/* 首頁沒有返回鍵，左側保留同樣 42px 空間；右側固定自己的欄位 */
-.top.home-fixed-header .top-admin-actions,
-.subpage-fixed-header .subpage-actions{
-  grid-column:3 !important;
-  grid-row:1 !important;
-  justify-self:end !important;
-  align-self:center !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:6px !important;
-  margin:0 !important;
-  position:static !important;
-  flex:0 0 auto !important;
-}
-
-/* 子頁返回鍵永遠固定在最左欄 */
-.subpage-fixed-header .subpage-back-top{
-  grid-column:1 !important;
-  grid-row:1 !important;
-  justify-self:start !important;
-  align-self:center !important;
-  margin:0 !important;
-}
-
-/* 三個 Header icon/button 統一幾何尺寸 */
-.top.home-fixed-header .top-admin-access,
-.top.home-fixed-header .top-admin-logout,
-.subpage-fixed-header .top-admin-access,
-.subpage-fixed-header .top-admin-logout,
-.subpage-fixed-header .subpage-back-top{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  flex:0 0 42px !important;
-}
-
-.top.home-fixed-header .top-admin-access svg,
-.top.home-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .top-admin-access svg,
-.subpage-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .subpage-back-top svg{
-  width:20px !important;
-  height:20px !important;
+/* 子頁原本的 Header 若仍由舊版 class 產生，避免與新 Header 疊加 */
+#app.child-view .app-header,
+#app.subpage-view .app-header{
+  display:none !important;
 }
 
 @media(max-width:430px){
@@ -2701,51 +2625,99 @@ body .app-header:not(.home-header){
     gap:6px !important;
   }
 }
+</style>
 
-
-.home-header-left-slot{
-  width:42px !important;height:42px !important;min-width:42px !important;
-  flex:0 0 42px !important;visibility:hidden !important;
+<style id="remove-legacy-subpage-back">
+/* 舊子頁返回鍵：直接移除，不佔版面空間 */
+.child-view .back,
+.subpage-view .back,
+.child-view #back-link,
+.subpage-view #back-link,
+.child-view #back-admin-top,
+.subpage-view #back-admin-top,
+.child-view .subpage-back,
+.subpage-view .subpage-back {
+  display:none !important;
 }
+</style>
+<style id="v21-final-header-alignment">
+/* ===== V2.1 FINAL HEADER ALIGNMENT ===== */
+.top.home-fixed-header,.subpage-fixed-header{position:sticky!important;top:0!important;z-index:100!important;width:100%!important;height:58px!important;min-height:58px!important;max-height:58px!important;padding:8px 0!important;margin:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;align-items:center!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important}
+.top.home-fixed-header .home-header-left-slot{width:42px!important;height:42px!important;min-width:42px!important;visibility:hidden!important}
+.top.home-fixed-header .top-brand,.subpage-fixed-header .subpage-title{grid-column:2!important;grid-row:1!important;width:100%!important;min-width:0!important;margin:0!important;padding:0!important;text-align:center!important;justify-self:stretch!important;align-self:center!important}
+.top.home-fixed-header .top-brand h1,.subpage-fixed-header .subpage-title{margin:0!important;padding:0!important;font-size:18px!important;line-height:1.2!important;font-weight:900!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.top.home-fixed-header .top-admin-actions,.subpage-fixed-header .subpage-actions{grid-column:3!important;grid-row:1!important;width:90px!important;min-width:90px!important;height:42px!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:6px!important;margin:0!important;padding:0!important}
+.top.home-fixed-header .top-admin-access,.top.home-fixed-header .top-admin-logout,.subpage-fixed-header .top-admin-access,.subpage-fixed-header .top-admin-logout{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;flex:0 0 42px!important}
+.top.home-fixed-header .top-admin-access svg,.top.home-fixed-header .top-admin-logout svg,.subpage-fixed-header .top-admin-access svg,.subpage-fixed-header .top-admin-logout svg{width:20px!important;height:20px!important}
+.subpage-fixed-header .subpage-back-top{grid-column:1!important;grid-row:1!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;margin:0!important;padding:0!important;align-self:center!important;justify-self:start!important}
+@media(max-width:430px){.top.home-fixed-header,.subpage-fixed-header{height:58px!important;min-height:58px!important;max-height:58px!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;padding:8px 0!important}}
+</style>
 
-/* V95 FINAL CHECK：以查詢頁 Header 的固定座標為基準，首頁／所有子頁完全共用同一套定位。
-   標題永遠以視窗中心定位；左右控制獨立定位，不因換頁或登入狀態改變。 */
+<style id="v21-header-single-geometry-fix">
+/* V2.1: 所有頁面使用完全相同的 Header 座標，避免切換時標題位移 */
+html,body{
+  width:100%;
+  min-width:0;
+}
+body{overflow-y:scroll;}
 .top.home-fixed-header,
 .subpage-fixed-header{
   position:sticky !important;
   top:0 !important;
   z-index:1000 !important;
   width:100% !important;
+  height:58px !important;
   min-height:58px !important;
+  max-height:58px !important;
+  margin:0 !important;
   padding:8px 0 !important;
-  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:42px minmax(0,1fr) 90px !important;
+  grid-template-rows:42px !important;
+  column-gap:8px !important;
+  align-items:center !important;
+  background:var(--bg) !important;
+  border-bottom:1px solid var(--line) !important;
+}
+/* 左右欄永遠固定，不讓內容決定標題位置 */
+.top.home-fixed-header .home-header-left-slot,
+.subpage-fixed-header .subpage-back-top{
+  grid-column:1 !important;
+  grid-row:1 !important;
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  justify-self:start !important;
+  align-self:center !important;
+}
+.top.home-fixed-header .home-header-left-slot{
+  visibility:visible !important;
   display:flex !important;
   align-items:center !important;
-  justify-content:space-between !important;
-  gap:0 !important;
-  background:var(--bg) !important;
+  justify-content:flex-start !important;
 }
 .top.home-fixed-header .top-brand,
 .subpage-fixed-header .subpage-title{
-  position:absolute !important;
-  left:50% !important;
-  top:50% !important;
-  transform:translate(-50%,-50%) !important;
-  width:max-content !important;
-  max-width:calc(100% - 112px) !important;
+  grid-column:2 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  min-width:0 !important;
   margin:0 !important;
   padding:0 !important;
+  justify-self:stretch !important;
+  align-self:center !important;
   text-align:center !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-  z-index:1 !important;
 }
 .top.home-fixed-header .top-brand h1,
 .subpage-fixed-header .subpage-title{
+  width:100% !important;
   margin:0 !important;
+  padding:0 !important;
   font-size:18px !important;
-  line-height:1.2 !important;
+  line-height:22px !important;
   font-weight:900 !important;
   text-align:center !important;
   white-space:nowrap !important;
@@ -2754,127 +2726,48 @@ body .app-header:not(.home-header){
 }
 .top.home-fixed-header .top-admin-actions,
 .subpage-fixed-header .subpage-actions{
-  position:absolute !important;
-  right:0 !important;
-  top:50% !important;
-  transform:translateY(-50%) !important;
+  grid-column:3 !important;
+  grid-row:1 !important;
+  width:90px !important;
+  min-width:90px !important;
+  height:42px !important;
   margin:0 !important;
   padding:0 !important;
   display:flex !important;
   align-items:center !important;
+  justify-content:flex-end !important;
   gap:6px !important;
-  z-index:2 !important;
-}
-.subpage-fixed-header .subpage-back-top{
-  position:absolute !important;
-  left:0 !important;
-  top:50% !important;
-  transform:translateY(-50%) !important;
-  margin:0 !important;
-  z-index:2 !important;
+  justify-self:end !important;
+  align-self:center !important;
 }
 .top.home-fixed-header .top-admin-access,
 .top.home-fixed-header .top-admin-logout,
 .subpage-fixed-header .top-admin-access,
-.subpage-fixed-header .top-admin-logout,
-.subpage-fixed-header .subpage-back-top{
+.subpage-fixed-header .top-admin-logout{
   width:42px !important;
   height:42px !important;
   min-width:42px !important;
   min-height:42px !important;
   flex:0 0 42px !important;
+  margin:0 !important;
 }
 .top.home-fixed-header .top-admin-access svg,
 .top.home-fixed-header .top-admin-logout svg,
 .subpage-fixed-header .top-admin-access svg,
-.subpage-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .subpage-back-top svg{
-  width:20px !important;
-  height:20px !important;
+.subpage-fixed-header .top-admin-logout svg{
+  width:20px !important;height:20px !important;
 }
-/* Home header uses the same divider as the query/subpage header. */
-.top.home-fixed-header{
-  border-bottom:1px solid var(--line) !important;
-}
-
 @media(max-width:430px){
   .top.home-fixed-header,
   .subpage-fixed-header{
+    grid-template-columns:42px minmax(0,1fr) 90px !important;
+    column-gap:8px !important;
+    height:58px !important;
     min-height:58px !important;
+    max-height:58px !important;
     padding:8px 0 !important;
   }
-  .top.home-fixed-header .top-brand,
-  .subpage-fixed-header .subpage-title{
-    max-width:calc(100% - 112px) !important;
-  }
-  .top.home-fixed-header .top-brand h1,
-  .subpage-fixed-header .subpage-title{font-size:18px !important}
-  .top.home-fixed-header .top-admin-actions,
-  .subpage-fixed-header .subpage-actions{gap:6px !important}
 }
-
-/* V95 FIX：避免查詢頁高度較短造成切頁時 Scrollbar 出現/消失，導致 Header 水平微移 */
-html{scrollbar-gutter:stable !important;}
-body{overflow-y:scroll !important;}
-
-/* V95 FIX：所有子頁 Header 使用完全相同的 sticky 定位，不因查詢頁內容高度不同而改變 */
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  margin-top:0 !important;
-  transform:none !important;
-}
-.subpage-fixed-header{
-  isolation:isolate !important;
-}
-
-/* V2.1 FINAL：首頁左側預留區顯示首頁 Icon */
-.home-header-left-slot{visibility:visible !important;}
-
-/* V2.1 Header：手機版標題以整個 Header 真正置中，不縮小文字 */
-.home-fixed-header,
-.subpage-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  z-index:100 !important;
-}
-.home-fixed-header .top-brand,
-.subpage-fixed-header .subpage-title{
-  position:absolute !important;
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  width:max-content !important;
-  max-width:calc(100% - 100px) !important;
-  margin:0 !important;
-  text-align:center !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-.home-fixed-header .top-admin-actions,
-.subpage-fixed-header .subpage-actions{
-  position:absolute !important;
-  right:0 !important;
-  margin:0 !important;
-  z-index:3 !important;
-}
-.home-fixed-header .home-icon,
-.subpage-fixed-header .subpage-back-top{
-  position:absolute !important;
-  left:0 !important;
-  z-index:3 !important;
-}
-@media(max-width:430px){
-  .home-fixed-header, .subpage-fixed-header{
-    min-height:62px !important;
-  }
-  .home-fixed-header .top-brand h1,
-  .subpage-fixed-header .subpage-title{
-    font-size:18px !important;
-  }
-}
-
 </style>
 </head>
 <body>
