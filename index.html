@@ -1256,29 +1256,6 @@ body .app-header:not(.home-header){
   padding:4px 10px !important;
   gap:4px !important;
 }
-.home-tabs button{
-  min-height:62px !important;
-  border:0 !important;
-  background:transparent !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:5px !important;
-  font-size:15px !important;
-  font-weight:850 !important;
-}
-.home-tabs button svg{
-  width:28px !important;
-  height:28px !important;
-}
-.home-tabs button.active{
-  font-weight:950 !important;
-}
-.home-tabs button.active svg{
-  width:30px !important;
-  height:30px !important;
-}
 
 .admin-menu-grid{
   display:grid !important;
@@ -1328,68 +1305,6 @@ body .app-header:not(.home-header){
   }
 }
 
-
-.home-tabs button{
-  color:#777 !important;
-  position:relative !important;
-}
-.home-tabs button svg{
-  color:#777 !important;
-  stroke:#777 !important;
-}
-.home-tabs button.active{
-  color:#d71920 !important;
-  font-weight:950 !important;
-}
-.home-tabs button.active svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-.home-tabs button.active::after{
-  content:"";
-  position:absolute;
-  left:22%;
-  right:22%;
-  bottom:2px;
-  height:3px;
-  border-radius:99px;
-  background:#d71920;
-}
-
-
-.home-tabs button{
-  color:#777 !important;
-  transition:color .18s ease, background .18s ease, transform .18s ease !important;
-  border-radius:14px !important;
-}
-.home-tabs button:hover,
-.home-tabs button:focus-visible{
-  color:#d71920 !important;
-  background:#fff1f1 !important;
-  outline:none !important;
-}
-.home-tabs button:hover svg,
-.home-tabs button:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-.home-tabs button:active{
-  color:#d71920 !important;
-  transform:translateY(1px);
-}
-.home-tabs button.active,
-.home-tabs button.active:hover,
-.home-tabs button.active:focus-visible{
-  color:#d71920 !important;
-  background:transparent !important;
-}
-.home-tabs button.active svg,
-.home-tabs button.active:hover svg,
-.home-tabs button.active:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-
 /* Keep the same red interaction language for the home-page admin shield. */
 .home-fixed-header .top-admin-access{
   transition:color .18s ease, border-color .18s ease, background .18s ease !important;
@@ -1433,29 +1348,6 @@ body .app-header:not(.home-header){
   min-height:64px !important;
   margin:0 !important;
 }
-.home-tabs button{
-  width:100% !important;
-  min-height:56px !important;
-  padding:8px 12px !important;
-  margin:0 !important;
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:8px !important;
-  font-size:16px !important;
-  font-weight:900 !important;
-}
-.home-tabs button svg{
-  width:25px !important;
-  height:25px !important;
-  flex:0 0 auto !important;
-}
-.home-tabs button.active::after{
-  left:18% !important;
-  right:18% !important;
-  bottom:1px !important;
-}
 
 /* Keep the exact same shell on the admin landing. The colored admin hero
    starts after the shared navigation instead of compressing it. */
@@ -1493,32 +1385,10 @@ body .app-header:not(.home-header){
   display:none !important;
 }
 
-/* Hover / focus / active: one red interaction rule everywhere. */
-.home-tabs button:hover,
-.home-tabs button:focus-visible,
-.home-tabs button:active{
-  color:#d71920 !important;
-}
-.home-tabs button:hover svg,
-.home-tabs button:focus-visible svg,
-.home-tabs button:active svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-
 @media(max-width:520px){
   .home-tabs{
     padding:6px 8px !important;
     gap:6px !important;
-  }
-  .home-tabs button{
-    min-height:52px !important;
-    font-size:15px !important;
-    padding:6px 8px !important;
-  }
-  .home-tabs button svg{
-    width:23px !important;
-    height:23px !important;
   }
   #app.admin-home-view .admin-menu-grid{
     gap:6px !important;
@@ -1539,81 +1409,6 @@ body .app-header:not(.home-header){
   #app.admin-home-view .admin-square strong{
     font-size:11px !important;
   }
-}
-
-
-.home-tabs button.active,
-.home-tabs button.active:hover,
-.home-tabs button.active:focus-visible,
-.home-tabs button.active:active{
-  color:#777 !important;
-  background:transparent !important;
-  font-weight:850 !important;
-}
-.home-tabs button.active svg,
-.home-tabs button.active:hover svg,
-.home-tabs button.active:focus-visible svg,
-.home-tabs button.active:active svg{
-  color:#777 !important;
-  stroke:#777 !important;
-}
-.home-tabs button.active::after{
-  display:none !important;
-}
-
-
-.home-tabs button:hover,
-.home-tabs button:focus-visible{
-  color:#d71920 !important;
-  background:#fff1f1 !important;
-  outline:none !important;
-}
-.home-tabs button:hover svg,
-.home-tabs button:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-/* Active tab itself stays neutral, per v53 request. */
-.home-tabs button.active{
-  color:#777 !important;
-  background:transparent !important;
-  font-weight:850 !important;
-}
-.home-tabs button.active svg{
-  color:#777 !important;
-  stroke:#777 !important;
-}
-.home-tabs button.active::after{
-  display:none !important;
-}
-
-
-.home-tabs button{
-  cursor:pointer !important;
-}
-.home-tabs button.is-pointer,
-.home-tabs button:hover,
-.home-tabs button:focus-visible{
-  color:#d71920 !important;
-  background:#fff1f1 !important;
-}
-.home-tabs button.is-pointer svg,
-.home-tabs button:hover svg,
-.home-tabs button:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
-}
-.home-tabs button.active.is-pointer,
-.home-tabs button.active:hover,
-.home-tabs button.active:focus-visible{
-  color:#d71920 !important;
-  background:#fff1f1 !important;
-}
-.home-tabs button.active.is-pointer svg,
-.home-tabs button.active:hover svg,
-.home-tabs button.active:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
 }
 
 
@@ -2918,6 +2713,71 @@ header.subpage-fixed-header,
 .form-title{font-size:18px!important;line-height:1.25!important;}
 .field-label{font-size:18px!important;line-height:1.25!important;}
 .section-head h2{font-size:18px!important;line-height:1.25!important;}
+</style>
+
+
+
+<style id="bottom-signin-query-unified-final">
+/* 底部「簽到／查詢」唯一統一樣式 */
+.home-tabs button{
+  width:100% !important;
+  min-height:52px !important;
+  margin:0 !important;
+  padding:6px 8px !important;
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  box-sizing:border-box !important;
+  border:0 !important;
+  border-radius:14px !important;
+  background:#c62828 !important;
+  color:#fff !important;
+  font-size:15px !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+  cursor:pointer !important;
+}
+.home-tabs button svg{
+  width:23px !important;
+  height:23px !important;
+  flex:0 0 23px !important;
+  color:#fff !important;
+  stroke:#fff !important;
+}
+.home-tabs button.active,
+.home-tabs button.active:hover,
+.home-tabs button.active:focus-visible,
+.home-tabs button.active:active{
+  background:#c62828 !important;
+  color:#fff !important;
+  font-weight:900 !important;
+  transform:none !important;
+}
+.home-tabs button.active svg,
+.home-tabs button.active:hover svg,
+.home-tabs button.active:focus-visible svg,
+.home-tabs button.active:active svg{
+  width:23px !important;
+  height:23px !important;
+  color:#fff !important;
+  stroke:#fff !important;
+}
+.home-tabs button:hover,
+.home-tabs button:focus-visible{
+  background:#a91f1f !important;
+  color:#fff !important;
+  outline:none !important;
+}
+.home-tabs button:hover svg,
+.home-tabs button:focus-visible svg{
+  color:#fff !important;
+  stroke:#fff !important;
+}
+.home-tabs button.active::after{
+  display:none !important;
+}
 </style>
 </head>
 <body>
