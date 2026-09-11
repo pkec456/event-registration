@@ -2861,6 +2861,16 @@ let announcementEditing = false;
 
 let adminPage = "home";
 
+// 簽到頁面總開關：管理者可控制一般使用者是否看到「簽到」頁與按鈕。
+const SIGNIN_PAGE_VISIBILITY_KEY = "haotian-signin-page-visible";
+function isSigninPageVisible(){
+  try{return localStorage.getItem(SIGNIN_PAGE_VISIBILITY_KEY) !== "hidden";}catch(e){return true;}
+}
+function setSigninPageVisible(visible){
+  try{localStorage.setItem(SIGNIN_PAGE_VISIBILITY_KEY, visible ? "visible" : "hidden");}catch(e){}
+}
+let signinPageVisible = isSigninPageVisible();
+
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
   if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = true; }
@@ -2919,7 +2929,7 @@ function isActivityDateExpired(activity, now=Date.now()){
   // 活動日期為 YYYY-MM-DD；隔日 00:00 起視為「已過一天」。
   // 沒有有效日期時不介入，避免影響既有活動。
   const raw=String(activity?.date||"").trim();
-  const m=raw.match(/^(\\d{4})[-\\/](\\d{1,2})[-\\/](\\d{1,2})/);
+  const m=raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
   if(!m) return false;
   const end=new Date(Number(m[1]),Number(m[2])-1,Number(m[3])+1,0,0,0,0).getTime();
   return Number.isFinite(end) && now>=end;
@@ -3343,6 +3353,11 @@ function getPublishAt(){
 
 function render(){
   const app=document.getElementById("app");
+  signinPageVisible=isSigninPageVisible();
+  if(!signinPageVisible && !adminUnlocked && activeTab==="register"){
+    activeTab="query";
+    openEventId=null;
+  }
   const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
@@ -3363,9 +3378,9 @@ function render(){
       </div>
       </header>
       <nav class="tabs home-tabs">
-        <button data-tab="register" class="${activeTab==='register'?'active':''}">
+        ${(signinPageVisible || adminUnlocked)?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
           <i data-lucide="check"></i>簽到
-        </button>
+        </button>`:""}
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
           <i data-lucide="search"></i>查詢
         </button>
@@ -3434,6 +3449,7 @@ function render(){
 
   const homeSigninLink=app.querySelector("#home-signin-link");
   if(homeSigninLink)homeSigninLink.onclick=()=>{
+    if(!isSigninPageVisible() && !adminUnlocked){ activeTab="query"; openEventId=null; render(); return; }
     activeTab="register";
     openEventId=null;
     adminPage="home";
@@ -4022,6 +4038,82 @@ function renderAdmin(el){
          </button>
        </div>`}
 </div>
+
+<style id="signin-page-setting-ui">
+/* 簽到頁面：沿用系統「活動管理」按鈕語言，不另造一套視覺。 */
+.signin-page-setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.signin-page-setting-info{
+  min-width:0;
+  flex:1 1 auto;
+}
+.signin-page-setting-info strong{
+  display:block;
+  margin:0;
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+  color:var(--ink);
+}
+.signin-page-setting-info .field-hint{
+  margin-top:5px;
+}
+.signin-page-toggle{
+  flex:0 0 auto;
+  min-width:92px;
+  min-height:42px;
+  padding:5px 10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f7f7f5;
+  font-size:11px;
+  font-weight:850;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.signin-page-toggle svg{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+}
+.signin-page-toggle.is-on{
+  color:var(--success,#16a34a);
+}
+.signin-page-toggle.is-off{
+  color:var(--ink);
+}
+.signin-page-toggle:hover{
+  background:#efefec;
+}
+.signin-page-toggle:focus-visible{
+  outline:2px solid rgba(201,20,27,.25);
+  outline-offset:2px;
+}
+@media (max-width:420px){
+  .signin-page-setting-row{align-items:flex-start;}
+  .signin-page-toggle{min-width:84px;}
+}
+</style>
+
+<div class="section-head"><h2>簽到頁面</h2><span>一般使用者顯示設定</span></div>
+<div class="form-block signin-page-setting-card">
+  <div class="form-title"><span class="ico"><i data-lucide="clipboard-check"></i></span>簽到頁面</div>
+  <div class="signin-page-setting-row">
+    <div class="signin-page-setting-info">
+      <strong id="signin-page-setting-status">${signinPageVisible?"目前：開啟":"目前：隱藏"}</strong>
+      <div class="field-hint">隱藏後，一般使用者看不到「簽到」按鈕與簽到頁面；管理者登入後仍可看到。</div>
+    </div>
+    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle">
+      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"開啟":"隱藏"}</span>
+    </button>
+  </div>
+</div>
 <div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${todayActs.filter(a=>a.open&&!a.hidden).length}</b><span>開放活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>簽到紀錄</span></div><div class="metric"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><b>${todayAverageRate}%</b><span>平均出席率</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
@@ -4095,6 +4187,14 @@ function renderAdmin(el){
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
   const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
+  const signinPageToggle=document.getElementById("signin-page-toggle");
+  if(signinPageToggle)signinPageToggle.onclick=()=>{
+    signinPageVisible=!isSigninPageVisible();
+    setSigninPageVisible(signinPageVisible);
+    if(!signinPageVisible && !adminUnlocked && activeTab==="register") activeTab="query";
+    showToast(signinPageVisible?"簽到頁面已開啟":"簽到頁面已隱藏");
+    render();
+  };
   if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
   refreshIcons();
 }
