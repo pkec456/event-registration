@@ -2861,15 +2861,40 @@ let announcementEditing = false;
 
 let adminPage = "home";
 
-// 簽到頁面總開關：管理者可控制一般使用者是否看到「簽到」頁與按鈕。
+// 簽到頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
 const SIGNIN_PAGE_VISIBILITY_KEY = "haotian-signin-page-visible";
 function isSigninPageVisible(){
   try{return localStorage.getItem(SIGNIN_PAGE_VISIBILITY_KEY) !== "hidden";}catch(e){return true;}
 }
-function setSigninPageVisible(visible){
+function setSigninPageVisibleLocal(visible){
   try{localStorage.setItem(SIGNIN_PAGE_VISIBILITY_KEY, visible ? "visible" : "hidden");}catch(e){}
 }
 let signinPageVisible = isSigninPageVisible();
+let signinPageVisibilityLoaded = false;
+async function loadSigninPageVisibilityRemote(){
+  const {data,error}=await supabaseClient.rpc("get_signin_page_visibility");
+  if(error) throw error;
+  const visible = data?.visible !== false;
+  signinPageVisible=visible;
+  setSigninPageVisibleLocal(visible);
+  signinPageVisibilityLoaded=true;
+  return visible;
+}
+async function saveSigninPageVisibilityRemote(visible){
+  const session=getAdminSession();
+  if(!session?.username || !session?.access_code) throw new Error("請先登入管理者");
+  const {data,error}=await supabaseClient.rpc("simple_set_signin_page_visibility",{
+    p_username:session.username,
+    p_access_code:session.access_code,
+    p_visible:!!visible
+  });
+  if(error) throw error;
+  if(data?.ok===false) throw new Error(data?.message||"簽到頁面設定儲存失敗");
+  signinPageVisible=!!visible;
+  setSigninPageVisibleLocal(!!visible);
+  signinPageVisibilityLoaded=true;
+  return data;
+}
 
 document.addEventListener("focusin", (e)=>{
   const tag = e.target.tagName;
@@ -4187,12 +4212,19 @@ function renderAdmin(el){
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
   const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
   const signinPageToggle=document.getElementById("signin-page-toggle");
-  if(signinPageToggle)signinPageToggle.onclick=()=>{
-    signinPageVisible=!isSigninPageVisible();
-    setSigninPageVisible(signinPageVisible);
-    if(!signinPageVisible && !adminUnlocked && activeTab==="register") activeTab="query";
-    showToast(signinPageVisible?"簽到頁面已開啟":"簽到頁面已隱藏");
-    render();
+  if(signinPageToggle)signinPageToggle.onclick=async()=>{
+    const next=!signinPageVisible;
+    signinPageToggle.disabled=true;
+    try{
+      await saveSigninPageVisibilityRemote(next);
+      if(!next && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
+      showToast(next?"簽到頁面已開啟":"簽到頁面已隱藏");
+      render();
+    }catch(e){
+      console.error("簽到頁面設定儲存失敗",e);
+      showToast("設定儲存失敗："+(e?.message||"請確認 Supabase 已建立簽到頁面設定 RPC"));
+      render();
+    }
   };
   if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
   refreshIcons();
@@ -4518,6 +4550,8 @@ async function init(){
   await loadData();
   try{ await loadAnnouncementRemote(); }
   catch(e){ console.error("公告載入失敗",e); }
+  try{ await loadSigninPageVisibilityRemote(); }
+  catch(e){ console.error("簽到頁面設定載入失敗",e); }
   render();
   setInterval(async ()=>{
     // 任何輸入框正在使用時，禁止背景資料刷新／DOM 重建。
@@ -4559,6 +4593,11 @@ async function init(){
 
     if(activeTab !== "admin"){
       await loadData();
+      try{
+        const before=signinPageVisible;
+        await loadSigninPageVisibilityRemote();
+        if(before && !signinPageVisible && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
+      }catch(e){console.error("簽到頁面設定同步失敗",e);}
       if(!userIsTyping) renderTab();
       if(openEventId){
         const publicActivity=state.activities.find(x=>String(x.id)===String(openEventId));
@@ -4567,6 +4606,7 @@ async function init(){
     }else if(!userIsTyping){
       // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
       await loadData();
+      try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("簽到頁面設定同步失敗",e);}
     }
   },6000);
   refreshActivityListClocks();
@@ -4854,7 +4894,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.1.1</div>
+    <div class="version">系統版本：2.1</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
