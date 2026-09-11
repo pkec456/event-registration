@@ -30,7 +30,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 .announcement{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;gap:12px;align-items:flex-start}.announcement-icon{width:42px;height:42px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}.announcement h3{margin:0 0 4px;font-size:14px}.announcement p{margin:0;color:#666;font-size:13px;line-height:1.5}.announcement-edit{margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--accent-soft);color:var(--accent);border:0;border-radius:11px;padding:8px 10px;font-size:11px;font-weight:850}.announcement-edit:hover{background:#ffe1e1}.announcement-admin{margin-top:12px}.announcement-admin textarea{width:100%;min-height:92px;resize:vertical;padding:12px 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;outline:none;font:inherit;font-size:14px;line-height:1.5}.announcement-admin textarea:focus{border-color:#999;box-shadow:0 0 0 3px #eee}
 .activity-grid{display:grid;gap:12px}.activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.activity-card:active{transform:scale(.99)}.activity-top{display:flex;gap:12px;align-items:flex-start}.activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}.activity-main{min-width:0;flex:1}.activity-name{font-size:17px;font-weight:850}.activity-meta{margin-top:4px;color:#777;font-size:12px}.activity-right{display:flex;align-items:center;gap:8px}.count{font-size:13px;font-weight:800;white-space:nowrap}.arrow{color:#999}
-.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status svg{width:14px!important;height:14px!important;min-width:14px!important;flex:0 0 14px!important;stroke-width:2.5}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 9px;border-radius:999px}.status svg{width:14px!important;height:14px!important;min-width:14px!important;flex:0 0 14px!important;stroke-width:2.5}.status.open{background:#eaf8ef;color:var(--success)}.status.closed{background:#efefec;color:#777}.status.future{background:#fff5dd;color:#b56e00}.status.manual{background:#fff5dd;color:#b56e00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.stat-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#777}.stat-row b{color:#171717}
 .back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
 .form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=time],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -2780,6 +2780,34 @@ header.subpage-fixed-header,
 }
 </style>
 
+
+<style id="manual-registration-ui">
+.manual-register-list{margin-top:8px}
+.manual-register-list .list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
+.manual-register-list .list-row:last-child{border-bottom:0}
+.manual-register-list .list-index{width:28px;height:28px;border-radius:10px;background:#f1f1ef;display:grid;place-items:center;font-size:11px;font-weight:850;flex:0 0 auto}
+.manual-register-list .list-main{flex:1;min-width:0}
+.manual-register-list .list-name{font-weight:800;font-size:14px}
+.manual-register-list .list-meta{font-size:11px;color:#999;margin-top:2px}
+.manual-register-list .check{color:var(--success)}
+.manual-register-activity-locked{background:#f1f1ef!important;color:#777}
+.manual-activity-summary{display:flex;align-items:center;gap:12px;min-height:48px}
+.manual-activity-summary-main{flex:1;min-width:0}
+.manual-activity-summary-name{font-size:14px;font-weight:850;line-height:1.35;word-break:break-word}
+.manual-activity-summary-date{display:flex;align-items:center;gap:6px;margin-top:6px;color:#777;font-size:12px;font-weight:700}
+.manual-activity-summary-date svg{width:15px;height:15px;color:var(--accent)}
+.manual-activity-summary .announcement-edit{margin-left:auto;flex:0 0 auto}
+.manual-activity-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+@media(max-width:520px){.manual-activity-actions{grid-template-columns:1fr 1fr}}
+</style>
+
+
+<style id="activity-management-filter-ui">
+.activity-management-filter{margin-bottom:12px}
+.activity-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.activity-filter-row .choice-grid{gap:8px}
+@media(max-width:600px){.activity-filter-row{grid-template-columns:1fr}.activity-filter-row .choice{min-height:42px}}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2860,6 +2888,14 @@ let announcementEditing = false;
 
 
 let adminPage = "home";
+let activityManagementSearch = "";
+let activityManagementType = "all";
+let activityManagementStatus = "all";
+
+let manualRegisterActivityId = null;
+let manualRegisterActivityName = "";
+let manualRegisterActivityDate = ""; let manualRegisterActivityEditing = false;
+
 
 // 簽到頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
 const SIGNIN_PAGE_VISIBILITY_KEY = "haotian-signin-page-visible";
@@ -4143,6 +4179,10 @@ function renderAdmin(el){
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
   </button>
+  <button class="admin-action admin-square" data-admin-page="manual-register">
+     <span class="menu-icon"><i data-lucide="clipboard-pen-line"></i></span>
+     <strong>手動登記</strong>
+   </button>
   <button class="admin-action admin-square" data-admin-page="activities">
     <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
     <strong>活動管理</strong>
@@ -4159,8 +4199,94 @@ function renderAdmin(el){
   if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "0")}"><div class="field-hint">預設上限 0 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
-    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div><div class="section-head"><h2>顯示中的活動</h2><span>${visibleActs.length} 場</span></div>${visibleActs.length?visibleActs.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有顯示中的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${hiddenActs.length} 場</span></div>${hiddenActs.length?hiddenActs.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有已隱藏的活動</div></div>`}`;
+    const search=norm(activityManagementSearch).toLowerCase();
+    const matchActivity=a=>{
+      const manual=isManualRegistrationActivity(a);
+      const typeOK=activityManagementType==="all" || (activityManagementType==="manual"&&manual) || (activityManagementType==="normal"&&!manual);
+      const statusOK=activityManagementStatus==="all" || (activityManagementStatus==="open"&&manual ? true : activityManagementStatus==="open"&&!manual&&!!a.open) || (activityManagementStatus==="closed"&&!manual&&!a.open);
+      const searchOK=!search || String(a.name||"").toLowerCase().includes(search);
+      return typeOK&&statusOK&&searchOK;
+    };
+    const filteredVisible=visibleActs.filter(matchActivity);
+    const filteredHidden=hiddenActs.filter(matchActivity);
+    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div>
+    <div class="activity-management-filter form-block">
+      <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-search">搜尋活動</label><input type="text" id="activity-management-search" placeholder="請輸入活動名稱" value="${escapeHtml(activityManagementSearch)}"></div>
+      <div class="activity-filter-row">
+        <div class="choice-grid three activity-filter-type"><button type="button" class="choice ${activityManagementType==='all'?'selected':''}" data-activity-filter-type="all">全部</button><button type="button" class="choice ${activityManagementType==='normal'?'selected':''}" data-activity-filter-type="normal">一般活動</button><button type="button" class="choice ${activityManagementType==='manual'?'selected':''}" data-activity-filter-type="manual">手動登記</button></div>
+        <div class="choice-grid three activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button></div>
+      </div>
+    </div>
+    <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
   }
+
+  if(adminPage==="manual-register"){
+    const current=manualRegisterActivityId
+      ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
+      : null;
+    const list=current ? regsOf(current.id) : [];
+    const activityDate=current ? String(current.date||"").slice(0,10) : manualRegisterActivityDate;
+    const activityName=current?.name ?? manualRegisterActivityName;
+    const editing=!!current && manualRegisterActivityEditing;
+    content=`<h1 class="page-title">手動登記</h1><p class="page-subtitle">建立活動後，可由管理者直接輸入隊員姓名完成登記。</p>
+    <div class="form-block">
+      <div class="form-title"><span class="ico"><i data-lucide="clipboard-pen-line"></i></span>活動資料</div>
+      ${current && !editing ? `
+        <div class="manual-activity-summary">
+          <div class="manual-activity-summary-main">
+            <div class="manual-activity-summary-name">${escapeHtml(activityName)}</div>
+            <div class="manual-activity-summary-date"><i data-lucide="calendar-days"></i>${escapeHtml(activityDate||"—")}</div>
+          </div>
+          <button type="button" class="announcement-edit" id="edit-manual-activity-btn">
+            <i data-lucide="pencil"></i>編輯
+          </button>
+        </div>` : `
+        <div class="field">
+          <label class="field-label" for="manual-activity-name">活動名稱</label>
+          <input type="text" id="manual-activity-name" placeholder="請輸入活動名稱"
+            value="${escapeHtml(activityName)}">
+        </div>
+        <div class="field">
+          <label class="field-label" for="manual-activity-date">活動日期</label>
+          <input type="date" id="manual-activity-date" min="${localDateKey()}"
+            value="${escapeHtml(activityDate)}">
+        </div>
+        ${current ? `<div class="manual-activity-actions">
+          <button type="button" class="primary" id="save-manual-activity-btn"><i data-lucide="save"></i>儲存</button>
+          <button type="button" class="secondary" id="cancel-manual-activity-btn"><i data-lucide="x"></i>取消</button>
+        </div>` : ``}`}
+    </div>
+
+    <div class="form-block">
+      <div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>姓名</div>
+      <div class="field">
+        <input type="text" id="manual-member-name" placeholder="請輸入隊員姓名" autocomplete="off">
+      </div>
+      <button type="button" class="primary" id="manual-register-btn">
+        <i data-lucide="${current?"plus":"clipboard-plus"}"></i>${current?"新增登記":"建立活動並登記"}
+      </button>
+      <div class="debug-error-box" id="manual-register-error"></div>
+    </div>
+
+    <div class="form-block">
+      <div class="form-title">
+        <span class="ico"><i data-lucide="users"></i></span>已登記名單
+        <span style="margin-left:auto;color:#888;font-size:11px">${list.length} 人</span>
+      </div>
+      <div class="manual-register-list">
+        ${list.length ? list.map((r,i)=>`
+          <div class="list-row">
+            <div class="list-index">${i+1}</div>
+            <div class="list-main">
+              <div class="list-name">${escapeHtml(r.name)}</div>
+              <div class="list-meta">${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</div>
+            </div>
+            <i data-lucide="check" class="check"></i>
+          </div>`).join("") : `<div class="empty" style="padding:14px">目前尚無登記人員</div>`}
+      </div>
+    </div>`;
+  }
+
   if(adminPage==="attendance"){
     const now=new Date();
     const month=now.getMonth();
@@ -4226,9 +4352,62 @@ function renderAdmin(el){
       render();
     }
   };
-  if(adminPage==="create")setupCreateActivityPage(el);if(adminPage==="activities")setupActivityManagementPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
+  if(adminPage==="create")setupCreateActivityPage(el);
+  if(adminPage==="activities"){
+    const searchInput=document.getElementById("activity-management-search");
+    if(searchInput){
+      let searchTimer=null;
+      let composing=false;
+      const applySearch=()=>{
+        activityManagementSearch=searchInput.value;
+        renderAdmin(el);
+        const next=document.getElementById("activity-management-search");
+        if(next){
+          next.focus();
+          const pos=next.value.length;
+          try{next.setSelectionRange(pos,pos);}catch(_){ }
+        }
+      };
+      searchInput.addEventListener("compositionstart",()=>{composing=true;});
+      searchInput.addEventListener("compositionend",()=>{
+        composing=false;
+        clearTimeout(searchTimer);
+        searchTimer=setTimeout(applySearch,0);
+      });
+      searchInput.addEventListener("input",()=>{
+        activityManagementSearch=searchInput.value;
+        if(composing || searchInput.isComposing) return;
+        clearTimeout(searchTimer);
+        searchTimer=setTimeout(applySearch,300);
+      });
+    }
+    el.querySelectorAll("[data-activity-filter-type]").forEach(btn=>btn.onclick=()=>{activityManagementType=btn.dataset.activityFilterType;renderAdmin(el);});
+    el.querySelectorAll("[data-activity-filter-status]").forEach(btn=>btn.onclick=()=>{activityManagementStatus=btn.dataset.activityFilterStatus;renderAdmin(el);});
+    setupActivityManagementPage(el);
+  }if(adminPage==="manual-register")setupManualRegistrationPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
   refreshIcons();
 }
+
+function isManualRegistrationActivity(a){
+  if(!a) return false;
+  try{
+    const ids=JSON.parse(localStorage.getItem("manual-registration-activity-ids")||"[]");
+    if(Array.isArray(ids) && ids.some(id=>String(id)===String(a.id))) return true;
+  }catch(e){}
+  // 舊版手動登記活動沒有額外欄位可辨識；依目前系統建立規則，以「無人數上限＋無攜帶物品欄位」辨識。
+  return a.maxParticipants==null && (!Array.isArray(a.fields) || a.fields.length===0);
+}
+
+function openManualRegistrationEditor(a){
+  if(!a) return;
+  manualRegisterActivityId=a.id;
+  manualRegisterActivityName=a.name||"";
+  manualRegisterActivityDate=String(a.date||"").slice(0,10);
+  manualRegisterActivityEditing=false;
+  adminPage="manual-register";
+  render();
+}
+window.openManualRegistrationEditor=openManualRegistrationEditor;
 
 function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
@@ -4243,8 +4422,9 @@ function activityAdminRow(a,hidden=false){
     const headers=(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("");
     detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
   }
-  const statusClass=future?"future":(a.open?"open":"closed");
-  const statusText=future?"未發佈":(a.open?"開放中":"已停止");
+  const manualRegistration=isManualRegistrationActivity(a);
+  const statusClass=manualRegistration?"manual":(future?"future":(a.open?"open":"closed"));
+  const statusText=manualRegistration?"手動登記":(future?"未發佈":(a.open?"開放中":"已停止"));
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
     <div class="admin-card-icon"><i data-lucide="calendar-days"></i></div>
@@ -4264,7 +4444,7 @@ function activityAdminRow(a,hidden=false){
   </div>
   <div class="admin-actions">
     <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
-    <button class="activity-toggle-btn ${a.open?"is-on":"is-off"}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>
+    ${isManualRegistrationActivity(a)?`<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>`:`<button class="activity-toggle-btn ${a.open?"is-on":"is-off"}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
   </div>${detail}</div>`;
@@ -4439,6 +4619,133 @@ function safeQuerySelectorAll(root, selector){
     console.warn("忽略無效 selector:",selector,e);
     return [];
   }
+}
+
+
+function setupManualRegistrationPage(el){
+  const nameInput=document.getElementById("manual-activity-name");
+  const dateInput=document.getElementById("manual-activity-date");
+  const memberInput=document.getElementById("manual-member-name");
+  const btn=document.getElementById("manual-register-btn");
+  const err=document.getElementById("manual-register-error");
+
+  const editActivityBtn=document.getElementById("edit-manual-activity-btn");
+  if(editActivityBtn) editActivityBtn.onclick=()=>{
+    manualRegisterActivityEditing=true;
+    renderAdmin(el);
+  };
+
+  const cancelActivityBtn=document.getElementById("cancel-manual-activity-btn");
+  if(cancelActivityBtn) cancelActivityBtn.onclick=()=>{
+    manualRegisterActivityEditing=false;
+    renderAdmin(el);
+  };
+
+  const saveActivityBtn=document.getElementById("save-manual-activity-btn");
+  if(saveActivityBtn) saveActivityBtn.onclick=async()=>{
+    const activity=manualRegisterActivityId
+      ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
+      : null;
+    if(!activity){showToast("活動資料不存在");return;}
+    const newName=norm(nameInput?.value||"");
+    const newDate=dateInput?.value||"";
+    if(!newName){showToast("請輸入活動名稱");return;}
+    if(!newDate){showToast("請選擇活動日期");return;}
+    if(newDate<localDateKey()){showToast("活動日期不能早於今天");return;}
+
+    saveActivityBtn.disabled=true;
+    try{
+      const updated={...activity,name:newName,date:newDate};
+      const saved=await updateActivityRemote(updated);
+      const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
+      if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate};
+      manualRegisterActivityName=newName;
+      manualRegisterActivityDate=newDate;
+      manualRegisterActivityEditing=false;
+      showToast("活動資料已儲存");
+      renderAdmin(el);
+    }catch(e){
+      console.error("手動登記活動資料儲存失敗",e);
+      showToast("活動資料儲存失敗："+(e?.message||"請稍後再試"));
+      saveActivityBtn.disabled=false;
+    }
+  };
+
+  [nameInput,dateInput].forEach(input=>{
+    if(!input) return;
+    input.addEventListener("input",()=>{
+      if(input===nameInput) manualRegisterActivityName=input.value;
+      if(input===dateInput) manualRegisterActivityDate=input.value;
+    });
+    input.addEventListener("change",()=>{
+      if(input===nameInput) manualRegisterActivityName=input.value;
+      if(input===dateInput) manualRegisterActivityDate=input.value;
+    });
+  });
+
+  if(memberInput) memberInput.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){e.preventDefault();btn?.click();}
+  });
+
+  if(btn) btn.onclick=async()=>{
+    const member=norm(memberInput?.value||"");
+    if(!manualRegisterActivityId){
+      manualRegisterActivityName=norm(nameInput?.value||"");
+      manualRegisterActivityDate=dateInput?.value||"";
+      if(!manualRegisterActivityName){showToast("請輸入活動名稱");return;}
+      if(!manualRegisterActivityDate){showToast("請選擇活動日期");return;}
+      if(manualRegisterActivityDate<localDateKey()){showToast("活動日期不能早於今天");return;}
+    }
+    if(!member){showToast("請輸入隊員姓名");return;}
+
+    btn.disabled=true;
+    if(err) err.classList.remove("show");
+
+    try{
+      let activity=null;
+
+      if(!manualRegisterActivityId){
+        const session=getAdminSession();
+        activity={
+          id:uid(),name:manualRegisterActivityName,
+          date:new Date(manualRegisterActivityDate+"T00:00:00").toISOString(),
+          fields:[],open:true,maxParticipants:null,createdBy:session?.username||"",
+          closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null
+        };
+        const saved=await createActivityRemote(activity);
+        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date};
+        state.activities.push(activity);state.registrations[activity.id]=[];
+        manualRegisterActivityId=activity.id;
+        manualRegisterActivityEditing=false;
+        try{
+          const ids=JSON.parse(localStorage.getItem("manual-registration-activity-ids")||"[]");
+          if(Array.isArray(ids) && !ids.some(id=>String(id)===String(activity.id))){
+            ids.push(activity.id);
+            localStorage.setItem("manual-registration-activity-ids",JSON.stringify(ids));
+          }
+        }catch(e){}
+      }else{
+        activity=state.activities.find(a=>String(a.id)===String(manualRegisterActivityId));
+      }
+
+      const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}});
+      const r=savedReg||{id:uid(),activity_id:activity.id,name:member,fieldValues:{},ts:new Date().toISOString()};
+      if(!state.registrations[activity.id]) state.registrations[activity.id]=[];
+      state.registrations[activity.id].push({
+        id:r.id||uid(),activity_id:r.activity_id||activity.id,name:r.name||member,
+        fieldValues:r.field_values||r.fieldValues||{},ts:r.created_at||r.ts||new Date().toISOString()
+      });
+
+      if(memberInput) memberInput.value="";
+      showToast(state.registrations[activity.id].length===1?"活動建立並完成登記":"已完成登記");
+      renderAdmin(el);
+      setTimeout(()=>document.getElementById("manual-member-name")?.focus(),50);
+    }catch(e){
+      console.error("手動登記失敗",e);
+      if(err){err.textContent="手動登記失敗："+(e?.message||"未知錯誤");err.classList.add("show");}
+      showToast("手動登記失敗");btn.disabled=false;
+    }
+  };
 }
 
 function setupActivityManagementPage(el){
@@ -4655,18 +4962,20 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 (function(){
   async function activityButtonHandler(ev){
     const btn=ev.target && ev.target.closest &&
-      ev.target.closest("[data-activity-close],[data-activity-hide],[data-activity-delete]");
+      ev.target.closest("[data-activity-close],[data-activity-edit],[data-activity-hide],[data-activity-delete]");
     if(!btn) return;
     ev.preventDefault();
     ev.stopPropagation();
 
     const id=btn.getAttribute("data-activity-close") ||
+             btn.getAttribute("data-activity-edit") ||
              btn.getAttribute("data-activity-hide") ||
              btn.getAttribute("data-activity-delete");
 
     console.log("[活動管理] 按鈕被點擊", {
       id:id,
       close:btn.getAttribute("data-activity-close"),
+      edit:btn.getAttribute("data-activity-edit"),
       hide:btn.getAttribute("data-activity-hide"),
       delete:btn.getAttribute("data-activity-delete")
     });
@@ -4721,7 +5030,9 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       return;
     }
 
-    if(btn.hasAttribute("data-activity-close")){
+    if(btn.hasAttribute("data-activity-edit")){
+      openManualRegistrationEditor(a);
+    }else if(btn.hasAttribute("data-activity-close")){
       activityActionClose(a,btn);
     }else if(btn.hasAttribute("data-activity-hide")){
       activityActionHide(a,btn);
