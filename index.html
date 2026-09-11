@@ -96,6 +96,9 @@ input[type=date]{width:100%;max-width:100%;min-width:0;min-height:48px;box-sizin
 }
 
 .empty{text-align:center;color:#888;padding:28px 10px;font-size:13px}.debug-error-box{display:none;margin-top:10px;padding:12px;border-radius:14px;background:#fff0f0;border:1px solid #f0b6b6;color:#a00;font-size:12px;white-space:pre-wrap;word-break:break-word}.debug-error-box.show{display:block}.countdown-box{margin-top:12px;padding:10px 12px;border-radius:13px;background:#fff5dd;color:#9b6800;text-align:center;font-size:12px;font-weight:850}.note-shared{font-size:11px;color:#888;background:#f5f5f3;border-radius:13px;padding:10px 12px;line-height:1.5;margin-top:10px}.divider{height:1px;background:var(--line);margin:14px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#171717;color:#fff;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.manual-return-overlay{position:fixed;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000;backdrop-filter:blur(3px)}
+.manual-return-modal{width:min(360px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
+.manual-return-modal h3{margin:0;font-size:17px;font-weight:900;text-align:center}.manual-return-modal p{margin:8px 0 18px;color:#777;font-size:13px;text-align:center}.manual-return-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.manual-return-actions button{min-height:46px;border-radius:14px;font-weight:850;font-size:13px}.manual-return-save{background:var(--accent);color:#fff;border:1px solid var(--accent)}.manual-return-discard{background:#fff;color:#555;border:1px solid var(--line)}
 .system-footer{margin-top:28px;padding:10px 0;text-align:center;color:#aaa;font-size:10px;line-height:1.6}.system-footer .version{font-weight:800}.system-footer .maker{margin-top:1px}
 .table-wrap{overflow-x:auto}.list-table{width:100%;border-collapse:collapse;font-size:12px}.list-table th{text-align:left;color:#888;font-size:10px;padding:8px;border-bottom:1px solid var(--line)}.list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.list-table td.name{font-weight:800}.rate-bar-wrap{display:flex;align-items:center;gap:8px}.rate-bar-track{flex:1;height:6px;border-radius:99px;background:#eee;overflow:hidden}.rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}.rate-num{font-weight:850;min-width:38px;text-align:right;font-size:11px}
 @media(max-width:420px){.grid-2{grid-template-columns:1fr}.choice-grid.four{grid-template-columns:repeat(2,1fr)}.admin-actions{grid-template-columns:repeat(2,1fr)}.officer-actions{grid-template-columns:1fr 1fr}.officer-actions button:first-child{grid-column:1/-1}}
@@ -3469,7 +3472,22 @@ function render(){
     if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
     if(openEventId){openEventId=null;render();return;}
     if(activeTab==="query"){if(!signinPageVisible){activeTab="query";openEventId=null;queryResultVisible=false;render();return;} activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
-    if(activeTab==="admin" && adminUnlocked){adminPage="home";render();return;}
+    if(activeTab==="admin" && adminUnlocked){
+      if(adminPage==="manual-register" && manualRegisterActivityId){
+        showManualReturnDialog().then(async save=>{
+          try{
+            if(save){await saveManualRegistrationDraft();showToast("活動資料已儲存");}
+            resetManualRegistrationPage();
+            adminPage="home";
+            render();
+          }catch(e){
+            showToast("活動資料儲存失敗："+(e?.message||"請稍後再試"));
+          }
+        });
+        return;
+      }
+      adminPage="home";render();return;
+    }
     activeTab="register";openEventId=null;render();
   };
   const subpageAdminAccess=app.querySelector("#subpage-admin-access");
@@ -4637,6 +4655,54 @@ function safeQuerySelectorAll(root, selector){
 }
 
 
+async function saveManualRegistrationDraft(){
+  const activity=manualRegisterActivityId
+    ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
+    : null;
+  if(!activity) return false;
+  const nameInput=document.getElementById("manual-activity-name");
+  const dateInput=document.getElementById("manual-activity-date");
+  const newName=norm(nameInput?.value||manualRegisterActivityName||activity.name||"");
+  const newDate=dateInput?.value||manualRegisterActivityDate||String(activity.date||"").slice(0,10);
+  if(!newName || !newDate || newDate<localDateKey()) throw new Error("活動資料不完整或日期不能早於今天");
+  document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
+    const i=Number(inp.dataset.manualIdx);
+    if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
+  });
+  const fields=manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
+  const updated={...activity,name:newName,date:newDate,fields};
+  const saved=await updateActivityRemote(updated);
+  const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
+  if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields};
+  manualRegisterActivityName=newName;
+  manualRegisterActivityDate=newDate;
+  manualRegisterFields=fields.map(f=>f.label);
+  manualRegisterActivityEditing=false;
+  return true;
+}
+
+function resetManualRegistrationPage(){
+  manualRegisterActivityId=null;
+  manualRegisterActivityName="";
+  manualRegisterActivityDate=localDateKey();
+  manualRegisterFields=["公用哨角"];
+  manualRegisterActivityEditing=false;
+}
+
+function showManualReturnDialog(){
+  return new Promise(resolve=>{
+    const old=document.getElementById("manual-return-overlay");
+    if(old) old.remove();
+    const overlay=document.createElement("div");
+    overlay.id="manual-return-overlay";
+    overlay.className="manual-return-overlay";
+    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector('[data-manual-return="save"]').onclick=()=>{overlay.remove();resolve(true);};
+    overlay.querySelector('[data-manual-return="discard"]').onclick=()=>{overlay.remove();resolve(false);};
+  });
+}
+
 function setupManualRegistrationPage(el){
   const nameInput=document.getElementById("manual-activity-name");
   const dateInput=document.getElementById("manual-activity-date");
@@ -4664,28 +4730,10 @@ function setupManualRegistrationPage(el){
 
   const saveActivityBtn=document.getElementById("save-manual-activity-btn");
   if(saveActivityBtn) saveActivityBtn.onclick=async()=>{
-    const activity=manualRegisterActivityId
-      ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
-      : null;
-    if(!activity){showToast("活動資料不存在");return;}
-    const newName=norm(nameInput?.value||"");
-    const newDate=dateInput?.value||"";
-    if(!newName){showToast("請輸入活動名稱");return;}
-    if(!newDate){showToast("請選擇活動日期");return;}
-    if(newDate<localDateKey()){showToast("活動日期不能早於今天");return;}
-
+    if(!manualRegisterActivityId){showToast("活動資料不存在");return;}
     saveActivityBtn.disabled=true;
     try{
-      syncManualFields();
-      const fields=manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
-      const updated={...activity,name:newName,date:newDate,fields};
-      const saved=await updateActivityRemote(updated);
-      const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
-      if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields};
-      manualRegisterFields=fields.map(f=>f.label);
-      manualRegisterActivityName=newName;
-      manualRegisterActivityDate=newDate;
-      manualRegisterActivityEditing=false;
+      await saveManualRegistrationDraft();
       showToast("活動資料已儲存");
       renderAdmin(el);
     }catch(e){
@@ -4694,7 +4742,6 @@ function setupManualRegistrationPage(el){
       saveActivityBtn.disabled=false;
     }
   };
-
   [nameInput,dateInput].forEach(input=>{
     if(!input) return;
     input.addEventListener("input",()=>{
