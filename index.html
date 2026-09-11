@@ -3377,17 +3377,18 @@ function render(){
       <nav class="tabs home-tabs">
         ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
           <i data-lucide="check"></i>簽到
-        </button>`:""}
+        </button>
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
           <i data-lucide="search"></i>查詢
-        </button>
+        </button>`:""}
       </nav>
       <div id="tab-content"></div>`;
   }else{
-    const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(activeTab==="query"?"返回首頁":"返回管理後台"));
+    const queryHomeMode=activeTab==="query" && !signinPageVisible;
+    const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(queryHomeMode?"首頁":(activeTab==="query"?"返回首頁":"返回管理後台")));
     app.innerHTML=`
       <header class="subpage-fixed-header">
-        <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="arrow-left"></i></button>
+        <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${queryHomeMode?"house":"arrow-left"}"></i></button>
         <h1 class="subpage-title">台中浩天宮四紅哨角隊</h1>
         <div class="subpage-actions">
           <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="subpage-admin-access" aria-label="管理者" title="${adminUnlocked?"進入管理者":"管理者登入"}"><i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i></button>
@@ -3401,7 +3402,7 @@ function render(){
   if(subpageBack)subpageBack.onclick=()=>{
     if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
     if(openEventId){openEventId=null;render();return;}
-    if(activeTab==="query"){activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
+    if(activeTab==="query"){if(!signinPageVisible){activeTab="query";openEventId=null;queryResultVisible=false;render();return;} activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
     if(activeTab==="admin" && adminUnlocked){adminPage="home";render();return;}
     activeTab="register";openEventId=null;render();
   };
@@ -4853,7 +4854,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </script>
 
   <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本：2.1</div>
+    <div class="version">系統版本：2.1.1</div>
     <div class="maker">製作者：小樂</div>
   </footer>
 
