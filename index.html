@@ -2897,7 +2897,9 @@ let activityManagementStatus = "all";
 
 let manualRegisterActivityId = null;
 let manualRegisterActivityName = "";
-let manualRegisterActivityDate = ""; let manualRegisterActivityEditing = false;
+let manualRegisterActivityDate = "";
+let manualRegisterFields = ["公用哨角"];
+let manualRegisterActivityEditing = false;
 
 
 // 簽到頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
@@ -4229,6 +4231,9 @@ function renderAdmin(el){
     const list=current ? regsOf(current.id) : [];
     const activityDate=current ? String(current.date||"").slice(0,10) : manualRegisterActivityDate;
     const activityName=current?.name ?? manualRegisterActivityName;
+    if(current && !manualRegisterActivityEditing){
+      manualRegisterFields=Array.isArray(current.fields)&&current.fields.length ? current.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
+    }
     const editing=!!current && manualRegisterActivityEditing;
     content=`<h1 class="page-title">手動登記</h1><p class="page-subtitle">建立活動後，可由管理者直接輸入隊員姓名完成登記。</p>
     <div class="form-block">
@@ -4258,6 +4263,13 @@ function renderAdmin(el){
           <button type="button" class="secondary" id="cancel-manual-activity-btn"><i data-lucide="x"></i>取消</button>
         </div>` : ``}`}
     </div>
+
+    ${(!current || editing) ? `
+    <div class="form-block">
+      <div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div>
+      <div id="manual-draft-fields-wrap">${manualRegisterFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input manual-draft-field-input" data-manual-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-manual-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div>
+      <button class="add-field" id="add-manual-field-btn"><i data-lucide="plus"></i>新增欄位</button>
+    </div>` : ``}
 
     <div class="form-block">
       <div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>姓名</div>
@@ -4405,6 +4417,7 @@ function openManualRegistrationEditor(a){
   manualRegisterActivityId=a.id;
   manualRegisterActivityName=a.name||"";
   manualRegisterActivityDate=String(a.date||"").slice(0,10);
+  manualRegisterFields=Array.isArray(a.fields)&&a.fields.length ? a.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
   manualRegisterActivityEditing=false;
   adminPage="manual-register";
   render();
@@ -4628,6 +4641,12 @@ function setupManualRegistrationPage(el){
   const nameInput=document.getElementById("manual-activity-name");
   const dateInput=document.getElementById("manual-activity-date");
   const memberInput=document.getElementById("manual-member-name");
+  const syncManualFields=()=>{
+    document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
+      const i=Number(inp.dataset.manualIdx);
+      if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
+    });
+  };
   const btn=document.getElementById("manual-register-btn");
   const err=document.getElementById("manual-register-error");
 
@@ -4657,10 +4676,13 @@ function setupManualRegistrationPage(el){
 
     saveActivityBtn.disabled=true;
     try{
-      const updated={...activity,name:newName,date:newDate};
+      syncManualFields();
+      const fields=manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
+      const updated={...activity,name:newName,date:newDate,fields};
       const saved=await updateActivityRemote(updated);
       const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
-      if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate};
+      if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields};
+      manualRegisterFields=fields.map(f=>f.label);
       manualRegisterActivityName=newName;
       manualRegisterActivityDate=newDate;
       manualRegisterActivityEditing=false;
@@ -4685,6 +4707,22 @@ function setupManualRegistrationPage(el){
     });
   });
 
+  el.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
+    inp.addEventListener("input",syncManualFields);
+    inp.addEventListener("change",syncManualFields);
+  });
+  const addManualFieldBtn=document.getElementById("add-manual-field-btn");
+  if(addManualFieldBtn) addManualFieldBtn.onclick=()=>{
+    syncManualFields(); manualRegisterFields.push(""); renderAdmin(el);
+  };
+  el.querySelectorAll("[data-remove-manual-field]").forEach(btn=>{
+    btn.onclick=()=>{
+      syncManualFields();
+      manualRegisterFields.splice(Number(btn.dataset.removeManualField),1);
+      renderAdmin(el);
+    };
+  });
+
   if(memberInput) memberInput.addEventListener("keydown",e=>{
     if(e.key==="Enter"){e.preventDefault();btn?.click();}
   });
@@ -4699,6 +4737,7 @@ function setupManualRegistrationPage(el){
       if(manualRegisterActivityDate<localDateKey()){showToast("活動日期不能早於今天");return;}
     }
     if(!member){showToast("請輸入隊員姓名");return;}
+    syncManualFields();
 
     btn.disabled=true;
     if(err) err.classList.remove("show");
@@ -4711,7 +4750,7 @@ function setupManualRegistrationPage(el){
         activity={
           id:uid(),name:manualRegisterActivityName,
           date:new Date(manualRegisterActivityDate+"T00:00:00").toISOString(),
-          fields:[],open:true,maxParticipants:null,createdBy:session?.username||"",
+          fields:manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label})),open:true,maxParticipants:null,createdBy:session?.username||"",
           closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null
         };
         const saved=await createActivityRemote(activity);
