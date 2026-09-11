@@ -4166,10 +4166,8 @@ function renderAdmin(el){
 
 <div class="section-head"><h2>簽到頁面</h2><span>一般使用者顯示設定</span></div>
 <div class="form-block signin-page-setting-card">
-  <div class="form-title"><span class="ico"><i data-lucide="clipboard-check"></i></span>簽到頁面</div>
   <div class="signin-page-setting-row">
     <div class="signin-page-setting-info">
-      <strong id="signin-page-setting-status">${signinPageVisible?"目前：開啟":"目前：隱藏"}</strong>
       <div class="field-hint">隱藏後，一般使用者看不到「簽到」按鈕與簽到頁面；管理者登入後仍可看到。</div>
     </div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle">
