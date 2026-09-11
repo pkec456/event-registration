@@ -3354,10 +3354,7 @@ function getPublishAt(){
 function render(){
   const app=document.getElementById("app");
   signinPageVisible=isSigninPageVisible();
-  if(!signinPageVisible && !adminUnlocked && activeTab==="register"){
-    activeTab="query";
-    openEventId=null;
-  }
+  if(!signinPageVisible && activeTab==="register"){ activeTab="query"; openEventId=null; }
   const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
@@ -3378,7 +3375,7 @@ function render(){
       </div>
       </header>
       <nav class="tabs home-tabs">
-        ${(signinPageVisible || adminUnlocked)?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
+        ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
           <i data-lucide="check"></i>簽到
         </button>`:""}
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
@@ -3702,6 +3699,7 @@ function childBackButton(label){
   return `<button class="child-back" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i data-lucide="arrow-left"></i></button>`;
 }
 function renderRegister(el){
+   if(!isSigninPageVisible()){ activeTab="query"; openEventId=null; return renderQuery(el); }
   const acts=[...recentOrOpenActivities()].sort((a,b)=>{
     const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
     const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
