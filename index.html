@@ -3839,30 +3839,22 @@ function childBackButton(label){
 }
 async function attendanceEligibilityFor(name, activity){
   const required=Math.max(0,Math.min(100,Number(activity?.minimumAttendanceRate)||0));
-  if(required<=0 || isManualRegistrationActivity(activity)) return {eligible:true,required,rate:100,total:0,attended:0};
+  if(required<=0 || isManualRegistrationActivity(activity)){
+    return {eligible:true,required,rate:100,total:0,attended:0};
+  }
   const {data,error}=await supabaseClient.rpc("public_check_attendance_eligibility",{
     p_activity_id:String(activity?.id||""),
     p_name:String(name||"")
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
-  const result={
+  return {
     eligible:Boolean(data.eligible),
     required:Number(data.required ?? required),
     rate:Number(data.rate ?? 0),
     total:Number(data.total ?? 0),
     attended:Number(data.attended ?? 0)
   };
-  console.info("[出席率資格比對]", {
-    name:String(name||""),
-    activityId:String(activity?.id||""),
-    required:result.required,
-    rate:result.rate,
-    attended:result.attended,
-    total:result.total,
-    eligible:result.eligible
-  });
-  return result;
 }
 
 function renderRegister(el){
