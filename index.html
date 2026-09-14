@@ -3038,8 +3038,7 @@ async function loadData(){
       id:a.id,
       name:a.name,
       date:a.date,
-      manualRegistration:Array.isArray(a.fields) && a.fields.some(f=>f && f.key===MANUAL_REGISTRATION_MARKER_KEY),
-      fields:cleanManualRegistrationFields(a.fields),
+      fields:Array.isArray(a.fields)?a.fields:[],
       open:(!adminUnlocked && isActivityDateExpired(a)) ? false : !!a.open,
       maxParticipants:a.max_participants==null?null:Number(a.max_participants),
       createdBy:a.created_by||"",
@@ -3114,7 +3113,7 @@ async function createActivityRemote(activity){
     p_id:activity.id,
     p_name:activity.name,
     p_date:activity.date,
-    p_fields:activity.manualRegistration ? markManualRegistrationFields(activity.fields) : activity.fields,
+    p_fields:activity.fields,
     p_open:activity.open,
     p_max_participants:activity.maxParticipants,
     p_created_by:activity.createdBy||session.username,
@@ -3197,7 +3196,7 @@ async function updateActivityRemote(activity){
     p_id:String(a.id||""),
     p_name:String(a.name||""),
     p_date:a.date,
-    p_fields:a.manualRegistration ? markManualRegistrationFields(a.fields) : (Array.isArray(a.fields)?a.fields:[]),
+    p_fields:Array.isArray(a.fields)?a.fields:[],
     p_open:!!a.open,
     p_max_participants:a.maxParticipants==null?null:Number(a.maxParticipants),
     p_created_by:String(a.createdBy||session.username||""),
@@ -4421,19 +4420,8 @@ function renderAdmin(el){
   refreshIcons();
 }
 
-const MANUAL_REGISTRATION_MARKER_KEY="__manual_registration__";
-function markManualRegistrationFields(fields){
-  const clean=Array.isArray(fields)?fields.filter(f=>f && f.key!==MANUAL_REGISTRATION_MARKER_KEY):[];
-  return [...clean,{key:MANUAL_REGISTRATION_MARKER_KEY,label:""}];
-}
-function cleanManualRegistrationFields(fields){
-  return (Array.isArray(fields)?fields:[]).filter(f=>f && f.key!==MANUAL_REGISTRATION_MARKER_KEY);
-}
-
 function isManualRegistrationActivity(a){
   if(!a) return false;
-  if(a.manualRegistration===true) return true;
-  if(Array.isArray(a.fields) && a.fields.some(f=>f && f.key===MANUAL_REGISTRATION_MARKER_KEY)) return true;
   try{
     const ids=JSON.parse(localStorage.getItem("manual-registration-activity-ids")||"[]");
     if(Array.isArray(ids) && ids.some(id=>String(id)===String(a.id))) return true;
@@ -4476,11 +4464,7 @@ function activityAdminRow(a,hidden=false){
     <div class="admin-card-info">
       <div class="admin-card-name">${escapeHtml(a.name)}</div>
       <div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
-      <div class="admin-card-status">
-        <span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>
-        ${future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}
-        ${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
-      </div>
+      
     </div>
     <div class="admin-card-summary">
       <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
@@ -4682,10 +4666,10 @@ async function saveManualRegistrationDraft(){
     if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
   });
   const fields=manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
-  const updated={...activity,name:newName,date:newDate,fields,manualRegistration:true};
+  const updated={...activity,name:newName,date:newDate,fields};
   const saved=await updateActivityRemote(updated);
   const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
-  if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields,manualRegistration:true};
+  if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields};
   manualRegisterActivityName=newName;
   manualRegisterActivityDate=newDate;
   manualRegisterFields=fields.map(f=>f.label);
@@ -4809,11 +4793,11 @@ function setupManualRegistrationPage(el){
         activity={
           id:uid(),name:manualRegisterActivityName,
           date:new Date(manualRegisterActivityDate+"T00:00:00").toISOString(),
-          fields:manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label})),manualRegistration:true,open:true,maxParticipants:null,createdBy:session?.username||"",
+          fields:manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label})),open:true,maxParticipants:null,createdBy:session?.username||"",
           closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null
         };
         const saved=await createActivityRemote(activity);
-        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date,manualRegistration:true,fields:cleanManualRegistrationFields(saved?.fields||activity.fields)};
+        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date};
         state.activities.push(activity);state.registrations[activity.id]=[];
         manualRegisterActivityId=activity.id;
         manualRegisterActivityEditing=false;
