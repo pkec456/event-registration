@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.1</title>
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.2.2</title>
 <style>
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
@@ -2886,6 +2886,7 @@ let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, re
 let draftName = "";
 let draftDate = "";
 let draftMaxParticipants = "0";
+let draftMinimumAttendanceRate = "0";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
 let draftPublishAt = "";
@@ -3041,13 +3042,15 @@ async function loadData(){
       fields:Array.isArray(a.fields)?a.fields:[],
       open:(!adminUnlocked && isActivityDateExpired(a)) ? false : !!a.open,
       maxParticipants:a.max_participants==null?null:Number(a.max_participants),
+      minimumAttendanceRate:a.minimum_attendance_rate==null?0:Number(a.minimum_attendance_rate),
       createdBy:a.created_by||"",
       closeAt:a.close_at||null,
       autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
       hidden:Object.prototype.hasOwnProperty.call(a,"hidden") ? !!a.hidden :
 
         (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false),
-      publishAt:a.publish_at||null
+      publishAt:a.publish_at||null,
+      activityType:a.activity_type||"normal"
     }));
 
     state.registrations={};
@@ -3146,8 +3149,44 @@ async function createActivityRemote(activity){
       ? Number(raw.auto_close_minutes || 0)
       : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
     hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
-    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null
+    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null,
+    activityType: raw?.activity_type ?? raw?.activityType ?? activity.activityType ?? "normal"
   };
+}
+
+async function setActivityTypeRemote(activityId, activityType){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+  const {data,error}=await supabaseClient.rpc("simple_admin_set_activity_type",{
+    p_activity_id:String(activityId||""),
+    p_activity_type:String(activityType||"normal"),
+    p_admin_code:String(session.access_code||""),
+    p_admin_username:String(session.username||"")
+  });
+  if(error){
+    const detail=[error.message,error.details,error.hint,error.code]
+      .filter(Boolean).join(" | ");
+    if(String(error.message||"").includes("Could not find the function")){
+      throw new Error("Supabase 尚未建立活動類型同步 RPC，請先執行隨附的 SQL：活動管理_V2.2.2_手動登記手機電腦同步修正版_SQL.sql");
+    }
+    throw new Error(detail||"活動類型儲存失敗");
+  }
+  if(!data?.ok) throw new Error(data?.message||"活動類型儲存失敗");
+  return data;
+}
+
+async function setMinimumAttendanceRateRemote(activityId, minimumAttendanceRate){
+  const session=getAdminSession();
+  if(!session) throw new Error("管理者登入已失效");
+  const {data,error}=await supabaseClient.rpc("simple_admin_set_minimum_attendance_rate",{
+    p_activity_id:String(activityId||""),
+    p_minimum_attendance_rate:Number(minimumAttendanceRate||0),
+    p_admin_code:String(session.access_code||""),
+    p_admin_username:String(session.username||"")
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"最低出席率儲存失敗");
+  return data;
 }
 
 function normalizeActivityForRPC(activity){
@@ -3172,6 +3211,9 @@ function normalizeActivityForRPC(activity){
   x.maxParticipants =
     x.maxParticipants==null || x.maxParticipants==="" ? null :
     Number(x.maxParticipants);
+  x.minimumAttendanceRate = x.minimumAttendanceRate==null || x.minimumAttendanceRate==="" ? 0 : Number(x.minimumAttendanceRate);
+  if(!Number.isFinite(x.minimumAttendanceRate) || x.minimumAttendanceRate<0) x.minimumAttendanceRate=0;
+  x.minimumAttendanceRate=Math.min(100,x.minimumAttendanceRate);
   if(x.maxParticipants!==null && !Number.isFinite(x.maxParticipants))
     x.maxParticipants=null;
 
@@ -3233,6 +3275,16 @@ async function deleteActivityRemote(activityId){
   if(!data?.ok) throw new Error(data?.message||"刪除活動失敗");
   return data;
 }
+async function checkAttendanceEligibilityRemote(activityId, name){
+  const {data,error}=await supabaseClient.rpc("public_check_attendance_eligibility",{
+    p_activity_id:String(activityId||""),
+    p_name:String(name||"")
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
+  return data;
+}
+
 async function createRegistrationRemote(activityId, registration){
   // 隊員簽到改走公開 RPC。
   // 不直接 INSERT registrations，避免被 Supabase RLS 擋住。
@@ -3783,6 +3835,24 @@ function subpageHeader(title, backLabel="返回"){
 function childBackButton(label){
   return `<button class="child-back" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i data-lucide="arrow-left"></i></button>`;
 }
+async function attendanceEligibilityFor(name, activity){
+  const required=Math.max(0,Math.min(100,Number(activity?.minimumAttendanceRate)||0));
+  if(required<=0 || isManualRegistrationActivity(activity)) return {eligible:true,required,rate:100,total:0,attended:0};
+  const {data,error}=await supabaseClient.rpc("public_check_attendance_eligibility",{
+    p_activity_id:String(activity?.id||""),
+    p_name:String(name||"")
+  });
+  if(error) throw error;
+  if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
+  return {
+    eligible:Boolean(data.eligible),
+    required:Number(data.required ?? required),
+    rate:Number(data.rate ?? 0),
+    total:Number(data.total ?? 0),
+    attended:Number(data.attended ?? 0)
+  };
+}
+
 function renderRegister(el){
    if(!isSigninPageVisible()){ activeTab="query"; openEventId=null; return renderQuery(el); }
   const acts=[...recentOrOpenActivities()].sort((a,b)=>{
@@ -3846,6 +3916,18 @@ function renderRegister(el){
           let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
           if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
           if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
+          let eligibility;
+          try{
+            eligibility=await attendanceEligibilityFor(name,activity);
+          }catch(e){
+            console.error("資格檢查失敗：",e);
+            showToast("無法完成資格檢查，請稍後再試");
+            return;
+          }
+          if(!eligibility.eligible){
+            showToast(`未達出席資格（需 ${eligibility.required}% 以上，目前 ${eligibility.rate}%）`);
+            return;
+          }
           const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
           btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
           try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id,name:remote.name||name,fieldValues:remote.field_values||fieldValues,ts:remote.created_at||new Date().toISOString()};state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);state.registrations[activity.id].push(newReg);rememberLocalSigned(activity.id,name);showToast(`${name} 簽到成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
@@ -4218,14 +4300,14 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
 </div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "0")}"><div class="field-hint">預設上限 0 人，可自行調整</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div><div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="10" value="${escapeHtml(draftMaxParticipants || "0")}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><select id="new-min-attendance"><option value="0" ${String(draftMinimumAttendanceRate)==="0"?'selected':''}>不限</option><option value="50" ${String(draftMinimumAttendanceRate)==="50"?'selected':''}>50%</option><option value="60" ${String(draftMinimumAttendanceRate)==="60"?'selected':''}>60%</option><option value="70" ${String(draftMinimumAttendanceRate)==="70"?'selected':''}>70%</option><option value="80" ${String(draftMinimumAttendanceRate)==="80"?'selected':''}>80%</option><option value="90" ${String(draftMinimumAttendanceRate)==="90"?'selected':''}>90%</option></select><div class="field-hint">未達標者無法完成簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     const search=norm(activityManagementSearch).toLowerCase();
     const matchActivity=a=>{
       const manual=isManualRegistrationActivity(a);
       const typeOK=activityManagementType==="all" || (activityManagementType==="manual"&&manual) || (activityManagementType==="normal"&&!manual);
-      const statusOK=activityManagementStatus==="all" || (activityManagementStatus==="open"&&manual ? true : activityManagementStatus==="open"&&!manual&&!!a.open) || (activityManagementStatus==="closed"&&!manual&&!a.open);
+      const statusOK=activityManagementStatus==="all" || (!manual&&activityManagementStatus==="open"&&!!a.open) || (!manual&&activityManagementStatus==="closed"&&!a.open);
       const searchOK=!search || String(a.name||"").toLowerCase().includes(search);
       return typeOK&&statusOK&&searchOK;
     };
@@ -4236,7 +4318,7 @@ function renderAdmin(el){
       <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-search">搜尋活動</label><input type="text" id="activity-management-search" placeholder="請輸入活動名稱" value="${escapeHtml(activityManagementSearch)}"></div>
       <div class="activity-filter-row">
         <div class="choice-grid three activity-filter-type"><button type="button" class="choice ${activityManagementType==='all'?'selected':''}" data-activity-filter-type="all">全部</button><button type="button" class="choice ${activityManagementType==='normal'?'selected':''}" data-activity-filter-type="normal">一般活動</button><button type="button" class="choice ${activityManagementType==='manual'?'selected':''}" data-activity-filter-type="manual">手動登記</button></div>
-        <div class="choice-grid three activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button></div>
+        <div class="choice-grid three activity-filter-status" style="${activityManagementType==='manual'?'display:none':''}"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button></div>
       </div>
     </div>
     <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
@@ -4413,7 +4495,7 @@ function renderAdmin(el){
         searchTimer=setTimeout(applySearch,300);
       });
     }
-    el.querySelectorAll("[data-activity-filter-type]").forEach(btn=>btn.onclick=()=>{activityManagementType=btn.dataset.activityFilterType;renderAdmin(el);});
+    el.querySelectorAll("[data-activity-filter-type]").forEach(btn=>btn.onclick=()=>{activityManagementType=btn.dataset.activityFilterType;if(activityManagementType==="manual")activityManagementStatus="all";renderAdmin(el);});
     el.querySelectorAll("[data-activity-filter-status]").forEach(btn=>btn.onclick=()=>{activityManagementStatus=btn.dataset.activityFilterStatus;renderAdmin(el);});
     setupActivityManagementPage(el);
   }if(adminPage==="manual-register")setupManualRegistrationPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
@@ -4421,13 +4503,7 @@ function renderAdmin(el){
 }
 
 function isManualRegistrationActivity(a){
-  if(!a) return false;
-  try{
-    const ids=JSON.parse(localStorage.getItem("manual-registration-activity-ids")||"[]");
-    if(Array.isArray(ids) && ids.some(id=>String(id)===String(a.id))) return true;
-  }catch(e){}
-  // 舊版手動登記活動沒有額外欄位可辨識；依目前系統建立規則，以「無人數上限＋無攜帶物品欄位」辨識。
-  return a.maxParticipants==null && (!Array.isArray(a.fields) || a.fields.length===0);
+  return !!a && String(a.activityType||"normal")==="manual";
 }
 
 function openManualRegistrationEditor(a){
@@ -4456,15 +4532,19 @@ function activityAdminRow(a,hidden=false){
     detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
   }
   const manualRegistration=isManualRegistrationActivity(a);
-  const statusClass=manualRegistration?"manual":(future?"future":(a.open?"open":"closed"));
-  const statusText=manualRegistration?"手動登記":(future?"未發佈":(a.open?"開放中":"已停止"));
+  const statusClass=future?"future":(a.open?"open":"closed");
+  const statusText=future?"未發佈":(a.open?"開放中":"已停止");
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
     <div class="admin-card-icon"><i data-lucide="calendar-days"></i></div>
     <div class="admin-card-info">
       <div class="admin-card-name">${escapeHtml(a.name)}</div>
       <div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
-      
+      <div class="admin-card-status">
+        ${!manualRegistration?`<span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>`:""}
+        ${!manualRegistration&&future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}
+        ${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
+      </div>
     </div>
     <div class="admin-card-summary">
       <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
@@ -4486,6 +4566,8 @@ function rememberCreateDraft(){
   if(n) draftName=n.value;
   if(d) draftDate=d.value;
   if(m) draftMaxParticipants=m.value;
+  const ar=document.getElementById("new-min-attendance");
+  if(ar) draftMinimumAttendanceRate=ar.value;
   const pd=document.getElementById("new-publish-date");
   const pt=document.getElementById("new-publish-time");
   if(pd && pt) draftPublishAt=(pd.value && pt.value) ? `${pd.value}T${pt.value}` : "";
@@ -4525,7 +4607,7 @@ function setupCreateActivityPage(el){
     document.querySelectorAll(".draft-field-input").forEach(inp=>draftFields[Number(inp.dataset.idx)]=inp.value);
   }
 
-  ["new-name","new-date","new-max-participants"].forEach(id=>{
+  ["new-name","new-date","new-max-participants","new-min-attendance"].forEach(id=>{
     const input=document.getElementById(id);
     if(input){
       input.addEventListener("focus",()=>{ userIsTyping=true; });
@@ -4590,6 +4672,7 @@ function setupCreateActivityPage(el){
     syncDraftFieldsFromDom();
     const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
     const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
+    const minimumAttendanceRate=Number(document.getElementById("new-min-attendance")?.value||0);
     const todayKey=localDateKey();
     if(!draftDate || draftDate < todayKey){
       showToast("活動日期不能早於今天");
@@ -4608,10 +4691,11 @@ function setupCreateActivityPage(el){
     }
     if(!name){showToast("請輸入活動名稱");return;}
     if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
+    if(!Number.isFinite(minimumAttendanceRate)||minimumAttendanceRate<0||minimumAttendanceRate>100){showToast("最低出席率設定錯誤");return;}
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
-    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt};
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt,activityType:"normal",minimumAttendanceRate};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
@@ -4621,11 +4705,17 @@ function setupCreateActivityPage(el){
         id:saved?.id||activity.id,
         publishAt:saved?.publish_at ?? saved?.publishAt ?? activity.publishAt ?? null
       });
+      if(minimumAttendanceRate>0){
+        await setMinimumAttendanceRateRemote(saved?.id||activity.id, minimumAttendanceRate);
+        const savedRate=minimumAttendanceRate;
+        const idx=state.activities.findIndex(x=>String(x.id)===String(saved?.id||activity.id));
+        if(idx>=0) state.activities[idx].minimumAttendanceRate=savedRate;
+      }
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
       showToast(publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈");
       adminPage="activities";
-      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants="10"; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
+      draftFields=["公用哨角"]; draftName=""; draftDate=""; draftMaxParticipants="0"; draftMinimumAttendanceRate="0"; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
   renderAdmin(el);
     }catch(e){
       const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
@@ -4794,20 +4884,19 @@ function setupManualRegistrationPage(el){
           id:uid(),name:manualRegisterActivityName,
           date:new Date(manualRegisterActivityDate+"T00:00:00").toISOString(),
           fields:manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label})),open:true,maxParticipants:null,createdBy:session?.username||"",
-          closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null
+          closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null,activityType:"manual"
         };
         const saved=await createActivityRemote(activity);
-        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date};
-        state.activities.push(activity);state.registrations[activity.id]=[];
+        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date,activityType:"manual"};
+        // 活動建立後，將「手動登記」類型寫入 Supabase。
+        // 這是手機／電腦共用的唯一資料來源，不使用 localStorage 判斷活動類型。
+        await setActivityTypeRemote(activity.id,"manual");
+        // 重新從雲端載入一次，確認本機狀態與 Supabase 完全一致。
+        await loadData();
+        activity=state.activities.find(a=>String(a.id)===String(activity.id)) || activity;
+        state.registrations[activity.id]=state.registrations[activity.id]||[];
         manualRegisterActivityId=activity.id;
         manualRegisterActivityEditing=false;
-        try{
-          const ids=JSON.parse(localStorage.getItem("manual-registration-activity-ids")||"[]");
-          if(Array.isArray(ids) && !ids.some(id=>String(id)===String(activity.id))){
-            ids.push(activity.id);
-            localStorage.setItem("manual-registration-activity-ids",JSON.stringify(ids));
-          }
-        }catch(e){}
       }else{
         activity=state.activities.find(a=>String(a.id)===String(manualRegisterActivityId));
       }
