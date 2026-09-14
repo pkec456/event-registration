@@ -3404,10 +3404,12 @@ function activitiesThisYear(){
   const y = new Date().getFullYear();
   const now = Date.now();
 
-  // 「未發佈」活動不納入查詢／出席率計算。
-  // publishAt 為 null 代表立即發佈；只有發佈時間尚未到的活動才排除。
+  // 出席率只計算「已關閉」的一般活動。
+  // 開放中、尚未發佈、未來活動，以及手動登記活動一律不計入。
   return state.activities.filter(a => {
     if(new Date(a.date).getFullYear() !== y) return false;
+    if(isManualRegistrationActivity(a)) return false;
+    if(a.open) return false;
 
     const publishTs = a.publishAt ? new Date(a.publishAt).getTime() : null;
     if(Number.isFinite(publishTs) && publishTs > now) return false;
@@ -3844,13 +3846,23 @@ async function attendanceEligibilityFor(name, activity){
   });
   if(error) throw error;
   if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
-  return {
+  const result={
     eligible:Boolean(data.eligible),
     required:Number(data.required ?? required),
     rate:Number(data.rate ?? 0),
     total:Number(data.total ?? 0),
     attended:Number(data.attended ?? 0)
   };
+  console.info("[出席率資格比對]", {
+    name:String(name||""),
+    activityId:String(activity?.id||""),
+    required:result.required,
+    rate:result.rate,
+    attended:result.attended,
+    total:result.total,
+    eligible:result.eligible
+  });
+  return result;
 }
 
 function renderRegister(el){
@@ -3913,9 +3925,8 @@ function renderRegister(el){
       if(btn&&nameInput){
         const doRegister=async()=>{
           const name=norm(nameInput.value);if(!name){showToast("請輸入姓名");return;}
-          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
-          if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
-          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
+          // 新增功能：先依「輸入姓名」立即做最低出席率資格比對。
+          // 不先抓整份簽到名單，避免簽到名單讀取卡住時，資格判斷根本沒有執行。
           let eligibility;
           try{
             eligibility=await attendanceEligibilityFor(name,activity);
@@ -3928,6 +3939,10 @@ function renderRegister(el){
             showToast(`未達出席資格（需 ${eligibility.required}% 以上，目前 ${eligibility.rate}%）`);
             return;
           }
+
+          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
+          if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
+          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
           const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
           btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
           try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id,name:remote.name||name,fieldValues:remote.field_values||fieldValues,ts:remote.created_at||new Date().toISOString()};state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);state.registrations[activity.id].push(newReg);rememberLocalSigned(activity.id,name);showToast(`${name} 簽到成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
