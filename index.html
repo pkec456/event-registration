@@ -2097,7 +2097,7 @@ body .app-header:not(.home-header){
   align-items:center !important;
   justify-content:center !important;
   gap:2px !important;
-  flex:0 0 32px !important;
+  flex:0 0 46px !important;
   box-sizing:border-box !important;
   background:var(--accent) !important;
   color:#fff !important;
@@ -5650,6 +5650,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 }
 </style>
 
+
 </body>
 
 
@@ -5666,23 +5667,37 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   overflow-wrap:anywhere !important;
 }
 
-/* V94：內頁倒數區塊調整為 42×32px；% 區塊維持 32×32px */
+/* V95：內頁倒數區塊與出席率百分比統一為 46×46px，手機／電腦一致 */
 .checkin-countdown.has-countdown,
 .checkin-countdown.no-countdown{
-  width:42px !important;
-  min-width:42px !important;
-  max-width:42px !important;
-  height:32px !important;
-  min-height:32px !important;
-  max-height:32px !important;
+  width:46px !important;
+  min-width:46px !important;
+  max-width:46px !important;
+  height:46px !important;
+  min-height:46px !important;
+  max-height:46px !important;
   box-sizing:border-box !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
 }
 @media(max-width:430px){
-  .checkin-countdown.has-countdown{
-    width:42px !important;
-    min-width:42px !important;
-    max-width:42px !important;
-    height:32px !important;
+  .checkin-countdown.has-countdown,
+  .checkin-countdown.no-countdown{
+    width:46px !important;
+    min-width:46px !important;
+    max-width:46px !important;
+    height:46px !important;
+    min-height:46px !important;
+    max-height:46px !important;
   }
 }
+</style>
+<style id="activity-list-rate-42x42-final">
+/* V96：活動列表 % 與倒數皆固定 42×42px；手機／電腦一致 */
+.activity-list-rate-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
+.activity-list-rate-slot .activity-list-attendance-rate{width:42px !important;height:42px !important;min-width:42px !important;max-width:42px !important;min-height:42px !important;max-height:42px !important;flex:0 0 42px !important;box-sizing:border-box !important;}
+.activity-list-countdown-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
+.activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;max-width:42px !important;min-height:42px !important;max-height:42px !important;box-sizing:border-box !important;}
 </style>
