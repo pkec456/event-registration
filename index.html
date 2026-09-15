@@ -1291,7 +1291,7 @@ body .app-header:not(.home-header){
 
 @media(max-width:520px){
   .admin-menu-grid{
-    gap:7px !important;
+    gap:2px !important;
   }
   .admin-square{
     min-height:112px !important;
@@ -1641,8 +1641,8 @@ body .app-header:not(.home-header){
 }
 .activity-status-clock.closed i,
 .activity-status-clock.open i{
-  width:18px !important;
-  height:18px !important;
+  width:14px !important;
+  height:14px !important;
   margin:0 !important;
   padding:0 !important;
 }
@@ -2040,18 +2040,27 @@ body .app-header:not(.home-header){
 
 /* v86: cleaned baseline; UI and behavior preserved */
 
-/* V93：沿用舊版倒數樣式，icon 固定，只更新數字 */
+/* V93：倒數區塊與出席率百分比統一為 32×32 正方形 */
 .checkin-countdown.has-countdown,
 .checkin-countdown.no-countdown{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  max-width:32px !important;
+  max-height:32px !important;
+  padding:0 !important;
+  border-radius:8px !important;
   display:inline-flex !important;
   align-items:center !important;
-  gap:6px !important;
+  justify-content:center !important;
+  gap:2px !important;
   font-variant-numeric:tabular-nums !important;
 }
 .checkin-countdown.has-countdown svg,
 .activity-status-clock.countdown svg{
-  width:18px !important;
-  height:18px !important;
+  width:14px !important;
+  height:14px !important;
   flex:none !important;
 }
 .checkin-countdown .countdown-text,
@@ -2068,31 +2077,34 @@ body .app-header:not(.home-header){
 
 /* V93 FIX：活動列表倒數完全沿用建立活動／簽到頁既有倒數外觀 */
 .activity-status-clock.countdown{
-  min-width:78px !important;
-  width:auto !important;
-  height:48px !important;
-  padding:0 10px !important;
-  border-radius:14px !important;
+  width:32px !important;
+  min-width:32px !important;
+  max-width:32px !important;
+  height:32px !important;
+  min-height:32px !important;
+  max-height:32px !important;
+  padding:0 !important;
+  border-radius:8px !important;
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
-  gap:7px !important;
-  flex:0 0 auto !important;
+  gap:2px !important;
+  flex:0 0 32px !important;
   box-sizing:border-box !important;
   background:var(--accent) !important;
   color:#fff !important;
 }
 .activity-status-clock.countdown svg{
   position:static !important;
-  width:19px !important;
-  height:19px !important;
+  width:14px !important;
+  height:14px !important;
   transform:none !important;
   flex:0 0 auto !important;
 }
 .activity-status-clock.countdown span{
   position:static !important;
   color:#fff !important;
-  font-size:13px !important;
+  font-size:9px !important;
   font-weight:900 !important;
   letter-spacing:.02em !important;
   line-height:1 !important;
@@ -2108,12 +2120,17 @@ body .app-header:not(.home-header){
 }
 @media(max-width:430px){
   .activity-status-clock.countdown{
-    min-width:72px !important;
-    height:44px !important;
-    padding:0 9px !important;
+    width:32px !important;
+    min-width:32px !important;
+    max-width:32px !important;
+    height:32px !important;
+    min-height:32px !important;
+    max-height:32px !important;
+    padding:0 !important;
+    border-radius:8px !important;
   }
-  .activity-status-clock.countdown span{font-size:12px !important}
-  .activity-status-clock.countdown svg{width:18px !important;height:18px !important}
+  .activity-status-clock.countdown span{font-size:9px !important}
+  .activity-status-clock.countdown svg{width:14px !important;height:14px !important}
 }
 
 /* V95 publish countdown style */
