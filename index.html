@@ -2861,6 +2861,41 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-right svg.activity-list-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
 .activity-icon svg.activity-list-icon.closed-icon,
 .activity-right svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
+</style><style id="activity-list-fixed-icon-columns">
+/* 活動列表：整個右側固定欄位，讓所有卡片的 %／倒數／人數／箭頭完全對齊 */
+.activity-right{
+  display:grid !important;
+  grid-template-columns:32px 42px 70px 22px !important;
+  width:190px !important;
+  min-width:190px !important;
+  max-width:190px !important;
+  flex:0 0 190px !important;
+  align-items:center !important;
+  justify-content:end !important;
+  column-gap:8px !important;
+  box-sizing:border-box !important;
+}
+.activity-list-rate-slot{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-list-countdown-slot{
+  width:42px !important;
+  height:32px !important;
+  min-width:42px !important;
+  min-height:32px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.activity-list-countdown-slot .activity-status-clock{margin:0 !important;}
+.activity-right .count{grid-column:3 !important;justify-self:end !important;width:70px !important;text-align:right !important;box-sizing:border-box !important;}
+.activity-right .arrow{grid-column:4 !important;justify-self:end !important;width:22px !important;}
 </style><style id="activity-list-attendance-rate-style">
 /* 出席率百分比：列表與簽到頁統一為固定正方形 */
 .activity-list-attendance-rate,
@@ -2894,12 +2929,12 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   flex:0 0 auto;
 }
 .signin-attendance-rate{
-  width:32px !important;
-  height:32px !important;
-  min-width:32px !important;
-  min-height:32px !important;
-  max-width:32px !important;
-  max-height:32px !important;
+  width:46px !important;
+  height:46px !important;
+  min-width:46px !important;
+  min-height:46px !important;
+  max-width:46px !important;
+  max-height:46px !important;
   padding:0 !important;
   display:inline-flex !important;
   align-items:center !important;
@@ -4069,8 +4104,8 @@ function renderRegister(el){
 
     </div>
     <div class="activity-right">
-      ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}
-      ${activityStatusClock(a)}
+      <div class="activity-list-rate-slot">${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}</div>
+      <div class="activity-list-countdown-slot">${activityStatusClock(a)}</div>
       <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
       <span class="arrow"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="chevron-right"></i></span>
     </div>
@@ -5208,7 +5243,45 @@ async function init(){
   },6000);
   refreshActivityListClocks();
 setInterval(refreshActivityListClocks,1000);
+
+  // V95：內頁跨手機／電腦同步活動狀態與 ICON。
+  // 只在目前正在看的活動內頁查詢該活動，不整頁重載，避免影響輸入中的姓名。
+  setInterval(async()=>{
+    if(!openEventId || userIsTyping || activeTab!="register") return;
+    try{
+      const {data,error}=await supabaseClient
+        .from("activities")
+        .select("id,open,close_at,minimum_attendance_rate")
+        .eq("id",String(openEventId))
+        .maybeSingle();
+      if(error || !data) return;
+
+      const a=state.activities.find(x=>String(x.id)===String(openEventId));
+      if(!a) return;
+
+      const nextOpen=!!data.open;
+      const nextCloseAt=data.close_at||null;
+      const nextRate=data.minimum_attendance_rate==null?0:Number(data.minimum_attendance_rate);
+      const changed =
+        a.open!==nextOpen ||
+        String(a.closeAt||"")!==String(nextCloseAt||"") ||
+        Number(a.minimumAttendanceRate||0)!==nextRate;
+
+      if(!changed) return;
+
+      a.open=nextOpen;
+      a.closeAt=nextCloseAt;
+      a.minimumAttendanceRate=nextRate;
+      window.v93CountdownDeadlines?.delete(String(a.id));
+
+      // 重新繪製內頁，讓手機／電腦的開放、限制、關閉 ICON 與顏色同步。
+      renderTab();
+    }catch(e){
+      console.warn("[活動管理] 內頁跨裝置同步失敗",e);
+    }
+  },2000);
 }
+
 
 init();
 
@@ -5591,5 +5664,25 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   line-height:1.5 !important;
   white-space:normal !important;
   overflow-wrap:anywhere !important;
+}
+
+/* V94：內頁倒數區塊調整為 42×32px；% 區塊維持 32×32px */
+.checkin-countdown.has-countdown,
+.checkin-countdown.no-countdown{
+  width:42px !important;
+  min-width:42px !important;
+  max-width:42px !important;
+  height:32px !important;
+  min-height:32px !important;
+  max-height:32px !important;
+  box-sizing:border-box !important;
+}
+@media(max-width:430px){
+  .checkin-countdown.has-countdown{
+    width:42px !important;
+    min-width:42px !important;
+    max-width:42px !important;
+    height:32px !important;
+  }
 }
 </style>
