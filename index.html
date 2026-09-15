@@ -2857,7 +2857,42 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   line-height:1;
   flex:0 0 32px;
 }
-</style></head>
+.activity-list-attendance-rate.closed-attendance-rate,
+.signin-attendance-rate.closed-attendance-rate{background:#171717 !important;color:#fff !important;}
+</style>
+<style id="signin-attendance-rate-hero-layout">
+.checkin-hero-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex:0 0 auto;
+}
+.signin-attendance-rate{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  max-width:32px !important;
+  max-height:32px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+  border-radius:8px !important;
+  background:#f2c94c !important;
+  color:#5a4500 !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  flex:0 0 32px !important;
+}
+@media(max-width:430px){
+  .checkin-hero-actions{gap:6px}
+}
+</style>
+</head>
 <body>
 <div id="app"></div>
 <div class="toast" id="toast"></div>
@@ -3751,7 +3786,7 @@ function activityStatusClock(activity){
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i class="activity-list-icon ${((Number(activity.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon"}" data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
   }
-  if(activity.open) return `<div class="activity-status-clock open" aria-label="開放中"><i class="activity-list-icon ${((Number(activity.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon"}" data-lucide="check"></i></div>`;
+  if(activity.open) return ``;
   return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
 }
 
@@ -3921,10 +3956,13 @@ function renderRegister(el){
             <p>${fmtDate(activity.date)}</p>
           </div>
         </div>
-        <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
+        <div class="checkin-hero-actions">
+          ${(Number(activity.minimumAttendanceRate)||0)>0?`<div class="signin-attendance-rate ${activity.open?'':'closed-attendance-rate'}" aria-label="最低出席率 ${Number(activity.minimumAttendanceRate)}%">${Number(activity.minimumAttendanceRate)}%</div>`:""}
+          <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
+        </div>
       </div>
       <div class="checkin-card">
-        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${(Number(activity.minimumAttendanceRate)||0)>0?'attendance-limited':(activity.open?'open':'closed')}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span><span class="${(Number(activity.minimumAttendanceRate)||0)>0?'attendance-limit':''}"> 出席率資格：${(Number(activity.minimumAttendanceRate)||0)>0?Number(activity.minimumAttendanceRate)+'%':'不限'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
@@ -3997,17 +4035,17 @@ function renderRegister(el){
     </div>
     <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}">
   <div class="activity-top">
-    <div class="activity-icon"><i class="activity-list-icon ${((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":(a.open?"open-icon":"closed-icon")}" data-lucide="calendar-days"></i></div>
+    <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
     <div class="activity-main">
       <div class="activity-name">${escapeHtml(a.name)}</div>
       <div class="activity-meta">${fmtDate(a.date)}</div>
 
     </div>
     <div class="activity-right">
-      ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate">${Number(a.minimumAttendanceRate)}%</div>`:""}
+      ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}
       ${activityStatusClock(a)}
       <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
-      <span class="arrow"><i class="activity-list-icon ${((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":(a.open?"open-icon":"closed-icon")}" data-lucide="chevron-right"></i></span>
+      <span class="arrow"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="chevron-right"></i></span>
     </div>
   </div>
 </div>`).join("")}</div>
@@ -4588,7 +4626,7 @@ function activityAdminRow(a,hidden=false){
   const statusText=future?"未發佈":(a.open?"開放中":"已停止");
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
-    <div class="admin-card-icon"><i class="activity-status-all-icon ${((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":(a.open?"open-icon":"closed-icon")}" data-lucide="calendar-days"></i></div>
+    <div class="admin-card-icon"><i class="activity-status-all-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
     <div class="admin-card-info">
       <div class="admin-card-name">${escapeHtml(a.name)}</div>
       <div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
@@ -4604,7 +4642,7 @@ function activityAdminRow(a,hidden=false){
     </div>
   </div>
   <div class="admin-actions">
-    <button data-admin-attendance="${escapeHtml(a.id)}"><i class="activity-status-all-icon ${((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":(a.open?"open-icon":"closed-icon")}" data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
+    <button data-admin-attendance="${escapeHtml(a.id)}"><i class="activity-status-all-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
     ${isManualRegistrationActivity(a)?`<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>`:`<button class="activity-toggle-btn ${a.open?"is-on":"is-off"}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
