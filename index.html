@@ -34,7 +34,17 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .back{display:inline-flex;align-items:center;gap:7px;color:#666;font-size:13px;font-weight:800;background:transparent;padding:4px 0;margin:2px 0 14px}.back:hover{color:#171717}.page-title{font-size:25px;font-weight:900;letter-spacing:-.03em;margin:0}.page-subtitle{margin:5px 0 18px;color:#777;font-size:13px}
 .form-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:12px}.form-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:850;margin-bottom:14px}.form-title .ico{width:34px;height:34px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}.field{margin-bottom:14px}.field:last-child{margin-bottom:0}.field-label{display:block;font-size:12px;font-weight:850;color:#555;margin-bottom:7px}.field-hint{font-size:11px;color:#999;margin-top:5px}input[type=text],input[type=date],input[type=time],input[type=password],input[type=number],select{width:100%;height:48px;padding:0 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;color:#171717;outline:none}input:focus,select:focus{border-color:#999;box-shadow:0 0 0 3px #eee}input[type=number]{appearance:textfield}
 input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-height:48px;box-sizing:border-box;padding:0 12px;appearance:none;-webkit-appearance:none}
-@media(max-width:430px){input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;font-size:14px}}
+@media(max-width:430px){input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inline-size:0;font-size:14px;box-sizing:border-box;display:block}}
+
+/* V96：建立活動－發佈時間手機欄位跟活動日期使用相同的防溢出規則 */
+.grid-2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.grid-2>.field{min-width:0}
+#new-publish-date,#new-publish-time{width:100% !important;max-width:100% !important;min-width:0 !important;min-inline-size:0 !important;box-sizing:border-box !important;display:block !important;padding-left:12px !important;padding-right:12px !important}
+@media(max-width:430px){
+  .grid-2{grid-template-columns:minmax(0,1fr) !important}
+  .grid-2>.field{width:100% !important;min-width:0 !important}
+  #new-publish-time{width:100% !important;max-width:100% !important;min-width:0 !important;min-inline-size:0 !important;box-sizing:border-box !important;font-size:14px !important}
+}
 
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice-grid.four{grid-template-columns:repeat(4,1fr)}.choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}.choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 .draft-field{display:flex;gap:8px;margin-bottom:8px}.draft-field input{flex:1}.icon-btn{width:44px;height:48px;border-radius:14px;background:#f7f7f5;border:1px solid var(--line);display:grid;place-items:center;flex:0 0 auto}.icon-btn.danger{color:var(--danger)}.add-field{width:100%;height:44px;border:1px dashed #ccc;background:transparent;border-radius:13px;color:#555;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -4686,16 +4696,17 @@ function activityAdminRow(a,hidden=false){
   const manualRegistration=isManualRegistrationActivity(a);
   const statusClass=future?"future":(a.open?"open":"closed");
   const statusText=future?"未發佈":(a.open?"開放中":"已停止");
+  // 管理頁狀態顏色唯一來源：關閉＝黑、開放且有限制＝黃、開放無限制＝綠。
+  const adminStatusIconClass = !a.open ? "closed-icon" : ((Number(a.minimumAttendanceRate)||0)>0 ? "attendance-limit-icon" : "open-icon");
+  const adminStatusButtonClass = !a.open ? "status-closed" : ((Number(a.minimumAttendanceRate)||0)>0 ? "status-limited" : "status-open");
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
-    <div class="admin-card-icon"><i class="activity-status-all-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
+    <div class="admin-card-icon"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="calendar-days"></i></div>
     <div class="admin-card-info">
       <div class="admin-card-name">${escapeHtml(a.name)}</div>
       <div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
       <div class="admin-card-status">
-        ${!manualRegistration?`<span class="status ${statusClass}"><span class="dot"></span>${statusText}</span>`:""}
-        ${!manualRegistration&&future?` <span class="publish-countdown" data-publish-countdown="${escapeHtml(a.id)}" data-publish-at="${escapeHtml(a.publishAt)}">距離發佈 ${formatCountdown(new Date(a.publishAt).getTime()-Date.now())}</span>`:""}
-        ${hidden?` <span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
+        ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
       </div>
     </div>
     <div class="admin-card-summary">
@@ -4704,8 +4715,8 @@ function activityAdminRow(a,hidden=false){
     </div>
   </div>
   <div class="admin-actions">
-    <button data-admin-attendance="${escapeHtml(a.id)}"><i class="activity-status-all-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
-    ${isManualRegistrationActivity(a)?`<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>`:`<button class="activity-toggle-btn ${a.open?"is-on":"is-off"}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>`}
+    <button class="${adminStatusButtonClass}" data-admin-attendance="${escapeHtml(a.id)}"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
+    ${isManualRegistrationActivity(a)?`<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>`:`<button class="activity-toggle-btn ${adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
   </div>${detail}</div>`;
@@ -5651,6 +5662,25 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </style>
 
 
+
+<style id="admin-status-color-stable-final">
+/* 管理活動頁：狀態顏色唯一規則，避免 hover／active／重繪造成跳色 */
+.activity-admin-card .admin-actions button.status-open,
+.activity-admin-card .admin-actions button.status-open:active,
+.activity-admin-card .admin-actions button.status-open:hover { color:#2e9b57 !important; }
+.activity-admin-card .admin-actions button.status-limited,
+.activity-admin-card .admin-actions button.status-limited:active,
+.activity-admin-card .admin-actions button.status-limited:hover { color:#8a6d00 !important; }
+.activity-admin-card .admin-actions button.status-closed,
+.activity-admin-card .admin-actions button.status-closed:active,
+.activity-admin-card .admin-actions button.status-closed:hover { color:#171717 !important; }
+.activity-admin-card .admin-actions button.status-open svg { color:#2e9b57 !important; stroke:#2e9b57 !important; }
+.activity-admin-card .admin-actions button.status-limited svg { color:#f2c94c !important; stroke:#f2c94c !important; }
+.activity-admin-card .admin-actions button.status-closed svg { color:#171717 !important; stroke:#171717 !important; }
+.activity-admin-card .admin-actions button.status-open:active,
+.activity-admin-card .admin-actions button.status-limited:active,
+.activity-admin-card .admin-actions button.status-closed:active { background:#f7f7f5 !important; border-color:var(--line) !important; }
+</style>
 </body>
 
 
