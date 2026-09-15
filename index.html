@@ -461,28 +461,31 @@ button.secondary:focus-visible,
 .checkin-hero h2{font-size:23px;line-height:1.15;font-weight:900;margin:0}
 .checkin-hero p{font-size:13px;margin:5px 0 0;opacity:.9}
 .checkin-countdown{
-  min-width:78px;
-  height:48px;
-  padding:0 10px;
-  border-radius:14px;
+  min-width:0;
+  width:auto;
+  height:32px;
+  padding:0 8px;
+  border-radius:8px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:7px;
+  gap:5px;
   flex:0 0 auto;
   box-sizing:border-box;
-  font-size:13px;
+  font-size:11px;
   font-weight:900;
-  letter-spacing:.02em;
+  letter-spacing:.01em;
+  white-space:nowrap;
 }
-.checkin-countdown svg{width:19px;height:19px;flex:0 0 auto}
+.checkin-countdown svg{width:15px;height:15px;flex:0 0 auto}
 .checkin-countdown.has-countdown{
   color:#fff;
   background:var(--accent);
 }
 .checkin-countdown.no-countdown{
-  min-width:48px;
-  width:48px;
+  min-width:32px;
+  width:32px;
+  padding:0;
   color:var(--ink);
   background:#f1f1ef;
 }
@@ -491,8 +494,9 @@ button.secondary:focus-visible,
   .checkin-hero h2{font-size:20px}
   .checkin-hero p{font-size:12px}
   .checkin-hero-icon{width:40px;height:40px}
-  .checkin-countdown{min-width:72px;height:44px;font-size:12px}
-  .checkin-countdown.no-countdown{min-width:44px;width:44px}
+  .checkin-countdown{min-width:0;height:32px;font-size:10px;padding:0 7px}
+  .checkin-countdown svg{width:14px;height:14px}
+  .checkin-countdown.no-countdown{min-width:32px;width:32px;padding:0}
 }
 
 
@@ -2040,10 +2044,14 @@ body .app-header:not(.home-header){
 
 /* v86: cleaned baseline; UI and behavior preserved */
 
+/* 內頁倒數不顯示時鐘 ICON，只保留倒數文字 */
+.checkin-countdown svg{display:none !important;}
+.checkin-countdown.has-countdown,.checkin-countdown.no-countdown{gap:0 !important;}
+
 /* V93：倒數區塊與出席率百分比統一為 32×32 正方形 */
 .checkin-countdown.has-countdown,
 .checkin-countdown.no-countdown{
-  width:32px !important;
+  width:40px !important;
   height:32px !important;
   min-width:32px !important;
   min-height:32px !important;
@@ -3861,10 +3869,12 @@ function startActivityExpiryWatcher(){
       }
     }
 
-    // 倒數每秒只更新既有數字，不重建整個頁面。
-    // 只有真的到 0 秒並成功關閉活動後，才需要 render 一次。
-    if(expired.length===0 && typeof window.refreshActivityListClocks==="function"){
+    // 倒數到 0 秒並成功關閉後，立即同步畫面，確實停止接受簽到。
+    if(typeof window.refreshActivityListClocks==="function"){
       window.refreshActivityListClocks();
+    }
+    if(expired.some(a=>String(a.id)===String(openEventId))){
+      render();
     }
   },1000);
 }
