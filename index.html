@@ -2962,6 +2962,19 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   .checkin-hero-actions{gap:6px}
 }
 </style>
+
+<style id="officer-form-spacing-fix">
+/* 幹部管理：輸入欄位與按鈕增加間距 */
+.admin-edit-box .edit-code-input{
+  margin-bottom:10px !important;
+}
+.officer-input + .officer-input{
+  margin-top:8px !important;
+}
+.officer-input + .primary{
+  margin-top:10px !important;
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -4483,7 +4496,7 @@ function renderAdmin(el){
         <div class="choice-grid three activity-filter-status" style="${activityManagementType==='manual'?'display:none':''}"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button></div>
       </div>
     </div>
-    <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
+    <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.filter(matchActivity).length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.filter(matchActivity).length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
   }
 
   if(adminPage==="manual-register"){
@@ -4696,9 +4709,9 @@ function activityAdminRow(a,hidden=false){
   const manualRegistration=isManualRegistrationActivity(a);
   const statusClass=future?"future":(a.open?"open":"closed");
   const statusText=future?"未發佈":(a.open?"開放中":"已停止");
-  // 管理頁狀態顏色唯一來源：關閉＝黑、開放且有限制＝黃、開放無限制＝綠。
-  const adminStatusIconClass = !a.open ? "closed-icon" : ((Number(a.minimumAttendanceRate)||0)>0 ? "attendance-limit-icon" : "open-icon");
-  const adminStatusButtonClass = !a.open ? "status-closed" : ((Number(a.minimumAttendanceRate)||0)>0 ? "status-limited" : "status-open");
+  // 管理頁採 V2.1：名單按鈕維持中性；開放／停止只由活動切換按鈕呈現顏色。
+  const adminStatusIconClass = a.open ? "open-icon" : "closed-icon";
+  const adminStatusButtonClass = a.open ? "is-on" : "is-off";
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
     <div class="admin-card-icon"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="calendar-days"></i></div>
@@ -4715,7 +4728,7 @@ function activityAdminRow(a,hidden=false){
     </div>
   </div>
   <div class="admin-actions">
-    <button class="${adminStatusButtonClass}" data-admin-attendance="${escapeHtml(a.id)}"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
+    <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded?"收起名單":`名單 ${list.length}`}</button>
     ${isManualRegistrationActivity(a)?`<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>`:`<button class="activity-toggle-btn ${adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open?"關閉活動":"開啟活動"}"><i data-lucide="${a.open?"toggle-right":"toggle-left"}"></i><span>${a.open?"開放中":"已停止"}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden?"eye":"eye-off"}"></i>${hidden?"取消隱藏":"隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
@@ -5680,6 +5693,305 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 .activity-admin-card .admin-actions button.status-open:active,
 .activity-admin-card .admin-actions button.status-limited:active,
 .activity-admin-card .admin-actions button.status-closed:active { background:#f7f7f5 !important; border-color:var(--line) !important; }
+</style>
+
+<style id="officer-list-match-activity-admin-css">
+/* 幹部列表：套用「活動管理／顯示中的活動」卡片視覺，不改功能 */
+.officer-card{
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  border-radius:20px !important;
+  padding:15px !important;
+  margin-bottom:10px !important;
+  box-sizing:border-box !important;
+}
+.officer-top{
+  display:grid !important;
+  grid-template-columns:42px minmax(0,1fr) 70px !important;
+  column-gap:10px !important;
+  align-items:start !important;
+}
+.officer-icon{
+  width:42px !important;
+  height:42px !important;
+  border-radius:13px !important;
+  background:#f1f1ef !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 auto !important;
+}
+.officer-info{
+  min-width:0 !important;
+  padding-top:1px !important;
+}
+.officer-name{
+  font-weight:900 !important;
+  font-size:15px !important;
+  line-height:18px !important;
+  height:18px !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.officer-role{
+  font-size:11px !important;
+  color:#888 !important;
+  line-height:14px !important;
+  height:14px !important;
+  margin-top:3px !important;
+}
+.officer-state{
+  width:70px !important;
+  min-width:70px !important;
+  text-align:right !important;
+  font-size:12px !important;
+  font-weight:850 !important;
+  line-height:18px !important;
+  color:#171717 !important;
+  white-space:nowrap !important;
+}
+.officer-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:6px !important;
+  margin-top:13px !important;
+  padding-top:12px !important;
+  border-top:1px solid var(--line) !important;
+}
+.officer-actions button{
+  min-height:42px !important;
+  padding:5px 4px !important;
+  background:#f7f7f5 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:420px){
+  .officer-actions{grid-template-columns:repeat(2,1fr) !important;}
+  .officer-actions button:first-child{grid-column:auto !important;}
+}
+</style>
+
+<style id="officer-actions-activity-style-fix">
+/* 幹部列表：操作按鈕比照「活動管理／顯示中的活動」按鈕樣式 */
+.officer-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:6px !important;
+  margin-top:13px !important;
+  padding-top:12px !important;
+  border-top:1px solid var(--line) !important;
+}
+.officer-actions button{
+  min-height:42px !important;
+  padding:5px 4px !important;
+  background:#f7f7f5 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+}
+.officer-actions button svg{
+  width:16px !important;
+  height:16px !important;
+  flex:0 0 16px !important;
+}
+@media(max-width:420px){
+  .officer-actions{grid-template-columns:1fr 1fr !important;}
+  .officer-actions button:first-child{grid-column:1/-1 !important;}
+}
+</style>
+
+<style id="admin-edit-save-cancel-equal">
+/* 修改密碼：儲存／取消按鈕固定等寬 */
+.admin-edit-box > div{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:7px !important;
+  width:100% !important;
+}
+.admin-edit-box > div > .save-code-btn,
+.admin-edit-box > div > .cancel-code-btn{
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+</style>
+
+
+
+<style id="management-activity-v21-css-final">
+/* 顯示中的活動：完整採用 V2.1 管理活動卡片 CSS；只作用於管理頁，不影響成員區域。 */
+#app.admin-home-view .activity-admin-card{
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  border-radius:20px !important;
+  padding:15px !important;
+  margin-bottom:10px !important;
+  box-sizing:border-box !important;
+}
+#app.admin-home-view .activity-admin-card.hidden{opacity:.65 !important;}
+#app.admin-home-view .activity-admin-card .admin-card-top{
+  display:flex !important;
+  gap:10px !important;
+  align-items:center !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-icon{
+  width:42px !important;
+  height:42px !important;
+  border-radius:13px !important;
+  background:#f1f1ef !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 auto !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-info{
+  flex:1 !important;
+  min-width:0 !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-name{
+  font-weight:900 !important;
+  font-size:15px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-meta{
+  font-size:11px !important;
+  color:#888 !important;
+  margin-top:3px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-status{
+  margin-top:8px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:6px !important;
+  margin-top:13px !important;
+  padding-top:12px !important;
+  border-top:1px solid var(--line) !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button{
+  min-height:42px !important;
+  padding:5px 4px !important;
+  background:#f7f7f5 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#171717 !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on,
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on:hover,
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on:active{
+  color:#16a34a !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on svg{
+  color:#16a34a !important;
+  stroke:#16a34a !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off,
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off:hover,
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off:active{
+  color:#111827 !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off svg{
+  color:#111827 !important;
+  stroke:#111827 !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button.danger,
+#app.admin-home-view .activity-admin-card .admin-actions button.danger:hover,
+#app.admin-home-view .activity-admin-card .admin-actions button.danger:active{
+  color:var(--danger) !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button.danger svg{
+  color:var(--danger) !important;
+  stroke:var(--danger) !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary{
+  position:absolute !important;
+  top:0 !important;
+  right:0 !important;
+  width:110px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-end !important;
+  justify-content:flex-start !important;
+  gap:4px !important;
+  text-align:right !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-limit,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins > span{
+  box-sizing:border-box !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-family:inherit !important;
+  font-size:12px !important;
+  line-height:16px !important;
+  font-weight:850 !important;
+  color:#171717 !important;
+  text-align:right !important;
+  white-space:nowrap !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:baseline !important;
+  justify-content:flex-end !important;
+  gap:4px !important;
+  height:16px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins svg,
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-checkins i{
+  width:14px !important;
+  height:14px !important;
+  min-width:14px !important;
+  min-height:14px !important;
+  max-width:14px !important;
+  max-height:14px !important;
+  flex:0 0 14px !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+@media(max-width:560px){
+  #app.admin-home-view .activity-admin-card .admin-card-top{padding-right:105px !important;position:relative !important;}
+  #app.admin-home-view .activity-admin-card .admin-card-summary{width:100px !important;right:0 !important;}
+}
+@media(max-width:430px){
+  #app.admin-home-view .activity-admin-card .admin-actions{grid-template-columns:repeat(2,1fr) !important;}
+}
+</style>
+
+<style id="v21-admin-activity-icon-neutral-final">
+/* 管理活動：依 V2.1，活動卡片左側 ICON 維持中性，不因開放／手動登記變綠。 */
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.open-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.attendance-limit-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.closed-icon{
+  color:#171717 !important;
+  stroke:#171717 !important;
+}
 </style>
 </body>
 
