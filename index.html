@@ -3591,11 +3591,14 @@ function activitiesThisYear(){
   const y = new Date().getFullYear();
   const now = Date.now();
 
-  // 出席率只計算「已關閉」的一般活動。
-  // 開放中、尚未發佈、未來活動，以及手動登記活動一律不計入。
+  // 出席率：一般活動只計算已關閉且已發佈的活動；
+  // 手動登記活動的管理者登記視為已出席，建立後直接納入出席率，
+  // 不受活動是否開放或日期早於今天的限制。
   return state.activities.filter(a => {
     if(new Date(a.date).getFullYear() !== y) return false;
-    if(isManualRegistrationActivity(a)) return false;
+
+    if(isManualRegistrationActivity(a)) return true;
+
     if(a.open) return false;
 
     const publishTs = a.publishAt ? new Date(a.publishAt).getTime() : null;
@@ -4964,7 +4967,8 @@ async function saveManualRegistrationDraft(){
   const dateInput=document.getElementById("manual-activity-date");
   const newName=norm(nameInput?.value||manualRegisterActivityName||activity.name||"");
   const newDate=dateInput?.value||manualRegisterActivityDate||String(activity.date||"").slice(0,10);
-  if(!newName || !newDate || newDate<localDateKey()) throw new Error("活動資料不完整或日期不能早於今天");
+  // 手動登記活動允許修改為過去、今天或未來日期，不限制不得早於今天。
+  if(!newName || !newDate) throw new Error("活動資料不完整");
   document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
     const i=Number(inp.dataset.manualIdx);
     if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
