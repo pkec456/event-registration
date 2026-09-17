@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.3</title>
+<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.2.2</title>
 <style>
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
@@ -2974,6 +2974,25 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .officer-input + .primary{
   margin-top:10px !important;
 }
+</style>
+<style id="v23-activity-list-right-layout">
+/* V2.3：活動列表右側欄位固定對齊，但不再浪費 190px 空間 */
+.activity-right{
+  display:grid !important;
+  grid-template-columns:32px 42px auto 22px !important;
+  align-items:center !important;
+  justify-content:end !important;
+  column-gap:8px !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+  flex:0 0 auto !important;
+}
+.activity-list-rate-slot{width:32px !important;height:32px !important;min-width:32px !important;min-height:32px !important;}
+.activity-list-countdown-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
+.activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;margin:0 !important;}
+.activity-right .count{grid-column:3 !important;width:auto !important;min-width:48px !important;text-align:right !important;white-space:nowrap !important;}
+.activity-right .arrow{grid-column:4 !important;width:22px !important;justify-self:end !important;}
 </style>
 </head>
 <body>
@@ -6017,6 +6036,44 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 
 
+
+<style id="v23-activity-list-rate42-countdown48x42-gap5">
+/* V2.3：活動列表 % 42×42、倒數 48×42（寬×高）；彼此間距 5px，保持整列對齊 */
+.activity-right{
+  display:grid !important;
+  grid-template-columns:42px 48px auto 22px !important;
+  column-gap:5px !important;
+  align-items:center !important;
+  justify-content:end !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+  flex:0 0 auto !important;
+}
+.activity-list-rate-slot{
+  width:42px !important; height:42px !important;
+  min-width:42px !important; min-height:42px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+}
+.activity-list-rate-slot .activity-list-attendance-rate{
+  width:42px !important; height:42px !important;
+  min-width:42px !important; max-width:42px !important;
+  min-height:42px !important; max-height:42px !important;
+  flex:0 0 42px !important; box-sizing:border-box !important;
+}
+.activity-list-countdown-slot{
+  width:48px !important; height:42px !important;
+  min-width:48px !important; max-width:48px !important;
+  min-height:42px !important; max-height:42px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+}
+.activity-list-countdown-slot .activity-status-clock{
+  width:48px !important; height:42px !important;
+  min-width:48px !important; max-width:48px !important;
+  min-height:42px !important; max-height:42px !important;
+  margin:0 !important; box-sizing:border-box !important;
+}
+</style>
 </html>
 <style id="announcement-static-final">
 .announcement .announcement-text{
@@ -6053,11 +6110,4 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     max-height:46px !important;
   }
 }
-</style>
-<style id="activity-list-rate-42x42-final">
-/* V96：活動列表 % 與倒數皆固定 42×42px；手機／電腦一致 */
-.activity-list-rate-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
-.activity-list-rate-slot .activity-list-attendance-rate{width:42px !important;height:42px !important;min-width:42px !important;max-width:42px !important;min-height:42px !important;max-height:42px !important;flex:0 0 42px !important;box-sizing:border-box !important;}
-.activity-list-countdown-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
-.activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;max-width:42px !important;min-height:42px !important;max-height:42px !important;box-sizing:border-box !important;}
 </style>
