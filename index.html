@@ -3446,21 +3446,28 @@ async function checkAttendanceEligibilityRemote(activityId, name){
   return data;
 }
 
-async function createRegistrationRemote(activityId, registration){
-  // 隊員簽到改走公開 RPC。
-  // 不直接 INSERT registrations，避免被 Supabase RLS 擋住。
-  const { data, error } = await supabaseClient.rpc("public_create_registration", {
-    p_activity_id: activityId,
-    p_name: registration.name,
-    p_field_values: registration.fieldValues || {}
-  });
+async function createRegistrationRemote(activityId, registration, adminManual=false){
+  // 一般成員簽到維持原本公開 RPC。
+  // 手動登記由已登入管理者使用管理者 RPC，可在活動已停止後仍手動輸入。
+  const session=adminManual?getAdminSession():null;
+  const rpcName=adminManual?"simple_admin_create_registration":"public_create_registration";
+  const params=adminManual
+    ? {
+        p_admin_username:String(session?.username||""),
+        p_admin_code:String(session?.access_code||""),
+        p_activity_id:String(activityId||""),
+        p_name:registration.name,
+        p_field_values:registration.fieldValues || {}
+      }
+    : {
+        p_activity_id:activityId,
+        p_name:registration.name,
+        p_field_values:registration.fieldValues || {}
+      };
 
+  const { data, error } = await supabaseClient.rpc(rpcName, params);
   if(error) throw error;
-
-  if(!data?.ok){
-    throw new Error(data?.message || "簽到失敗");
-  }
-
+  if(!data?.ok) throw new Error(data?.message || "簽到失敗");
   return data.registration || data;
 }
 
@@ -5088,7 +5095,7 @@ function setupManualRegistrationPage(el){
         activity=state.activities.find(a=>String(a.id)===String(manualRegisterActivityId));
       }
 
-      const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}});
+      const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}},true);
       const r=savedReg||{id:uid(),activity_id:activity.id,name:member,fieldValues:{},ts:new Date().toISOString()};
       if(!state.registrations[activity.id]) state.registrations[activity.id]=[];
       state.registrations[activity.id].push({
