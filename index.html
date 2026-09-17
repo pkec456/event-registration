@@ -5055,7 +5055,6 @@ function setupManualRegistrationPage(el){
       manualRegisterActivityDate=dateInput?.value||"";
       if(!manualRegisterActivityName){showToast("請輸入活動名稱");return;}
       if(!manualRegisterActivityDate){showToast("請選擇活動日期");return;}
-      if(manualRegisterActivityDate<localDateKey()){showToast("活動日期不能早於今天");return;}
     }
     if(!member){showToast("請輸入隊員姓名");return;}
     syncManualFields();
