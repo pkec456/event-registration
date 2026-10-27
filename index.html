@@ -3595,10 +3595,10 @@ function activitiesThisYear(){
   const y = new Date().getFullYear();
   const now = Date.now();
 
-  // 出席率：一般活動只計算已關閉且已發佈的活動；
-  // 手動登記活動的管理者登記視為已出席，建立後直接納入出席率，
-  // 不受活動是否開放或日期早於今天的限制。
+  // 出席率只計算未隱藏的活動；一般活動須已關閉且已發佈。
+  // 手動登記活動建立後直接納入，但隱藏活動一律排除。
   return state.activities.filter(a => {
+    if(a.hidden) return false;
     if(new Date(a.date).getFullYear() !== y) return false;
 
     if(isManualRegistrationActivity(a)) return true;
