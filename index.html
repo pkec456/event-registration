@@ -4765,7 +4765,6 @@ function activityAdminRow(a,hidden=false){
   const adminStatusButtonClass = a.open ? "is-on" : "is-off";
   return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
-    <div class="admin-card-icon"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="calendar-days"></i></div>
     <div class="admin-card-info">
       <div class="admin-card-title-block"><div class="admin-card-name">${escapeHtml(a.name)}</div></div>
       <div class="admin-card-subtitle-block"><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div></div>
@@ -6065,6 +6064,17 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 .activity-admin-card .admin-card-title-block,.activity-admin-card .admin-card-subtitle-block{display:block!important;position:static!important;float:none!important;clear:both!important;width:100%!important;height:auto!important;min-height:0!important;transform:none!important;}
 .activity-admin-card .admin-card-name{position:static!important;display:block!important;white-space:normal!important;line-height:1.35!important;margin:0!important;overflow-wrap:anywhere!important;}
 .activity-admin-card .admin-card-subtitle-block .admin-card-meta{position:static!important;display:block!important;white-space:nowrap!important;line-height:1.35!important;margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important;transform:none!important;}
+</style>
+
+<style id="admin-card-no-icon-layout-fix">
+/* 活動管理卡片移除左側圖示，文字區使用完整可用寬度 */
+.activity-admin-card .admin-card-top{display:flex!important;align-items:flex-start!important;gap:12px!important;}
+.activity-admin-card .admin-card-icon{display:none!important;}
+.activity-admin-card .admin-card-info{display:flex!important;flex-direction:column!important;flex:1 1 auto!important;min-width:0!important;gap:6px!important;}
+.activity-admin-card .admin-card-title-block,.activity-admin-card .admin-card-subtitle-block{position:static!important;display:block!important;float:none!important;clear:both!important;width:100%!important;height:auto!important;transform:none!important;}
+.activity-admin-card .admin-card-name{position:static!important;display:block!important;white-space:normal!important;line-height:1.35!important;margin:0!important;overflow-wrap:anywhere!important;}
+.activity-admin-card .admin-card-info .admin-card-subtitle-block .admin-card-meta{position:static!important;display:block!important;white-space:nowrap!important;line-height:1.35!important;margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important;transform:none!important;}
+.activity-admin-card .admin-card-summary{flex:0 0 auto!important;}
 </style>
 </body>
 
