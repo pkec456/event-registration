@@ -4651,7 +4651,7 @@ function renderAdmin(el){
         <div class="rate-percent" style="color:${tone.color}">${r.rate}%</div>
         <div class="rate-bar"><div class="rate-bar-fill" style="width:${rate}%;background:${tone.color}"></div></div>
         <div class="rate-detail">${r.attended} / ${r.total} 場</div>
-      </div>`;
+      </button>`;
     };
     content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map(r=>ring(r)).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
   }
