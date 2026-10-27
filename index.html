@@ -4747,7 +4747,6 @@ window.openManualRegistrationEditor=openManualRegistrationEditor;
 function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
   const expanded=window.adminAttendanceExpandedId===a.id;
-  const actionsExpanded=String(window.adminActionExpandedId||"")===String(a.id);
   const future=a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
   let detail="";
   if(expanded){
@@ -4778,10 +4777,7 @@ function activityAdminRow(a,hidden=false){
       <div class="admin-card-meta">${list.length} 人簽到</div>
     </div>
   </div>
-  <button type="button" class="admin-actions-toggle" data-admin-actions-toggle="${escapeHtml(a.id)}" aria-expanded="${actionsExpanded ? "true" : "false"}">
-    <span>活動操作</span><span class="admin-actions-toggle-label">${actionsExpanded ? "收合" : "展開操作"}</span><i data-lucide="${actionsExpanded ? "chevron-up" : "chevron-down"}"></i>
-  </button>
-  <div class="admin-actions ${actionsExpanded ? "is-expanded" : "is-collapsed"}">
+  <div class="admin-actions">
     <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded ? "收起名單" : `名單 ${list.length}`}</button>
     ${isManualRegistrationActivity(a) ? `<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>` : `<button class="activity-toggle-btn ${adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open ? "關閉活動" : "開啟活動"}"><i data-lucide="${a.open ? "toggle-right" : "toggle-left"}"></i><span>${a.open ? "開放中" : "已停止"}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden ? "eye" : "eye-off"}"></i>${hidden ? "取消隱藏" : "隱藏"}</button>
@@ -5152,26 +5148,6 @@ function setupManualRegistrationPage(el){
 }
 
 function setupActivityManagementPage(el){
-  // 活動操作區：使用容器事件委派，避免重繪後按鈕事件未綁定。
-  if(!el.dataset.adminActionToggleBound){
-    el.dataset.adminActionToggleBound="1";
-    el.addEventListener("click",(ev)=>{
-      const btn=ev.target.closest("[data-admin-actions-toggle]");
-      if(!btn || !el.contains(btn)) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-      const id=String(btn.getAttribute("data-admin-actions-toggle")||"");
-      if(!id) return;
-      if(String(window.adminActionExpandedId||"")===id){
-        window.adminActionExpandedId=null;
-        if(String(window.adminAttendanceExpandedId||"")===id) window.adminAttendanceExpandedId=null;
-      }else{
-        window.adminActionExpandedId=id;
-        window.adminAttendanceExpandedId=null;
-      }
-      renderAdmin(el);
-    },true);
-  }
   // 活動管理：查看／隱藏簽到名單
   el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
     btn.onclick=async(ev)=>{
@@ -5714,6 +5690,19 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 #app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off svg{color:#111827;stroke:#111827}
 #app.admin-home-view .activity-admin-card .admin-actions button.danger svg{color:var(--danger);stroke:var(--danger)}
 @media(max-width:480px){#app.admin-home-view .activity-admin-card .admin-card-top{grid-template-columns:minmax(0,1fr) 96px;gap:8px}#app.admin-home-view .activity-admin-card .admin-card-summary{width:96px;max-width:96px}#app.admin-home-view .activity-admin-card .admin-card-name{font-size:16px;line-height:1.4}#app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{font-size:12px}}
+
+/* 操作按鈕固定單排四欄，手機版也不改成 2×2 */
+#app.admin-home-view .activity-admin-card .admin-actions{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:5px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button{
+  min-width:0 !important;
+  padding:4px 2px !important;
+  font-size:10px !important;
+  white-space:nowrap !important;
+}
 </style>
 <style id="admin-status-color-stable-final">
 /* 管理活動頁：狀態顏色唯一規則，避免 hover／active／重繪造成跳色 */
