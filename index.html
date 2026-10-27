@@ -4646,7 +4646,7 @@ function renderAdmin(el){
       const trend=trendFor(r.name);
       const champion=Number(r.rate)===championRate&&championRate>=0;
       const icon=champion?'trophy':trend==='up'?'trending-up':trend==='down'?'trending-down':'';
-      return `<div class="rate-card">
+      return `<button type="button" class="rate-card rate-card-clickable" data-attendance-person="${escapeHtml(r.name)}" aria-label="查看${escapeHtml(r.name)}的出席紀錄" style="width:100%;font:inherit;cursor:pointer">
         <div class="rate-head">${icon?`<i class="rate-rank-icon ${champion?'champion':trend}" data-lucide="${icon}" title="${champion?'總冠軍':trend==='up'?'上升':'下降'}"></i>`:''}<span class="rate-head-name">${escapeHtml(r.name)}</span></div>
         <div class="rate-percent" style="color:${tone.color}">${r.rate}%</div>
         <div class="rate-bar"><div class="rate-bar-fill" style="width:${rate}%;background:${tone.color}"></div></div>
@@ -4655,6 +4655,23 @@ function renderAdmin(el){
     };
     content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map(r=>ring(r)).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
   }
+  if(adminPage==="attendance-person"){
+    const name=String(window.__adminAttendancePersonName||"");
+    const personStats=annualStats(name);
+    const rate=Math.max(0,Math.min(100,Number(personStats.rate)||0));
+    const attended=Math.max(0,Number(personStats.attended)||0);
+    const total=Math.max(0,Number(personStats.total)||0);
+    const tone=getAttendanceTone(rate);
+    const attendancePercent=total>0?Math.max(0,Math.min(100,(attended/total)*100)):0;
+    content=`<button type="button" class="secondary" id="attendance-person-back" style="width:100%;margin-bottom:12px"><i data-lucide="arrow-left"></i>返回出席率列表</button>
+      <div class="query-person"><div class="query-person-icon"><i data-lucide="user-round"></i></div><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div></div></div>
+      <div class="query-metrics">
+        <div class="query-metric-card attendance-metric ${tone.name}"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div>
+        <div class="query-metric-card attendance-metric signins"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div>
+      </div>
+      <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
+      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="calendar-days"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
+  }
   const superAdmin=isSuperAdmin();
   const session=getAdminSession();
   const roleText=superAdmin?"最高管理者":"幹部";
@@ -4662,6 +4679,9 @@ function renderAdmin(el){
   const accountText=escapeHtml(session?.username||"—");
   el.innerHTML=`${content}`;
   if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
+  const attendancePersonBack=document.getElementById("attendance-person-back");
+  if(attendancePersonBack)attendancePersonBack.onclick=()=>{adminPage="attendance";render();};
+  if(adminPage==="attendance")el.querySelectorAll("[data-attendance-person]").forEach(card=>{card.onclick=()=>{window.__adminAttendancePersonName=card.getAttribute("data-attendance-person")||"";adminPage="attendance-person";render();};});
   const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
   const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
