@@ -6194,3 +6194,33 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 </style>
 
+
+
+<style id="activity-admin-actions-four-columns-final-fix">
+/* 最終覆寫：活動管理卡片四個操作按鈕固定同一排 */
+#app.admin-home-view .activity-admin-card .admin-actions,
+#app.admin-home-view .activity-admin-card .admin-actions.is-expanded,
+#app.admin-home-view .activity-admin-card .admin-actions.is-collapsed {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-flow: column !important;
+  gap: 5px !important;
+  width: 100% !important;
+  margin-top: 8px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button {
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 5px 1px !important;
+  font-size: 10px !important;
+  gap: 3px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button svg {
+  width: 19px !important;
+  height: 19px !important;
+  flex: 0 0 19px !important;
+}
+</style>
