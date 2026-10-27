@@ -4370,8 +4370,21 @@ function renderAdmin(el){
   const todayKey=new Date().toLocaleDateString('sv-SE');
   const todayActs=acts.filter(a=>String(a.date||'').slice(0,10)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況：統計年度出席率落在橘色級距（60%～未滿80%）的人數，不顯示姓名。
+  // 今日概況：統計年度出席率落在橘色級距（60%～未滿80%）的人數。
   const orangeAttendanceCount=rows.filter(r=>getAttendanceTone(r.rate).name==="orange").length;
+  // 出席率上升：比較最近三個月與前一個三個月的出席率。
+  const trendNow=new Date(),trendMonth=trendNow.getMonth();
+  const trendRecentStart=new Date(trendNow.getFullYear(),Math.max(0,trendMonth-2),1);
+  const trendPreviousStart=new Date(trendNow.getFullYear(),Math.max(0,trendMonth-5),1);
+  const trendPreviousEnd=new Date(trendRecentStart.getTime()-1);
+  const attendanceTrendUpCount=names.filter(name=>{
+    const k=keyOf(name);
+    const recentActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=trendRecentStart;});
+    const prevActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=trendPreviousStart&&d<=trendPreviousEnd;});
+    const rateOf=arr=>arr.length?arr.filter(a=>regsOf(a.id).some(r=>keyOf(r.name)===k)).length/arr.length*100:null;
+    const recentRate=rateOf(recentActs),previousRate=rateOf(prevActs);
+    return recentRate!==null&&previousRate!==null&&recentRate>previousRate+0.1;
+  }).length;
   let content="";
   if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
   <div class="admin-main-hero-brand">
@@ -4478,7 +4491,7 @@ function renderAdmin(el){
     </button>
   </div>
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>簽到紀錄</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="users"></i></div><b id="top-attendance-count">${orangeAttendanceCount}</b><span id="top-attendance-rate">橘色人數（60%～未滿80%）</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="trending-up"></i></div><b>${attendanceTrendUpCount}</b><span>出席率上升人數</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="users"></i></div><b id="top-attendance-count">${orangeAttendanceCount}</b><span id="top-attendance-rate">橘色人數（60%～未滿80%）</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
