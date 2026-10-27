@@ -3719,6 +3719,7 @@ function render(){
     if(openEventId){openEventId=null;render();return;}
     if(activeTab==="query"){if(!signinPageVisible){activeTab="query";openEventId=null;queryResultVisible=false;render();return;} activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
     if(activeTab==="admin" && adminUnlocked){
+      if(adminPage==="attendance-person"){adminPage="attendance";render();return;}
       if(adminPage==="manual-register" && manualRegisterActivityId){
         showManualReturnDialog().then(async save=>{
           try{
