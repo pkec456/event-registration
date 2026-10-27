@@ -6044,6 +6044,19 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   stroke:#171717 !important;
 }
 </style>
+
+<style id="admin-card-title-subtitle-mobile-fix">
+/* 活動管理卡片：標題與副標分開，副標維持單行 */
+.activity-admin-card .admin-card-top{align-items:flex-start;}
+.activity-admin-card .admin-card-info{flex:1 1 0;min-width:0;}
+.activity-admin-card .admin-card-name{display:block;line-height:1.35;overflow-wrap:anywhere;margin-bottom:5px;}
+.activity-admin-card .admin-card-info > .admin-card-meta{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.35;margin-top:0;}
+@media(max-width:480px){
+  .activity-admin-card .admin-card-top{gap:10px;}
+  .activity-admin-card .admin-card-summary{flex:0 0 auto;}
+  .activity-admin-card .admin-card-info > .admin-card-meta{font-size:11px;}
+}
+</style>
 </body>
 
 
