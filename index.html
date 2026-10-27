@@ -4370,9 +4370,9 @@ function renderAdmin(el){
   const todayKey=new Date().toLocaleDateString('sv-SE');
   const todayActs=acts.filter(a=>String(a.date||'').slice(0,10)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況：改顯示年度最高出席率成員；同率成員以幻燈片輪播。
+  // 今日概況：統計年度最高出席率的同色級人數，不顯示任何姓名。
   const maxAttendanceRate=rows.length ? Math.max(...rows.map(r=>Number(r.rate)||0)) : -1;
-  const topAttendanceNames=rows.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
+  const topAttendanceCount=rows.filter(r=>Number(r.rate)===maxAttendanceRate).length;
   let content="";
   if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
   <div class="admin-main-hero-brand">
@@ -4479,7 +4479,7 @@ function renderAdmin(el){
     </button>
   </div>
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>簽到紀錄</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="trophy"></i></div><b id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b><span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>簽到紀錄</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="trophy"></i></div><b id="top-attendance-count">${topAttendanceCount}</b><span id="top-attendance-rate">${topAttendanceCount>0?`${maxAttendanceRate}% 同級人數`:"尚無出席資料"}</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
@@ -4649,23 +4649,7 @@ function renderAdmin(el){
   const roleClass=superAdmin?"super-admin":"officer-admin";
   const accountText=escapeHtml(session?.username||"—");
   el.innerHTML=`${content}`;
-  if(adminPage==="home" && topAttendanceNames.length>1){
-    let topIndex=0;
-    const rotateTopAttendance=()=>{
-      const nameEl=document.getElementById("top-attendance-name");
-      const rateEl=document.getElementById("top-attendance-rate");
-      if(!nameEl||!rateEl) return;
-      const item=topAttendanceNames[topIndex];
-      nameEl.textContent=item.name;
-      rateEl.textContent=`${item.rate}% 最高出席率`;
-      topIndex=(topIndex+1)%topAttendanceNames.length;
-    };
-    window.__topAttendanceCarouselTimer && clearInterval(window.__topAttendanceCarouselTimer);
-    window.__topAttendanceCarouselTimer=setInterval(rotateTopAttendance,3000);
-  }else{
-    window.__topAttendanceCarouselTimer && clearInterval(window.__topAttendanceCarouselTimer);
-    window.__topAttendanceCarouselTimer=null;
-  }
+  if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
   const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
   const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
