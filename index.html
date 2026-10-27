@@ -4767,8 +4767,8 @@ function activityAdminRow(a,hidden=false){
   <div class="admin-card-top">
     <div class="admin-card-icon"><i class="activity-status-all-icon ${adminStatusIconClass}" data-lucide="calendar-days"></i></div>
     <div class="admin-card-info">
-      <div class="admin-card-name">${escapeHtml(a.name)}</div>
-      <div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div>
+      <div class="admin-card-title-block"><div class="admin-card-name">${escapeHtml(a.name)}</div></div>
+      <div class="admin-card-subtitle-block"><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div></div>
       <div class="admin-card-status">
         ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
       </div>
@@ -6056,6 +6056,15 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   .activity-admin-card .admin-card-summary{flex:0 0 auto;}
   .activity-admin-card .admin-card-info > .admin-card-meta{font-size:11px;}
 }
+</style>
+
+<style id="admin-card-title-subtitle-independent-blocks">
+/* 標題與副標使用獨立區塊，避免沿用舊版定位造成重疊 */
+.activity-admin-card .admin-card-top{align-items:flex-start!important;}
+.activity-admin-card .admin-card-info{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:6px!important;min-width:0!important;flex:1 1 0!important;}
+.activity-admin-card .admin-card-title-block,.activity-admin-card .admin-card-subtitle-block{display:block!important;position:static!important;float:none!important;clear:both!important;width:100%!important;height:auto!important;min-height:0!important;transform:none!important;}
+.activity-admin-card .admin-card-name{position:static!important;display:block!important;white-space:normal!important;line-height:1.35!important;margin:0!important;overflow-wrap:anywhere!important;}
+.activity-admin-card .admin-card-subtitle-block .admin-card-meta{position:static!important;display:block!important;white-space:nowrap!important;line-height:1.35!important;margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important;transform:none!important;}
 </style>
 </body>
 
