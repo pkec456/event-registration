@@ -6408,6 +6408,16 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   }
 }
 
+/* HOTFIX 2: explicitly reset stale grid coordinates left behind by the removed icon */
+#app.admin-home-view .activity-admin-card .admin-card-info{
+  grid-column:1!important; grid-row:1!important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-summary{
+  grid-column:2!important; grid-row:1!important;
+}
+#app.admin-home-view .activity-admin-card .admin-card-top{
+  grid-template-columns:minmax(0,1fr) 100px!important;
+}
 /* HOTFIX 2026-10-27: repair activity card overlap; override legacy fixed-height/grid rules */
 #app.admin-home-view .activity-admin-card .admin-card-top{
   display:grid!important;
