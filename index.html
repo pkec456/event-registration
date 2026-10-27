@@ -4494,7 +4494,7 @@ function renderAdmin(el){
     </button>
   </div>
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="trending-up"></i></div><b>${attendanceTrendUpCount}</b><span>總人數</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="users"></i></div><b id="top-attendance-count">${orangeAttendanceCount}</b><span id="top-attendance-rate">橘色人數（60%～未滿80%）</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="trending-up"></i></div><b>${names.length}</b><span>總人數</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="users"></i></div><b id="top-attendance-count">${orangeAttendanceCount}</b><span id="top-attendance-rate">橘色人數（60%～未滿80%）</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
