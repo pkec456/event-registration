@@ -4767,7 +4767,7 @@ function activityAdminRow(a,hidden=false){
   <div class="admin-card-top">
     <div class="admin-card-info">
       <div class="admin-card-title-block"><div class="admin-card-name">${escapeHtml(a.name)}</div></div>
-      <div class="admin-card-subtitle-block"><div class="admin-card-meta">${fmtDate(a.date)} · 建立者：${escapeHtml(a.createdBy||"—")}</div></div>
+      <div class="admin-card-subtitle-block"><div class="admin-card-meta admin-card-date">${fmtDate(a.date)}</div><div class="admin-card-meta admin-card-creator">建立者：${escapeHtml(a.createdBy||"—")}</div></div>
       <div class="admin-card-status">
         ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
       </div>
@@ -6075,6 +6075,19 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 .activity-admin-card .admin-card-name{position:static!important;display:block!important;white-space:normal!important;line-height:1.35!important;margin:0!important;overflow-wrap:anywhere!important;}
 .activity-admin-card .admin-card-info .admin-card-subtitle-block .admin-card-meta{position:static!important;display:block!important;white-space:nowrap!important;line-height:1.35!important;margin:0!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important;transform:none!important;}
 .activity-admin-card .admin-card-summary{flex:0 0 auto!important;}
+</style>
+
+<style id="admin-card-mobile-layout-final">
+/* 活動管理卡片最終排版：取消舊版右側預留空間與絕對定位，標題及副標分區排列 */
+.activity-admin-card .admin-card-top{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:start!important;gap:12px!important;padding-right:0!important;position:static!important;}
+.activity-admin-card .admin-card-info{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:7px!important;min-width:0!important;width:auto!important;flex:initial!important;}
+.activity-admin-card .admin-card-title-block,.activity-admin-card .admin-card-subtitle-block{display:block!important;position:static!important;float:none!important;clear:both!important;width:100%!important;height:auto!important;min-height:0!important;transform:none!important;overflow:visible!important;}
+.activity-admin-card .admin-card-name{display:block!important;position:static!important;font-size:15px!important;font-weight:900!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;margin:0!important;transform:none!important;}
+.activity-admin-card .admin-card-subtitle-block{display:flex!important;flex-direction:column!important;gap:3px!important;}
+.activity-admin-card .admin-card-subtitle-block .admin-card-meta{display:block!important;position:static!important;font-size:11px!important;line-height:1.4!important;white-space:normal!important;overflow-wrap:anywhere!important;margin:0!important;transform:none!important;max-width:100%!important;}
+.activity-admin-card .admin-card-summary{position:static!important;display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:4px!important;min-width:86px!important;max-width:110px!important;flex:initial!important;margin:0!important;transform:none!important;}
+.activity-admin-card .admin-card-summary .admin-card-meta{font-size:11px!important;line-height:1.4!important;text-align:right!important;white-space:normal!important;margin:0!important;}
+@media(max-width:480px){.activity-admin-card .admin-card-top{grid-template-columns:minmax(0,1fr) 86px!important;gap:8px!important;}.activity-admin-card .admin-card-name{font-size:15px!important;}}
 </style>
 </body>
 
