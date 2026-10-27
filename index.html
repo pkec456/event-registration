@@ -2847,7 +2847,9 @@ header.subpage-fixed-header,
 .activity-management-filter{margin-bottom:12px}
 .activity-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .activity-filter-row .choice-grid{gap:8px}
-@media(max-width:600px){.activity-filter-row{grid-template-columns:1fr}.activity-filter-row .choice{min-height:42px}}
+.activity-filter-row .activity-filter-status{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.activity-filter-row .activity-filter-status .choice{min-width:0;padding:0 3px;white-space:nowrap;font-size:11px}
+@media(max-width:600px){.activity-filter-row{grid-template-columns:1fr}.activity-filter-row .activity-filter-status{grid-template-columns:repeat(4,minmax(0,1fr))}.activity-filter-row .activity-filter-status .choice{min-height:42px;padding:0 2px;font-size:10px}}
 </style>
 <style id="attendance-limit-style">
 .attendance-limit{display:inline-flex;align-items:center;gap:4px;}
