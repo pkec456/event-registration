@@ -5326,9 +5326,13 @@ async function init(){
         if(publicActivity) ensurePublicCountdown(publicActivity);
       }
     }else if(!userIsTyping){
-      // 管理者頁面不重繪，避免建立活動中的輸入資料被清空。
+      // 管理者頁面先同步最新雲端資料；首頁與出席率頁面需同步重算統計。
       await loadData();
       try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("簽到頁面設定同步失敗",e);}
+      if(activeTab==="admin" && !userIsTyping && ["home","attendance","attendance-person"].includes(adminPage)){
+        const adminContent=document.getElementById("tab-content");
+        if(adminContent) renderAdmin(adminContent);
+      }
     }
   },6000);
   refreshActivityListClocks();
