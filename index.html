@@ -5152,11 +5152,16 @@ function setupManualRegistrationPage(el){
 }
 
 function setupActivityManagementPage(el){
-  // 活動操作區：一次只展開一張；與簽到名單展開狀態分離。
-  el.querySelectorAll("[data-admin-actions-toggle]").forEach(btn=>{
-    btn.onclick=(ev)=>{
-      ev.preventDefault(); ev.stopPropagation();
+  // 活動操作區：使用容器事件委派，避免重繪後按鈕事件未綁定。
+  if(!el.dataset.adminActionToggleBound){
+    el.dataset.adminActionToggleBound="1";
+    el.addEventListener("click",(ev)=>{
+      const btn=ev.target.closest("[data-admin-actions-toggle]");
+      if(!btn || !el.contains(btn)) return;
+      ev.preventDefault();
+      ev.stopPropagation();
       const id=String(btn.getAttribute("data-admin-actions-toggle")||"");
+      if(!id) return;
       if(String(window.adminActionExpandedId||"")===id){
         window.adminActionExpandedId=null;
         if(String(window.adminAttendanceExpandedId||"")===id) window.adminAttendanceExpandedId=null;
@@ -5165,8 +5170,8 @@ function setupActivityManagementPage(el){
         window.adminAttendanceExpandedId=null;
       }
       renderAdmin(el);
-    };
-  });
+    },true);
+  }
   // 活動管理：查看／隱藏簽到名單
   el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
     btn.onclick=async(ev)=>{
