@@ -6197,28 +6197,36 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 
 <style id="activity-admin-actions-four-columns-final-fix">
-/* 最終覆寫：活動管理卡片四個操作按鈕固定同一排 */
-#app.admin-home-view .activity-admin-card .admin-actions,
-#app.admin-home-view .activity-admin-card .admin-actions.is-expanded,
-#app.admin-home-view .activity-admin-card .admin-actions.is-collapsed {
+/* 活動管理卡片：直接鎖定實際產生的 .activity-admin-card > .admin-actions，
+   不依賴 #app 是否帶有 admin-home-view class，也不受舊版手機 2 欄規則影響。 */
+.activity-admin-card > .admin-actions,
+.activity-admin-card > .admin-actions.is-expanded,
+.activity-admin-card > .admin-actions.is-collapsed {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  grid-auto-flow: column !important;
+  grid-auto-flow: row !important;
   gap: 5px !important;
   width: 100% !important;
+  box-sizing: border-box !important;
   margin-top: 8px !important;
 }
-#app.admin-home-view .activity-admin-card .admin-actions button {
+.activity-admin-card > .admin-actions > button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
   min-width: 0 !important;
   width: 100% !important;
   min-height: 48px !important;
+  box-sizing: border-box !important;
   padding: 5px 1px !important;
   font-size: 10px !important;
+  line-height: 1.2 !important;
   gap: 3px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
 }
-#app.admin-home-view .activity-admin-card .admin-actions button svg {
+.activity-admin-card > .admin-actions > button svg {
   width: 19px !important;
   height: 19px !important;
   flex: 0 0 19px !important;
