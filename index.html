@@ -3538,6 +3538,63 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   #app.admin-home-view .section-head > span{font-size:15px !important;}
 }
 
+
+/* V2.5 UI 配色微調：朱紅 × 香檳金；只調整圖示、按鈕與狀態色 */
+:root{
+  --accent:#a92f32;
+  --accent-soft:#fbefeb;
+  --primary:#a92f32;
+  --success:#25845a;
+  --warning:#b8872e;
+  --danger:#a92f32;
+}
+/* 管理首頁圖示：淡朱紅與香檳金，不更動尺寸或版面 */
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon,
+#app.admin-home-view .statistics-info-summary .metric-icon,
+#app.admin-home-view .cumulative-category-icon{
+  background:#f8efeb !important;
+  color:#a92f32 !important;
+}
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
+#app.admin-home-view .statistics-info-summary .metric-icon svg,
+#app.admin-home-view .cumulative-category-icon svg{
+  color:#a92f32 !important;
+  stroke:#a92f32 !important;
+}
+#app.admin-home-view .statistics-info-summary .top-attendance-metric .metric-icon{
+  background:#f7f0df !important;
+  color:#a98235 !important;
+}
+#app.admin-home-view .statistics-info-summary .top-attendance-metric .metric-icon svg{
+  color:#a98235 !important;
+  stroke:#a98235 !important;
+}
+/* 主要按鈕與選取狀態統一使用朱紅 */
+button.primary,
+.primary,
+.manual-return-save,
+.tabs button.active,
+.choice.selected{
+  background-color:#a92f32;
+  border-color:#a92f32;
+}
+button.primary:hover,
+.primary:hover,
+.manual-return-save:hover{
+  background-color:#922629;
+}
+/* 保留成功、關閉與警示的語意，僅調整為較沉穩色調 */
+.status.open,
+.history-status.present,
+.check,
+.officer-state{color:#25845a;}
+.status.future,
+.status.manual{color:#9b742b;background:#fbf4e4;}
+.history-status.absent{color:#b8872e;background:#fbf4e4;}
+.icon-btn.danger,
+.admin-actions button.danger,
+.danger-btn{color:#a92f32;}
+
 </style>
 
 
