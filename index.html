@@ -4981,7 +4981,6 @@ function renderAdmin(el){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
-    <button type="button" class="secondary" id="category-activities-back" style="width:100%;margin-bottom:12px"><i data-lucide="arrow-left"></i>返回管理首頁</button>
     <div class="activity-grid">${categoryActs.length?categoryActs.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-category-activity-open="${escapeHtml(a.id)}">
       <div class="activity-top">
         <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
@@ -5163,7 +5162,6 @@ function renderAdmin(el){
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
   el.querySelectorAll("[data-category-open]").forEach(btn=>btn.onclick=()=>{window.__adminSelectedActivityCategory=btn.dataset.categoryOpen||"";adminPage="category-activities";render();});
-  const categoryBack=document.getElementById("category-activities-back");if(categoryBack)categoryBack.onclick=()=>{adminPage="home";render();};
   el.querySelectorAll("[data-category-activity-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.categoryActivityOpen;activeTab="register";adminPage="home";render();});
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
