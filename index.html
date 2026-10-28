@@ -5990,6 +5990,8 @@ function renderAdminLock(el){
     if(b)b.disabled=true;
     try{
       await adminLogin(norm(u.value),p.value);
+      // 登入後先載入管理者完整資料，再顯示首頁，避免先用公開名單顯示舊統計數字。
+      await loadData();
       showToast("登入成功");
       render();
     }catch(e){
