@@ -3012,6 +3012,14 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   font-size:clamp(14px,4vw,20px);
   line-height:1.3;
 }
+#app.admin-home-view .top-attendance-marquee{width:100%;min-width:0;overflow:hidden;white-space:nowrap;line-height:1.35;}
+#app.admin-home-view .top-attendance-marquee-track{display:inline-flex;align-items:center;width:max-content;animation:topAttendanceMarqueeScroll 18s linear infinite;will-change:transform;}
+#app.admin-home-view .top-attendance-marquee-item{display:inline-flex;align-items:center;gap:4px;font-size:clamp(13px,3.4vw,17px);font-weight:700;}
+#app.admin-home-view .top-attendance-marquee-item strong{font-size:.82em;opacity:.75;}
+#app.admin-home-view .top-attendance-marquee-item em{font-size:.8em;font-style:normal;font-weight:600;opacity:.8;}
+#app.admin-home-view .top-attendance-marquee-separator{display:inline-block;opacity:.55;}
+@keyframes topAttendanceMarqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+#app.admin-home-view .top-attendance-marquee:hover .top-attendance-marquee-track{animation-play-state:paused;}
 /* 今日概況與累積統計合併為統計資訊 */
 #app.admin-home-view .statistics-info-summary{
   display:grid !important;
@@ -4935,6 +4943,9 @@ function renderAdmin(el){
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
+  const topAttendanceMarqueeNames=topAttendanceEligible.slice(0,3).map((r,i)=>({name:r.name,rate:Number(r.rate)||0,rank:i+1}));
+  const topAttendanceMarqueeItems=topAttendanceMarqueeNames.map(item=>`<span class="top-attendance-marquee-item"><strong>${item.rank}.</strong> ${escapeHtml(item.name)} <em>${item.rate}%</em></span>`).join('<span class="top-attendance-marquee-separator">　·　</span>');
+  const topAttendanceMarqueeTrack=topAttendanceMarqueeItems?`${topAttendanceMarqueeItems}<span class="top-attendance-marquee-separator">　·　</span>${topAttendanceMarqueeItems}`:"尚無出席資料";
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
   const openActivityCount=cumulativeActivities.filter(a=>!!a.open).length;
@@ -5037,8 +5048,8 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
-    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
+    <div class="top-attendance-marquee" aria-label="年度出席率前三名"><div class="top-attendance-marquee-track">${topAttendanceMarqueeTrack}</div></div>
+    <span id="top-attendance-rate">年度出席率前三名</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
