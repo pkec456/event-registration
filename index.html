@@ -3020,6 +3020,21 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   align-items:stretch !important;
   margin-bottom:14px;
 }
+/* 管理功能與簽到頁面設定合併為同一組橫向入口 */
+#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:10px !important;align-items:stretch !important;}
+#app.admin-home-view .admin-menu-grid > .admin-action{min-width:0 !important;min-height:104px !important;height:auto !important;padding:12px !important;border-radius:14px !important;box-sizing:border-box !important;}
+#app.admin-home-view .admin-menu-grid > .admin-square{align-items:center !important;justify-content:center !important;text-align:center !important;gap:7px !important;}
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon{width:34px !important;height:34px !important;margin:0 !important;flex:0 0 34px !important;border-radius:10px !important;}
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg{width:18px !important;height:18px !important;}
+#app.admin-home-view .admin-menu-grid > .admin-square strong{display:block !important;font-size:12px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
+#app.admin-home-view .admin-menu-grid > .signin-page-setting-tile{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;text-align:center !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy{min-width:0 !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{display:block !important;font-size:12px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy small{display:block !important;margin-top:3px !important;font-size:10px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle{min-width:0 !important;min-height:28px !important;padding:3px 7px !important;border-radius:8px !important;font-size:10px !important;gap:4px !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle svg{width:15px !important;height:15px !important;flex:0 0 15px !important;}
+@media(max-width:900px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}
+@media(max-width:520px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important}#app.admin-home-view .admin-menu-grid > .admin-action{min-height:100px !important;padding:10px !important}}
 #app.admin-home-view .statistics-info-summary > .metric{
   min-width:0 !important;
   box-sizing:border-box !important;
@@ -4950,17 +4965,6 @@ function renderAdmin(el){
 
 
 
-<div class="section-head"><h2>簽到頁面</h2><span>一般使用者顯示設定</span></div>
-<div class="form-block signin-page-setting-card">
-  <div class="signin-page-setting-row">
-    <div class="signin-page-setting-info">
-      <div class="field-hint">隱藏後，一般使用者看不到「簽到」按鈕與簽到頁面；管理者登入後仍可看到。</div>
-    </div>
-    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle">
-      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"隱藏":"開啟"}</span>
-    </button>
-  </div>
-</div>
 <div class="section-head statistics-info-head"><h2>統計資訊</h2><span>即時資料</span></div>
 <div class="admin-summary statistics-info-summary">
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div>
@@ -4975,7 +4979,7 @@ function renderAdmin(el){
 </div>
 <div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
 <div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
-<div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>管理功能與簽到設定</h2><span>常用操作</span></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>活動簽到</strong>
@@ -4996,6 +5000,13 @@ function renderAdmin(el){
     <span class="menu-icon"><i data-lucide="users"></i></span>
     <strong>幹部管理</strong>
   </button>`:""}
+  <div class="admin-action admin-square signin-page-setting-tile">
+    <span class="menu-icon"><i data-lucide="monitor-check"></i></span>
+    <div class="signin-tile-copy"><strong>簽到頁面</strong><small>一般使用者顯示設定</small></div>
+    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
+      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"隱藏":"開啟"}</span>
+    </button>
+  </div>
 </div>`;
   if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
