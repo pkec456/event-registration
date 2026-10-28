@@ -5164,7 +5164,7 @@ function renderAdmin(el){
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
   el.querySelectorAll("[data-category-open]").forEach(btn=>btn.onclick=()=>{window.__adminSelectedActivityCategory=btn.dataset.categoryOpen||"";adminPage="category-activities";render();});
   const categoryBack=document.getElementById("category-activities-back");if(categoryBack)categoryBack.onclick=()=>{adminPage="home";render();};
-  el.querySelectorAll("[data-category-activity-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.categoryActivityOpen;render();});
+  el.querySelectorAll("[data-category-activity-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.categoryActivityOpen;activeTab="register";adminPage="home";render();});
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
