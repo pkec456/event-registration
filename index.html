@@ -148,8 +148,16 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .monthly-chart-y-label{fill:#888;font-size:9px}
 .monthly-chart-x-label{fill:#777;font-size:9px}
 .monthly-chart-line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.monthly-chart-point{fill:#fff;stroke:var(--accent);stroke-width:2}
+.monthly-chart-point{fill:#fff;stroke:var(--accent);stroke-width:2;cursor:pointer;pointer-events:all}
+.monthly-chart-point:focus{stroke-width:3;outline:none}
 .monthly-chart-footnote{padding:0 4px;color:#999;font-size:10px}
+.monthly-chart-detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.monthly-chart-detail[hidden]{display:none}
+.monthly-chart-detail-title{font-size:14px;font-weight:900;margin-bottom:8px}
+.monthly-chart-activity{padding:10px 0;border-bottom:1px solid var(--line)}
+.monthly-chart-activity:last-child{border-bottom:0}
+.monthly-chart-activity-name{font-size:13px;font-weight:800;overflow-wrap:anywhere}
+.monthly-chart-activity-meta{font-size:11px;color:var(--muted);margin-top:3px}
 .admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}
 .metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}
@@ -5169,7 +5177,7 @@ function renderAdmin(el){
     monthlyChartGrid+
     '<line x1="30" y1="28" x2="30" y2="140" class="monthly-chart-axis"/><line x1="30" y1="140" x2="330" y2="140" class="monthly-chart-axis"/>' +
     '<path d="'+monthlyChartPath+'" class="monthly-chart-line"/>' +
-    monthlyChartPoints.map(point=>'<circle cx="'+point.x.toFixed(1)+'" cy="'+point.y.toFixed(1)+'" r="3.2" class="monthly-chart-point"><title>'+point.month+' 月：'+point.value+' 場</title></circle>').join("")+
+    monthlyChartPoints.map(point=>'<circle cx="'+point.x.toFixed(1)+'" cy="'+point.y.toFixed(1)+'" r="4" class="monthly-chart-point" data-month-point="'+point.month+'" tabindex="0" role="button" aria-label="查看'+point.month+'月活動，共'+point.value+'場"><title>'+point.month+' 月：'+point.value+' 場（點擊查看）</title></circle>').join("")+
     monthlyChartPoints.map(point=>'<text x="'+point.x.toFixed(1)+'" y="158" class="monthly-chart-x-label" text-anchor="middle">'+point.month+'月</text>').join("")+
     '</svg>';
   const activityCategories=["廟","禮聘","隊","北港進香","福宴"];
@@ -5270,7 +5278,8 @@ function renderAdmin(el){
 <div class="section-head monthly-chart-head"><h2>每月活動場次</h2><span>${monthlyChartYear} 年</span></div>
 <div class="monthly-chart-card">
   <div class="monthly-chart-wrap">${monthlyChartSvg}</div>
-  <div class="monthly-chart-footnote">依活動舉辦日期統計；不含已隱藏活動。</div>
+  <div class="monthly-chart-footnote">點擊圖上的月份資料點，可查看該月活動清單。</div>
+  <div id="monthly-chart-detail" class="monthly-chart-detail" hidden></div>
 </div>
 <div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>點擊查看</span></div>
 <div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button>`).join("")}</div>
@@ -5466,6 +5475,23 @@ function renderAdmin(el){
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
   el.querySelectorAll("[data-category-open]").forEach(btn=>btn.onclick=()=>{window.__adminSelectedActivityCategory=btn.dataset.categoryOpen||"";adminPage="category-activities";render();});
+  el.querySelectorAll("[data-month-point]").forEach(point=>{
+    const showMonthActivities=()=>{
+      const month=Number(point.getAttribute("data-month-point"));
+      const detail=document.getElementById("monthly-chart-detail");
+      if(!detail||!Number.isInteger(month)||month<1||month>12)return;
+      const monthActs=cumulativeActivities.filter(a=>{
+        const dateKey=String(a.date||"").slice(0,10);
+        const match=dateKey.match(/^(\\d{4})-(\\d{2})-\\d{2}$/);
+        return match&&Number(match[1])===monthlyChartYear&&Number(match[2])===month;
+      }).sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+      detail.hidden=false;
+      detail.innerHTML='<div class="monthly-chart-detail-title">'+month+' 月活動（'+monthActs.length+' 場）</div>'+
+        (monthActs.length?monthActs.map(a=>'<div class="monthly-chart-activity"><div class="monthly-chart-activity-name">'+escapeHtml(a.name||"未命名活動")+'</div><div class="monthly-chart-activity-meta">'+escapeHtml(String(a.date||"").slice(0,10)||"日期未設定")+(a.eventCategory?' · '+escapeHtml(a.eventCategory):"")+'</div></div>').join(""):'<div class="empty" style="padding:12px 0">本月沒有活動</div>');
+    };
+    point.addEventListener("click",showMonthActivities);
+    point.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();showMonthActivities();}});
+  });
 
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
