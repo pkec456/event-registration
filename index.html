@@ -4963,23 +4963,7 @@ function renderAdmin(el){
        </div>`}
 </div>
 
-
-
-<div class="section-head statistics-info-head"><h2>統計資訊</h2><span>即時資料</span></div>
-<div class="admin-summary statistics-info-summary">
-  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div>
-  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
-  <div class="metric top-attendance-metric" id="top-attendance-metric">
-    <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
-    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
-  </div>
-  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
-  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
-</div>
-<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
-<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
-<div class="section-head"><h2>管理功能與簽到設定</h2><span>常用操作</span></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>管理功能</h2><span>常用操作</span></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>活動簽到</strong>
@@ -5001,13 +4985,30 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button>`:""}
   <div class="admin-action admin-square signin-page-setting-tile">
-    <span class="menu-icon"><i data-lucide="monitor-check"></i></span>
     <div class="signin-tile-copy"><strong>簽到頁面</strong></div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"隱藏":"開啟"}</span>
     </button>
   </div>
-</div>`;
+</div>
+
+
+
+<div class="section-head statistics-info-head"><h2>統計資訊</h2><span>即時資料</span></div>
+<div class="admin-summary statistics-info-summary">
+  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
+  <div class="metric top-attendance-metric" id="top-attendance-metric">
+    <div class="metric-icon"><i data-lucide="trophy"></i></div>
+    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
+    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
+  </div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
+</div>
+<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
+<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
+`;
   if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
