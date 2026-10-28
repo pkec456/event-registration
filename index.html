@@ -155,8 +155,6 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .category-activity-admin-card{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
 .category-activity-admin-card:active{transform:scale(.99)}
 .category-activity-admin-card .admin-card-status{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.category-activity-admin-card .category-activity-open-hint{display:flex;justify-content:flex-end;color:#999;margin-top:6px}
-.category-activity-admin-card .category-activity-open-hint svg{width:18px;height:18px}
 .activity-admin-card.hidden{opacity:.65}
 .admin-card-top{display:flex;gap:10px;align-items:flex-start}
 .admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}
@@ -4996,7 +4994,6 @@ function renderAdmin(el){
         <div class="admin-card-summary">
           <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
           <div class="admin-card-meta">${(state.registrations[a.id]||[]).length} 人簽到</div>
-          <div class="category-activity-open-hint"><i data-lucide="chevron-right"></i></div>
         </div>
       </div>
     </div>`).join(""):`<div class="block"><div class="empty">此類別目前沒有活動</div></div>`}</div>`;
