@@ -3041,6 +3041,33 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   box-sizing:border-box !important;
 }
 #app.admin-home-view .statistics-info-summary > .metric > b{overflow-wrap:anywhere}
+/* 管理首頁卡片視覺統一，提升輔助文字可讀性 */
+#app.admin-home-view .admin-menu-grid > .admin-action,
+#app.admin-home-view .statistics-info-summary > .metric,
+#app.admin-home-view .cumulative-category-card{
+  border-radius:18px !important;
+  border:1px solid var(--line) !important;
+  box-sizing:border-box !important;
+}
+#app.admin-home-view .statistics-info-summary > .metric > span{
+  display:block;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  overflow-wrap:anywhere;
+}
+#app.admin-home-view .cumulative-category-card > strong{
+  font-size:12px !important;
+  line-height:1.4 !important;
+}
+#app.admin-home-view .section-head > span{
+  font-size:12px !important;
+  line-height:1.4 !important;
+}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{
+  font-size:12px !important;
+  line-height:1.3 !important;
+}
+
 @media(max-width:760px){
   #app.admin-home-view .statistics-info-summary{
     grid-template-columns:repeat(2,minmax(0,1fr)) !important;
