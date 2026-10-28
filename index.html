@@ -152,6 +152,11 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .admin-head .actions{display:flex;gap:7px}
 .activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}
+.category-activity-admin-card{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.category-activity-admin-card:active{transform:scale(.99)}
+.category-activity-admin-card .admin-card-status{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.category-activity-admin-card .category-activity-open-hint{display:flex;justify-content:flex-end;color:#999;margin-top:6px}
+.category-activity-admin-card .category-activity-open-hint svg{width:18px;height:18px}
 .activity-admin-card.hidden{opacity:.65}
 .admin-card-top{display:flex;gap:10px;align-items:flex-start}
 .admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}
@@ -4981,11 +4986,18 @@ function renderAdmin(el){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
-    <div class="activity-grid">${categoryActs.length?categoryActs.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-category-activity-open="${escapeHtml(a.id)}">
-      <div class="activity-top">
-        <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
-        <div class="activity-main"><div class="event-category-label">${escapeHtml(a.eventCategory||"")}</div><div class="activity-name">${escapeHtml(a.name)}</div><div class="activity-meta">${fmtDate(a.date)}</div></div>
-        <div class="activity-right"><div class="activity-list-rate-slot">${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}</div><div class="activity-list-countdown-slot">${activityStatusClock(a)}</div><span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span><span class="arrow"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="chevron-right"></i></span></div>
+    <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card" data-category-activity-open="${escapeHtml(a.id)}" role="button" tabindex="0" aria-label="查看活動：${escapeHtml(a.name)}">
+      <div class="admin-card-top">
+        <div class="admin-card-info">
+          <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
+          <div class="admin-card-subtitle-block"><div class="admin-card-meta admin-card-date">${fmtDate(a.date)}</div><div class="admin-card-meta admin-card-creator">建立者：${escapeHtml(a.createdBy||"—")}</div></div>
+          <div class="admin-card-status"><span class="status ${a.open?"open":"closed"}"><span class="dot"></span>${a.open?"開放中":"已停止"}</span>${activityStatusClock(a)}</div>
+        </div>
+        <div class="admin-card-summary">
+          <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
+          <div class="admin-card-meta">${(state.registrations[a.id]||[]).length} 人簽到</div>
+          <div class="category-activity-open-hint"><i data-lucide="chevron-right"></i></div>
+        </div>
       </div>
     </div>`).join(""):`<div class="block"><div class="empty">此類別目前沒有活動</div></div>`}</div>`;
   }
