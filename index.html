@@ -2614,12 +2614,6 @@ body{overflow-y:scroll;}
   }
 }
 
-/* ===== CSS 區段 05｜v21-header-scroll-stability ===== */
-/* V2.1：固定垂直捲軸空間，避免查詢頁內容高度改變造成 Header 位移 */
-html{
-  overflow-y:scroll;
-}
-
 /* ===== CSS 區段 06｜v21-admin-header-scroll-stability ===== */
 /* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
 html{
@@ -2662,24 +2656,6 @@ header.subpage-fixed-header,
 .signin-status-count-row > strong{
   margin-left:auto !important;
   white-space:nowrap !important;
-}
-
-/* ===== CSS 區段 09｜v21-overview-admin-icons-32px-corrected ===== */
-/* V2.1：今日概況／管理功能 Icon 統一 32×32 */
-#app.admin-home-view .metric-icon svg,
-#app.admin-home-view .admin-action .menu-icon svg,
-#app.admin-home-view .admin-square .menu-icon svg{
-  width:32px !important;
-  height:32px !important;
-}
-
-/* ===== CSS 區段 10｜v21-overview-admin-icon-frame-40 ===== */
-/* V2.1：今日概況／管理功能 Icon 外框統一 40×40 */
-#app.admin-home-view .metric-icon,
-#app.admin-home-view .admin-action .menu-icon,
-#app.admin-home-view .admin-square .menu-icon{
-  width:40px !important;
-  height:40px !important;
 }
 
 /* ===== CSS 區段 11｜v211-overview-admin-icons-unified ===== */
@@ -2877,42 +2853,6 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-icon svg.activity-list-icon.closed-icon,
 .activity-right svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
 
-/* ===== CSS 區段 21｜activity-list-fixed-icon-columns ===== */
-/* 活動列表：整個右側固定欄位，讓所有卡片的 %／倒數／人數／箭頭完全對齊 */
-.activity-right{
-  display:grid !important;
-  grid-template-columns:32px 42px 70px 22px !important;
-  width:190px !important;
-  min-width:190px !important;
-  max-width:190px !important;
-  flex:0 0 190px !important;
-  align-items:center !important;
-  justify-content:end !important;
-  column-gap:8px !important;
-  box-sizing:border-box !important;
-}
-.activity-list-rate-slot{
-  width:32px !important;
-  height:32px !important;
-  min-width:32px !important;
-  min-height:32px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-.activity-list-countdown-slot{
-  width:42px !important;
-  height:32px !important;
-  min-width:42px !important;
-  min-height:32px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-.activity-list-countdown-slot .activity-status-clock{margin:0 !important;}
-.activity-right .count{grid-column:3 !important;justify-self:end !important;width:70px !important;text-align:right !important;box-sizing:border-box !important;}
-.activity-right .arrow{grid-column:4 !important;justify-self:end !important;width:22px !important;}
-
 /* ===== CSS 區段 22｜activity-list-attendance-rate-style ===== */
 /* 出席率百分比：列表與簽到頁統一為固定正方形 */
 .activity-list-attendance-rate,
@@ -2980,25 +2920,6 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .officer-input + .primary{
   margin-top:10px !important;
 }
-
-/* ===== CSS 區段 25｜v23-activity-list-right-layout ===== */
-/* V2.4：活動列表右側欄位固定對齊，但不再浪費 190px 空間 */
-.activity-right{
-  display:grid !important;
-  grid-template-columns:32px 42px auto 22px !important;
-  align-items:center !important;
-  justify-content:end !important;
-  column-gap:8px !important;
-  width:auto !important;
-  min-width:0 !important;
-  max-width:none !important;
-  flex:0 0 auto !important;
-}
-.activity-list-rate-slot{width:32px !important;height:32px !important;min-width:32px !important;min-height:32px !important;}
-.activity-list-countdown-slot{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
-.activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;margin:0 !important;}
-.activity-right .count{grid-column:3 !important;width:auto !important;min-width:48px !important;text-align:right !important;white-space:nowrap !important;}
-.activity-right .arrow{grid-column:4 !important;width:22px !important;justify-self:end !important;}
 
 /* ===== CSS 區段 26｜signin-page-setting-ui ===== */
 /* 簽到頁面：沿用系統「活動管理」按鈕語言，不另造一套視覺。 */
@@ -3631,42 +3552,6 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
     flex:0 0 50px !important;
     border-radius:15px !important;
   }
-}
-
-/* ===== CSS 區段 38｜activity-admin-actions-four-columns-final-fix ===== */
-/* 活動管理卡片：直接鎖定實際產生的 .activity-admin-card > .admin-actions，
-   不依賴 #app 是否帶有 admin-home-view class，也不受舊版手機 2 欄規則影響。 */
-.activity-admin-card > .admin-actions,
-.activity-admin-card > .admin-actions.is-expanded,
-.activity-admin-card > .admin-actions.is-collapsed {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  grid-auto-flow: row !important;
-  gap: 5px !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  margin-top: 8px !important;
-}
-.activity-admin-card > .admin-actions > button {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  min-height: 48px !important;
-  box-sizing: border-box !important;
-  padding: 5px 1px !important;
-  font-size: 10px !important;
-  line-height: 1.2 !important;
-  gap: 3px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-}
-.activity-admin-card > .admin-actions > button svg {
-  width: 19px !important;
-  height: 19px !important;
-  flex: 0 0 19px !important;
 }
 
 /* ===== CSS 區段 39｜activity-admin-actions-fixed-row ===== */
