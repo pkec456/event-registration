@@ -4442,14 +4442,14 @@ function render(){
         ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
       </div>
       </header>
-      <nav class="tabs home-tabs">
-        ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
+      ${signinPageVisible?`<nav class="tabs home-tabs">
+        <button data-tab="register" class="${activeTab==='register'?'active':''}">
           <i data-lucide="check"></i>簽到
         </button>
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
           <i data-lucide="search"></i>查詢
-        </button>`:""}
-      </nav>
+        </button>
+      </nav>`:""}
       <div id="tab-content"></div>`;
   }else{
     const queryHomeMode=activeTab==="query" && !signinPageVisible;
