@@ -5061,7 +5061,7 @@ function renderAdmin(el){
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
     <div class="top-attendance-slideshow" aria-label="年度出席率前三組">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b><span class="top-attendance-slide-detail">${item.rate}% 出席率</span></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
-    <span id="top-attendance-rate">年度出席率前三名</span>
+    <span id="top-attendance-rate">高出席率</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
