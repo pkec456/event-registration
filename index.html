@@ -3354,7 +3354,7 @@ async function setEventCategoryRemote(activityId, eventCategory){
   return data;
 }
 function eventCategoryButtons(selected="",prefix="event-category"){
-  return `<div class="field"><label class="field-label">活動分類</label><div class="choice-grid four">${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<button type="button" class="choice ${selected===category?"selected":""}" data-event-category="${category}" data-event-category-prefix="${prefix}">${category}</button>`).join("")}</div></div>`;
+  return `<div class="field event-category-field"><label class="field-label">活動分類</label><div class="choice-grid four event-category-choices">${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<button type="button" class="choice ${selected===category?"selected":""}" data-event-category="${category}" data-event-category-prefix="${prefix}">${category}</button>`).join("")}</div></div>`;
 }
 async function setActivityTypeRemote(activityId, activityType){
   const session=getAdminSession();
@@ -6340,3 +6340,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   }
 }
 </style>
+
+
+/* 活動分類按鈕字級：只調整建立／編輯活動分類，不影響其他 choice 按鈕 */
+.event-category-field .event-category-choices > .choice{font-size:16px}
