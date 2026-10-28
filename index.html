@@ -3006,13 +3006,6 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   min-width:0;
   box-sizing:border-box;
 }
-#app.admin-home-view .top-attendance-marquee{width:100%;min-width:0;overflow:hidden;white-space:nowrap;margin:2px 0 4px;}
-#app.admin-home-view .top-attendance-marquee-track{display:inline-flex;align-items:center;width:max-content;gap:0;white-space:nowrap;animation:top-attendance-marquee-scroll 18s linear infinite;will-change:transform;}
-#app.admin-home-view .top-attendance-marquee-track > span:not(.top-attendance-separator){display:inline-block;font-size:clamp(14px,4vw,20px);line-height:1.3;font-weight:900;}
-#app.admin-home-view .top-attendance-separator{font-size:13px;color:#888;}
-#app.admin-home-view .top-attendance-marquee:hover .top-attendance-marquee-track{animation-play-state:paused;}
-@keyframes top-attendance-marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){#app.admin-home-view .top-attendance-marquee-track{animation:none !important;}}
 #app.admin-home-view .top-attendance-name{
   display:block;
   overflow-wrap:anywhere;
@@ -4940,8 +4933,8 @@ function renderAdmin(el){
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
   // 今日概況沿用 V2.3：開放中活動、今日簽到紀錄，以及排除隊長後的年度最高出席率。
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
-  const topAttendanceNames=topAttendanceEligible.slice(0,3).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  const topAttendanceMarqueeHtml=topAttendanceNames.length?topAttendanceNames.concat(topAttendanceNames).map((r,i)=>`<span>${i%topAttendanceNames.length+1}. ${escapeHtml(r.name)} ${r.rate}%</span>`).join('<span class="top-attendance-separator">　·　</span>'):"—";
+  const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
+  const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
   const openActivityCount=cumulativeActivities.filter(a=>!!a.open).length;
@@ -5044,10 +5037,8 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-marquee" aria-label="前三名出席率">
-      <div class="top-attendance-marquee-track">${topAttendanceMarqueeHtml}</div>
-    </div>
-    <span id="top-attendance-rate">${topAttendanceNames.length?"前三名出席率":"尚無出席資料"}</span>
+    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
+    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
