@@ -4986,7 +4986,7 @@ function renderAdmin(el){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
-    <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card" data-category-activity-open="${escapeHtml(a.id)}" role="button" tabindex="0" aria-label="查看活動：${escapeHtml(a.name)}">
+    <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card">
       <div class="admin-card-top">
         <div class="admin-card-info">
           <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
@@ -5174,7 +5174,7 @@ function renderAdmin(el){
   const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
   el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
   el.querySelectorAll("[data-category-open]").forEach(btn=>btn.onclick=()=>{window.__adminSelectedActivityCategory=btn.dataset.categoryOpen||"";adminPage="category-activities";render();});
-  el.querySelectorAll("[data-category-activity-open]").forEach(row=>{const openCategoryActivity=()=>{openEventId=row.dataset.categoryActivityOpen;activeTab="register";adminPage="home";render();};row.onclick=openCategoryActivity;row.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openCategoryActivity();}};});
+
   const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
   const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
   const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
