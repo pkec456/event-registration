@@ -9,6 +9,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.4</title>
 <style>
+
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
   --accent:#c9141b; --accent-soft:#fff0f0; --success:#22a35a; --warning:#e59a13; --danger:#b42318;
@@ -2471,8 +2472,9 @@ body .app-header:not(.home-header){
     gap:6px !important;
   }
 }
-</style>
-<style id="remove-legacy-subpage-back">
+
+
+
 /* 舊子頁返回鍵：直接移除，不佔版面空間 */
 .child-view .back,
 .subpage-view .back,
@@ -2484,8 +2486,9 @@ body .app-header:not(.home-header){
 .subpage-view .subpage-back {
   display:none !important;
 }
-</style>
-<style id="v21-final-header-alignment">
+
+
+
 /* ===== V2.1 FINAL HEADER ALIGNMENT ===== */
 .top.home-fixed-header,.subpage-fixed-header{position:sticky!important;top:0!important;z-index:100!important;width:100%!important;height:58px!important;min-height:58px!important;max-height:58px!important;padding:8px 0!important;margin:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;align-items:center!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important}
 .top.home-fixed-header .home-header-left-slot{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;visibility:visible!important;display:flex!important;align-items:center!important;justify-content:flex-start!important}
@@ -2496,9 +2499,9 @@ body .app-header:not(.home-header){
 .top.home-fixed-header .top-admin-access svg,.top.home-fixed-header .top-admin-logout svg,.subpage-fixed-header .top-admin-access svg,.subpage-fixed-header .top-admin-logout svg{width:20px!important;height:20px!important}
 .subpage-fixed-header .subpage-back-top{grid-column:1!important;grid-row:1!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;margin:0!important;padding:0!important;align-self:center!important;justify-self:start!important}
 @media(max-width:430px){.top.home-fixed-header,.subpage-fixed-header{height:58px!important;min-height:58px!important;max-height:58px!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;padding:8px 0!important}}
-</style>
 
-<style id="v21-header-single-geometry-fix">
+
+
 /* V2.1: 所有頁面使用完全相同的 Header 座標，避免切換時標題位移 */
 html,body{
   width:100%;
@@ -2613,17 +2616,16 @@ body{overflow-y:scroll;}
     padding:8px 0 !important;
   }
 }
-</style>
 
-<style id="v21-header-scroll-stability">
+
+
 /* V2.1：固定垂直捲軸空間，避免查詢頁內容高度改變造成 Header 位移 */
 html{
   overflow-y:scroll;
 }
-</style>
 
 
-<style id="v21-admin-header-scroll-stability">
+
 /* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
 html{
   overflow-y:scroll;
@@ -2631,10 +2633,9 @@ html{
 body{
   overflow-y:scroll;
 }
-</style>
 
 
-<style id="v21-fixed-header">
+
 /* V2.1：Header 改為固定定位，避免切換首頁／查詢／管理時跳動 */
 header.top,
 header.subpage-fixed-header,
@@ -2653,10 +2654,9 @@ header.subpage-fixed-header,
 #app{
   padding-top:74px !important;
 }
-</style>
 
 
-<style id="v21-signin-status-count-final">
+
 /* V2.1：簽到頁「開放狀態／人數」固定左右排列，僅調整這一列 */
 .signin-status-count-row{
   display:flex !important;
@@ -2670,9 +2670,9 @@ header.subpage-fixed-header,
   margin-left:auto !important;
   white-space:nowrap !important;
 }
-</style>
 
-<style id="v21-overview-admin-icons-32px-corrected">
+
+
 /* V2.1：今日概況／管理功能 Icon 統一 32×32 */
 #app.admin-home-view .metric-icon svg,
 #app.admin-home-view .admin-action .menu-icon svg,
@@ -2680,10 +2680,9 @@ header.subpage-fixed-header,
   width:32px !important;
   height:32px !important;
 }
-</style>
 
 
-<style id="v21-overview-admin-icon-frame-40">
+
 /* V2.1：今日概況／管理功能 Icon 外框統一 40×40 */
 #app.admin-home-view .metric-icon,
 #app.admin-home-view .admin-action .menu-icon,
@@ -2691,10 +2690,9 @@ header.subpage-fixed-header,
   width:40px !important;
   height:40px !important;
 }
-</style>
 
 
-<style id="v211-overview-admin-icons-unified">
+
 /* V2.1.1：今日概況／管理功能 Icon 完全統一 */
 #app.admin-home-view .metric-icon,
 #app.admin-home-view .admin-square .menu-icon{
@@ -2720,10 +2718,9 @@ header.subpage-fixed-header,
   margin:0 !important;
   flex:0 0 32px !important;
 }
-</style>
 
 
-<style id="v211-admin-activity-rearrange">
+
 /* V2.1.1：管理活動列表重新排列；不改功能、不縮放其他區塊 */
 #app.admin-home-view .activity-admin-card .admin-card-top{
   align-items:center !important;
@@ -2741,24 +2738,22 @@ header.subpage-fixed-header,
 #app.admin-home-view .activity-admin-card .stat-row span{
   white-space:nowrap !important;
 }
-</style>
-<style id="admin-activity-hide-status-notes">
+
+
+
 .activity-admin-card .admin-card-status .status.closed{
   display:none !important;
 }
-</style>
 
 
-<style id="css-cleanup-final">
+
 /* ===== CSS 統一修正版：僅統一使用者指定文字尺寸，不改變其他功能 ===== */
 .form-title{font-size:18px!important;line-height:1.25!important;}
 .field-label{font-size:18px!important;line-height:1.25!important;}
 .section-head h2{font-size:18px!important;line-height:1.25!important;}
-</style>
 
 
 
-<style id="bottom-signin-query-unified-final">
 /* 底部「簽到／查詢」唯一統一樣式 */
 .home-tabs button{
   width:100% !important;
@@ -2819,10 +2814,9 @@ header.subpage-fixed-header,
 .home-tabs button.active::after{
   display:none !important;
 }
-</style>
 
 
-<style id="manual-registration-ui">
+
 .manual-register-list{margin-top:8px}
 .manual-register-list .list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
 .manual-register-list .list-row:last-child{border-bottom:0}
@@ -2840,10 +2834,9 @@ header.subpage-fixed-header,
 .manual-activity-summary .announcement-edit{margin-left:auto;flex:0 0 auto}
 .manual-activity-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 @media(max-width:520px){.manual-activity-actions{grid-template-columns:1fr 1fr}}
-</style>
 
 
-<style id="activity-management-filter-ui">
+
 /* 活動管理篩選：欄位自適應，不固定按鈕寬度或四等分欄位 */
 .activity-management-filter{margin-bottom:12px}
 .activity-filter-row{display:block;width:100%}
@@ -2875,19 +2868,23 @@ header.subpage-fixed-header,
     font-size:14px !important;
   }
 }
-</style>
-<style id="attendance-limit-style">
+
+
+
 .attendance-limit{display:inline-flex;align-items:center;gap:4px;}
 .attendance-limit::before{content:"";width:7px;height:7px;border-radius:50%;background:#f2c94c;display:inline-block;}
 .status.attendance-limited{background:#f2c94c !important;color:#5a4500 !important;border-color:#d8ad2b !important;}
 .status.attendance-limited .dot{background:#8a6d00 !important;}
-</style>
-<style id="activity-name-status-svg-style">
+
+
+
 .activity-status-all-icon{width:22px;height:22px;stroke-width:2.4;}
 .activity-status-all-icon.open-icon{color:#2e9b57!important;stroke:#2e9b57!important;}
 .activity-status-all-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
 .activity-status-all-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
-</style><style id="activity-list-existing-icons-style">
+
+
+
 /* 活動列表原有 SVG：最終顏色只由該活動狀態決定 */
 svg.activity-list-icon.open-icon{color:#2e9b57!important;stroke:#2e9b57!important;}
 svg.activity-list-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
@@ -2898,7 +2895,9 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-right svg.activity-list-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
 .activity-icon svg.activity-list-icon.closed-icon,
 .activity-right svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
-</style><style id="activity-list-fixed-icon-columns">
+
+
+
 /* 活動列表：整個右側固定欄位，讓所有卡片的 %／倒數／人數／箭頭完全對齊 */
 .activity-right{
   display:grid !important;
@@ -2933,7 +2932,9 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-list-countdown-slot .activity-status-clock{margin:0 !important;}
 .activity-right .count{grid-column:3 !important;justify-self:end !important;width:70px !important;text-align:right !important;box-sizing:border-box !important;}
 .activity-right .arrow{grid-column:4 !important;justify-self:end !important;width:22px !important;}
-</style><style id="activity-list-attendance-rate-style">
+
+
+
 /* 出席率百分比：列表與簽到頁統一為固定正方形 */
 .activity-list-attendance-rate,
 .signin-attendance-rate{
@@ -2956,8 +2957,9 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 }
 .activity-list-attendance-rate.closed-attendance-rate,
 .signin-attendance-rate.closed-attendance-rate{background:#171717 !important;color:#fff !important;}
-</style>
-<style id="signin-attendance-rate-hero-layout">
+
+
+
 .checkin-hero-actions{
   display:flex;
   align-items:center;
@@ -2988,9 +2990,9 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 @media(max-width:430px){
   .checkin-hero-actions{gap:6px}
 }
-</style>
 
-<style id="officer-form-spacing-fix">
+
+
 /* 幹部管理：輸入欄位與按鈕增加間距 */
 .admin-edit-box .edit-code-input{
   margin-bottom:10px !important;
@@ -3001,8 +3003,9 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .officer-input + .primary{
   margin-top:10px !important;
 }
-</style>
-<style id="v23-activity-list-right-layout">
+
+
+
 /* V2.4：活動列表右側欄位固定對齊，但不再浪費 190px 空間 */
 .activity-right{
   display:grid !important;
@@ -3020,7 +3023,796 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;margin:0 !important;}
 .activity-right .count{grid-column:3 !important;width:auto !important;min-width:48px !important;text-align:right !important;white-space:nowrap !important;}
 .activity-right .arrow{grid-column:4 !important;width:22px !important;justify-self:end !important;}
+
+
+
+/* 簽到頁面：沿用系統「活動管理」按鈕語言，不另造一套視覺。 */
+.signin-page-setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.signin-page-setting-info{
+  min-width:0;
+  flex:1 1 auto;
+}
+.signin-page-setting-info strong{
+  display:block;
+  margin:0;
+  font-size:14px;
+  line-height:1.4;
+  font-weight:900;
+  color:var(--ink);
+}
+.signin-page-setting-info .field-hint{
+  margin-top:5px;
+}
+.signin-page-toggle{
+  flex:0 0 auto;
+  min-width:92px;
+  min-height:42px;
+  padding:5px 10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f7f7f5;
+  font-size:11px;
+  font-weight:850;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.signin-page-toggle svg{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+}
+.signin-page-toggle.is-on{
+  color:var(--success,#16a34a);
+}
+.signin-page-toggle.is-off{
+  color:var(--ink);
+}
+.signin-page-toggle:hover{
+  background:#efefec;
+}
+.signin-page-toggle:focus-visible{
+  outline:2px solid rgba(201,20,27,.25);
+  outline-offset:2px;
+}
+@media (max-width:420px){
+  .signin-page-setting-row{align-items:flex-start;}
+  .signin-page-toggle{min-width:84px;}
+}
+
+
+
+/* V2.4 活動管理卡片唯一排版規則：A 方案資訊層級 + 單卡操作展開 */
+#app.admin-home-view .activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px;box-sizing:border-box}
+#app.admin-home-view .activity-admin-card.hidden{opacity:.65}
+#app.admin-home-view .activity-admin-card .admin-card-top{display:grid;grid-template-columns:minmax(0,1fr) 108px;align-items:start;gap:12px;padding:0;margin:0;position:static}
+#app.admin-home-view .activity-admin-card .admin-card-info{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;width:auto;height:auto;min-height:0;overflow:visible;text-align:left;position:static}
+#app.admin-home-view .activity-admin-card .admin-card-title-block,#app.admin-home-view .activity-admin-card .admin-card-subtitle-block{display:block;position:static;float:none;clear:both;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;overflow:visible;transform:none}
+#app.admin-home-view .activity-admin-card .admin-card-name{display:block;position:static;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;font-size:16px;font-weight:900;line-height:1.4;white-space:normal;overflow:visible;overflow-wrap:anywhere;word-break:normal;text-align:left;transform:none}
+#app.admin-home-view .activity-admin-card .admin-card-subtitle-block{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+#app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{display:block;position:static;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;color:#888;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;overflow:visible;text-align:left;transform:none}
+#app.admin-home-view .activity-admin-card .admin-card-status{margin-top:0}
+#app.admin-home-view .activity-admin-card .admin-card-summary{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;gap:6px;position:static;width:108px;min-width:0;max-width:108px;height:auto;margin:0;padding:0;text-align:right;transform:none}
+#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-meta{display:block;width:100%;height:auto;min-height:0;margin:0;padding:0;font-size:12px;font-weight:850;line-height:1.4;color:#171717;white-space:normal;overflow-wrap:anywhere;text-align:right}
+#app.admin-home-view .activity-admin-card .admin-actions-toggle{width:100%;min-height:38px;margin-top:12px;padding:8px 2px 0;display:flex;align-items:center;gap:8px;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;color:#555;font-size:12px;font-weight:800;text-align:left}
+#app.admin-home-view .activity-admin-card .admin-actions-toggle-label{margin-left:auto;color:#171717}
+#app.admin-home-view .activity-admin-card .admin-actions-toggle svg{width:16px;height:16px;flex:0 0 16px}
+#app.admin-home-view .activity-admin-card .admin-actions.is-collapsed{display:none!important}
+#app.admin-home-view .activity-admin-card .admin-actions.is-expanded{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;padding-top:0;border-top:0}
+#app.admin-home-view .activity-admin-card .admin-actions button{min-width:0;min-height:58px;padding:8px 4px;box-sizing:border-box;border:1px solid var(--line);border-radius:13px;background:#f7f7f5;color:#171717;font-size:12px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+#app.admin-home-view .activity-admin-card .admin-actions button svg{width:22px;height:22px}
+#app.admin-home-view .activity-admin-card .admin-actions button.danger{color:var(--danger)}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on{color:#16a34a}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on svg{color:#16a34a;stroke:#16a34a}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off{color:#111827}
+#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off svg{color:#111827;stroke:#111827}
+#app.admin-home-view .activity-admin-card .admin-actions button.danger svg{color:var(--danger);stroke:var(--danger)}
+@media(max-width:480px){#app.admin-home-view .activity-admin-card .admin-card-top{grid-template-columns:minmax(0,1fr) 96px;gap:8px}#app.admin-home-view .activity-admin-card .admin-card-summary{width:96px;max-width:96px}#app.admin-home-view .activity-admin-card .admin-card-name{font-size:16px;line-height:1.4}#app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{font-size:12px}}
+
+/* 操作按鈕固定單排四欄，手機版也不改成 2×2 */
+#app.admin-home-view .activity-admin-card .admin-actions{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:5px !important;
+}
+#app.admin-home-view .activity-admin-card .admin-actions button{
+  min-width:0 !important;
+  padding:4px 2px !important;
+  font-size:10px !important;
+  white-space:nowrap !important;
+}
+
+
+
+/* 管理活動頁：狀態顏色唯一規則，避免 hover／active／重繪造成跳色 */
+.activity-admin-card .admin-actions button.status-open,
+.activity-admin-card .admin-actions button.status-open:active,
+.activity-admin-card .admin-actions button.status-open:hover { color:#2e9b57 !important; }
+.activity-admin-card .admin-actions button.status-limited,
+.activity-admin-card .admin-actions button.status-limited:active,
+.activity-admin-card .admin-actions button.status-limited:hover { color:#8a6d00 !important; }
+.activity-admin-card .admin-actions button.status-closed,
+.activity-admin-card .admin-actions button.status-closed:active,
+.activity-admin-card .admin-actions button.status-closed:hover { color:#171717 !important; }
+.activity-admin-card .admin-actions button.status-open svg { color:#2e9b57 !important; stroke:#2e9b57 !important; }
+.activity-admin-card .admin-actions button.status-limited svg { color:#f2c94c !important; stroke:#f2c94c !important; }
+.activity-admin-card .admin-actions button.status-closed svg { color:#171717 !important; stroke:#171717 !important; }
+.activity-admin-card .admin-actions button.status-open:active,
+.activity-admin-card .admin-actions button.status-limited:active,
+.activity-admin-card .admin-actions button.status-closed:active { background:#f7f7f5 !important; border-color:var(--line) !important; }
+
+
+
+/* 幹部列表：套用「活動管理／顯示中的活動」卡片視覺，不改功能 */
+.officer-card{
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  border-radius:20px !important;
+  padding:15px !important;
+  margin-bottom:10px !important;
+  box-sizing:border-box !important;
+}
+.officer-top{
+  display:grid !important;
+  grid-template-columns:42px minmax(0,1fr) 70px !important;
+  column-gap:10px !important;
+  align-items:start !important;
+}
+.officer-icon{
+  width:42px !important;
+  height:42px !important;
+  border-radius:13px !important;
+  background:#f1f1ef !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 auto !important;
+}
+.officer-info{
+  min-width:0 !important;
+  padding-top:1px !important;
+}
+.officer-name{
+  font-weight:900 !important;
+  font-size:15px !important;
+  line-height:18px !important;
+  height:18px !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.officer-role{
+  font-size:11px !important;
+  color:#888 !important;
+  line-height:14px !important;
+  height:14px !important;
+  margin-top:3px !important;
+}
+.officer-state{
+  width:70px !important;
+  min-width:70px !important;
+  text-align:right !important;
+  font-size:12px !important;
+  font-weight:850 !important;
+  line-height:18px !important;
+  color:#171717 !important;
+  white-space:nowrap !important;
+}
+.officer-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:6px !important;
+  margin-top:13px !important;
+  padding-top:12px !important;
+  border-top:1px solid var(--line) !important;
+}
+.officer-actions button{
+  min-height:42px !important;
+  padding:5px 4px !important;
+  background:#f7f7f5 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:420px){
+  .officer-actions{grid-template-columns:repeat(2,1fr) !important;}
+  .officer-actions button:first-child{grid-column:auto !important;}
+}
+
+
+
+/* 幹部列表：操作按鈕比照「活動管理／顯示中的活動」按鈕樣式 */
+.officer-actions{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:6px !important;
+  margin-top:13px !important;
+  padding-top:12px !important;
+  border-top:1px solid var(--line) !important;
+}
+.officer-actions button{
+  min-height:42px !important;
+  padding:5px 4px !important;
+  background:#f7f7f5 !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+}
+.officer-actions button svg{
+  width:16px !important;
+  height:16px !important;
+  flex:0 0 16px !important;
+}
+@media(max-width:420px){
+  .officer-actions{grid-template-columns:1fr 1fr !important;}
+  .officer-actions button:first-child{grid-column:1/-1 !important;}
+}
+
+
+
+/* 修改密碼：儲存／取消按鈕固定等寬 */
+.admin-edit-box > div{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:7px !important;
+  width:100% !important;
+}
+.admin-edit-box > div > .save-code-btn,
+.admin-edit-box > div > .cancel-code-btn{
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+
+
+/* 管理活動：依 V2.1，活動卡片左側 ICON 維持中性，不因開放／手動登記變綠。 */
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.open-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.attendance-limit-icon,
+#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.closed-icon{
+  color:#171717 !important;
+  stroke:#171717 !important;
+}
+
+
+
+/* 管理首頁統計區：以獨立、可維護的元件樣式取代零散覆寫 */
+#app.admin-home-view .dashboard-today-summary,
+#app.admin-home-view .cumulative-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  align-items:stretch;
+}
+#app.admin-home-view .cumulative-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+#app.admin-home-view .dashboard-today-summary .metric,
+#app.admin-home-view .cumulative-summary .metric{
+  min-width:0;
+  box-sizing:border-box;
+}
+#app.admin-home-view .top-attendance-name{
+  display:block;
+  overflow-wrap:anywhere;
+  font-size:clamp(14px,4vw,20px);
+  line-height:1.3;
+}
+#app.admin-home-view .cumulative-category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:14px;
+}
+#app.admin-home-view .cumulative-category-card{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  padding:12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-sizing:border-box;
+}
+#app.admin-home-view .cumulative-category-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:12px;
+  background:#f2f2ef;
+}
+#app.admin-home-view .cumulative-category-icon svg{width:21px;height:21px}
+#app.admin-home-view .cumulative-category-info{display:flex;flex:1;flex-direction:column;min-width:0;gap:3px}
+#app.admin-home-view .cumulative-category-info strong{font-size:14px;line-height:1.3}
+#app.admin-home-view .cumulative-category-info span{font-size:11px;color:#777;line-height:1.3}
+#app.admin-home-view .cumulative-category-card > b{flex:0 0 auto;font-size:20px;white-space:nowrap}
+#app.admin-home-view .cumulative-category-card > b small{font-size:11px;font-weight:700}
+@media(max-width:360px){
+  #app.admin-home-view .dashboard-today-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #app.admin-home-view .dashboard-today-summary .top-attendance-metric{grid-column:1/-1}
+  #app.admin-home-view .cumulative-category-grid{grid-template-columns:minmax(0,1fr)}
+}
+
+
+
+/* V2.4：活動列表 % 42×42、倒數 48×42（寬×高）；彼此間距 5px，保持整列對齊 */
+.activity-right{
+  display:grid !important;
+  grid-template-columns:42px 48px auto 22px !important;
+  column-gap:5px !important;
+  align-items:center !important;
+  justify-content:end !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+  flex:0 0 auto !important;
+}
+.activity-list-rate-slot{
+  width:42px !important; height:42px !important;
+  min-width:42px !important; min-height:42px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+}
+.activity-list-rate-slot .activity-list-attendance-rate{
+  width:42px !important; height:42px !important;
+  min-width:42px !important; max-width:42px !important;
+  min-height:42px !important; max-height:42px !important;
+  flex:0 0 42px !important; box-sizing:border-box !important;
+}
+.activity-list-countdown-slot{
+  width:48px !important; height:42px !important;
+  min-width:48px !important; max-width:48px !important;
+  min-height:42px !important; max-height:42px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+}
+.activity-list-countdown-slot .activity-status-clock{
+  width:48px !important; height:42px !important;
+  min-width:48px !important; max-width:48px !important;
+  min-height:42px !important; max-height:42px !important;
+  margin:0 !important; box-sizing:border-box !important;
+}
+
+
+
+/* =========================================================
+   V2.4｜通用狀態區塊標準
+   ・尺寸：50 × 50px
+   ・圓角：15px
+   ・同組間距：5px
+   ・手機／電腦一致
+   ========================================================= */
+.status-box{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  flex:0 0 50px !important;
+  border-radius:15px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden;
+}
+.status-box-group{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:5px !important;
+  margin:0 !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+.status-box.rate,
+.status-box.countdown{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  flex:0 0 50px !important;
+  border-radius:15px !important;
+}
+.status-box svg{
+  width:20px !important;
+  height:20px !important;
+  min-width:20px !important;
+  min-height:20px !important;
+  flex:0 0 20px !important;
+  display:block !important;
+}
+.status-box span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  box-sizing:border-box;
+  white-space:nowrap;
+  line-height:1;
+}
+.status-box.rate span,
+.status-box.countdown span{
+  font-size:14px;
+  font-weight:800;
+  line-height:1;
+}
+.status-box.neutral{background:#f1f1ef !important;color:#171717 !important;}
+.status-box.open{background:#dcfce7 !important;color:#16a34a !important;}
+.status-box.limited{background:#fef3c7 !important;color:#d97706 !important;}
+.status-box.closed{background:#f1f1ef !important;color:#171717 !important;}
+.status-box.counting{background:#fee2e2 !important;color:#dc2626 !important;}
+.status-box.open svg{color:#16a34a !important;stroke:#16a34a !important;}
+.status-box.limited svg{color:#d97706 !important;stroke:#d97706 !important;}
+.status-box.closed svg{color:#171717 !important;stroke:#171717 !important;}
+.status-box.counting svg{color:#dc2626 !important;stroke:#dc2626 !important;}
+
+/* =========================================================
+   V2.4｜活動列表套用通用狀態區塊
+   ・出席率：50 × 50px
+   ・倒數：50 × 50px
+   ・兩者間距：5px
+   ・不影響簽到內頁的 46 × 46 設計
+   ========================================================= */
+.activity-right{
+  display:grid !important;
+  grid-template-columns:50px 50px auto 22px !important;
+  column-gap:5px !important;
+  align-items:center !important;
+  justify-content:end !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+}
+.activity-list-rate-slot{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+}
+.activity-list-rate-slot .activity-list-attendance-rate{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  flex:0 0 50px !important;
+  border-radius:15px !important;
+  box-sizing:border-box !important;
+}
+.activity-list-countdown-slot{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+}
+.activity-list-countdown-slot .activity-status-clock{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  flex:0 0 50px !important;
+  margin:0 !important;
+  border-radius:15px !important;
+  box-sizing:border-box !important;
+}
+.activity-right .count{
+  grid-column:3 !important;
+  justify-self:end !important;
+  width:auto !important;
+  min-width:48px !important;
+  text-align:right !important;
+  white-space:nowrap !important;
+  box-sizing:border-box !important;
+}
+.activity-right .arrow{
+  grid-column:4 !important;
+  justify-self:end !important;
+  width:22px !important;
+}
+@media(max-width:600px){
+  .activity-right{
+    grid-template-columns:50px 50px auto 22px !important;
+    column-gap:5px !important;
+  }
+  .activity-list-rate-slot,
+  .activity-list-countdown-slot,
+  .activity-list-rate-slot .activity-list-attendance-rate,
+  .activity-list-countdown-slot .activity-status-clock{
+    width:50px !important;
+    height:50px !important;
+    min-width:50px !important;
+    min-height:50px !important;
+    max-width:50px !important;
+    max-height:50px !important;
+    flex:0 0 50px !important;
+  }
+}
+
+
+
+.announcement .announcement-text{
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.5 !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere !important;
+}
+
+/* V95：內頁倒數區塊與出席率百分比統一為 46×46px，手機／電腦一致 */
+.checkin-countdown.has-countdown,
+.checkin-countdown.no-countdown{
+  width:46px !important;
+  min-width:46px !important;
+  max-width:46px !important;
+  height:46px !important;
+  min-height:46px !important;
+  max-height:46px !important;
+  box-sizing:border-box !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+@media(max-width:430px){
+  .checkin-countdown.has-countdown,
+  .checkin-countdown.no-countdown{
+    width:46px !important;
+    min-width:46px !important;
+    max-width:46px !important;
+    height:46px !important;
+    min-height:46px !important;
+    max-height:46px !important;
+  }
+}
+
+
+
+/* V2.4：簽到內頁 % 與倒數統一為 50×50px，圓角 15px，間距 5px */
+.checkin-hero-actions{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:5px !important;
+  flex:0 0 auto !important;
+}
+
+.signin-attendance-rate,
+.checkin-countdown.has-countdown,
+.checkin-countdown.no-countdown{
+  width:50px !important;
+  height:50px !important;
+  min-width:50px !important;
+  min-height:50px !important;
+  max-width:50px !important;
+  max-height:50px !important;
+  flex:0 0 50px !important;
+  box-sizing:border-box !important;
+  border-radius:15px !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+.signin-attendance-rate{
+  font-size:11px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+}
+
+.checkin-countdown .countdown-text{
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
+@media(max-width:430px){
+  .checkin-hero-actions{
+    gap:5px !important;
+  }
+  .signin-attendance-rate,
+  .checkin-countdown.has-countdown,
+  .checkin-countdown.no-countdown{
+    width:50px !important;
+    height:50px !important;
+    min-width:50px !important;
+    min-height:50px !important;
+    max-width:50px !important;
+    max-height:50px !important;
+    flex:0 0 50px !important;
+    border-radius:15px !important;
+  }
+}
+
+
+
+
+/* 活動管理卡片：直接鎖定實際產生的 .activity-admin-card > .admin-actions，
+   不依賴 #app 是否帶有 admin-home-view class，也不受舊版手機 2 欄規則影響。 */
+.activity-admin-card > .admin-actions,
+.activity-admin-card > .admin-actions.is-expanded,
+.activity-admin-card > .admin-actions.is-collapsed {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-flow: row !important;
+  gap: 5px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 8px !important;
+}
+.activity-admin-card > .admin-actions > button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  box-sizing: border-box !important;
+  padding: 5px 1px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  gap: 3px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+.activity-admin-card > .admin-actions > button svg {
+  width: 19px !important;
+  height: 19px !important;
+  flex: 0 0 19px !important;
+}
+
+
+
+/* 活動管理：取消操作區展開／收合，四個操作按鈕固定同一排 */
+.activity-admin-card > .admin-actions-toggle,
+.activity-admin-card .admin-actions-toggle {
+  display: none !important;
+}
+.activity-admin-card > .admin-actions,
+.activity-admin-card > .admin-actions.is-expanded,
+.activity-admin-card > .admin-actions.is-collapsed {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: minmax(0, 1fr) !important;
+  gap: 5px !important;
+  width: 100% !important;
+  margin-top: 8px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  overflow: visible !important;
+}
+.activity-admin-card > .admin-actions > button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 46px !important;
+  padding: 5px 2px !important;
+  box-sizing: border-box !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+@media (max-width: 420px) {
+  .activity-admin-card > .admin-actions,
+  .activity-admin-card > .admin-actions.is-expanded,
+  .activity-admin-card > .admin-actions.is-collapsed {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    gap: 4px !important;
+  }
+  .activity-admin-card > .admin-actions > button {
+    min-height: 44px !important;
+    padding: 4px 1px !important;
+    font-size: 9px !important;
+  }
+  .activity-admin-card > .admin-actions > button svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+
+/* 活動分類按鈕字級：只調整建立／編輯活動分類，不影響其他 choice 按鈕 */
+.event-category-field .event-category-choices > .choice{font-size:16px}
+
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
 <body>
 <div id="app"></div>
@@ -4474,67 +5266,7 @@ function renderAdmin(el){
        </div>`}
 </div>
 
-<style id="signin-page-setting-ui">
-/* 簽到頁面：沿用系統「活動管理」按鈕語言，不另造一套視覺。 */
-.signin-page-setting-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-}
-.signin-page-setting-info{
-  min-width:0;
-  flex:1 1 auto;
-}
-.signin-page-setting-info strong{
-  display:block;
-  margin:0;
-  font-size:14px;
-  line-height:1.4;
-  font-weight:900;
-  color:var(--ink);
-}
-.signin-page-setting-info .field-hint{
-  margin-top:5px;
-}
-.signin-page-toggle{
-  flex:0 0 auto;
-  min-width:92px;
-  min-height:42px;
-  padding:5px 10px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#f7f7f5;
-  font-size:11px;
-  font-weight:850;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-}
-.signin-page-toggle svg{
-  width:18px;
-  height:18px;
-  flex:0 0 18px;
-}
-.signin-page-toggle.is-on{
-  color:var(--success,#16a34a);
-}
-.signin-page-toggle.is-off{
-  color:var(--ink);
-}
-.signin-page-toggle:hover{
-  background:#efefec;
-}
-.signin-page-toggle:focus-visible{
-  outline:2px solid rgba(201,20,27,.25);
-  outline-offset:2px;
-}
-@media (max-width:420px){
-  .signin-page-setting-row{align-items:flex-start;}
-  .signin-page-toggle{min-width:84px;}
-}
-</style>
+
 
 <div class="section-head"><h2>簽到頁面</h2><span>一般使用者顯示設定</span></div>
 <div class="form-block signin-page-setting-card">
@@ -5767,276 +6499,21 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   },true);
 })();
 </script>
-<style id="activity-admin-card-v23-unified">
-/* V2.4 活動管理卡片唯一排版規則：A 方案資訊層級 + 單卡操作展開 */
-#app.admin-home-view .activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px;box-sizing:border-box}
-#app.admin-home-view .activity-admin-card.hidden{opacity:.65}
-#app.admin-home-view .activity-admin-card .admin-card-top{display:grid;grid-template-columns:minmax(0,1fr) 108px;align-items:start;gap:12px;padding:0;margin:0;position:static}
-#app.admin-home-view .activity-admin-card .admin-card-info{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;width:auto;height:auto;min-height:0;overflow:visible;text-align:left;position:static}
-#app.admin-home-view .activity-admin-card .admin-card-title-block,#app.admin-home-view .activity-admin-card .admin-card-subtitle-block{display:block;position:static;float:none;clear:both;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;overflow:visible;transform:none}
-#app.admin-home-view .activity-admin-card .admin-card-name{display:block;position:static;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;font-size:16px;font-weight:900;line-height:1.4;white-space:normal;overflow:visible;overflow-wrap:anywhere;word-break:normal;text-align:left;transform:none}
-#app.admin-home-view .activity-admin-card .admin-card-subtitle-block{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
-#app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{display:block;position:static;width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;color:#888;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere;overflow:visible;text-align:left;transform:none}
-#app.admin-home-view .activity-admin-card .admin-card-status{margin-top:0}
-#app.admin-home-view .activity-admin-card .admin-card-summary{display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-start;gap:6px;position:static;width:108px;min-width:0;max-width:108px;height:auto;margin:0;padding:0;text-align:right;transform:none}
-#app.admin-home-view .activity-admin-card .admin-card-summary .admin-card-meta{display:block;width:100%;height:auto;min-height:0;margin:0;padding:0;font-size:12px;font-weight:850;line-height:1.4;color:#171717;white-space:normal;overflow-wrap:anywhere;text-align:right}
-#app.admin-home-view .activity-admin-card .admin-actions-toggle{width:100%;min-height:38px;margin-top:12px;padding:8px 2px 0;display:flex;align-items:center;gap:8px;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;color:#555;font-size:12px;font-weight:800;text-align:left}
-#app.admin-home-view .activity-admin-card .admin-actions-toggle-label{margin-left:auto;color:#171717}
-#app.admin-home-view .activity-admin-card .admin-actions-toggle svg{width:16px;height:16px;flex:0 0 16px}
-#app.admin-home-view .activity-admin-card .admin-actions.is-collapsed{display:none!important}
-#app.admin-home-view .activity-admin-card .admin-actions.is-expanded{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;padding-top:0;border-top:0}
-#app.admin-home-view .activity-admin-card .admin-actions button{min-width:0;min-height:58px;padding:8px 4px;box-sizing:border-box;border:1px solid var(--line);border-radius:13px;background:#f7f7f5;color:#171717;font-size:12px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
-#app.admin-home-view .activity-admin-card .admin-actions button svg{width:22px;height:22px}
-#app.admin-home-view .activity-admin-card .admin-actions button.danger{color:var(--danger)}
-#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on{color:#16a34a}
-#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-on svg{color:#16a34a;stroke:#16a34a}
-#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off{color:#111827}
-#app.admin-home-view .activity-admin-card .admin-actions .activity-toggle-btn.is-off svg{color:#111827;stroke:#111827}
-#app.admin-home-view .activity-admin-card .admin-actions button.danger svg{color:var(--danger);stroke:var(--danger)}
-@media(max-width:480px){#app.admin-home-view .activity-admin-card .admin-card-top{grid-template-columns:minmax(0,1fr) 96px;gap:8px}#app.admin-home-view .activity-admin-card .admin-card-summary{width:96px;max-width:96px}#app.admin-home-view .activity-admin-card .admin-card-name{font-size:16px;line-height:1.4}#app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{font-size:12px}}
-
-/* 操作按鈕固定單排四欄，手機版也不改成 2×2 */
-#app.admin-home-view .activity-admin-card .admin-actions{
-  display:grid !important;
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  gap:5px !important;
-}
-#app.admin-home-view .activity-admin-card .admin-actions button{
-  min-width:0 !important;
-  padding:4px 2px !important;
-  font-size:10px !important;
-  white-space:nowrap !important;
-}
-</style>
-<style id="admin-status-color-stable-final">
-/* 管理活動頁：狀態顏色唯一規則，避免 hover／active／重繪造成跳色 */
-.activity-admin-card .admin-actions button.status-open,
-.activity-admin-card .admin-actions button.status-open:active,
-.activity-admin-card .admin-actions button.status-open:hover { color:#2e9b57 !important; }
-.activity-admin-card .admin-actions button.status-limited,
-.activity-admin-card .admin-actions button.status-limited:active,
-.activity-admin-card .admin-actions button.status-limited:hover { color:#8a6d00 !important; }
-.activity-admin-card .admin-actions button.status-closed,
-.activity-admin-card .admin-actions button.status-closed:active,
-.activity-admin-card .admin-actions button.status-closed:hover { color:#171717 !important; }
-.activity-admin-card .admin-actions button.status-open svg { color:#2e9b57 !important; stroke:#2e9b57 !important; }
-.activity-admin-card .admin-actions button.status-limited svg { color:#f2c94c !important; stroke:#f2c94c !important; }
-.activity-admin-card .admin-actions button.status-closed svg { color:#171717 !important; stroke:#171717 !important; }
-.activity-admin-card .admin-actions button.status-open:active,
-.activity-admin-card .admin-actions button.status-limited:active,
-.activity-admin-card .admin-actions button.status-closed:active { background:#f7f7f5 !important; border-color:var(--line) !important; }
-</style>
-
-<style id="officer-list-match-activity-admin-css">
-/* 幹部列表：套用「活動管理／顯示中的活動」卡片視覺，不改功能 */
-.officer-card{
-  background:#fff !important;
-  border:1px solid var(--line) !important;
-  border-radius:20px !important;
-  padding:15px !important;
-  margin-bottom:10px !important;
-  box-sizing:border-box !important;
-}
-.officer-top{
-  display:grid !important;
-  grid-template-columns:42px minmax(0,1fr) 70px !important;
-  column-gap:10px !important;
-  align-items:start !important;
-}
-.officer-icon{
-  width:42px !important;
-  height:42px !important;
-  border-radius:13px !important;
-  background:#f1f1ef !important;
-  display:grid !important;
-  place-items:center !important;
-  flex:0 0 auto !important;
-}
-.officer-info{
-  min-width:0 !important;
-  padding-top:1px !important;
-}
-.officer-name{
-  font-weight:900 !important;
-  font-size:15px !important;
-  line-height:18px !important;
-  height:18px !important;
-  margin:0 !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-  white-space:nowrap !important;
-}
-.officer-role{
-  font-size:11px !important;
-  color:#888 !important;
-  line-height:14px !important;
-  height:14px !important;
-  margin-top:3px !important;
-}
-.officer-state{
-  width:70px !important;
-  min-width:70px !important;
-  text-align:right !important;
-  font-size:12px !important;
-  font-weight:850 !important;
-  line-height:18px !important;
-  color:#171717 !important;
-  white-space:nowrap !important;
-}
-.officer-actions{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:6px !important;
-  margin-top:13px !important;
-  padding-top:12px !important;
-  border-top:1px solid var(--line) !important;
-}
-.officer-actions button{
-  min-height:42px !important;
-  padding:5px 4px !important;
-  background:#f7f7f5 !important;
-  border:1px solid var(--line) !important;
-  border-radius:12px !important;
-  font-size:10px !important;
-  font-weight:800 !important;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-@media(max-width:420px){
-  .officer-actions{grid-template-columns:repeat(2,1fr) !important;}
-  .officer-actions button:first-child{grid-column:auto !important;}
-}
-</style>
-
-<style id="officer-actions-activity-style-fix">
-/* 幹部列表：操作按鈕比照「活動管理／顯示中的活動」按鈕樣式 */
-.officer-actions{
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-  gap:6px !important;
-  margin-top:13px !important;
-  padding-top:12px !important;
-  border-top:1px solid var(--line) !important;
-}
-.officer-actions button{
-  min-height:42px !important;
-  padding:5px 4px !important;
-  background:#f7f7f5 !important;
-  border:1px solid var(--line) !important;
-  border-radius:12px !important;
-  font-size:10px !important;
-  font-weight:800 !important;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  justify-content:center !important;
-  line-height:1.2 !important;
-  white-space:nowrap !important;
-}
-.officer-actions button svg{
-  width:16px !important;
-  height:16px !important;
-  flex:0 0 16px !important;
-}
-@media(max-width:420px){
-  .officer-actions{grid-template-columns:1fr 1fr !important;}
-  .officer-actions button:first-child{grid-column:1/-1 !important;}
-}
-</style>
-
-<style id="admin-edit-save-cancel-equal">
-/* 修改密碼：儲存／取消按鈕固定等寬 */
-.admin-edit-box > div{
-  display:grid !important;
-  grid-template-columns:1fr 1fr !important;
-  gap:7px !important;
-  width:100% !important;
-}
-.admin-edit-box > div > .save-code-btn,
-.admin-edit-box > div > .cancel-code-btn{
-  width:100% !important;
-  min-width:0 !important;
-  box-sizing:border-box !important;
-}
-</style>
 
 
 
-<style id="v21-admin-activity-icon-neutral-final">
-/* 管理活動：依 V2.1，活動卡片左側 ICON 維持中性，不因開放／手動登記變綠。 */
-#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon,
-#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.open-icon,
-#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.attendance-limit-icon,
-#app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.closed-icon{
-  color:#171717 !important;
-  stroke:#171717 !important;
-}
-</style>
 
 
-<style id="dashboard-cumulative-statistics-v1">
-/* 管理首頁統計區：以獨立、可維護的元件樣式取代零散覆寫 */
-#app.admin-home-view .dashboard-today-summary,
-#app.admin-home-view .cumulative-summary{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
-  align-items:stretch;
-}
-#app.admin-home-view .cumulative-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
-#app.admin-home-view .dashboard-today-summary .metric,
-#app.admin-home-view .cumulative-summary .metric{
-  min-width:0;
-  box-sizing:border-box;
-}
-#app.admin-home-view .top-attendance-name{
-  display:block;
-  overflow-wrap:anywhere;
-  font-size:clamp(14px,4vw,20px);
-  line-height:1.3;
-}
-#app.admin-home-view .cumulative-category-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
-  margin-bottom:14px;
-}
-#app.admin-home-view .cumulative-category-card{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  min-width:0;
-  padding:12px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-sizing:border-box;
-}
-#app.admin-home-view .cumulative-category-icon{
-  display:grid;
-  place-items:center;
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  border-radius:12px;
-  background:#f2f2ef;
-}
-#app.admin-home-view .cumulative-category-icon svg{width:21px;height:21px}
-#app.admin-home-view .cumulative-category-info{display:flex;flex:1;flex-direction:column;min-width:0;gap:3px}
-#app.admin-home-view .cumulative-category-info strong{font-size:14px;line-height:1.3}
-#app.admin-home-view .cumulative-category-info span{font-size:11px;color:#777;line-height:1.3}
-#app.admin-home-view .cumulative-category-card > b{flex:0 0 auto;font-size:20px;white-space:nowrap}
-#app.admin-home-view .cumulative-category-card > b small{font-size:11px;font-weight:700}
-@media(max-width:360px){
-  #app.admin-home-view .dashboard-today-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #app.admin-home-view .dashboard-today-summary .top-attendance-metric{grid-column:1/-1}
-  #app.admin-home-view .cumulative-category-grid{grid-template-columns:minmax(0,1fr)}
-}
-</style>
+
+
+
+
+
+
+
+
+
+
 </body>
 
 
@@ -6044,415 +6521,16 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 
 
-<style id="v23-activity-list-rate42-countdown48x42-gap5">
-/* V2.4：活動列表 % 42×42、倒數 48×42（寬×高）；彼此間距 5px，保持整列對齊 */
-.activity-right{
-  display:grid !important;
-  grid-template-columns:42px 48px auto 22px !important;
-  column-gap:5px !important;
-  align-items:center !important;
-  justify-content:end !important;
-  width:auto !important;
-  min-width:0 !important;
-  max-width:none !important;
-  flex:0 0 auto !important;
-}
-.activity-list-rate-slot{
-  width:42px !important; height:42px !important;
-  min-width:42px !important; min-height:42px !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
-}
-.activity-list-rate-slot .activity-list-attendance-rate{
-  width:42px !important; height:42px !important;
-  min-width:42px !important; max-width:42px !important;
-  min-height:42px !important; max-height:42px !important;
-  flex:0 0 42px !important; box-sizing:border-box !important;
-}
-.activity-list-countdown-slot{
-  width:48px !important; height:42px !important;
-  min-width:48px !important; max-width:48px !important;
-  min-height:42px !important; max-height:42px !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
-}
-.activity-list-countdown-slot .activity-status-clock{
-  width:48px !important; height:42px !important;
-  min-width:48px !important; max-width:48px !important;
-  min-height:42px !important; max-height:42px !important;
-  margin:0 !important; box-sizing:border-box !important;
-}
-</style>
 
-<style id="v23-universal-status-box-final">
-/* =========================================================
-   V2.4｜通用狀態區塊標準
-   ・尺寸：50 × 50px
-   ・圓角：15px
-   ・同組間距：5px
-   ・手機／電腦一致
-   ========================================================= */
-.status-box{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  flex:0 0 50px !important;
-  border-radius:15px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  box-sizing:border-box !important;
-  padding:0 !important;
-  margin:0 !important;
-  overflow:hidden;
-}
-.status-box-group{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  gap:5px !important;
-  margin:0 !important;
-  padding:0 !important;
-  box-sizing:border-box !important;
-}
-.status-box.rate,
-.status-box.countdown{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  flex:0 0 50px !important;
-  border-radius:15px !important;
-}
-.status-box svg{
-  width:20px !important;
-  height:20px !important;
-  min-width:20px !important;
-  min-height:20px !important;
-  flex:0 0 20px !important;
-  display:block !important;
-}
-.status-box span{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  height:100%;
-  box-sizing:border-box;
-  white-space:nowrap;
-  line-height:1;
-}
-.status-box.rate span,
-.status-box.countdown span{
-  font-size:14px;
-  font-weight:800;
-  line-height:1;
-}
-.status-box.neutral{background:#f1f1ef !important;color:#171717 !important;}
-.status-box.open{background:#dcfce7 !important;color:#16a34a !important;}
-.status-box.limited{background:#fef3c7 !important;color:#d97706 !important;}
-.status-box.closed{background:#f1f1ef !important;color:#171717 !important;}
-.status-box.counting{background:#fee2e2 !important;color:#dc2626 !important;}
-.status-box.open svg{color:#16a34a !important;stroke:#16a34a !important;}
-.status-box.limited svg{color:#d97706 !important;stroke:#d97706 !important;}
-.status-box.closed svg{color:#171717 !important;stroke:#171717 !important;}
-.status-box.counting svg{color:#dc2626 !important;stroke:#dc2626 !important;}
 
-/* =========================================================
-   V2.4｜活動列表套用通用狀態區塊
-   ・出席率：50 × 50px
-   ・倒數：50 × 50px
-   ・兩者間距：5px
-   ・不影響簽到內頁的 46 × 46 設計
-   ========================================================= */
-.activity-right{
-  display:grid !important;
-  grid-template-columns:50px 50px auto 22px !important;
-  column-gap:5px !important;
-  align-items:center !important;
-  justify-content:end !important;
-  width:auto !important;
-  min-width:0 !important;
-  max-width:none !important;
-  flex:0 0 auto !important;
-  box-sizing:border-box !important;
-}
-.activity-list-rate-slot{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  box-sizing:border-box !important;
-}
-.activity-list-rate-slot .activity-list-attendance-rate{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  flex:0 0 50px !important;
-  border-radius:15px !important;
-  box-sizing:border-box !important;
-}
-.activity-list-countdown-slot{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  box-sizing:border-box !important;
-}
-.activity-list-countdown-slot .activity-status-clock{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  flex:0 0 50px !important;
-  margin:0 !important;
-  border-radius:15px !important;
-  box-sizing:border-box !important;
-}
-.activity-right .count{
-  grid-column:3 !important;
-  justify-self:end !important;
-  width:auto !important;
-  min-width:48px !important;
-  text-align:right !important;
-  white-space:nowrap !important;
-  box-sizing:border-box !important;
-}
-.activity-right .arrow{
-  grid-column:4 !important;
-  justify-self:end !important;
-  width:22px !important;
-}
-@media(max-width:600px){
-  .activity-right{
-    grid-template-columns:50px 50px auto 22px !important;
-    column-gap:5px !important;
-  }
-  .activity-list-rate-slot,
-  .activity-list-countdown-slot,
-  .activity-list-rate-slot .activity-list-attendance-rate,
-  .activity-list-countdown-slot .activity-status-clock{
-    width:50px !important;
-    height:50px !important;
-    min-width:50px !important;
-    min-height:50px !important;
-    max-width:50px !important;
-    max-height:50px !important;
-    flex:0 0 50px !important;
-  }
-}
-</style>
+
 </html>
-<style id="announcement-static-final">
-.announcement .announcement-text{
-  font-size:14px !important;
-  font-weight:700 !important;
-  line-height:1.5 !important;
-  white-space:normal !important;
-  overflow-wrap:anywhere !important;
-}
-
-/* V95：內頁倒數區塊與出席率百分比統一為 46×46px，手機／電腦一致 */
-.checkin-countdown.has-countdown,
-.checkin-countdown.no-countdown{
-  width:46px !important;
-  min-width:46px !important;
-  max-width:46px !important;
-  height:46px !important;
-  min-height:46px !important;
-  max-height:46px !important;
-  box-sizing:border-box !important;
-  padding:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-@media(max-width:430px){
-  .checkin-countdown.has-countdown,
-  .checkin-countdown.no-countdown{
-    width:46px !important;
-    min-width:46px !important;
-    max-width:46px !important;
-    height:46px !important;
-    min-height:46px !important;
-    max-height:46px !important;
-  }
-}
-</style>
-<style id="v23-inner-status-box-unified-final">
-/* V2.4：簽到內頁 % 與倒數統一為 50×50px，圓角 15px，間距 5px */
-.checkin-hero-actions{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-  gap:5px !important;
-  flex:0 0 auto !important;
-}
-
-.signin-attendance-rate,
-.checkin-countdown.has-countdown,
-.checkin-countdown.no-countdown{
-  width:50px !important;
-  height:50px !important;
-  min-width:50px !important;
-  min-height:50px !important;
-  max-width:50px !important;
-  max-height:50px !important;
-  flex:0 0 50px !important;
-  box-sizing:border-box !important;
-  border-radius:15px !important;
-  padding:0 !important;
-  margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-.signin-attendance-rate{
-  font-size:11px !important;
-  font-weight:800 !important;
-  line-height:1 !important;
-}
-
-.checkin-countdown .countdown-text{
-  line-height:1 !important;
-  white-space:nowrap !important;
-}
-
-@media(max-width:430px){
-  .checkin-hero-actions{
-    gap:5px !important;
-  }
-  .signin-attendance-rate,
-  .checkin-countdown.has-countdown,
-  .checkin-countdown.no-countdown{
-    width:50px !important;
-    height:50px !important;
-    min-width:50px !important;
-    min-height:50px !important;
-    max-width:50px !important;
-    max-height:50px !important;
-    flex:0 0 50px !important;
-    border-radius:15px !important;
-  }
-}
-
-</style>
 
 
 
-<style id="activity-admin-actions-four-columns-final-fix">
-/* 活動管理卡片：直接鎖定實際產生的 .activity-admin-card > .admin-actions，
-   不依賴 #app 是否帶有 admin-home-view class，也不受舊版手機 2 欄規則影響。 */
-.activity-admin-card > .admin-actions,
-.activity-admin-card > .admin-actions.is-expanded,
-.activity-admin-card > .admin-actions.is-collapsed {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  grid-auto-flow: row !important;
-  gap: 5px !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  margin-top: 8px !important;
-}
-.activity-admin-card > .admin-actions > button {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 0 !important;
-  width: 100% !important;
-  min-height: 48px !important;
-  box-sizing: border-box !important;
-  padding: 5px 1px !important;
-  font-size: 10px !important;
-  line-height: 1.2 !important;
-  gap: 3px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-}
-.activity-admin-card > .admin-actions > button svg {
-  width: 19px !important;
-  height: 19px !important;
-  flex: 0 0 19px !important;
-}
-</style>
 
 
-<style id="activity-admin-actions-fixed-row">
-/* 活動管理：取消操作區展開／收合，四個操作按鈕固定同一排 */
-.activity-admin-card > .admin-actions-toggle,
-.activity-admin-card .admin-actions-toggle {
-  display: none !important;
-}
-.activity-admin-card > .admin-actions,
-.activity-admin-card > .admin-actions.is-expanded,
-.activity-admin-card > .admin-actions.is-collapsed {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  grid-auto-flow: column !important;
-  grid-auto-columns: minmax(0, 1fr) !important;
-  gap: 5px !important;
-  width: 100% !important;
-  margin-top: 8px !important;
-  padding-top: 0 !important;
-  border-top: 0 !important;
-  overflow: visible !important;
-}
-.activity-admin-card > .admin-actions > button {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 46px !important;
-  padding: 5px 2px !important;
-  box-sizing: border-box !important;
-  font-size: 10px !important;
-  line-height: 1.2 !important;
-  white-space: normal !important;
-  overflow-wrap: anywhere !important;
-}
-@media (max-width: 420px) {
-  .activity-admin-card > .admin-actions,
-  .activity-admin-card > .admin-actions.is-expanded,
-  .activity-admin-card > .admin-actions.is-collapsed {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    grid-auto-flow: column !important;
-    gap: 4px !important;
-  }
-  .activity-admin-card > .admin-actions > button {
-    min-height: 44px !important;
-    padding: 4px 1px !important;
-    font-size: 9px !important;
-  }
-  .activity-admin-card > .admin-actions > button svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
-}
 
 
-/* 活動分類按鈕字級：只調整建立／編輯活動分類，不影響其他 choice 按鈕 */
-.event-category-field .event-category-choices > .choice{font-size:16px}
-</style>
+
+
