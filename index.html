@@ -4785,7 +4785,7 @@ function renderQuery(el){
         <div class="list">
           ${s.detail.slice().reverse().map(d=>`
             <div class="list-row">
-              <div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"circle-dollar-sign":String(d.activity.eventCategory||"").trim()==="隊"?"users":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
+              <div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"dollar-sign":String(d.activity.eventCategory||"").trim()==="隊"?"users":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
               <div class="list-main">
                 <div class="list-name">${escapeHtml(d.activity.name)}</div>
                 <div class="list-meta">${fmtDate(d.activity.date)}</div>
@@ -5156,7 +5156,7 @@ function renderAdmin(el){
         <div class="query-metric-card attendance-metric signins"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div>
       </div>
       <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
-      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"circle-dollar-sign":String(d.activity.eventCategory||"").trim()==="隊"?"users":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
+      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"dollar-sign":String(d.activity.eventCategory||"").trim()==="隊"?"users":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
   }
   const superAdmin=isSuperAdmin();
   const session=getAdminSession();
