@@ -3012,15 +3012,11 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   font-size:clamp(14px,4vw,20px);
   line-height:1.3;
 }
-#app.admin-home-view .top-attendance-marquee{width:100%;min-width:0;overflow:hidden;white-space:nowrap;line-height:1.35;}
-#app.admin-home-view .top-attendance-marquee-track{display:flex;align-items:center;width:max-content;flex-shrink:0;animation:topAttendanceMarqueeScroll 18s linear infinite;will-change:transform;}
-#app.admin-home-view .top-attendance-marquee-group{display:inline-flex;align-items:center;flex-shrink:0;white-space:nowrap;}
-#app.admin-home-view .top-attendance-marquee-item{display:inline-flex;align-items:center;gap:4px;font-size:clamp(13px,3.4vw,17px);font-weight:700;}
-#app.admin-home-view .top-attendance-marquee-item strong{font-size:.82em;opacity:.75;}
-#app.admin-home-view .top-attendance-marquee-item em{font-size:.8em;font-style:normal;font-weight:600;opacity:.8;}
-#app.admin-home-view .top-attendance-marquee-separator{display:inline-block;opacity:.55;}
-@keyframes topAttendanceMarqueeScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-#app.admin-home-view .top-attendance-marquee:hover .top-attendance-marquee-track{animation-play-state:paused;}
+#app.admin-home-view .top-attendance-slideshow{width:100%;min-width:0;min-height:28px;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center;}
+#app.admin-home-view .top-attendance-slide{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;animation:topAttendanceSlideFade .45s ease both;}
+#app.admin-home-view .top-attendance-slide-name{display:block;max-width:100%;font-size:clamp(14px,4vw,20px);font-weight:700;line-height:1.25;overflow-wrap:anywhere;}
+#app.admin-home-view .top-attendance-slide-detail{font-size:12px;line-height:1.2;opacity:.78;}
+@keyframes topAttendanceSlideFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 /* 今日概況與累積統計合併為統計資訊 */
 #app.admin-home-view .statistics-info-summary{
   display:grid !important;
@@ -4944,10 +4940,8 @@ function renderAdmin(el){
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  const topAttendanceMarqueeNames=topAttendanceEligible.slice(0,3).map((r,i)=>({name:r.name,rate:Number(r.rate)||0,rank:i+1}));
-  const topAttendanceMarqueeItems=topAttendanceMarqueeNames.map(item=>`<span class="top-attendance-marquee-item"><strong>${item.rank}.</strong> ${escapeHtml(item.name)} <em>${item.rate}%</em></span>`).join('<span class="top-attendance-marquee-separator">　·　</span>');
-  const topAttendanceMarqueeGroup=topAttendanceMarqueeItems?`<span class="top-attendance-marquee-group">${topAttendanceMarqueeItems}</span>`:"<span class=\"top-attendance-marquee-group\">尚無出席資料</span>";
-  const topAttendanceMarqueeTrack=`${topAttendanceMarqueeGroup}${topAttendanceMarqueeGroup}`;
+  const topAttendanceSlides=topAttendanceEligible.slice(0,3).map((r,i)=>({name:r.name,rate:Number(r.rate)||0,rank:i+1}));
+  const topAttendanceSlideHtml=topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide" data-attendance-slide="${item.rank}"><b class="top-attendance-slide-name">${item.rank}. ${escapeHtml(item.name)}</b><span class="top-attendance-slide-detail">${item.rate}% 出席率</span></div>`).join(""):'<div class="top-attendance-slide"><b class="top-attendance-slide-name">尚無出席資料</b></div>';
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
   const openActivityCount=cumulativeActivities.filter(a=>!!a.open).length;
@@ -5050,7 +5044,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-marquee" aria-label="年度出席率前三名"><div class="top-attendance-marquee-track">${topAttendanceMarqueeTrack}</div></div>
+    <div class="top-attendance-slideshow" id="top-attendance-slideshow" aria-label="年度出席率前三名">${topAttendanceSlides.length?topAttendanceSlides.slice(0,1).map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">1. ${escapeHtml(item.name)}</b><span class="top-attendance-slide-detail">${item.rate}% 出席率</span></div>`).join(""):'<div class="top-attendance-slide"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
     <span id="top-attendance-rate">年度出席率前三名</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
@@ -6258,6 +6252,39 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       }
     }
   },true);
+})();
+
+/* 最高出席率前三名：幻燈片輪播 */
+(function(){
+  if(window.__topAttendanceSlideshowTimer){clearInterval(window.__topAttendanceSlideshowTimer);window.__topAttendanceSlideshowTimer=null;}
+  function renderAttendanceSlide(){
+    const host=document.getElementById("top-attendance-slideshow");
+    if(!host)return;
+    const slides=host.dataset.slides;
+    if(!slides)return;
+    let items;
+    try{items=JSON.parse(slides);}catch(e){return;}
+    if(!items.length)return;
+    let index=Number(host.dataset.slideIndex||0);
+    if(index>=items.length)index=0;
+    const item=items[index];
+    host.innerHTML='<div class="top-attendance-slide"><b class="top-attendance-slide-name">'+(index+1)+'. '+String(item.name).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];})+'</b><span class="top-attendance-slide-detail">'+Number(item.rate||0)+'% 出席率</span></div>';
+    host.dataset.slideIndex=String((index+1)%items.length);
+  }
+  function startAttendanceSlideshow(){
+    const host=document.getElementById("top-attendance-slideshow");
+    if(!host)return;
+    host.dataset.slides=JSON.stringify([]);
+  }
+  window.__startTopAttendanceSlideshow=function(items){
+    const host=document.getElementById("top-attendance-slideshow");
+    if(!host)return;
+    host.dataset.slides=JSON.stringify(items||[]);
+    host.dataset.slideIndex="0";
+    renderAttendanceSlide();
+    if(window.__topAttendanceSlideshowTimer)clearInterval(window.__topAttendanceSlideshowTimer);
+    window.__topAttendanceSlideshowTimer=setInterval(renderAttendanceSlide,3000);
+  };
 })();
 </script>
 
