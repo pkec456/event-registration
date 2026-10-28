@@ -9,6 +9,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.4</title>
 <style>
+/* ===== CSS 區段 01｜base-styles ===== */
 :root{
   --bg:#f5f5f3; --surface:#fff; --surface-2:#f0f0ed; --ink:#171717; --muted:#777; --line:#e7e7e3;
   --accent:#c9141b; --accent-soft:#fff0f0; --success:#22a35a; --warning:#e59a13; --danger:#b42318;
@@ -2471,8 +2472,8 @@ body .app-header:not(.home-header){
     gap:6px !important;
   }
 }
-</style>
-<style id="remove-legacy-subpage-back">
+
+/* ===== CSS 區段 02｜remove-legacy-subpage-back ===== */
 /* 舊子頁返回鍵：直接移除，不佔版面空間 */
 .child-view .back,
 .subpage-view .back,
@@ -2484,8 +2485,8 @@ body .app-header:not(.home-header){
 .subpage-view .subpage-back {
   display:none !important;
 }
-</style>
-<style id="v21-final-header-alignment">
+
+/* ===== CSS 區段 03｜v21-final-header-alignment ===== */
 /* ===== V2.1 FINAL HEADER ALIGNMENT ===== */
 .top.home-fixed-header,.subpage-fixed-header{position:sticky!important;top:0!important;z-index:100!important;width:100%!important;height:58px!important;min-height:58px!important;max-height:58px!important;padding:8px 0!important;margin:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;align-items:center!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important}
 .top.home-fixed-header .home-header-left-slot{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;visibility:visible!important;display:flex!important;align-items:center!important;justify-content:flex-start!important}
@@ -2496,9 +2497,8 @@ body .app-header:not(.home-header){
 .top.home-fixed-header .top-admin-access svg,.top.home-fixed-header .top-admin-logout svg,.subpage-fixed-header .top-admin-access svg,.subpage-fixed-header .top-admin-logout svg{width:20px!important;height:20px!important}
 .subpage-fixed-header .subpage-back-top{grid-column:1!important;grid-row:1!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;margin:0!important;padding:0!important;align-self:center!important;justify-self:start!important}
 @media(max-width:430px){.top.home-fixed-header,.subpage-fixed-header{height:58px!important;min-height:58px!important;max-height:58px!important;grid-template-columns:42px minmax(0,1fr) 90px!important;column-gap:8px!important;padding:8px 0!important}}
-</style>
 
-<style id="v21-header-single-geometry-fix">
+/* ===== CSS 區段 04｜v21-header-single-geometry-fix ===== */
 /* V2.1: 所有頁面使用完全相同的 Header 座標，避免切換時標題位移 */
 html,body{
   width:100%;
@@ -2613,17 +2613,14 @@ body{overflow-y:scroll;}
     padding:8px 0 !important;
   }
 }
-</style>
 
-<style id="v21-header-scroll-stability">
+/* ===== CSS 區段 05｜v21-header-scroll-stability ===== */
 /* V2.1：固定垂直捲軸空間，避免查詢頁內容高度改變造成 Header 位移 */
 html{
   overflow-y:scroll;
 }
-</style>
 
-
-<style id="v21-admin-header-scroll-stability">
+/* ===== CSS 區段 06｜v21-admin-header-scroll-stability ===== */
 /* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
 html{
   overflow-y:scroll;
@@ -2631,10 +2628,8 @@ html{
 body{
   overflow-y:scroll;
 }
-</style>
 
-
-<style id="v21-fixed-header">
+/* ===== CSS 區段 07｜v21-fixed-header ===== */
 /* V2.1：Header 改為固定定位，避免切換首頁／查詢／管理時跳動 */
 header.top,
 header.subpage-fixed-header,
@@ -2653,10 +2648,8 @@ header.subpage-fixed-header,
 #app{
   padding-top:74px !important;
 }
-</style>
 
-
-<style id="v21-signin-status-count-final">
+/* ===== CSS 區段 08｜v21-signin-status-count-final ===== */
 /* V2.1：簽到頁「開放狀態／人數」固定左右排列，僅調整這一列 */
 .signin-status-count-row{
   display:flex !important;
@@ -2670,9 +2663,8 @@ header.subpage-fixed-header,
   margin-left:auto !important;
   white-space:nowrap !important;
 }
-</style>
 
-<style id="v21-overview-admin-icons-32px-corrected">
+/* ===== CSS 區段 09｜v21-overview-admin-icons-32px-corrected ===== */
 /* V2.1：今日概況／管理功能 Icon 統一 32×32 */
 #app.admin-home-view .metric-icon svg,
 #app.admin-home-view .admin-action .menu-icon svg,
@@ -2680,10 +2672,8 @@ header.subpage-fixed-header,
   width:32px !important;
   height:32px !important;
 }
-</style>
 
-
-<style id="v21-overview-admin-icon-frame-40">
+/* ===== CSS 區段 10｜v21-overview-admin-icon-frame-40 ===== */
 /* V2.1：今日概況／管理功能 Icon 外框統一 40×40 */
 #app.admin-home-view .metric-icon,
 #app.admin-home-view .admin-action .menu-icon,
@@ -2691,10 +2681,8 @@ header.subpage-fixed-header,
   width:40px !important;
   height:40px !important;
 }
-</style>
 
-
-<style id="v211-overview-admin-icons-unified">
+/* ===== CSS 區段 11｜v211-overview-admin-icons-unified ===== */
 /* V2.1.1：今日概況／管理功能 Icon 完全統一 */
 #app.admin-home-view .metric-icon,
 #app.admin-home-view .admin-square .menu-icon{
@@ -2720,10 +2708,8 @@ header.subpage-fixed-header,
   margin:0 !important;
   flex:0 0 32px !important;
 }
-</style>
 
-
-<style id="v211-admin-activity-rearrange">
+/* ===== CSS 區段 12｜v211-admin-activity-rearrange ===== */
 /* V2.1.1：管理活動列表重新排列；不改功能、不縮放其他區塊 */
 #app.admin-home-view .activity-admin-card .admin-card-top{
   align-items:center !important;
@@ -2741,24 +2727,19 @@ header.subpage-fixed-header,
 #app.admin-home-view .activity-admin-card .stat-row span{
   white-space:nowrap !important;
 }
-</style>
-<style id="admin-activity-hide-status-notes">
+
+/* ===== CSS 區段 13｜admin-activity-hide-status-notes ===== */
 .activity-admin-card .admin-card-status .status.closed{
   display:none !important;
 }
-</style>
 
-
-<style id="css-cleanup-final">
+/* ===== CSS 區段 14｜css-cleanup-final ===== */
 /* ===== CSS 統一修正版：僅統一使用者指定文字尺寸，不改變其他功能 ===== */
 .form-title{font-size:18px!important;line-height:1.25!important;}
 .field-label{font-size:18px!important;line-height:1.25!important;}
 .section-head h2{font-size:18px!important;line-height:1.25!important;}
-</style>
 
-
-
-<style id="bottom-signin-query-unified-final">
+/* ===== CSS 區段 15｜bottom-signin-query-unified-final ===== */
 /* 底部「簽到／查詢」唯一統一樣式 */
 .home-tabs button{
   width:100% !important;
@@ -2819,10 +2800,8 @@ header.subpage-fixed-header,
 .home-tabs button.active::after{
   display:none !important;
 }
-</style>
 
-
-<style id="manual-registration-ui">
+/* ===== CSS 區段 16｜manual-registration-ui ===== */
 .manual-register-list{margin-top:8px}
 .manual-register-list .list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
 .manual-register-list .list-row:last-child{border-bottom:0}
@@ -2840,10 +2819,8 @@ header.subpage-fixed-header,
 .manual-activity-summary .announcement-edit{margin-left:auto;flex:0 0 auto}
 .manual-activity-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 @media(max-width:520px){.manual-activity-actions{grid-template-columns:1fr 1fr}}
-</style>
 
-
-<style id="activity-management-filter-ui">
+/* ===== CSS 區段 17｜activity-management-filter-ui ===== */
 /* 活動管理篩選：欄位自適應，不固定按鈕寬度或四等分欄位 */
 .activity-management-filter{margin-bottom:12px}
 .activity-filter-row{display:block;width:100%}
@@ -2875,19 +2852,20 @@ header.subpage-fixed-header,
     font-size:14px !important;
   }
 }
-</style>
-<style id="attendance-limit-style">
+
+/* ===== CSS 區段 18｜attendance-limit-style ===== */
 .attendance-limit{display:inline-flex;align-items:center;gap:4px;}
 .attendance-limit::before{content:"";width:7px;height:7px;border-radius:50%;background:#f2c94c;display:inline-block;}
 .status.attendance-limited{background:#f2c94c !important;color:#5a4500 !important;border-color:#d8ad2b !important;}
 .status.attendance-limited .dot{background:#8a6d00 !important;}
-</style>
-<style id="activity-name-status-svg-style">
+
+/* ===== CSS 區段 19｜activity-name-status-svg-style ===== */
 .activity-status-all-icon{width:22px;height:22px;stroke-width:2.4;}
 .activity-status-all-icon.open-icon{color:#2e9b57!important;stroke:#2e9b57!important;}
 .activity-status-all-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
 .activity-status-all-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
-</style><style id="activity-list-existing-icons-style">
+
+/* ===== CSS 區段 20｜activity-list-existing-icons-style ===== */
 /* 活動列表原有 SVG：最終顏色只由該活動狀態決定 */
 svg.activity-list-icon.open-icon{color:#2e9b57!important;stroke:#2e9b57!important;}
 svg.activity-list-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
@@ -2898,7 +2876,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-right svg.activity-list-icon.attendance-limit-icon{color:#f2c94c!important;stroke:#f2c94c!important;}
 .activity-icon svg.activity-list-icon.closed-icon,
 .activity-right svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!important;}
-</style><style id="activity-list-fixed-icon-columns">
+
+/* ===== CSS 區段 21｜activity-list-fixed-icon-columns ===== */
 /* 活動列表：整個右側固定欄位，讓所有卡片的 %／倒數／人數／箭頭完全對齊 */
 .activity-right{
   display:grid !important;
@@ -2933,7 +2912,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-list-countdown-slot .activity-status-clock{margin:0 !important;}
 .activity-right .count{grid-column:3 !important;justify-self:end !important;width:70px !important;text-align:right !important;box-sizing:border-box !important;}
 .activity-right .arrow{grid-column:4 !important;justify-self:end !important;width:22px !important;}
-</style><style id="activity-list-attendance-rate-style">
+
+/* ===== CSS 區段 22｜activity-list-attendance-rate-style ===== */
 /* 出席率百分比：列表與簽到頁統一為固定正方形 */
 .activity-list-attendance-rate,
 .signin-attendance-rate{
@@ -2956,8 +2936,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 }
 .activity-list-attendance-rate.closed-attendance-rate,
 .signin-attendance-rate.closed-attendance-rate{background:#171717 !important;color:#fff !important;}
-</style>
-<style id="signin-attendance-rate-hero-layout">
+
+/* ===== CSS 區段 23｜signin-attendance-rate-hero-layout ===== */
 .checkin-hero-actions{
   display:flex;
   align-items:center;
@@ -2988,9 +2968,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 @media(max-width:430px){
   .checkin-hero-actions{gap:6px}
 }
-</style>
 
-<style id="officer-form-spacing-fix">
+/* ===== CSS 區段 24｜officer-form-spacing-fix ===== */
 /* 幹部管理：輸入欄位與按鈕增加間距 */
 .admin-edit-box .edit-code-input{
   margin-bottom:10px !important;
@@ -3001,8 +2980,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .officer-input + .primary{
   margin-top:10px !important;
 }
-</style>
-<style id="v23-activity-list-right-layout">
+
+/* ===== CSS 區段 25｜v23-activity-list-right-layout ===== */
 /* V2.4：活動列表右側欄位固定對齊，但不再浪費 190px 空間 */
 .activity-right{
   display:grid !important;
@@ -3020,1461 +2999,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 .activity-list-countdown-slot .activity-status-clock{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;margin:0 !important;}
 .activity-right .count{grid-column:3 !important;width:auto !important;min-width:48px !important;text-align:right !important;white-space:nowrap !important;}
 .activity-right .arrow{grid-column:4 !important;width:22px !important;justify-self:end !important;}
-</style>
-</head>
-<body>
-<div id="app"></div>
-<div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-const SYSTEM_VERSION="2.4";
-/*__APP_ASYNC_IIFE__*/
-(async function(){
-
-const SUPABASE_URL = "https://bnulmfijoovttegvllvc.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eSOD7XuCOMdRX11QH_f97A_76GU3wA0";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-
-async function adminLogin(username, password){
-  const {data,error}=await supabaseClient.rpc("simple_admin_login",{
-    p_username:username,
-    p_access_code:password
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"帳號或管理碼錯誤");
-
-  window.__haotianAdminSession={
-    username:data.username,
-    role:data.role,
-    access_code:password
-  };
-  adminUnlocked=true;
-  return data;
-}
-
-function getAdminSession(){
-  return window.__haotianAdminSession || null;
-}
-
-function adminRole(){
-  const s=getAdminSession();
-  return s?s.role:null;
-}
-
-function isSuperAdmin(){
-  return adminRole()==="super_admin";
-}
-
-async function adminLogout(){
-  window.__haotianAdminSession=null;
-  adminUnlocked=false;
-}
-
-async function checkAdminSession(){
-  const s=getAdminSession();
-  adminUnlocked=!!s?.username;
-  return adminUnlocked;
-}
-
-const STORAGE_KEY = "event-registration-data";
-let state = { activities: [], registrations: {}, adminPin: null };
-let activeTab = "register";
-let queryResultVisible = false;
-let loaded = false;
-let openEventId = null;      // which event card is expanded in register view
-let adminExpandedId = null;  // which event's registrant list is expanded in admin tab
-let adminUnlocked = false;   // in-memory only, resets on reload
-let userIsTyping = false;    // true while an input/textarea/password field has focus
-let pendingDeleteIdx = null; // index of registrant pending an in-page delete confirmation
-let draftFields = ["公用哨角"]; // labels for the "建立新活動" form, reset after creating
-let draftName = "";
-let draftEventCategory = "";
-let draftDate = "";
-let draftMaxParticipants = "";
-let draftMinimumAttendanceRate = "";
-let draftCloseMinutes = 0;
-let pendingPublishActivity = null;
-let draftPublishAt = "";
-let announcementText = "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
-let announcementEditing = false;
-
-
-let adminPage = "home";
-let activityManagementSearch = "";
-let activityManagementCategory = "all";
-let activityManagementStatus = "all";
-let activityManagementDateFrom = "";
-let activityManagementDateTo = "";
-
-let manualRegisterActivityId = null;
-let manualRegisterActivityName = "";
-let manualRegisterEventCategory = "";
-let manualRegisterActivityDate = "";
-let manualRegisterFields = ["公用哨角"];
-let manualRegisterActivityEditing = false;
-
-
-// 簽到頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
-const SIGNIN_PAGE_VISIBILITY_KEY = "haotian-signin-page-visible";
-function isSigninPageVisible(){
-  try{return localStorage.getItem(SIGNIN_PAGE_VISIBILITY_KEY) !== "hidden";}catch(e){return true;}
-}
-function setSigninPageVisibleLocal(visible){
-  try{localStorage.setItem(SIGNIN_PAGE_VISIBILITY_KEY, visible ? "visible" : "hidden");}catch(e){}
-}
-let signinPageVisible = isSigninPageVisible();
-let signinPageVisibilityLoaded = false;
-async function loadSigninPageVisibilityRemote(){
-  const {data,error}=await supabaseClient.rpc("get_signin_page_visibility");
-  if(error) throw error;
-  const visible = data?.visible !== false;
-  signinPageVisible=visible;
-  setSigninPageVisibleLocal(visible);
-  signinPageVisibilityLoaded=true;
-  return visible;
-}
-async function saveSigninPageVisibilityRemote(visible){
-  const session=getAdminSession();
-  if(!session?.username || !session?.access_code) throw new Error("請先登入管理者");
-  const {data,error}=await supabaseClient.rpc("simple_set_signin_page_visibility",{
-    p_username:session.username,
-    p_access_code:session.access_code,
-    p_visible:!!visible
-  });
-  if(error) throw error;
-  if(data?.ok===false) throw new Error(data?.message||"簽到頁面設定儲存失敗");
-  signinPageVisible=!!visible;
-  setSigninPageVisibleLocal(!!visible);
-  signinPageVisibilityLoaded=true;
-  return data;
-}
-
-document.addEventListener("focusin", (e)=>{
-  const tag = e.target.tagName;
-  if(tag === "INPUT" || tag === "TEXTAREA"){ userIsTyping = true; }
-});
-document.addEventListener("focusout", (e)=>{
-  const tag = e.target.tagName;
-  if(tag === "INPUT" || tag === "TEXTAREA"){
-    requestAnimationFrame(()=>{
-      const active=document.activeElement;
-      userIsTyping=!!active && (active.tagName==="INPUT" || active.tagName==="TEXTAREA");
-    });
-  }
-});
-
-function safeAdd(el,event,handler){
-  if(el && typeof el.addEventListener==="function") el.addEventListener(event,handler);
-  return el;
-}
-function safeAddById(id,event,handler){
-  return safeAdd(document.getElementById(id),event,handler);
-}
-function safeOn(selector,event,handler,root=document){
-  const el=root.querySelector(selector);
-  if(el) el.addEventListener(event,handler);
-  return el;
-}
-function uid(){
-  if(window.crypto && typeof window.crypto.randomUUID === "function"){
-    return window.crypto.randomUUID();
-  }
-  // UUID v4 fallback for older browsers
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
-    const r = Math.random()*16|0, v = c === "x" ? r : (r&3|8);
-    return v.toString(16);
-  });
-}
-function norm(s){ return (s||"").trim().replace(/\s+/g," "); }
-function keyOf(name){ return norm(name).toLowerCase(); }
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function fmtDate(iso){
-  try{ return new Date(iso).toLocaleDateString('zh-TW',{year:'numeric',month:'numeric',day:'numeric'}); }
-  catch(e){ return iso; }
-}
-
-function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(t._timer);
-  t._timer = setTimeout(()=> t.classList.remove("show"), 1800);
-}
-
-function isActivityDateExpired(activity, now=Date.now()){
-  // 活動日期為 YYYY-MM-DD；隔日 00:00 起視為「已過一天」。
-  // 沒有有效日期時不介入，避免影響既有活動。
-  const raw=String(activity?.date||"").trim();
-  const m=raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-  if(!m) return false;
-  const end=new Date(Number(m[1]),Number(m[2])-1,Number(m[3])+1,0,0,0,0).getTime();
-  return Number.isFinite(end) && now>=end;
-}
-
-async function loadData(){
-  startActivityExpiryWatcher();
-  try{
-    let acts = [];
-
-    if(adminUnlocked){
-      const session=getAdminSession();
-      const {data: adminData,error:adminErr}=await supabaseClient.rpc("simple_admin_list_activities",{
-        p_admin_username:session.username,
-        p_admin_code:session.access_code
-      });
-      if(adminErr) throw adminErr;
-      if(!adminData?.ok) throw new Error(adminData?.message||"管理者活動資料讀取失敗");
-      acts=adminData.activities||[];
-      if(typeof acts==="string"){try{acts=JSON.parse(acts);}catch(_){acts=[];}}
-      acts=(Array.isArray(acts)?acts:[]).map(a=>({
-        ...a,
-        hidden:Object.prototype.hasOwnProperty.call(a,"hidden") ? !!a.hidden :
-          (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false)
-      }));
-    }else{
-      const {data: publicActs,error:aErr}=await supabaseClient
-        .from("activities")
-        .select("*")
-        .eq("hidden",false)
-        .order("date",{ascending:false});
-      if(aErr) throw aErr;
-      acts=(publicActs||[]).filter(a=>!a.publish_at || new Date(a.publish_at).getTime()<=Date.now());
-    }
-
-    state.activities=(acts||[]).map(a=>({
-      id:a.id,
-      name:a.name,
-      date:a.date,
-      fields:Array.isArray(a.fields)?a.fields:[],
-      open:(!adminUnlocked && isActivityDateExpired(a)) ? false : !!a.open,
-      maxParticipants:a.max_participants==null?null:Number(a.max_participants),
-      minimumAttendanceRate:a.minimum_attendance_rate==null?0:Number(a.minimum_attendance_rate),
-      createdBy:a.created_by||"",
-      closeAt:a.close_at||null,
-      autoCloseMinutes:a.auto_close_minutes==null?0:Number(a.auto_close_minutes),
-      hidden:Object.prototype.hasOwnProperty.call(a,"hidden") ? !!a.hidden :
-
-        (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false),
-      publishAt:a.publish_at||null,
-      activityType:a.activity_type||"normal",
-      eventCategory:a.event_category||""
-    }));
-
-    state.registrations={};
-
-    // 管理者使用安全 RPC；隊員頁只讀取公開簽到名單。
-    // 簽到頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
-    if(adminUnlocked){
-      const session=getAdminSession();
-      const {data: regData,error:rErr}=await supabaseClient.rpc("simple_admin_list_registrations",{
-        p_admin_username:session.username,
-        p_admin_code:session.access_code
-      });
-      if(rErr) throw rErr;
-      if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
-      (regData.registrations||[]).forEach(r=>{
-        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
-        state.registrations[r.activity_id].push({
-          id:r.id,
-          activity_id:r.activity_id,
-          name:r.name,
-          fieldValues:r.field_values||{},
-          ts:r.created_at
-        });
-      });
-    }else{
-      const {data: regData,error:rErr}=await supabaseClient
-        .from("registrations")
-        .select("id,activity_id,name,field_values,created_at")
-        .order("created_at",{ascending:true});
-      if(rErr) throw rErr;
-
-      (regData||[]).forEach(r=>{
-        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
-        state.registrations[r.activity_id].push({
-          id:r.id,
-          activity_id:r.activity_id,
-          name:r.name,
-          fieldValues:r.field_values||{},
-          ts:r.created_at
-        });
-      });
-    }
-
-    state.adminPin=null;
-  }catch(e){
-    console.error("Supabase load error:",e);
-    showToast("雲端資料載入失敗："+(e?.message||""));
-  }
-  loaded=true;
-}
-async function saveData(){
-  // 保留舊函式名稱，實際資料由各操作直接寫入 Supabase。
-  return true;
-}
-
-async function createActivityRemote(activity){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-
-  const {data,error}=await supabaseClient.rpc("simple_admin_create_activity",{
-    p_admin_username:session.username,
-    p_admin_code:session.access_code,
-    p_id:activity.id,
-    p_name:activity.name,
-    p_date:activity.date,
-    p_fields:activity.fields,
-    p_open:activity.open,
-    p_max_participants:activity.maxParticipants,
-    p_created_by:activity.createdBy||session.username,
-    p_close_at:activity.closeAt,
-    p_auto_close_minutes:activity.autoCloseMinutes||0,
-    p_hidden:!!activity.hidden,
-    p_publish_at:activity.publishAt||null
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"建立活動失敗");
-
-  // 相容舊／新 SQL 回傳格式：
-  // 舊版可能回傳 data.activity；部分 SQL 只回傳 data.id。
-  // 前端不能直接讀 undefined.id，因此永遠整理成完整 activity。
-  const raw=data.activity || data;
-  return {
-    ...activity,
-    ...(raw && typeof raw === "object" ? raw : {}),
-    id: raw?.id || activity.id,
-    name: raw?.name ?? activity.name,
-    date: raw?.date ?? activity.date,
-    fields: Array.isArray(raw?.fields) ? raw.fields : activity.fields,
-    open: typeof raw?.open === "boolean" ? raw.open : activity.open,
-    maxParticipants: raw?.max_participants !== undefined
-      ? (raw.max_participants == null ? null : Number(raw.max_participants))
-      : (raw?.maxParticipants !== undefined ? raw.maxParticipants : activity.maxParticipants),
-    createdBy: raw?.created_by ?? raw?.createdBy ?? activity.createdBy,
-    closeAt: raw?.close_at ?? raw?.closeAt ?? activity.closeAt,
-    autoCloseMinutes: raw?.auto_close_minutes !== undefined
-      ? Number(raw.auto_close_minutes || 0)
-      : Number(raw?.autoCloseMinutes ?? activity.autoCloseMinutes ?? 0),
-    hidden: typeof raw?.hidden === "boolean" ? raw.hidden : activity.hidden,
-    publishAt: raw?.publish_at ?? raw?.publishAt ?? activity.publishAt ?? null,
-    activityType: raw?.activity_type ?? raw?.activityType ?? activity.activityType ?? "normal",
-    eventCategory: raw?.event_category ?? raw?.eventCategory ?? activity.eventCategory ?? ""
-  };
-}
-
-async function setEventCategoryRemote(activityId, eventCategory){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-  const {data,error}=await supabaseClient.rpc("simple_admin_set_event_category",{
-    p_admin_username:session.username,p_admin_code:session.access_code,
-    p_activity_id:String(activityId||""),p_event_category:eventCategory||null
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"活動分類儲存失敗");
-  return data;
-}
-function eventCategoryButtons(selected="",prefix="event-category"){
-  return `<div class="field event-category-field"><label class="field-label">活動分類</label><div class="choice-grid four event-category-choices">${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<button type="button" class="choice ${selected===category?"selected":""}" style="font-size:16px !important" data-event-category="${category}" data-event-category-prefix="${prefix}">${category}</button>`).join("")}</div></div>`;
-}
-async function setActivityTypeRemote(activityId, activityType){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-  const {data,error}=await supabaseClient.rpc("simple_admin_set_activity_type",{
-    p_activity_id:String(activityId||""),
-    p_activity_type:String(activityType||"normal"),
-    p_admin_code:String(session.access_code||""),
-    p_admin_username:String(session.username||"")
-  });
-  if(error){
-    const detail=[error.message,error.details,error.hint,error.code]
-      .filter(Boolean).join(" | ");
-    if(String(error.message||"").includes("Could not find the function")){
-      throw new Error("Supabase 尚未建立活動類型同步 RPC，請先執行隨附的 SQL：活動管理_V2.2.2_手動登記手機電腦同步修正版_SQL.sql");
-    }
-    throw new Error(detail||"活動類型儲存失敗");
-  }
-  if(!data?.ok) throw new Error(data?.message||"活動類型儲存失敗");
-  return data;
-}
-
-async function setMinimumAttendanceRateRemote(activityId, minimumAttendanceRate){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-  const {data,error}=await supabaseClient.rpc("simple_admin_set_minimum_attendance_rate",{
-    p_activity_id:String(activityId||""),
-    p_minimum_attendance_rate:Number(minimumAttendanceRate||0),
-    p_admin_code:String(session.access_code||""),
-    p_admin_username:String(session.username||"")
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"最低出席率儲存失敗");
-  return data;
-}
-
-function normalizeActivityForRPC(activity){
-  const x={...activity};
-
-  // PostgreSQL date parameter: accept Date, ISO timestamp, YYYY/M/D and
-  // YYYY-MM-DD, and always send a valid YYYY-MM-DD when possible.
-  if(x.date instanceof Date && !isNaN(x.date.getTime())){
-    x.date=x.date.toISOString().slice(0,10);
-  }else if(typeof x.date==="string"){
-    const s=x.date.trim();
-    let m=s.match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})/);
-    if(m){
-      x.date=`${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
-    }else{
-      const d=new Date(s);
-      if(!isNaN(d.getTime())) x.date=d.toISOString().slice(0,10);
-    }
-  }
-
-  x.fields=Array.isArray(x.fields)?x.fields:[];
-  x.maxParticipants =
-    x.maxParticipants==null || x.maxParticipants==="" ? null :
-    Number(x.maxParticipants);
-  x.minimumAttendanceRate = x.minimumAttendanceRate==null || x.minimumAttendanceRate==="" ? 0 : Number(x.minimumAttendanceRate);
-  if(!Number.isFinite(x.minimumAttendanceRate) || x.minimumAttendanceRate<0) x.minimumAttendanceRate=0;
-  x.minimumAttendanceRate=Math.min(100,x.minimumAttendanceRate);
-  if(x.maxParticipants!==null && !Number.isFinite(x.maxParticipants))
-    x.maxParticipants=null;
-
-  x.autoCloseMinutes=Number(x.autoCloseMinutes||0);
-  if(!Number.isFinite(x.autoCloseMinutes)) x.autoCloseMinutes=0;
-
-  x.closeAt=x.closeAt||null;
-  x.publishAt=x.publishAt||null;
-  x.open=!!x.open;
-  x.hidden=!!x.hidden;
-  return x;
-}
-
-async function updateActivityRemote(activity){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-
-  const a=normalizeActivityForRPC(activity);
-  const {data,error}=await supabaseClient.rpc("simple_admin_update_activity",{
-    p_admin_username:String(session.username||""),
-    p_admin_code:String(session.access_code||""),
-    p_id:String(a.id||""),
-    p_name:String(a.name||""),
-    p_date:a.date,
-    p_fields:Array.isArray(a.fields)?a.fields:[],
-    p_open:!!a.open,
-    p_max_participants:a.maxParticipants==null?null:Number(a.maxParticipants),
-    p_created_by:String(a.createdBy||session.username||""),
-    p_close_at:a.closeAt||null,
-    p_auto_close_minutes:Number(a.autoCloseMinutes||0),
-    p_hidden:!!a.hidden,
-    p_publish_at:a.publishAt||null
-  });
-
-  if(error){
-    const detail=[error.message,error.details,error.hint,error.code]
-      .filter(Boolean).join(" | ");
-    throw new Error(detail||"活動更新失敗");
-  }
-  if(!data?.ok) throw new Error(data?.message||"活動更新失敗");
-
-  const raw=data.activity||null;
-  return {
-    ...a,
-    ...(raw&&typeof raw==="object"?raw:{})
-  };
-}
-
-async function deleteActivityRemote(activityId){
-  const session=getAdminSession();
-  if(!session) throw new Error("管理者登入已失效");
-
-  const {data,error}=await supabaseClient.rpc("simple_admin_delete_activity",{
-    p_admin_username:session.username,
-    p_admin_code:session.access_code,
-    p_activity_id:activityId
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"刪除活動失敗");
-  return data;
-}
-async function checkAttendanceEligibilityRemote(activityId, name){
-  const {data,error}=await supabaseClient.rpc("public_check_attendance_eligibility",{
-    p_activity_id:String(activityId||""),
-    p_name:String(name||"")
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
-  return data;
-}
-
-async function createRegistrationRemote(activityId, registration, adminManual=false){
-  // 一般成員簽到維持原本公開 RPC。
-  // 手動登記由已登入管理者使用管理者 RPC，可在活動已停止後仍手動輸入。
-  const session=adminManual?getAdminSession():null;
-  const rpcName=adminManual?"simple_admin_create_registration":"public_create_registration";
-  const params=adminManual
-    ? {
-        p_admin_username:String(session?.username||""),
-        p_admin_code:String(session?.access_code||""),
-        p_activity_id:String(activityId||""),
-        p_name:registration.name,
-        p_field_values:registration.fieldValues || {}
-      }
-    : {
-        p_activity_id:activityId,
-        p_name:registration.name,
-        p_field_values:registration.fieldValues || {}
-      };
-
-  const { data, error } = await supabaseClient.rpc(rpcName, params);
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message || "簽到失敗");
-  return data.registration || data;
-}
-
-async function deleteRegistrationRemote(registrationId){
-  // 直接刪除後必須確認資料庫真的消失。
-  const direct=await supabaseClient.from("registrations").delete().eq("id",registrationId);
-  if(!direct.error){
-    const verify=await supabaseClient.from("registrations")
-      .select("id").eq("id",registrationId).maybeSingle();
-    if(!verify.error && !verify.data) return true;
-  }
-
-  console.warn("直接刪除未確認成功，嘗試公開刪除 RPC：",direct.error);
-
-  const rpc=await supabaseClient.rpc("public_delete_registration",{
-    p_registration_id:registrationId
-  });
-
-  if(rpc.error) throw rpc.error;
-  if(rpc.data && rpc.data.ok===false){
-    throw new Error(rpc.data.message||"刪除簽到失敗");
-  }
-
-  const verify2=await supabaseClient.from("registrations")
-    .select("id").eq("id",registrationId).maybeSingle();
-  if(verify2.error) throw verify2.error;
-  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
-
-  return true;
-}
-
-async function renameRegistrationRemote(registrationId, name){
-  const { error } = await supabaseClient.from("registrations")
-    .update({ name }).eq("id", registrationId);
-  if(error) throw error;
-}
-
-async function saveAdminPinRemote(pin){ return true; }
-
-
-async function testSupabaseConnection(){
-  try{
-    const { error } = await supabaseClient
-      .from("activities")
-      .select("id")
-      .limit(1);
-    if(error) throw error;
-    return { ok:true };
-  }catch(e){
-    console.error("Supabase connection test:", e);
-    return {
-      ok:false,
-      message:e?.message || "未知錯誤",
-      code:e?.code || "",
-      details:e?.details || "",
-      hint:e?.hint || ""
-    };
-  }
-}
-
-const SIGNED_LOCAL_KEY="haotian_signed_names_v1";
-function getLocalSignedMap(){
-  try{return JSON.parse(localStorage.getItem(SIGNED_LOCAL_KEY)||"{}")||{};}
-  catch(e){return {};}
-}
-function hasLocalSigned(activityId,name){
-  const map=getLocalSignedMap();
-  const arr=Array.isArray(map[activityId])?map[activityId]:[];
-  return arr.some(n=>keyOf(n)===keyOf(name));
-}
-function rememberLocalSigned(activityId,name){
-  const map=getLocalSignedMap();
-  if(!Array.isArray(map[activityId])) map[activityId]=[];
-  if(!map[activityId].some(n=>keyOf(n)===keyOf(name))) map[activityId].push(norm(name));
-  localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
-}
-function forgetLocalSigned(activityId,name){
-  const map=getLocalSignedMap();
-  if(Array.isArray(map[activityId])){
-    map[activityId]=map[activityId].filter(n=>keyOf(n)!==keyOf(name));
-    localStorage.setItem(SIGNED_LOCAL_KEY,JSON.stringify(map));
-  }
-}
-
-function regsOf(activityId){ return state.registrations[activityId] || (state.registrations[activityId] = []); }
-
-function filledCount(activity){
-  const list = regsOf(activity.id);
-  // count registrants who filled in at least one field with a non-empty value
-  return list.filter(r => (activity.fields||[]).some(f => norm((r.fieldValues||{})[f.key]) !== "")).length;
-}
-
-function allKnownNames(){
-  const set = new Set();
-  Object.values(state.registrations).forEach(list=>{
-    (list||[]).forEach(r => set.add(norm(r.name)));
-  });
-  return Array.from(set).sort((a,b)=> a.localeCompare(b,'zh-Hant'));
-}
-
-function activitiesThisYear(){
-  const y = new Date().getFullYear();
-  const now = Date.now();
-
-  // 出席率只計算未隱藏的活動；一般活動須已關閉且已發佈。
-  // 手動登記活動建立後直接納入，但隱藏活動一律排除。
-  return state.activities.filter(a => {
-    if(a.hidden) return false;
-    if(new Date(a.date).getFullYear() !== y) return false;
-
-    if(isManualRegistrationActivity(a)) return true;
-
-    if(a.open) return false;
-
-    const publishTs = a.publishAt ? new Date(a.publishAt).getTime() : null;
-    if(Number.isFinite(publishTs) && publishTs > now) return false;
-
-    return true;
-  });
-}
-
-function localDateKey(d=new Date()){
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-
-function recentOrOpenActivities(){
-  const todayKey = localDateKey();
-  return state.activities.filter(a=>{
-    if(a.hidden) return false;
-    const ts = a.publishAt ? new Date(a.publishAt).getTime() : null;
-    if(Number.isFinite(ts) && ts > Date.now()) return false;
-    const activityDate = String(a.date||"").slice(0,10);
-    if(activityDate && activityDate < todayKey) return false;
-    return true;
-  });
-}
-
-function annualStats(name){
-  const k = keyOf(name);
-  const acts = activitiesThisYear();
-  let attended = 0;
-  const detail = acts.map(a=>{
-    const present = regsOf(a.id).some(r => keyOf(r.name) === k);
-    if(present) attended++;
-    return { activity: a, present };
-  });
-  const total = acts.length;
-  const rate = total === 0 ? 0 : Math.round((attended/total)*1000)/10;
-  return { attended, total, rate, detail };
-}
-
-function exportAnnualCSV(rows, year){
-  const escapeCsv = (v)=>{
-    const s=String(v);
-    return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
-  };
-  let csv="\uFEFF"+["姓名","參加場次","總場次","出席率(%)"].join(",")+"\n";
-  rows.forEach(r=>{
-    csv += [escapeCsv(r.name),r.attended,r.total,r.rate].join(",")+"\n";
-  });
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download=`年度出席率總表_${year}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function getPublishAt(){
-  if(publishMode === "1day") return new Date(Date.now()+24*60*60*1000).toISOString();
-  if(publishMode === "1week") return new Date(Date.now()+7*24*60*60*1000).toISOString();
-  return null;
-}
-
-function render(){
-  const app=document.getElementById("app");
-  signinPageVisible=isSigninPageVisible();
-  if(!signinPageVisible && activeTab==="register"){ activeTab="query"; openEventId=null; }
-  const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
-  const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
-
-  app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
-
-  if(!isChild && !window.__adminAccountsViewOpen){
-    app.innerHTML=`
-      <header class="top home-fixed-header">
-        <div class="home-header-left-slot"><button class="home-link" type="button" id="home-signin-link" aria-label="簽到首頁" title="簽到首頁"><i data-lucide="house"></i></button></div>
-        <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
-        <div class="top-admin-actions">
-        <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
-          type="button" id="top-admin-access" aria-label="管理者"
-          title="${adminUnlocked?"進入管理者":"管理者登入"}">
-          <i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i>
-        </button>
-        ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
-      </div>
-      </header>
-      <nav class="tabs home-tabs">
-        ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
-          <i data-lucide="check"></i>簽到
-        </button>
-        <button data-tab="query" class="${activeTab==='query'?'active':''}">
-          <i data-lucide="search"></i>查詢
-        </button>`:""}
-      </nav>
-      <div id="tab-content"></div>`;
-  }else{
-    const queryHomeMode=activeTab==="query" && !signinPageVisible;
-    const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(queryHomeMode?"首頁":(activeTab==="query"?"返回首頁":"返回管理後台")));
-    app.innerHTML=`
-      <header class="subpage-fixed-header">
-        <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${queryHomeMode?"house":"arrow-left"}"></i></button>
-        <h1 class="subpage-title">台中浩天宮四紅哨角隊</h1>
-        <div class="subpage-actions">
-          <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="subpage-admin-access" aria-label="管理者" title="${adminUnlocked?"進入管理者":"管理者登入"}"><i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i></button>
-          ${adminUnlocked?`<button class="top-admin-logout" type="button" id="subpage-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
-        </div>
-      </header>
-      <div id="tab-content"></div>`;
-  }
-
-  const subpageBack=app.querySelector(".subpage-back-top");
-  if(subpageBack)subpageBack.onclick=()=>{
-    if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
-    if(openEventId){openEventId=null;render();return;}
-    if(activeTab==="query"){if(!signinPageVisible){activeTab="query";openEventId=null;queryResultVisible=false;render();return;} activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
-    if(activeTab==="admin" && adminUnlocked){
-      if(adminPage==="attendance-person"){adminPage="attendance";render();return;}
-      if(adminPage==="manual-register" && manualRegisterActivityId){
-        showManualReturnDialog().then(async save=>{
-          try{
-            if(save){await saveManualRegistrationDraft();showToast("活動資料已儲存");}
-            resetManualRegistrationPage();
-            adminPage="home";
-            render();
-          }catch(e){
-            showToast("活動資料儲存失敗："+(e?.message||"請稍後再試"));
-          }
-        });
-        return;
-      }
-      adminPage="home";render();return;
-    }
-    activeTab="register";openEventId=null;render();
-  };
-  const subpageAdminAccess=app.querySelector("#subpage-admin-access");
-  if(subpageAdminAccess)subpageAdminAccess.onclick=()=>{activeTab="admin";openEventId=null;queryResultVisible=false;if(adminUnlocked)adminPage="home";render();};
-  const subpageAdminLogout=app.querySelector("#subpage-admin-logout");
-  if(subpageAdminLogout)subpageAdminLogout.onclick=async()=>{await adminLogout();adminPage="home";openEventId=null;queryResultVisible=false;showToast("已登出管理者");render();};
-
-  if(window.__adminAccountsViewOpen){
-    renderAdminAccounts(document.getElementById("tab-content"));
-    refreshIcons();
-    return;
-  }
-
-  const homeTabButtons=app.querySelectorAll(".home-tabs button");
-  homeTabButtons.forEach(btn=>{
-    btn.addEventListener("pointerenter",()=>btn.classList.add("is-pointer"));
-    btn.addEventListener("pointerleave",()=>btn.classList.remove("is-pointer"));
-    btn.addEventListener("focus",()=>btn.classList.add("is-pointer"));
-    btn.addEventListener("blur",()=>btn.classList.remove("is-pointer"));
-  });
-
-  const tabs=app.querySelector(".home-tabs");
-  if(tabs)tabs.onclick=(ev)=>{
-    const btn=ev.target.closest("button[data-tab]");
-    if(!btn)return;
-    activeTab=btn.dataset.tab;
-    openEventId=null;
-    adminExpandedId=null;
-    queryResultVisible=false;
-    render();
-  };
-
-  const adminAccess=app.querySelector("#top-admin-access");
-  if(adminAccess)adminAccess.onclick=()=>{
-    activeTab="admin";
-    openEventId=null;
-    adminExpandedId=null;
-    queryResultVisible=false;
-    render();
-  };
-
-  const homeSigninLink=app.querySelector("#home-signin-link");
-  if(homeSigninLink)homeSigninLink.onclick=()=>{
-    if(!isSigninPageVisible() && !adminUnlocked){ activeTab="query"; openEventId=null; render(); return; }
-    activeTab="register";
-    openEventId=null;
-    adminPage="home";
-    queryResultVisible=false;
-    window.__adminAccountsViewOpen=false;
-    render();
-  };
-
-  const topAdminLogout=app.querySelector("#top-admin-logout");
-  if(topAdminLogout)topAdminLogout.onclick=async()=>{
-    await adminLogout();
-    adminPage="home";
-    openEventId=null;
-    adminExpandedId=null;
-    queryResultVisible=false;
-    showToast("已登出管理者");
-    render();
-  };
-
-  renderTab();
-}
-function refreshIcons(){
-  if(window.lucide && typeof window.lucide.createIcons === "function") window.lucide.createIcons({attrs:{"stroke-width":2}});
-}
-function renderTab(){
-  const el=document.getElementById("tab-content"); if(!el)return;
-  el.classList.toggle("admin-landing",activeTab==="admin" && adminUnlocked && adminPage==="home");
-  el.classList.toggle("admin-child",activeTab==="admin" && adminUnlocked && adminPage!=="home");
-  if(!loaded){el.innerHTML=`<div class="block"><div class="empty">載入中…</div></div>`; refreshIcons(); return;}
-  if(activeTab==="register") renderRegister(el);
-  else if(activeTab==="query") renderQuery(el);
-  else if(activeTab==="admin") renderAdmin(el);
-  refreshIcons();
-}
-
-// ---------- REGISTER TAB ----------
-function formatCountdown(ms){
-  const total=Math.max(0,Math.floor(ms/1000));
-  const minutes=Math.floor(total/60);
-  const seconds=total%60;
-  return `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-}
-
-function ensurePublicCountdown(activity){
-  if(!activity || !activity.open)return;
-  const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
-  if(!end || end<=Date.now())return;
-  // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
-  if(typeof renderCountdown==="function") renderCountdown(activity);
-}
-function renderCountdown(activity){
-  const box=document.getElementById("event-countdown");
-  if(!box)return;
-
-  const timer=()=>{
-    const now=Date.now();
-
-    // 建立活動原本就是從 activity.closeAt 倒數；
-    // 二次開啟只在這裡多一個本機 30 秒 deadline，不改原本 CSS。
-    const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
-    const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
-    const end=localDeadline||dbDeadline;
-
-    if(end && end>now){
-      box.classList.add("has-countdown");
-      box.classList.remove("no-countdown");
-
-      let span=box.querySelector(".countdown-text");
-      if(!span){
-        box.innerHTML=`<i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(end-now)}</span>`;
-        refreshIcons();
-      }else{
-        // 舊版寫法的核心：每秒只改數字。
-        span.textContent=formatCountdown(end-now);
-      }
-    }else{
-      box.classList.remove("has-countdown");
-      box.classList.add("no-countdown");
-
-      if(!box.querySelector("[data-lucide='timer-off']")){
-        box.innerHTML=`<i data-lucide="timer-off"></i>`;
-        refreshIcons();
-      }
-    }
-  };
-
-  clearInterval(activity._countdownTimer);
-  timer();
-  activity._countdownTimer=setInterval(timer,1000);
-}
-
-async function refreshActivityRegistrations(activityId){
-  const {data,error}=await supabaseClient
-    .from("registrations")
-    .select("id,activity_id,name,field_values,created_at")
-    .eq("activity_id",activityId)
-    .order("created_at",{ascending:true});
-  if(error) throw error;
-
-  const fresh=(data||[]).map(r=>({
-    id:r.id,
-    activity_id:r.activity_id,
-    name:r.name,
-    fieldValues:r.field_values||{},
-    ts:r.created_at
-  }));
-  state.registrations[activityId]=fresh;
-  return fresh;
-}
-
-
-function activityStatusClock(activity){
-  // 正常建立活動：使用 activity.closeAt。
-  // 二次開啟：只額外從本機 deadline 取得 30 秒，不改既有 CSS。
-  const localDeadline=window.v93CountdownDeadlines?.get(String(activity.id))||0;
-  const dbDeadline=activity.closeAt?new Date(activity.closeAt).getTime():0;
-  const end=localDeadline||dbDeadline||null;
-  const remaining=end?end-Date.now():0;
-
-  if(activity.open && end && remaining>0){
-    return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i class="activity-list-icon ${((Number(activity.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon"}" data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
-  }
-  if(activity.open) return ``;
-  return `<div class="activity-status-clock closed" aria-label="已關閉"></div>`;
-}
-
-let activityExpiryTimer=null;
-window.v93CountdownDeadlines=window.v93CountdownDeadlines||new Map();
-
-function startActivityExpiryWatcher(){
-  if(activityExpiryTimer)clearInterval(activityExpiryTimer);
-  activityExpiryTimer=setInterval(async()=>{
-    if(!Array.isArray(state.activities))return;
-    const now=Date.now();
-    const expired=state.activities.filter(a=>{
-      const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
-      const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
-      const end=localEnd||dbEnd;
-      return a.open && (
-        (end && end<=now) ||
-        isActivityDateExpired(a, now)
-      );
-    });
-    if(!expired.length)return;
-
-    for(const a of expired){
-      // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
-      const oldCloseAt=a.closeAt;
-      const oldAuto=a.autoCloseMinutes;
-      const localDeadline=window.v93CountdownDeadlines?.get(String(a.id))||0;
-      a.open=false;
-      a.closeAt=null;
-      a.autoCloseMinutes=0;
-      window.v93CountdownDeadlines?.delete(String(a.id));
-
-      try{
-        await updateActivityRemote({
-          id:a.id,
-          name:a.name,
-          date:a.date,
-          fields:a.fields||[],
-          open:false,
-          maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
-          createdBy:a.createdBy||"",
-          closeAt:null,
-          autoCloseMinutes:0,
-          hidden:!!a.hidden,
-          publishAt:a.publishAt||null
-        });
-        console.log("[活動管理] 30 秒到，自動關閉活動",a.name);
-      }catch(e){
-        // 更新失敗時恢復本機狀態，避免畫面與資料庫不一致。
-        a.open=true;
-        a.closeAt=oldCloseAt;
-        a.autoCloseMinutes=oldAuto;
-        if(localDeadline) window.v93CountdownDeadlines?.set(String(a.id),localDeadline);
-        console.error("[活動管理] 30 秒自動關閉失敗",e);
-      }
-    }
-
-    // 倒數到 0 秒並成功關閉後，立即同步畫面，確實停止接受簽到。
-    if(typeof window.refreshActivityListClocks==="function"){
-      window.refreshActivityListClocks();
-    }
-    if(expired.some(a=>String(a.id)===String(openEventId))){
-      render();
-    }
-  },1000);
-}
-
-startActivityExpiryWatcher();
-
-function saveState(){
-  if(!window.state || !Array.isArray(window.state.activities)) return;
-}
-
-function refreshActivityListClocks(){
-  const now=Date.now();
-
-  document.querySelectorAll(".publish-countdown").forEach(box=>{
-    const publishAt=new Date(box.dataset.publishAt||"").getTime();
-    if(!Number.isFinite(publishAt)) return;
-    const remaining=publishAt-now;
-    if(remaining>0){
-      box.textContent=`距離發佈 ${formatCountdown(remaining)}`;
-    }else{
-      box.textContent="即將發佈";
-    }
-  });
-
-  document.querySelectorAll(".activity-status-clock.countdown").forEach(box=>{
-    const id=box.closest(".activity-card")?.dataset.open;
-    const mapped=window.v93CountdownDeadlines?.get(String(id));
-    const dbEnd=Number(box.dataset.countdownEnd||0);
-    const end=dbEnd||mapped;
-    const remaining=end-now;
-    if(remaining<=0)return;
-
-    const span=box.querySelector(".countdown-text");
-    if(span)span.textContent=formatCountdown(remaining);
-  });
-
-  const eventBox=document.getElementById("event-countdown");
-  if(eventBox && openEventId){
-    const activity=state.activities.find(x=>String(x.id)===String(openEventId));
-    if(activity && activity.open){
-      const mapped=window.v93CountdownDeadlines?.get(String(activity.id));
-      const end=mapped||(activity.closeAt?new Date(activity.closeAt).getTime():0);
-      if(end && end>now){
-        const span=eventBox.querySelector(".countdown-text");
-        if(span)span.textContent=formatCountdown(end-now);
-      }
-    }
-  }
-}
-
-
-window.refreshActivityListClocks=refreshActivityListClocks;
-
-
-function displayFieldLabel(label,index){
-  const name=norm(label)||"欄位";
-  return `${escapeHtml(name)} <span class="field-slot-no">${String(index+1).padStart(2,"0")}</span>`;
-}
-
-
-function subpageHeader(title, backLabel="返回"){
-  return ``;
-}
-
-function childBackButton(label){
-  return `<button class="child-back" type="button" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}"><i data-lucide="arrow-left"></i></button>`;
-}
-async function attendanceEligibilityFor(name, activity){
-  const required=Math.max(0,Math.min(100,Number(activity?.minimumAttendanceRate)||0));
-  if(required<=0 || isManualRegistrationActivity(activity)){
-    return {eligible:true,required,rate:100,total:0,attended:0};
-  }
-  const {data,error}=await supabaseClient.rpc("public_check_attendance_eligibility",{
-    p_activity_id:String(activity?.id||""),
-    p_name:String(name||"")
-  });
-  if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message||"資格檢查失敗");
-  return {
-    eligible:Boolean(data.eligible),
-    required:Number(data.required ?? required),
-    rate:Number(data.rate ?? 0),
-    total:Number(data.total ?? 0),
-    attended:Number(data.attended ?? 0)
-  };
-}
-
-function renderRegister(el){
-   if(!isSigninPageVisible()){ activeTab="query"; openEventId=null; return renderQuery(el); }
-  const acts=[...recentOrOpenActivities()].sort((a,b)=>{
-    const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
-    const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
-  });
-  if(openEventId){
-    const activity=acts.find(a=>a.id===openEventId);
-    if(!activity){openEventId=null;return renderRegister(el);}
-    const list=regsOf(activity.id), fields=activity.fields||[];
-    el.innerHTML=`
-
-      
-      <div class="hero checkin-hero">
-        <div class="checkin-hero-main">
-          <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
-          <div>
-            <h2>${escapeHtml(activity.name)}</h2>
-            <p>${fmtDate(activity.date)}</p>
-          </div>
-        </div>
-        <div class="checkin-hero-actions">
-          ${(Number(activity.minimumAttendanceRate)||0)>0?`<div class="signin-attendance-rate ${activity.open?'':'closed-attendance-rate'}" aria-label="最低出席率 ${Number(activity.minimumAttendanceRate)}%">${Number(activity.minimumAttendanceRate)}%</div>`:""}
-          <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
-        </div>
-      </div>
-      <div class="checkin-card">
-        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
-        ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
-          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
-          ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
-          <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
-        `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
-      </div>
-      <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
-      <div class="block tight" style="--field-count:${Math.max(1,fields.length)}"><div class="list">
-        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:`
-          <div class="signin-list-head">
-            <div>姓名</div>
-            ${fields.map(f=>`<div>${escapeHtml(f.label)}</div>`).join("")}
-            <div></div>
-          </div>
-          ${list.map((r,i)=>`<div class="list-row">
-            <div class="list-index">${i+1}</div>
-            <div class="list-main">
-              <div class="list-name">${escapeHtml(r.name)}</div>
-              <div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div>
-            </div>
-            ${fields.map(f=>`<div class="signin-field-value">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</div>`).join("")}
-            ${activity.open?`<button class="signin-delete-btn" data-delete-reg="${i}" title="刪除簽到" aria-label="刪除簽到"><i data-lucide="x"></i></button>`:`<i class="check" data-lucide="check"></i>`}
-          </div>`).join("")}
-        `}
-      </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
-    `;
-    if(activity.open){
-      el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
-        ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
-        try{await deleteRegistrationRemote(reg.id);const fresh=await refreshActivityRegistrations(activity.id);if(fresh.some(x=>String(x.id)===String(reg.id)))throw new Error("資料庫仍存在這筆簽到紀錄");state.registrations[activity.id]=fresh;forgetLocalSigned(activity.id,reg.name);showToast("已刪除");}catch(e){console.error(e);showToast("刪除失敗："+(e?.message||"未知錯誤"));}renderRegister(el);refreshIcons();
-      });
-      const btn=document.getElementById("reg-btn"),nameInput=document.getElementById("reg-name");
-      if(btn&&nameInput){
-        const doRegister=async()=>{
-          const name=norm(nameInput.value);if(!name){showToast("請輸入姓名");return;}
-          // 新增功能：先依「輸入姓名」立即做最低出席率資格比對。
-          // 不先抓整份簽到名單，避免簽到名單讀取卡住時，資格判斷根本沒有執行。
-          let eligibility;
-          try{
-            eligibility=await attendanceEligibilityFor(name,activity);
-          }catch(e){
-            console.error("資格檢查失敗：",e);
-            showToast("無法完成資格檢查，請稍後再試");
-            return;
-          }
-          if(!eligibility.eligible){
-            showToast(`未達出席資格（需 ${eligibility.required}% 以上，目前 ${eligibility.rate}%）`);
-            return;
-          }
-
-          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
-          if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
-          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
-          const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
-          btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
-          try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id,name:remote.name||name,fieldValues:remote.field_values||fieldValues,ts:remote.created_at||new Date().toISOString()};state.registrations[activity.id]=freshList.filter(r=>r.id!==newReg.id);state.registrations[activity.id].push(newReg);rememberLocalSigned(activity.id,name);showToast(`${name} 簽到成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
-        };btn.onclick=doRegister;nameInput.onkeydown=e=>{if(e.key==="Enter")doRegister();};
-      }
-    }
-    renderCountdown(activity);refreshIcons();return;
-  }
-  el.innerHTML=`
-    <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div style="flex:1;min-width:0"><h3>公告</h3><div class="announcement-text">${escapeHtml(announcementText)}</div></div></div>
-    <div class="section-head activity-list-head">
-      <h2>近期活動</h2>
-      <div class="activity-list-status-legend">
-        <span><span class="dot open-dot"></span>開放中</span>
-        <span><span class="dot closed-dot"></span>已關閉</span>
-      <span><span class="dot" style="background:#f2c94c"></span>出席率限制</span></div>
-    </div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}">
-  <div class="activity-top">
-    <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="calendar-days"></i></div>
-    <div class="activity-main">
-      ${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="activity-name">${escapeHtml(a.name)}</div>
-      <div class="activity-meta">${fmtDate(a.date)}</div>
-
-    </div>
-    <div class="activity-right">
-      <div class="activity-list-rate-slot">${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}</div>
-      <div class="activity-list-countdown-slot">${activityStatusClock(a)}</div>
-      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
-      <span class="arrow"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="chevron-right"></i></span>
-    </div>
-  </div>
-</div>`).join("")}</div>
-  `;
-  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;render();});refreshIcons();
-
-}
-
-// ---------- QUERY TAB ----------
-function getAttendanceTone(rate){
-  const n=Number(rate)||0;
-  if(n<60) return {name:'red',color:'#DC2626',label:'需要加油'};
-  if(n<80) return {name:'orange',color:'#EA580C',label:'持續努力'};
-  if(n<90) return {name:'blue',color:'#2563EB',label:'表現良好'};
-  return {name:'green',color:'#16A34A',label:'表現優異'};
-}
-
-function renderQuery(el){
-  el.innerHTML=`
-
-    <div class="announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div style="flex:1;min-width:0"><h3>公告</h3><div class="announcement-text">${escapeHtml(announcementText)}</div></div></div>
-
-    <div class="section-head" style="margin-top:12px">
-      <h2>搜尋資料</h2>
-      <span></span>
-    </div>
-
-    <div class="query-search-row">
-      <div class="query-search-label">
-        <span class="query-search-icon"><i data-lucide="chart-no-axes-combined"></i></span>
-        <strong>出席率</strong>
-      </div>
-
-      <div class="query-search-input">
-        <input type="text" id="query-name" class="reg-name-input" placeholder="輸入姓名" autocomplete="off">
-      </div>
-
-      <button type="button" class="query-search-button" id="query-btn" aria-label="搜尋" title="搜尋">
-        <i data-lucide="search"></i>
-      </button>
-    </div>
-
-    <div id="query-result"></div>
-  `;
-
-  const input=el.querySelector("#query-name");
-  const button=el.querySelector("#query-btn");
-  const box=el.querySelector("#query-result");
-  const back=el.querySelector("#query-back");
-  if(back)back.onclick=()=>{activeTab="register";openEventId=null;render();};
-  if(!input || !button || !box){
-    console.error("查詢頁面初始化失敗：找不到查詢元件");
-    return;
-  }
-
-  const doQuery=()=>{
-    const name=norm(input.value);
-    if(!name){
-      showToast("請輸入姓名");
-      input.focus();
-      return;
-    }
-
-    const acts=activitiesThisYear();
-    if(!acts.length){
-      box.innerHTML=`<div class="block"><div class="empty">今年還沒有任何活動</div></div>`;
-      refreshIcons();
-      return;
-    }
-
-    const hasHistory = Object.values(state.registrations).some(list =>
-      (list || []).some(r => keyOf(r.name) === keyOf(name))
-    );
-
-    if(!hasHistory){
-      box.innerHTML=`<div class="query-no-person">
-        <i data-lucide="user-round-x"></i>
-        <div class="query-no-person-title">查無此人</div>
-        <div class="query-no-person-hint">找不到此姓名的歷史簽到紀錄</div>
-      </div>`;
-      refreshIcons();
-      return;
-    }
-
-    const s=annualStats(name);
-    const rate=Math.max(0,Math.min(100,Number(s.rate)||0));
-    const attended=Math.max(0,Number(s.attended)||0);
-    const total=Math.max(0,Number(s.total)||0);
-    const tone=getAttendanceTone(rate);
-    const attendancePercent=total>0 ? Math.max(0,Math.min(100,(attended/total)*100)) : 0;
-
-    box.innerHTML=`
-      <div class="query-person">
-        <div class="query-person-icon"><i data-lucide="user-round"></i></div>
-        <div>
-          <div class="result-name">${escapeHtml(name)}</div>
-          <div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div>
-        </div>
-      </div>
-
-      <div class="query-metrics">
-        <div class="query-metric-card attendance-metric ${tone.name}">
-          <div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div>
-          <div class="donut" style="--value:${rate}%;--donut-color:${tone.color}">
-            <div class="donut-center">
-              <strong>${rate}<small>%</small></strong>
-              <span>出席率</span>
-            </div>
-          </div>
-          <div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div>
-        </div>
-
-        <div class="query-metric-card attendance-metric signins">
-          <div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div>
-          <div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)">
-            <div class="donut-center">
-              <strong>${attended}</strong>
-              <span>/ ${total} 場</span>
-            </div>
-          </div>
-          <div class="metric-badge signins-badge">已簽到 ${attended} 場</div>
-        </div>
-      </div>
-
-      <div class="section-head">
-        <h2>活動紀錄</h2>
-        <span>${total} 場</span>
-      </div>
-
-      <div class="block tight query-history">
-        <div class="list">
-          ${s.detail.slice().reverse().map(d=>`
-            <div class="list-row">
-              <div class="list-icon"><i data-lucide="calendar-days"></i></div>
-              <div class="list-main">
-                <div class="list-name">${escapeHtml(d.activity.name)}</div>
-                <div class="list-meta">${fmtDate(d.activity.date)}</div>
-              </div>
-              ${d.present
-                ? `<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`
-                : `<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`
-              }
-            </div>
-          `).join("")}
-        </div>
-      </div>
-    `;
-
-    refreshIcons();
-  };
-
-  button.onclick=doQuery;
-  input.onkeydown=(e)=>{
-    if(e.key==="Enter"){
-      e.preventDefault();
-      doQuery();
-    }
-  };
-
-  refreshIcons();
-}
-
-// ---------- ADMIN TAB (password gated) ----------
-
-async function renderAdminAccounts(el){
-  window.__adminAccountsViewOpen=true;
-  if(!isSuperAdmin()){showToast("只有主管理員可以管理幹部");return;}
-  const session=getAdminSession();if(!session){showToast("管理者登入已失效");return;}
-  try{
-    const {data,error}=await supabaseClient.rpc("simple_list_admins",{p_admin_username:session.username,p_admin_code:session.access_code});
-    if(error)throw error;if(!data?.ok)throw new Error(data?.message||"讀取幹部失敗");const rows=data.accounts||[];
-    el.innerHTML=`<div class="admin-head"><div><h1 class="page-title">幹部管理</h1><p class="page-subtitle">新增、修改密碼、啟用／停用或刪除幹部。</p></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>新增幹部</div><input id="new-officer-user" class="officer-input" type="text" placeholder="帳號" autocomplete="off"><input id="new-officer-pass" class="officer-input" type="password" placeholder="密碼（至少 4 碼）" autocomplete="new-password"><button type="button" class="primary" id="create-officer"><i data-lucide="plus"></i>新增幹部</button></div><div class="section-head"><h2>幹部列表</h2><span>${rows.length} 個帳號</span></div><div>${rows.map(a=>{const roleIcon=a.role==="super_admin"?"crown":"shield-check";return `<div class="officer-card" data-officer-username="${escapeHtml(a.username)}"><div class="officer-top"><div class="officer-icon"><i data-lucide="${roleIcon}"></i></div><div class="officer-info"><div class="officer-name">${escapeHtml(a.username)}</div><div class="officer-role">${a.role==="super_admin"?"主管理員":"幹部"}</div></div><div class="officer-state">${a.active?"啟用":"停用"}</div></div>${a.role==="officer"?`<div class="officer-actions"><button class="secondary officer-edit-btn"><i data-lucide="key-round"></i>修改密碼</button><button class="secondary officer-toggle-btn" data-active="${a.active?"true":"false"}"><i data-lucide="power"></i>${a.active?"停用":"啟用"}</button><button class="secondary officer-delete-btn danger-btn"><i data-lucide="trash-2"></i>刪除</button></div>`:""}</div>`}).join("")}</div><div id="admin-action-message" class="field-hint" style="min-height:18px;margin-top:10px"></div>`;
-    refreshIcons();
-    const messageEl=document.getElementById("admin-action-message"),showAdminMessage=msg=>{if(messageEl)messageEl.textContent=msg||""};
-    const goBack=()=>{window.__adminAccountsViewOpen=false;adminPage="home";render();};
-    el.onclick=async ev=>{const target=ev.target.closest("button");if(!target)return;const row=target.closest("[data-officer-username]");const username=row?.dataset.officerUsername;
-      if(target.id==="create-officer"){const u=norm(document.getElementById("new-officer-user")?.value),pw=document.getElementById("new-officer-pass")?.value||"";if(!u){showAdminMessage("請輸入帳號");return}if(!pw){showAdminMessage("請輸入密碼");return}target.disabled=true;try{const result=await supabaseClient.rpc("simple_create_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:u,p_code:pw});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"建立失敗");showToast("幹部建立成功");await renderAdminAccounts(el);}catch(e){target.disabled=false;showAdminMessage("新增失敗："+(e?.message||"未知錯誤"));}return;}
-      if(!row||!username)return;
-      if(target.classList.contains("officer-edit-btn")){const old=row.querySelector(".admin-edit-box");if(old){old.remove();return}const box=document.createElement("div");box.className="admin-edit-box";box.innerHTML=`<input class="officer-input edit-code-input" type="password" placeholder="新的密碼（至少 4 碼）"><div style="display:flex;gap:7px"><button class="primary save-code-btn" type="button">儲存</button><button class="secondary cancel-code-btn" type="button">取消</button></div>`;row.appendChild(box);box.querySelector(".cancel-code-btn").onclick=()=>box.remove();box.querySelector(".save-code-btn").onclick=async()=>{const newCode=box.querySelector(".edit-code-input")?.value||"";if(newCode.length<4){showAdminMessage("新的密碼至少 4 碼");return}try{const result=await supabaseClient.rpc("simple_change_officer_code",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:newCode});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"修改密碼失敗");showToast("密碼修改成功");await renderAdminAccounts(el);}catch(e){showAdminMessage("修改失敗："+(e?.message||"未知錯誤"));}};return;}
-      if(target.classList.contains("officer-toggle-btn")){const active=target.dataset.active==="true",action=active?"停用":"啟用";if(!confirm(`確定${action}幹部「${username}」？`))return;try{const result=await supabaseClient.rpc("simple_update_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username,p_new_code:null,p_active:!active});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||`${action}失敗`);showToast(active?"已停用":"已啟用");await renderAdminAccounts(el);}catch(e){showAdminMessage(`${action}失敗：`+(e?.message||"未知錯誤"));}return;}
-      if(target.classList.contains("officer-delete-btn")){if(!confirm(`確定刪除幹部「${username}」？
-刪除後無法使用此帳號登入。`))return;try{const result=await supabaseClient.rpc("simple_delete_officer",{p_admin_username:session.username,p_admin_code:session.access_code,p_username:username});if(result.error)throw result.error;if(!result.data?.ok)throw new Error(result.data?.message||"刪除失敗");showToast("幹部已刪除");await renderAdminAccounts(el);}catch(e){showAdminMessage("刪除失敗："+(e?.message||"未知錯誤"));}}
-    };
-  }catch(e){el.innerHTML=`<div class="block"><div class="empty">讀取幹部失敗：${escapeHtml(e?.message||"未知錯誤")}</div><button class="secondary" id="back-admin-error" style="width:100%">返回管理後台</button></div>`;document.getElementById("back-admin-error")?.addEventListener("click",()=>{window.__adminAccountsViewOpen=false;render();});}
-}
-
-async function loadAnnouncementRemote(){
-  const {data,error}=await supabaseClient.rpc("get_announcement");
-  if(error) throw error;
-  announcementText=(typeof data==="string"?data:(data?.announcement||"")) || "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
-  return announcementText;
-}
-async function saveAnnouncementRemote(text){
-  const {data,error}=await supabaseClient.rpc("save_announcement",{p_announcement:text});
-  if(error) throw error;
-  if(data===false || data?.ok===false) throw new Error(data?.message||"公告儲存失敗");
-  announcementText=text;
-  return true;
-}
-
-function renderAdmin(el){
-  if(window.__adminAccountsViewOpen)return;
-  if(!adminUnlocked)return renderAdminLock(el);
-  const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
-  const todayKey=localDateKey();
-  const todayActs=acts.filter(a=>String(a.date||"").slice(0,10)===todayKey);
-  const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況沿用 V2.3：顯示非隱藏活動總數、今日簽到紀錄，以及排除隊長後的年度最高出席率。
-  const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
-  const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
-  const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  // 累積統計：所有未隱藏活動及其登記紀錄，依活動類別彙總。
-  const cumulativeActivities=acts.filter(a=>!a.hidden);
-  const cumulativeRegistrationCount=cumulativeActivities.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  const activityCategories=["廟","禮聘","隊","北港進香","福宴"];
-  const cumulativeCategoryStats=activityCategories.map(category=>({
-    category,
-    count:cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category).length
-  }));
-  // 出席率上升：比較最近三個月與前一個三個月的出席率。
-  const trendNow=new Date(),trendMonth=trendNow.getMonth();
-  const trendRecentStart=new Date(trendNow.getFullYear(),Math.max(0,trendMonth-2),1);
-  const trendPreviousStart=new Date(trendNow.getFullYear(),Math.max(0,trendMonth-5),1);
-  const trendPreviousEnd=new Date(trendRecentStart.getTime()-1);
-  const attendanceTrendUpCount=names.filter(name=>{
-    const k=keyOf(name);
-    const recentActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=trendRecentStart;});
-    const prevActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=trendPreviousStart&&d<=trendPreviousEnd;});
-    const rateOf=arr=>arr.length?arr.filter(a=>regsOf(a.id).some(r=>keyOf(r.name)===k)).length/arr.length*100:null;
-    const recentRate=rateOf(recentActs),previousRate=rateOf(prevActs);
-    return recentRate!==null&&previousRate!==null&&recentRate>previousRate+0.1;
-  }).length;
-  let content="";
-  if(adminPage==="home")content=`<div class="admin-main-hero ${isSuperAdmin()?"super":"officer"}">
-  <div class="admin-main-hero-brand">
-    <div class="admin-main-hero-icon">
-      <i data-lucide="${isSuperAdmin()?"crown":"shield-check"}"></i>
-    </div>
-    <div>
-      <div class="admin-main-hero-title">${escapeHtml(getAdminSession()?.username||"—")}</div>
-      <div class="admin-main-hero-role">${isSuperAdmin()?"最高管理者":"幹部"}</div>
-    </div>
-  </div>
-
-</div><div class="section-head" style="margin-top:0">
-  <h2>首頁公告</h2>
-  <span></span>
-</div>
-<div class="announcement-admin">
-  ${announcementEditing
-    ? `<div class="announcement-edit-area">
-         <textarea id="announcement-input">${escapeHtml(announcementText)}</textarea>
-         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-           <button class="primary" id="save-announcement-btn"><i data-lucide="save"></i>儲存</button>
-           <button class="secondary" id="cancel-announcement-btn"><i data-lucide="x"></i>取消</button>
-         </div>
-       </div>`
-    : `<div class="announcement-simple">
-         <div class="announcement-text">${escapeHtml(announcementText)}</div>
-         <button class="announcement-edit" id="edit-announcement-btn">
-           <i data-lucide="pencil"></i>編輯
-         </button>
-       </div>`}
-</div>
-
-<style id="signin-page-setting-ui">
+/* ===== CSS 區段 26｜signin-page-setting-ui ===== */
 /* 簽到頁面：沿用系統「活動管理」按鈕語言，不另造一套視覺。 */
 .signin-page-setting-row{
   display:flex;
@@ -4534,1240 +3060,8 @@ function renderAdmin(el){
   .signin-page-setting-row{align-items:flex-start;}
   .signin-page-toggle{min-width:84px;}
 }
-</style>
 
-<div class="section-head"><h2>簽到頁面</h2><span>一般使用者顯示設定</span></div>
-<div class="form-block signin-page-setting-card">
-  <div class="signin-page-setting-row">
-    <div class="signin-page-setting-info">
-      <div class="field-hint">隱藏後，一般使用者看不到「簽到」按鈕與簽到頁面；管理者登入後仍可看到。</div>
-    </div>
-    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle">
-      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"隱藏":"開啟"}</span>
-    </button>
-  </div>
-</div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div>
-<div class="admin-summary dashboard-today-summary">
-  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${cumulativeActivities.length}</b><span>累積活動</span></div>
-  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
-  <div class="metric top-attendance-metric" id="top-attendance-metric">
-    <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
-    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
-  </div>
-</div>
-<div class="section-head cumulative-section-head"><h2>累積統計</h2><span>即時資料</span></div>
-<div class="admin-summary cumulative-summary">
-  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
-  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
-</div>
-<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
-<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<div class="cumulative-category-card"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"calendar-check":item.category==="隊"?"users":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>累積活動場次</span></div><b>${item.count}<small> 場</small></b></div>`).join("")}</div>
-<div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
-  <button class="admin-action admin-square" data-admin-page="create">
-    <span class="menu-icon"><i data-lucide="plus"></i></span>
-    <strong>建立活動</strong>
-  </button>
-  <button class="admin-action admin-square" data-admin-page="manual-register">
-     <span class="menu-icon"><i data-lucide="clipboard-pen-line"></i></span>
-     <strong>手動登記</strong>
-   </button>
-  <button class="admin-action admin-square" data-admin-page="activities">
-    <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
-    <strong>活動管理</strong>
-  </button>
-  <button class="admin-action admin-square" data-admin-page="attendance">
-    <span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span>
-    <strong>出席率</strong>
-  </button>
-  ${isSuperAdmin()?`<button class="admin-action admin-square" id="admin-accounts-btn">
-    <span class="menu-icon"><i data-lucide="users"></i></span>
-    <strong>幹部管理</strong>
-  </button>`:""}
-</div>`;
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
-  if(adminPage==="activities"){
-    const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
-    const search=norm(activityManagementSearch).toLowerCase();
-    const matchActivity=a=>{
-      const manual=isManualRegistrationActivity(a);
-      const categoryOK=activityManagementCategory==="all" || String(a.eventCategory||"")===activityManagementCategory;
-      const statusOK=activityManagementStatus==="all" || (activityManagementStatus==="hidden"&&!!a.hidden) || (!manual&&activityManagementStatus==="open"&&!!a.open) || (!manual&&activityManagementStatus==="closed"&&!a.open);
-      const searchOK=!search || String(a.name||"").toLowerCase().includes(search);
-      // 日期篩選依活動實際舉辦日期，使用與建立活動相同的日期格式。
-      const activityDate=String(a.date||"").slice(0,10);
-      const dateFromOK=!activityManagementDateFrom || activityDate>=activityManagementDateFrom;
-      const dateToOK=!activityManagementDateTo || activityDate<=activityManagementDateTo;
-      return categoryOK&&statusOK&&searchOK&&dateFromOK&&dateToOK;
-    };
-    const filteredVisible=visibleActs.filter(matchActivity);
-    const filteredHidden=hiddenActs.filter(matchActivity);
-    content=`<div class="admin-head"><div><h1 class="page-title">活動管理</h1><p class="page-subtitle">狀態直接顯示在活動方塊內，不另外增加頁籤。</p></div></div>
-    <div class="activity-management-filter form-block">
-      <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-search">搜尋活動名稱</label><input type="text" id="activity-management-search" placeholder="請輸入活動名稱" value="${escapeHtml(activityManagementSearch)}"></div>
-      <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-category">類別篩選</label><select id="activity-management-category"><option value="all" ${activityManagementCategory==="all"?"selected":""}>全部類別</option>${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<option value="${category}" ${activityManagementCategory===category?"selected":""}>${category}</option>`).join("")}</select></div>
-      <div class="activity-filter-row" style="margin-bottom:10px">
-        <div class="choice-grid four activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button><button type="button" class="choice ${activityManagementStatus==='hidden'?'selected':''}" data-activity-filter-status="hidden">隱藏中</button></div>
-      </div>
-      <div class="grid-2" style="margin-bottom:10px"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div>
-      <button type="button" class="secondary" id="activity-management-clear-filters" style="width:100%;margin-bottom:10px"><i data-lucide="rotate-ccw"></i>清除篩選</button>
-    </div>
-    <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.filter(matchActivity).length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.filter(matchActivity).length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
-  }
-
-  if(adminPage==="manual-register"){
-    const current=manualRegisterActivityId
-      ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
-      : null;
-    const list=current ? regsOf(current.id) : [];
-    const activityDate=current ? String(current.date||"").slice(0,10) : manualRegisterActivityDate;
-    const activityName=current?.name ?? manualRegisterActivityName;
-    if(current && !manualRegisterActivityEditing){
-      manualRegisterFields=Array.isArray(current.fields)&&current.fields.length ? current.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
-    }
-    const editing=!!current && manualRegisterActivityEditing;
-    content=`<h1 class="page-title">手動登記</h1><p class="page-subtitle">建立活動後，可由管理者直接輸入隊員姓名完成登記。</p>
-    <div class="form-block">
-      <div class="form-title"><span class="ico"><i data-lucide="clipboard-pen-line"></i></span>活動資料</div>
-      ${current && !editing ? `
-        <div class="manual-activity-summary">
-          <div class="manual-activity-summary-main">
-            <div class="manual-activity-summary-name">${escapeHtml(activityName)}</div>
-            <div class="manual-activity-summary-date"><i data-lucide="calendar-days"></i>${escapeHtml(activityDate||"—")}</div>
-          </div>
-          <button type="button" class="announcement-edit" id="edit-manual-activity-btn">
-            <i data-lucide="pencil"></i>編輯
-          </button>
-        </div>` : `
-        <div class="field">
-          ${eventCategoryButtons(current?.eventCategory||manualRegisterEventCategory,"manual")}
-          <label class="field-label" for="manual-activity-name">活動名稱</label>
-          <input type="text" id="manual-activity-name" placeholder="請輸入活動名稱"
-            value="${escapeHtml(activityName)}">
-        </div>
-        <div class="field">
-          <label class="field-label" for="manual-activity-date">活動日期</label>
-          <input type="date" id="manual-activity-date"
-            value="${escapeHtml(activityDate)}">
-        </div>
-        ${current ? `<div class="manual-activity-actions">
-          <button type="button" class="primary" id="save-manual-activity-btn"><i data-lucide="save"></i>儲存</button>
-          <button type="button" class="secondary" id="cancel-manual-activity-btn"><i data-lucide="x"></i>取消</button>
-        </div>` : ``}`}
-    </div>
-
-    ${(!current || editing) ? `
-    <div class="form-block">
-      <div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div>
-      <div id="manual-draft-fields-wrap">${manualRegisterFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input manual-draft-field-input" data-manual-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-manual-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div>
-      <button class="add-field" id="add-manual-field-btn"><i data-lucide="plus"></i>新增欄位</button>
-    </div>` : ``}
-
-    <div class="form-block">
-      <div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>姓名</div>
-      <div class="field">
-        <input type="text" id="manual-member-name" placeholder="請輸入隊員姓名" autocomplete="off">
-      </div>
-      <button type="button" class="primary" id="manual-register-btn">
-        <i data-lucide="${current?"plus":"clipboard-plus"}"></i>${current?"新增登記":"建立活動並登記"}
-      </button>
-      <div class="debug-error-box" id="manual-register-error"></div>
-    </div>
-
-    <div class="form-block">
-      <div class="form-title">
-        <span class="ico"><i data-lucide="users"></i></span>已登記名單
-        <span style="margin-left:auto;color:#888;font-size:11px">${list.length} 人</span>
-      </div>
-      <div class="manual-register-list">
-        ${list.length ? list.map((r,i)=>`
-          <div class="list-row">
-            <div class="list-index">${i+1}</div>
-            <div class="list-main">
-              <div class="list-name">${escapeHtml(r.name)}</div>
-              <div class="list-meta">${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</div>
-            </div>
-            <i data-lucide="check" class="check"></i>
-          </div>`).join("") : `<div class="empty" style="padding:14px">目前尚無登記人員</div>`}
-      </div>
-    </div>`;
-  }
-
-  if(adminPage==="attendance"){
-    const now=new Date();
-    const month=now.getMonth();
-    const recentStart=new Date(now.getFullYear(),Math.max(0,month-2),1);
-    const previousStart=new Date(now.getFullYear(),Math.max(0,month-5),1);
-    const previousEnd=new Date(recentStart.getTime()-1);
-    const trendFor=(name)=>{
-      const k=keyOf(name);
-      const recentActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=recentStart;});
-      const prevActs=yearActs.filter(a=>{const d=new Date(a.date);return d>=previousStart&&d<=previousEnd;});
-      const rateOf=(arr)=>{
-        if(!arr.length)return null;
-        const attended=arr.filter(a=>regsOf(a.id).some(r=>keyOf(r.name)===k)).length;
-        return attended/arr.length*100;
-      };
-      const rr=rateOf(recentActs),pr=rateOf(prevActs);
-      if(rr!==null&&pr!==null&&rr>pr+0.1)return 'up';
-      if(rr!==null&&pr!==null&&rr<pr-0.1)return 'down';
-      return '';
-    };
-    const championRate=rows.length?Math.max(...rows.map(r=>Number(r.rate)||0)):-1;
-    const ring=(r)=>{
-      const rate=Math.max(0,Math.min(100,Number(r.rate)||0));
-      const tone=getAttendanceTone(rate);
-      const trend=trendFor(r.name);
-      const champion=Number(r.rate)===championRate&&championRate>=0;
-      const icon=champion?'trophy':trend==='up'?'trending-up':trend==='down'?'trending-down':'';
-      return `<button type="button" class="rate-card rate-card-clickable" data-attendance-person="${escapeHtml(r.name)}" aria-label="查看${escapeHtml(r.name)}的出席紀錄" style="width:100%;font:inherit;cursor:pointer">
-        <div class="rate-head">${icon?`<i class="rate-rank-icon ${champion?'champion':trend}" data-lucide="${icon}" title="${champion?'總冠軍':trend==='up'?'上升':'下降'}"></i>`:''}<span class="rate-head-name">${escapeHtml(r.name)}</span></div>
-        <div class="rate-percent" style="color:${tone.color}">${r.rate}%</div>
-        <div class="rate-bar"><div class="rate-bar-fill" style="width:${rate}%;background:${tone.color}"></div></div>
-        <div class="rate-detail">${r.attended} / ${r.total} 場</div>
-      </button>`;
-    };
-    content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="rate-list">${rows.map(r=>ring(r)).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
-  }
-  if(adminPage==="attendance-person"){
-    const name=String(window.__adminAttendancePersonName||"");
-    const personStats=annualStats(name);
-    const rate=Math.max(0,Math.min(100,Number(personStats.rate)||0));
-    const attended=Math.max(0,Number(personStats.attended)||0);
-    const total=Math.max(0,Number(personStats.total)||0);
-    const tone=getAttendanceTone(rate);
-    const attendancePercent=total>0?Math.max(0,Math.min(100,(attended/total)*100)):0;
-    content=`<div class="query-person"><div class="query-person-icon"><i data-lucide="user-round"></i></div><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div></div></div>
-      <div class="query-metrics">
-        <div class="query-metric-card attendance-metric ${tone.name}"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div>
-        <div class="query-metric-card attendance-metric signins"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div>
-      </div>
-      <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
-      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="calendar-days"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
-  }
-  const superAdmin=isSuperAdmin();
-  const session=getAdminSession();
-  const roleText=superAdmin?"最高管理者":"幹部";
-  const roleClass=superAdmin?"super-admin":"officer-admin";
-  const accountText=escapeHtml(session?.username||"—");
-  el.innerHTML=`${content}`;
-  if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
-  if(adminPage==="attendance")el.querySelectorAll("[data-attendance-person]").forEach(card=>{card.onclick=()=>{window.__adminAttendancePersonName=card.getAttribute("data-attendance-person")||"";adminPage="attendance-person";render();};});
-  const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
-  const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
-  const lock=document.getElementById("lock-btn");if(lock)lock.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
-  el.querySelectorAll("[data-admin-page]").forEach(btn=>btn.onclick=()=>{adminPage=btn.dataset.adminPage;render();});
-  const accountBtn=document.getElementById("admin-accounts-btn");if(accountBtn)accountBtn.onclick=()=>{window.__adminAccountsViewOpen=true;render();};
-  const editAnnouncementBtn=document.getElementById("edit-announcement-btn");if(editAnnouncementBtn)editAnnouncementBtn.onclick=()=>{announcementEditing=true;renderAdmin(el);};
-  const saveAnnouncementBtn=document.getElementById("save-announcement-btn");if(saveAnnouncementBtn)saveAnnouncementBtn.onclick=async()=>{const input=document.getElementById("announcement-input");const text=norm(input?.value||"");saveAnnouncementBtn.disabled=true;try{await saveAnnouncementRemote(text);announcementEditing=false;showToast("公告已儲存");renderAdmin(el);}catch(e){showToast("公告儲存失敗："+(e?.message||"請稍後再試"));saveAnnouncementBtn.disabled=false;}};
-  const cancelAnnouncementBtn=document.getElementById("cancel-announcement-btn");if(cancelAnnouncementBtn)cancelAnnouncementBtn.onclick=()=>{announcementEditing=false;renderAdmin(el);};
-  const signinPageToggle=document.getElementById("signin-page-toggle");
-  if(signinPageToggle)signinPageToggle.onclick=async()=>{
-    const next=!signinPageVisible;
-    signinPageToggle.disabled=true;
-    try{
-      await saveSigninPageVisibilityRemote(next);
-      if(!next && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
-      showToast(next?"簽到頁面已開啟":"簽到頁面已隱藏");
-      render();
-    }catch(e){
-      console.error("簽到頁面設定儲存失敗",e);
-      showToast("設定儲存失敗："+(e?.message||"請確認 Supabase 已建立簽到頁面設定 RPC"));
-      render();
-    }
-  };
-  if(adminPage==="create")setupCreateActivityPage(el);
-  if(adminPage==="activities"){
-    const searchInput=document.getElementById("activity-management-search");
-    if(searchInput){
-      let searchTimer=null;
-      let composing=false;
-      const applySearch=()=>{
-        activityManagementSearch=searchInput.value;
-        renderAdmin(el);
-        const next=document.getElementById("activity-management-search");
-        if(next){
-          next.focus();
-          const pos=next.value.length;
-          try{next.setSelectionRange(pos,pos);}catch(_){ }
-        }
-      };
-      searchInput.addEventListener("compositionstart",()=>{composing=true;});
-      searchInput.addEventListener("compositionend",()=>{
-        composing=false;
-        clearTimeout(searchTimer);
-        searchTimer=setTimeout(applySearch,0);
-      });
-      searchInput.addEventListener("input",()=>{
-        activityManagementSearch=searchInput.value;
-        if(composing || searchInput.isComposing) return;
-        clearTimeout(searchTimer);
-        searchTimer=setTimeout(applySearch,300);
-      });
-    }
-    ["activity-management-date-from","activity-management-date-to"].forEach(id=>{const input=document.getElementById(id);if(input)input.addEventListener("change",()=>{const pickedValue=input.value;if(id==="activity-management-date-from")activityManagementDateFrom=pickedValue;else activityManagementDateTo=pickedValue;if(activityManagementDateFrom&&activityManagementDateTo&&activityManagementDateFrom>activityManagementDateTo){showToast("起始日期不能晚於結束日期");if(id==="activity-management-date-from")activityManagementDateFrom="";else activityManagementDateTo="";}renderAdmin(el);});});
-    const clearFilters=document.getElementById("activity-management-clear-filters");
-    if(clearFilters)clearFilters.onclick=()=>{activityManagementSearch="";activityManagementCategory="all";activityManagementStatus="all";activityManagementDateFrom="";activityManagementDateTo="";renderAdmin(el);};
-    const categoryFilter=document.getElementById("activity-management-category");
-    if(categoryFilter)categoryFilter.onchange=()=>{activityManagementCategory=categoryFilter.value;renderAdmin(el);};
-    el.querySelectorAll("[data-activity-filter-status]").forEach(btn=>btn.onclick=()=>{activityManagementStatus=btn.dataset.activityFilterStatus;renderAdmin(el);});
-    setupActivityManagementPage(el);
-  }if(adminPage==="manual-register")setupManualRegistrationPage(el);if(adminPage==="attendance"){const b=document.getElementById("export-csv-btn");if(b)b.onclick=()=>{exportAnnualCSV(rows,new Date().getFullYear());showToast("已匯出 CSV 檔案");};}
-  refreshIcons();
-}
-
-function isManualRegistrationActivity(a){
-  return !!a && String(a.activityType||"normal")==="manual";
-}
-
-function openManualRegistrationEditor(a){
-  if(!a) return;
-  manualRegisterActivityId=a.id;
-  manualRegisterActivityName=a.name||"";
-  manualRegisterActivityDate=String(a.date||"").slice(0,10);
-  manualRegisterFields=Array.isArray(a.fields)&&a.fields.length ? a.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
-  manualRegisterActivityEditing=false;
-  adminPage="manual-register";
-  render();
-}
-window.openManualRegistrationEditor=openManualRegistrationEditor;
-
-function activityAdminRow(a,hidden=false){
-  const list=regsOf(a.id);
-  const expanded=window.adminAttendanceExpandedId===a.id;
-  const future=a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
-  let detail="";
-  if(expanded){
-    const rows=list.map((r,i)=>{
-      const fieldCells=(a.fields||[]).map(f=>`<td>${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</td>`).join("");
-      return `<tr><td>${i+1}</td><td class="name">${escapeHtml(r.name)}</td>${fieldCells}<td>${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</td></tr>`;
-    }).join("");
-    const headers=(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("");
-    detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
-  }
-  const manualRegistration=isManualRegistrationActivity(a);
-  const statusClass=future?"future":(a.open?"open":"closed");
-  const statusText=future?"未發佈":(a.open?"開放中":"已停止");
-  // 管理頁採 V2.1：名單按鈕維持中性；開放／停止只由活動切換按鈕呈現顏色。
-  const adminStatusIconClass = a.open ? "open-icon" : "closed-icon";
-  const adminStatusButtonClass = a.open ? "is-on" : "is-off";
-  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
-  <div class="admin-card-top">
-    <div class="admin-card-info">
-      <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
-      <div class="admin-card-subtitle-block"><div class="admin-card-meta admin-card-date">${fmtDate(a.date)}</div><div class="admin-card-meta admin-card-creator">建立者：${escapeHtml(a.createdBy||"—")}</div></div>
-      <div class="admin-card-status">
-        ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
-      </div>
-    </div>
-    <div class="admin-card-summary">
-      <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
-      <div class="admin-card-meta">${list.length} 人簽到</div>
-    </div>
-  </div>
-  <div class="admin-actions">
-    <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded ? "收起名單" : `名單 ${list.length}`}</button>
-    ${isManualRegistrationActivity(a) ? `<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>` : `<button class="activity-toggle-btn ${adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open ? "關閉活動" : "開啟活動"}"><i data-lucide="${a.open ? "toggle-right" : "toggle-left"}"></i><span>${a.open ? "開放中" : "已停止"}</span></button>`}
-    <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden ? "eye" : "eye-off"}"></i>${hidden ? "取消隱藏" : "隱藏"}</button>
-    <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
-  </div>${detail}</div>`;
-}
-
-function rememberCreateDraft(){
-  const n=document.getElementById("new-name");
-  const d=document.getElementById("new-date");
-  const m=document.getElementById("new-max-participants");
-  if(n) draftName=n.value;
-  if(d) draftDate=d.value;
-  if(m) draftMaxParticipants=m.value;
-  const ar=document.getElementById("new-min-attendance");
-  if(ar) draftMinimumAttendanceRate=ar.value;
-  const pd=document.getElementById("new-publish-date");
-  const pt=document.getElementById("new-publish-time");
-  if(pd && pt) draftPublishAt=(pd.value && pt.value) ? `${pd.value}T${pt.value}` : "";
-  document.querySelectorAll(".draft-field-input").forEach(inp=>{
-    const i=Number(inp.dataset.idx);
-    if(Number.isFinite(i)) draftFields[i]=inp.value;
-  });
-}
-function setupCreateActivityPage(el){
-  const todayKey = localDateKey();
-  const dateInput = document.getElementById("new-date");
-  const publishDateInput = document.getElementById("new-publish-date");
-  [dateInput, publishDateInput].forEach(input=>{
-    if(!input) return;
-    input.min = todayKey;
-    if(input.value && input.value < todayKey){
-      input.value = "";
-      if(input.id === "new-date") draftDate = "";
-      else draftPublishAt = "";
-    }
-    input.addEventListener("change",()=>{
-      const today = localDateKey();
-      if(input.value && input.value < today){
-        input.value = "";
-        if(input.id === "new-date") draftDate = "";
-        else draftPublishAt = "";
-        showToast(input.id === "new-date" ? "活動日期不能早於今天" : "發佈日期不能早於今天");
-      }
-      rememberCreateDraft();
-    });
-  });
-  function syncDraftFieldsFromDom(){
-    draftName=document.getElementById("new-name")?.value||"";
-    draftDate=document.getElementById("new-date")?.value||"";
-    const max=document.getElementById("new-max-participants");
-    draftMaxParticipants=max?max.value:"";
-    document.querySelectorAll(".draft-field-input").forEach(inp=>draftFields[Number(inp.dataset.idx)]=inp.value);
-  }
-
-  ["new-name","new-date","new-max-participants","new-min-attendance"].forEach(id=>{
-    const input=document.getElementById(id);
-    if(input){
-      input.addEventListener("focus",()=>{ userIsTyping=true; });
-      input.addEventListener("input",rememberCreateDraft);
-      input.addEventListener("change",rememberCreateDraft);
-      input.addEventListener("blur",()=>{ 
-        rememberCreateDraft();
-        userIsTyping=false;
-      });
-    }
-  });
-  ["new-publish-date","new-publish-time"].forEach(id=>{
-    const input=document.getElementById(id);
-    if(input){
-      input.addEventListener("focus",()=>{ userIsTyping=true; });
-      input.addEventListener("input",rememberCreateDraft);
-      input.addEventListener("change",rememberCreateDraft);
-      input.addEventListener("blur",()=>{
-        rememberCreateDraft();
-        userIsTyping=false;
-      });
-    }
-  });
-  el.querySelectorAll(".draft-field-input").forEach(input=>{
-    input.addEventListener("focus",()=>{ userIsTyping=true; });
-    input.addEventListener("input",rememberCreateDraft);
-    input.addEventListener("change",rememberCreateDraft);
-    input.addEventListener("blur",()=>{
-      rememberCreateDraft();
-      userIsTyping=false;
-    });
-  });
-
-  const addFieldBtn=document.getElementById("add-field-btn"); if(addFieldBtn) addFieldBtn.onclick=()=>{
-    syncDraftFieldsFromDom(); draftFields.push(""); renderAdmin(el);
-  };
-  el.querySelectorAll("[data-remove-field]").forEach(btn=>{
-    btn.onclick=()=>{syncDraftFieldsFromDom();draftFields.splice(Number(btn.dataset.removeField),1);renderAdmin(el);};
-  });
-  el.querySelectorAll("[data-timer]").forEach(btn=>{
-    btn.onclick=(ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
-      draftCloseMinutes=Number(btn.dataset.timer || 0);
-      el.querySelectorAll("[data-timer]").forEach(b=>{
-        b.classList.toggle("selected", Number(b.dataset.timer||0)===draftCloseMinutes);
-      });
-    };
-  });
-  el.querySelectorAll(".publish-choice").forEach(btn=>{
-    btn.onclick=(ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
-      publishMode=btn.dataset.publishMode || "now";
-      el.querySelectorAll(".publish-choice").forEach(b=>b.classList.toggle("selected",b===btn));
-      rememberCreateDraft();
-    };
-  });
-
-  el.querySelectorAll("[data-event-category][data-event-category-prefix=\"create\"]").forEach(btn=>btn.onclick=()=>{draftEventCategory=btn.dataset.eventCategory||"";el.querySelectorAll("[data-event-category-prefix=\"create\"]").forEach(b=>b.classList.toggle("selected",b===btn));});
-  const createBtn=document.getElementById("create-btn"); if(createBtn) createBtn.onclick=async()=>{
-    const createBtn=document.getElementById("create-btn"), errBox=document.getElementById("create-activity-error");
-    syncDraftFieldsFromDom();
-    const name=norm(draftName), maxRaw=(document.getElementById("new-max-participants")?.value||"").trim();
-    const maxParticipants=maxRaw===""?null:Number(maxRaw), closeMinutes=Number(draftCloseMinutes||0);
-    const minimumAttendanceRate=Number(document.getElementById("new-min-attendance")?.value||0);
-    const todayKey=localDateKey();
-    if(!draftDate || draftDate < todayKey){
-      showToast("活動日期不能早於今天");
-      return;
-    }
-    if(draftPublishAt && draftPublishAt.slice(0,10) < todayKey){
-      showToast("發佈日期不能早於今天");
-      return;
-    }
-    const publishAt = draftPublishAt
-      ? new Date(draftPublishAt).toISOString()
-      : null;
-    if(draftPublishAt && (!Number.isFinite(new Date(draftPublishAt).getTime()) || new Date(draftPublishAt).getTime() <= Date.now())){
-      showToast("預先發佈時間必須晚於現在");
-      return;
-    }
-    if(!name){showToast("請輸入活動名稱");return;}
-    if(maxParticipants!==null&&(!Number.isInteger(maxParticipants)||maxParticipants<1)){showToast("人數限制請輸入 1 以上整數");return;}
-    if(!Number.isFinite(minimumAttendanceRate)||minimumAttendanceRate<0||minimumAttendanceRate>100){showToast("最低出席率設定錯誤");return;}
-    const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
-    const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
-    const session=getAdminSession();
-    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
-    createBtn.disabled=true;
-    try{
-      const saved=await createActivityRemote(activity);
-      await setEventCategoryRemote(saved?.id||activity.id,draftEventCategory);
-      activity.eventCategory=draftEventCategory;
-      state.activities.push({
-        ...activity,
-        ...(saved || {}),
-        id:saved?.id||activity.id,
-        publishAt:saved?.publish_at ?? saved?.publishAt ?? activity.publishAt ?? null
-      });
-      if(minimumAttendanceRate>0){
-        await setMinimumAttendanceRateRemote(saved?.id||activity.id, minimumAttendanceRate);
-        const savedRate=minimumAttendanceRate;
-        const idx=state.activities.findIndex(x=>String(x.id)===String(saved?.id||activity.id));
-        if(idx>=0) state.activities[idx].minimumAttendanceRate=savedRate;
-      }
-      state.registrations[activity.id]=[];
-      pendingPublishActivity=null;
-      showToast(publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈");
-      adminPage="activities";
-      draftFields=["公用哨角"]; draftName="";
-      draftEventCategory="";
-      draftDate=""; draftMaxParticipants=""; draftMinimumAttendanceRate=""; draftCloseMinutes=0; pendingPublishActivity=null; draftPublishAt="";
-  renderAdmin(el);
-    }catch(e){
-      const msg=[e?.message,e?.code,e?.details,e?.hint].filter(Boolean).join(" | ");
-      if(errBox){errBox.textContent="建立活動失敗："+(msg||"未知錯誤");errBox.classList.add("show");}
-      showToast("建立活動失敗","error");createBtn.disabled=false;
-    }
-  };
-}
-
-
-function showPublishChooser(el){
-  pendingPublishActivity=null;
-  adminPage="activities";
-  render();
-}
-
-function safeQuerySelectorAll(root, selector){
-  if(!root || !selector || !String(selector).trim()) return [];
-  try{return root.querySelectorAll(selector);}catch(e){
-    console.warn("忽略無效 selector:",selector,e);
-    return [];
-  }
-}
-
-
-async function saveManualRegistrationDraft(){
-  const activity=manualRegisterActivityId
-    ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
-    : null;
-  if(!activity) return false;
-  const nameInput=document.getElementById("manual-activity-name");
-  const dateInput=document.getElementById("manual-activity-date");
-  const newName=norm(nameInput?.value||manualRegisterActivityName||activity.name||"");
-  const newDate=dateInput?.value||manualRegisterActivityDate||String(activity.date||"").slice(0,10);
-  // 手動登記活動允許修改為過去、今天或未來日期，不限制不得早於今天。
-  if(!newName || !newDate) throw new Error("活動資料不完整");
-  document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
-    const i=Number(inp.dataset.manualIdx);
-    if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
-  });
-  const fields=manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
-  const updated={...activity,name:newName,date:newDate,fields,eventCategory:manualRegisterEventCategory||activity.eventCategory||""};
-   const saved=await updateActivityRemote(updated);
-   await setEventCategoryRemote(activity.id,updated.eventCategory);
-  const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
-  if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields,eventCategory:updated.eventCategory};
-  manualRegisterActivityName=newName;
-   manualRegisterActivityDate=newDate;
-   manualRegisterEventCategory=updated.eventCategory;
-  manualRegisterFields=fields.map(f=>f.label);
-  manualRegisterActivityEditing=false;
-  return true;
-}
-
-function resetManualRegistrationPage(){
-  manualRegisterActivityId=null;
-  manualRegisterActivityName="";
-  manualRegisterEventCategory="";
-  manualRegisterActivityDate=localDateKey();
-  manualRegisterFields=["公用哨角"];
-  manualRegisterActivityEditing=false;
-}
-
-function showManualReturnDialog(){
-  return new Promise(resolve=>{
-    const old=document.getElementById("manual-return-overlay");
-    if(old) old.remove();
-    const overlay=document.createElement("div");
-    overlay.id="manual-return-overlay";
-    overlay.className="manual-return-overlay";
-    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
-    document.body.appendChild(overlay);
-    overlay.querySelector('[data-manual-return="save"]').onclick=()=>{overlay.remove();resolve(true);};
-    overlay.querySelector('[data-manual-return="discard"]').onclick=()=>{overlay.remove();resolve(false);};
-  });
-}
-
-function setupManualRegistrationPage(el){
-  const nameInput=document.getElementById("manual-activity-name");
-  const dateInput=document.getElementById("manual-activity-date");
-  const memberInput=document.getElementById("manual-member-name");
-  const syncManualFields=()=>{
-    document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
-      const i=Number(inp.dataset.manualIdx);
-      if(Number.isFinite(i)) manualRegisterFields[i]=inp.value;
-    });
-  };
-  const btn=document.getElementById("manual-register-btn");
-  const err=document.getElementById("manual-register-error");
-
-  el.querySelectorAll("[data-event-category][data-event-category-prefix=\"manual\"]").forEach(btn=>btn.onclick=()=>{manualRegisterEventCategory=btn.dataset.eventCategory||"";el.querySelectorAll("[data-event-category-prefix=\"manual\"]").forEach(b=>b.classList.toggle("selected",b===btn));});
-  const editActivityBtn=document.getElementById("edit-manual-activity-btn");
-  if(editActivityBtn) editActivityBtn.onclick=()=>{
-    manualRegisterActivityEditing=true;
-    renderAdmin(el);
-  };
-
-  const cancelActivityBtn=document.getElementById("cancel-manual-activity-btn");
-  if(cancelActivityBtn) cancelActivityBtn.onclick=()=>{
-    manualRegisterActivityEditing=false;
-    renderAdmin(el);
-  };
-
-  const saveActivityBtn=document.getElementById("save-manual-activity-btn");
-  if(saveActivityBtn) saveActivityBtn.onclick=async()=>{
-    if(!manualRegisterActivityId){showToast("活動資料不存在");return;}
-    saveActivityBtn.disabled=true;
-    try{
-      await saveManualRegistrationDraft();
-      showToast("活動資料已儲存");
-      renderAdmin(el);
-    }catch(e){
-      console.error("手動登記活動資料儲存失敗",e);
-      showToast("活動資料儲存失敗："+(e?.message||"請稍後再試"));
-      saveActivityBtn.disabled=false;
-    }
-  };
-  [nameInput,dateInput].forEach(input=>{
-    if(!input) return;
-    input.addEventListener("input",()=>{
-      if(input===nameInput) manualRegisterActivityName=input.value;
-      if(input===dateInput) manualRegisterActivityDate=input.value;
-    });
-    input.addEventListener("change",()=>{
-      if(input===nameInput) manualRegisterActivityName=input.value;
-      if(input===dateInput) manualRegisterActivityDate=input.value;
-    });
-  });
-
-  el.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
-    inp.addEventListener("input",syncManualFields);
-    inp.addEventListener("change",syncManualFields);
-  });
-  const addManualFieldBtn=document.getElementById("add-manual-field-btn");
-  if(addManualFieldBtn) addManualFieldBtn.onclick=()=>{
-    syncManualFields(); manualRegisterFields.push(""); renderAdmin(el);
-  };
-  el.querySelectorAll("[data-remove-manual-field]").forEach(btn=>{
-    btn.onclick=()=>{
-      syncManualFields();
-      manualRegisterFields.splice(Number(btn.dataset.removeManualField),1);
-      renderAdmin(el);
-    };
-  });
-
-  if(memberInput) memberInput.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){e.preventDefault();btn?.click();}
-  });
-
-  if(btn) btn.onclick=async()=>{
-    const member=norm(memberInput?.value||"");
-    if(!manualRegisterActivityId){
-      manualRegisterActivityName=norm(nameInput?.value||"");
-      manualRegisterActivityDate=dateInput?.value||"";
-      if(!manualRegisterActivityName){showToast("請輸入活動名稱");return;}
-      if(!manualRegisterActivityDate){showToast("請選擇活動日期");return;}
-    }
-    if(!member){showToast("請輸入隊員姓名");return;}
-    syncManualFields();
-
-    btn.disabled=true;
-    if(err) err.classList.remove("show");
-
-    try{
-      let activity=null;
-
-      if(!manualRegisterActivityId){
-        const session=getAdminSession();
-        activity={
-          id:uid(),name:manualRegisterActivityName,
-          date:new Date(manualRegisterActivityDate+"T00:00:00").toISOString(),
-          fields:manualRegisterFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label})),open:true,maxParticipants:null,createdBy:session?.username||"",
-          closeAt:null,autoCloseMinutes:0,hidden:false,publishAt:null,activityType:"manual",eventCategory:manualRegisterEventCategory
-        };
-        const saved=await createActivityRemote(activity);
-        await setEventCategoryRemote(saved?.id||activity.id,manualRegisterEventCategory);
-        activity={...activity,...(saved||{}),id:saved?.id||activity.id,date:saved?.date||activity.date,activityType:"manual",eventCategory:manualRegisterEventCategory};
-        // 活動建立後，將「手動登記」類型寫入 Supabase。
-        // 這是手機／電腦共用的唯一資料來源，不使用 localStorage 判斷活動類型。
-        await setActivityTypeRemote(activity.id,"manual");
-        // 重新從雲端載入一次，確認本機狀態與 Supabase 完全一致。
-        await loadData();
-        activity=state.activities.find(a=>String(a.id)===String(activity.id)) || activity;
-        manualRegisterEventCategory=activity.eventCategory||manualRegisterEventCategory;
-        state.registrations[activity.id]=state.registrations[activity.id]||[];
-        manualRegisterActivityId=activity.id;
-        manualRegisterActivityEditing=false;
-      }else{
-        activity=state.activities.find(a=>String(a.id)===String(manualRegisterActivityId));
-      }
-
-      const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}},true);
-      const r=savedReg||{id:uid(),activity_id:activity.id,name:member,fieldValues:{},ts:new Date().toISOString()};
-      if(!state.registrations[activity.id]) state.registrations[activity.id]=[];
-      state.registrations[activity.id].push({
-        id:r.id||uid(),activity_id:r.activity_id||activity.id,name:r.name||member,
-        fieldValues:r.field_values||r.fieldValues||{},ts:r.created_at||r.ts||new Date().toISOString()
-      });
-
-      if(memberInput) memberInput.value="";
-      showToast(state.registrations[activity.id].length===1?"活動建立並完成登記":"已完成登記");
-      renderAdmin(el);
-      setTimeout(()=>document.getElementById("manual-member-name")?.focus(),50);
-    }catch(e){
-      console.error("手動登記失敗",e);
-      if(err){err.textContent="手動登記失敗："+(e?.message||"未知錯誤");err.classList.add("show");}
-      showToast("手動登記失敗");btn.disabled=false;
-    }
-  };
-}
-
-function setupActivityManagementPage(el){
-  // 活動管理：查看／隱藏簽到名單
-  el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
-    btn.onclick=async(ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
-      const id=btn.getAttribute("data-admin-attendance");
-      window.adminAttendanceExpandedId =
-        window.adminAttendanceExpandedId===id ? null : id;
-
-      // 若目前 state 沒有該活動的簽到資料，重新載入一次。
-      const a=state.activities.find(x=>String(x.id)===String(id));
-      if(a && (!state.registrations[a.id] || state.registrations[a.id].length===0)){
-        try{
-          await loadData();
-        }catch(e){
-          console.error("讀取簽到名單失敗",e);
-        }
-      }
-      renderAdmin(el);
-    };
-  });
-
-}
-
-function renderAdminLock(el){
-  el.innerHTML=`
-    <div class="admin-login-page">
-      <div class="admin-login-card">
-        <div class="admin-login-heading">
-          <div class="admin-login-heading-icon">
-            <i data-lucide="shield"></i>
-          </div>
-          <h1>管理者登入</h1>
-        </div>
-
-        <div class="field">
-          <label class="field-label" for="admin-username">帳號</label>
-          <input type="text" id="admin-username" placeholder="請輸入帳號" autocomplete="username">
-        </div>
-
-        <div class="field">
-          <label class="field-label" for="admin-password">密碼</label>
-          <div class="admin-password-wrap">
-            <input type="password" id="admin-password" placeholder="請輸入密碼" autocomplete="current-password">
-            <button type="button" class="admin-password-toggle" id="admin-password-toggle" aria-label="顯示密碼" title="顯示密碼">
-              <i data-lucide="eye"></i>
-            </button>
-          </div>
-        </div>
-
-        <button class="primary admin-login-button" id="admin-login-btn" type="button">
-          <i data-lucide="log-in"></i>
-          登入
-        </button>
-      </div>
-    </div>
-  `;
-
-  const b=document.getElementById("admin-login-btn");
-  const u=document.getElementById("admin-username");
-  const p=document.getElementById("admin-password");
-  const toggle=document.getElementById("admin-password-toggle");
-
-  const login=async()=>{
-    if(!norm(u?.value||"")){
-      showToast("請輸入帳號");
-      u?.focus();
-      return;
-    }
-    if(!p?.value){
-      showToast("請輸入密碼");
-      p?.focus();
-      return;
-    }
-    if(b)b.disabled=true;
-    try{
-      await adminLogin(norm(u.value),p.value);
-      showToast("登入成功");
-      render();
-    }catch(e){
-      showToast("登入失敗："+(e?.message||"帳號或密碼錯誤"));
-      if(b)b.disabled=false;
-    }
-  };
-
-  b?.addEventListener("click",login);
-  [u,p].filter(Boolean).forEach(x=>x.addEventListener("keydown",e=>{
-    if(e.key==="Enter")login();
-  }));
-
-  toggle?.addEventListener("click",()=>{
-    const visible=p.type==="text";
-    p.type=visible?"password":"text";
-    toggle.innerHTML=`<i data-lucide="${visible?"eye":"eye-off"}"></i>`;
-    toggle.setAttribute("aria-label",visible?"顯示密碼":"隱藏密碼");
-    toggle.setAttribute("title",visible?"顯示密碼":"隱藏密碼");
-    refreshIcons();
-  });
-
-  refreshIcons();
-}
-
-async function init(){
-  render();
-  await checkAdminSession();
-  await loadData();
-  try{ await loadAnnouncementRemote(); }
-  catch(e){ console.error("公告載入失敗",e); }
-  try{ await loadSigninPageVisibilityRemote(); }
-  catch(e){ console.error("簽到頁面設定載入失敗",e); }
-  render();
-  setInterval(async ()=>{
-    // 任何輸入框正在使用時，禁止背景資料刷新／DOM 重建。
-    // 30 秒倒數本身不需要 render，只有真的到 0 秒才重建一次。
-    const active=document.activeElement;
-    const fieldFocused=!!active && (
-      active.tagName==="INPUT" ||
-      active.tagName==="TEXTAREA" ||
-      active.tagName==="SELECT"
-    );
-    if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
-
-    // 自動關閉計時器：到時間後將活動設為停止簽到
-    const now = Date.now();
-    // 原本建立活動的 close_at 自動關閉保留。
-    // 「重新開啟 30 秒」由 startActivityExpiryWatcher 單獨處理，
-    // 避免 loadData 每 6 秒把本機 30 秒 deadline 洗掉。
-    const expired = state.activities.filter(a =>
-      a.open &&
-      !window.v93CountdownDeadlines?.has(String(a.id)) &&
-      (
-        (a.closeAt && new Date(a.closeAt).getTime() <= now) ||
-        isActivityDateExpired(a, now)
-      )
-    );
-
-    for(const a of expired){
-      try{
-        a.open = false;
-        a.closeAt = null;
-        a.autoCloseMinutes = 0;
-        window.v93CountdownDeadlines?.delete(String(a.id));
-        await updateActivityRemote(a);
-      }catch(e){
-        console.error("活動自動關閉失敗", e);
-        a.open = true;
-      }
-    }
-
-    if(activeTab !== "admin"){
-      await loadData();
-      try{
-        const before=signinPageVisible;
-        await loadSigninPageVisibilityRemote();
-        if(before && !signinPageVisible && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
-      }catch(e){console.error("簽到頁面設定同步失敗",e);}
-      if(!userIsTyping) renderTab();
-      if(openEventId){
-        const publicActivity=state.activities.find(x=>String(x.id)===String(openEventId));
-        if(publicActivity) ensurePublicCountdown(publicActivity);
-      }
-    }else if(!userIsTyping){
-      // 管理者頁面先同步最新雲端資料；首頁與出席率頁面需同步重算統計。
-      await loadData();
-      try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("簽到頁面設定同步失敗",e);}
-      if(activeTab==="admin" && !userIsTyping && ["home","attendance","attendance-person"].includes(adminPage)){
-        const adminContent=document.getElementById("tab-content");
-        if(adminContent) renderAdmin(adminContent);
-      }
-    }
-  },6000);
-  refreshActivityListClocks();
-setInterval(refreshActivityListClocks,1000);
-
-  // V95：內頁跨手機／電腦同步活動狀態與 ICON。
-  // 只在目前正在看的活動內頁查詢該活動，不整頁重載，避免影響輸入中的姓名。
-  setInterval(async()=>{
-    if(!openEventId || userIsTyping || activeTab!="register") return;
-    try{
-      const {data,error}=await supabaseClient
-        .from("activities")
-        .select("id,open,close_at,minimum_attendance_rate")
-        .eq("id",String(openEventId))
-        .maybeSingle();
-      if(error || !data) return;
-
-      const a=state.activities.find(x=>String(x.id)===String(openEventId));
-      if(!a) return;
-
-      const nextOpen=!!data.open;
-      const nextCloseAt=data.close_at||null;
-      const nextRate=data.minimum_attendance_rate==null?0:Number(data.minimum_attendance_rate);
-      const changed =
-        a.open!==nextOpen ||
-        String(a.closeAt||"")!==String(nextCloseAt||"") ||
-        Number(a.minimumAttendanceRate||0)!==nextRate;
-
-      if(!changed) return;
-
-      a.open=nextOpen;
-      a.closeAt=nextCloseAt;
-      a.minimumAttendanceRate=nextRate;
-      window.v93CountdownDeadlines?.delete(String(a.id));
-
-      // 重新繪製內頁，讓手機／電腦的開放、限制、關閉 ICON 與顏色同步。
-      renderTab();
-    }catch(e){
-      console.warn("[活動管理] 內頁跨裝置同步失敗",e);
-    }
-  },2000);
-}
-
-
-init();
-
-window.addEventListener("error",function(ev){
-  console.error("前端錯誤：",ev.error||ev.message);
-  const app=document.getElementById("app");
-  if(app && !app.innerHTML.trim()){
-    app.innerHTML='<div class="card"><h2>頁面載入錯誤</h2><p class="hint">請重新整理頁面；若仍空白，請開啟瀏覽器主控台查看錯誤。</p><pre style="white-space:pre-wrap;">'+escapeHtml(ev.message||"JavaScript error")+'</pre></div>';
-  }
-});
-
-
-window.state = state;
-window.showToast = showToast;
-window.updateActivityRemote = updateActivityRemote;
-window.deleteActivityRemote = deleteActivityRemote;
-window.loadData = loadData;
-window.renderAdmin = renderAdmin;
-
-})().catch(function(e){
-  console.error("JavaScript 錯誤：",e);
-  try{
-    const box=document.getElementById("debug-error");
-    if(box){box.textContent="JavaScript 錯誤："+(e&&e.message?e.message:e);}
-  }catch(_){}
-});
-</script>
-
-<div id="runtime-debug" style="display:none;position:fixed;inset:12px;z-index:9999;background:#fff;border:2px solid #9C2B1D;border-radius:14px;padding:16px;overflow:auto;color:#3B2416;font:13px/1.5 monospace;box-shadow:0 12px 40px rgba(0,0,0,.2);"><b>程式除錯訊息</b><pre id="runtime-debug-text" style="white-space:pre-wrap;word-break:break-word;"></pre></div>
-<script>
-function showRuntimeError(title,reason){
- var b=document.getElementById("runtime-debug"),x=document.getElementById("runtime-debug-text");
- if(b&&x){b.style.display="block";x.textContent=title+"："+String(reason&&reason.message||reason||"未知錯誤")+(reason&&reason.stack?"\n\n"+reason.stack:"");}
-}
-window.addEventListener("error",function(e){showRuntimeError("JavaScript 錯誤",e.error||e.message);});
-window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promise 錯誤",e.reason);});
-</script>
-
-<script>
-/* ===== 活動管理最終除錯層 ===== */
-(function(){
-  async function activityButtonHandler(ev){
-    const btn=ev.target && ev.target.closest &&
-      ev.target.closest("[data-activity-close],[data-activity-edit],[data-activity-hide],[data-activity-delete]");
-    if(!btn) return;
-    ev.preventDefault();
-    ev.stopPropagation();
-
-    const id=btn.getAttribute("data-activity-close") ||
-             btn.getAttribute("data-activity-edit") ||
-             btn.getAttribute("data-activity-hide") ||
-             btn.getAttribute("data-activity-delete");
-
-    console.log("[活動管理] 按鈕被點擊", {
-      id:id,
-      close:btn.getAttribute("data-activity-close"),
-      edit:btn.getAttribute("data-activity-edit"),
-      hide:btn.getAttribute("data-activity-hide"),
-      delete:btn.getAttribute("data-activity-delete")
-    });
-
-    let a=(window.state && Array.isArray(state.activities))
-      ? state.activities.find(x=>String(x.id)===String(id))
-      : null;
-
-    // state 可能因頁面重繪尚未同步；直接以按鈕上的 UUID 查資料庫。
-    if(!a){
-      try{
-        const {data:remoteActivity,error:remoteError}=await supabaseClient
-          .from("activities")
-          .select("*")
-          .eq("id",id)
-          .maybeSingle();
-
-        if(remoteError) throw remoteError;
-
-        if(remoteActivity){
-          a={
-            id:remoteActivity.id,
-            name:remoteActivity.name,
-            date:remoteActivity.date,
-            fields:Array.isArray(remoteActivity.fields)?remoteActivity.fields:[],
-            open:!!remoteActivity.open,
-            maxParticipants:remoteActivity.max_participants==null?null:Number(remoteActivity.max_participants),
-            createdBy:remoteActivity.created_by||"",
-            closeAt:remoteActivity.close_at||null,
-            autoCloseMinutes:remoteActivity.auto_close_minutes==null?0:Number(remoteActivity.auto_close_minutes),
-            hidden:!!remoteActivity.hidden,
-            publishAt:remoteActivity.publish_at||null
-          };
-
-          if(window.state){
-            window.state.activities=Array.isArray(window.state.activities)?window.state.activities:[];
-            const idx=window.state.activities.findIndex(x=>String(x.id)===String(id));
-            if(idx>=0) window.state.activities[idx]=a;
-            else window.state.activities.push(a);
-          }
-        }
-      }catch(dbErr){
-        console.error("[活動管理] 直接查詢活動失敗",dbErr);
-        window.showToast("讀取活動失敗："+(dbErr.message||dbErr),"error");
-        return;
-      }
-    }
-
-    if(!a){
-      window.showToast("資料庫找不到此活動："+id,"error");
-      console.error("[活動管理] 資料庫也找不到活動",id);
-      return;
-    }
-
-    if(btn.hasAttribute("data-activity-edit")){
-      openManualRegistrationEditor(a);
-    }else if(btn.hasAttribute("data-activity-close")){
-      activityActionClose(a,btn);
-    }else if(btn.hasAttribute("data-activity-hide")){
-      activityActionHide(a,btn);
-    }else{
-      activityActionDelete(a,btn);
-    }
-  }
-
-  async function activityActionClose(a,btn){
-    const next=!a.open;
-    if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
-
-    btn.disabled=true;
-    const oldOpen=a.open;
-    const oldCloseAt=a.closeAt;
-    const oldAuto=a.autoCloseMinutes;
-
-    try{
-      if(next){
-        // 第一次 RPC：只負責把活動正常開啟。
-        a.open=true;
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-        await window.updateActivityRemote(a);
-
-        // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
-        // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
-        const deadline=Date.now()+30000;
-        const sharedCloseAt=new Date(deadline).toISOString();
-
-        const sharedActivity={
-          ...a,
-          open:true,
-          closeAt:sharedCloseAt,
-          autoCloseMinutes:0
-        };
-
-        // 將同一個絕對時間寫入 DB；所有手機／電腦都從 close_at 讀取。
-        await window.updateActivityRemote(sharedActivity);
-
-        a.closeAt=sharedCloseAt;
-        a.autoCloseMinutes=0;
-        window.v93CountdownDeadlines.set(String(a.id),deadline);
-
-        // 更新本機 state，但不重新 loadData，避免輸入框／倒數被重建。
-        if(window.state && Array.isArray(window.state.activities)){
-          const local=window.state.activities.find(x=>String(x.id)===String(a.id));
-          if(local){
-            local.open=true;
-            local.closeAt=sharedCloseAt;
-            local.autoCloseMinutes=0;
-          }
-        }
-
-        window.showToast("活動已開啟，30 秒後關閉簽到");
-      }else{
-        a.open=false;
-        a.closeAt=null;
-        a.autoCloseMinutes=0;
-        await window.updateActivityRemote(a);
-
-        window.v93CountdownDeadlines.delete(String(a.id));
-        window.showToast("活動已關閉");
-      }
-
-      if(typeof renderAdmin==="function"){
-        const tab=document.getElementById("tab-content");
-        if(tab) window.renderAdmin(tab);
-      }
-      btn.disabled=false;
-      if(typeof window.refreshActivityListClocks==="function"){
-        window.refreshActivityListClocks();
-      }
-      if(typeof refreshIcons==="function") refreshIcons();
-
-    }catch(e){
-      console.error("[活動管理] 開啟／關閉失敗",e);
-      a.open=oldOpen;
-      a.closeAt=oldCloseAt;
-      a.autoCloseMinutes=oldAuto;
-      window.v93CountdownDeadlines.delete(String(a.id));
-      window.showToast("活動更新失敗："+(e.message||e),"error");
-      btn.disabled=false;
-    }
-  }
-  async function activityActionHide(a,btn){
-    const next=!a.hidden;
-    if(!confirm(next?"確定隱藏「"+a.name+"」？":"確定取消隱藏「"+a.name+"」？")) return;
-    btn.disabled=true;
-    const old=!!a.hidden;
-    a.hidden=next;
-    try{
-      await window.updateActivityRemote(a);
-      if(window.state && Array.isArray(window.state.activities)){
-        const idx=window.state.activities.findIndex(x=>String(x.id)===String(a.id));
-        if(idx>=0) window.state.activities[idx].hidden=next;
-      }
-      a.hidden=next;
-      window.showToast(next?"活動已隱藏":"已取消隱藏");
-      if(typeof renderAdmin==="function"){
-        const tab=document.getElementById("tab-content");
-        if(tab){
-          window.renderAdmin(tab);
-          if(next){
-            setTimeout(function(){
-              const section=document.getElementById("hidden-activities-section");
-              if(section) section.scrollIntoView({behavior:"smooth",block:"start"});
-            },50);
-          }
-        }
-      }
-      if(typeof refreshIcons==="function") refreshIcons();
-    }catch(e){
-      a.hidden=old;
-      console.error("[活動管理] 隱藏失敗",e);
-      window.showToast("隱藏更新失敗："+(e.message||e),"error");
-      btn.disabled=false;
-    }
-  }
-
-  async function activityActionDelete(a,btn){
-    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的簽到資料也會刪除，無法復原。")) return;
-    btn.disabled=true;
-    try{
-      await window.deleteActivityRemote(a.id);
-      window.state.activities=window.state.activities.filter(x=>String(x.id)!==String(a.id));
-      delete window.state.registrations[a.id];
-      window.showToast("活動已刪除");
-      await window.loadData();
-      if(typeof renderAdmin==="function") window.renderAdmin(document.getElementById("tab-content"));
-    }catch(e){
-      console.error("[活動管理] 刪除失敗",e);
-      window.showToast("刪除失敗："+(e.message||e),"error");
-      btn.disabled=false;
-    }
-  }
-
-  document.addEventListener("click",async(ev)=>{
-    const btn=ev.target.closest("[data-admin-edit-registration]");
-    if(!btn) return;
-    ev.preventDefault();
-    ev.stopPropagation();
-    const activityId=btn.getAttribute("data-activity-id");
-    const registrationId=btn.getAttribute("data-registration-id");
-    const a=state.activities.find(x=>String(x.id)===String(activityId));
-    if(!a || !a.open){
-      showToast("活動已關閉，無法修改名單");
-      return;
-    }
-    const r=(state.registrations[a.id]||[]).find(x=>String(x.id)===String(registrationId));
-    if(!r) return;
-    const name=prompt("修改姓名",r.name||"");
-    if(name===null) return;
-    const clean=norm(name);
-    if(!clean){ showToast("姓名不可空白"); return; }
-    try{
-      await renameRegistrationRemote(registrationId,clean);
-      await loadData();
-      renderAdmin(document.getElementById("tab-content"));
-      showToast("已修改簽到資料");
-    }catch(e){
-      console.error("修改簽到失敗",e);
-      showToast("修改失敗："+(e?.message||e),"error");
-    }
-  },true);
-
-  // capture=true：在任何其他 click handler 前攔截活動按鈕。
-  document.addEventListener("click",activityButtonHandler,true);
-})();
-</script>
-
-  <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本 V2.4</div>
-    <div class="maker">製作者：小樂</div>
-  </footer>
-
-<script>
-(function(){
-  document.addEventListener("input",function(ev){
-    const el=ev.target;
-    if(!el || !el.classList || !el.classList.contains("register-name-input")) return;
-    const old=el.value;
-    const cleaned=old.replace(/[0-9０-９]/g,"");
-    if(old!==cleaned){
-      const p=el.selectionStart;
-      el.value=cleaned;
-      if(typeof p==="number"){
-        try{el.setSelectionRange(Math.max(0,p-1),Math.max(0,p-1));}catch(e){}
-      }
-    }
-  },true);
-})();
-</script>
-<style id="activity-admin-card-v23-unified">
+/* ===== CSS 區段 27｜activity-admin-card-v23-unified ===== */
 /* V2.4 活動管理卡片唯一排版規則：A 方案資訊層級 + 單卡操作展開 */
 #app.admin-home-view .activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px;box-sizing:border-box}
 #app.admin-home-view .activity-admin-card.hidden{opacity:.65}
@@ -5807,8 +3101,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   font-size:10px !important;
   white-space:nowrap !important;
 }
-</style>
-<style id="admin-status-color-stable-final">
+
+/* ===== CSS 區段 28｜admin-status-color-stable-final ===== */
 /* 管理活動頁：狀態顏色唯一規則，避免 hover／active／重繪造成跳色 */
 .activity-admin-card .admin-actions button.status-open,
 .activity-admin-card .admin-actions button.status-open:active,
@@ -5825,9 +3119,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 .activity-admin-card .admin-actions button.status-open:active,
 .activity-admin-card .admin-actions button.status-limited:active,
 .activity-admin-card .admin-actions button.status-closed:active { background:#f7f7f5 !important; border-color:var(--line) !important; }
-</style>
 
-<style id="officer-list-match-activity-admin-css">
+/* ===== CSS 區段 29｜officer-list-match-activity-admin-css ===== */
 /* 幹部列表：套用「活動管理／顯示中的活動」卡片視覺，不改功能 */
 .officer-card{
   background:#fff !important;
@@ -5909,9 +3202,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   .officer-actions{grid-template-columns:repeat(2,1fr) !important;}
   .officer-actions button:first-child{grid-column:auto !important;}
 }
-</style>
 
-<style id="officer-actions-activity-style-fix">
+/* ===== CSS 區段 30｜officer-actions-activity-style-fix ===== */
 /* 幹部列表：操作按鈕比照「活動管理／顯示中的活動」按鈕樣式 */
 .officer-actions{
   display:grid !important;
@@ -5946,9 +3238,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   .officer-actions{grid-template-columns:1fr 1fr !important;}
   .officer-actions button:first-child{grid-column:1/-1 !important;}
 }
-</style>
 
-<style id="admin-edit-save-cancel-equal">
+/* ===== CSS 區段 31｜admin-edit-save-cancel-equal ===== */
 /* 修改密碼：儲存／取消按鈕固定等寬 */
 .admin-edit-box > div{
   display:grid !important;
@@ -5962,11 +3253,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   min-width:0 !important;
   box-sizing:border-box !important;
 }
-</style>
 
-
-
-<style id="v21-admin-activity-icon-neutral-final">
+/* ===== CSS 區段 32｜v21-admin-activity-icon-neutral-final ===== */
 /* 管理活動：依 V2.1，活動卡片左側 ICON 維持中性，不因開放／手動登記變綠。 */
 #app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon,
 #app.admin-home-view .activity-admin-card .admin-card-icon .activity-status-all-icon.open-icon,
@@ -5975,10 +3263,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   color:#171717 !important;
   stroke:#171717 !important;
 }
-</style>
 
-
-<style id="dashboard-cumulative-statistics-v1">
+/* ===== CSS 區段 33｜dashboard-cumulative-statistics-v1 ===== */
 /* 管理首頁統計區：以獨立、可維護的元件樣式取代零散覆寫 */
 #app.admin-home-view .dashboard-today-summary,
 #app.admin-home-view .cumulative-summary{
@@ -6036,15 +3322,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   #app.admin-home-view .dashboard-today-summary .top-attendance-metric{grid-column:1/-1}
   #app.admin-home-view .cumulative-category-grid{grid-template-columns:minmax(0,1fr)}
 }
-</style>
-</body>
 
-
-
-
-
-
-<style id="v23-activity-list-rate42-countdown48x42-gap5">
+/* ===== CSS 區段 34｜v23-activity-list-rate42-countdown48x42-gap5 ===== */
 /* V2.4：活動列表 % 42×42、倒數 48×42（寬×高）；彼此間距 5px，保持整列對齊 */
 .activity-right{
   display:grid !important;
@@ -6080,9 +3359,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   min-height:42px !important; max-height:42px !important;
   margin:0 !important; box-sizing:border-box !important;
 }
-</style>
 
-<style id="v23-universal-status-box-final">
+/* ===== CSS 區段 35｜v23-universal-status-box-final ===== */
 /* =========================================================
    V2.4｜通用狀態區塊標準
    ・尺寸：50 × 50px
@@ -6260,9 +3538,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     flex:0 0 50px !important;
   }
 }
-</style>
-</html>
-<style id="announcement-static-final">
+
+/* ===== CSS 區段 36｜announcement-static-final ===== */
 .announcement .announcement-text{
   font-size:14px !important;
   font-weight:700 !important;
@@ -6297,8 +3574,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     max-height:46px !important;
   }
 }
-</style>
-<style id="v23-inner-status-box-unified-final">
+
+/* ===== CSS 區段 37｜v23-inner-status-box-unified-final ===== */
 /* V2.4：簽到內頁 % 與倒數統一為 50×50px，圓角 15px，間距 5px */
 .checkin-hero-actions{
   display:flex !important;
@@ -6356,11 +3633,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   }
 }
 
-</style>
-
-
-
-<style id="activity-admin-actions-four-columns-final-fix">
+/* ===== CSS 區段 38｜activity-admin-actions-four-columns-final-fix ===== */
 /* 活動管理卡片：直接鎖定實際產生的 .activity-admin-card > .admin-actions，
    不依賴 #app 是否帶有 admin-home-view class，也不受舊版手機 2 欄規則影響。 */
 .activity-admin-card > .admin-actions,
@@ -6395,10 +3668,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   height: 19px !important;
   flex: 0 0 19px !important;
 }
-</style>
 
-
-<style id="activity-admin-actions-fixed-row">
+/* ===== CSS 區段 39｜activity-admin-actions-fixed-row ===== */
 /* 活動管理：取消操作區展開／收合，四個操作按鈕固定同一排 */
 .activity-admin-card > .admin-actions-toggle,
 .activity-admin-card .admin-actions-toggle {
