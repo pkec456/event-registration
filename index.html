@@ -3539,90 +3539,79 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 }
 
 
-/* V2.5 全站配色預覽：朱紅 × 香檳金；僅調整圖示、按鈕與狀態色 */
+/* V2.5 全站配色加強：朱紅 × 香檳金（提高辨識度，不改版面／字級） */
 :root{
+  --bg:#f7f2eb;
+  --surface:#ffffff;
+  --surface-2:#f4eee5;
+  --ink:#292421;
+  --muted:#786d65;
+  --line:#e8ddd0;
   --accent:#a92f32;
-  --accent-soft:#fbefeb;
+  --accent-soft:#f8e8e3;
   --primary:#a92f32;
-  --success:#25845a;
-  --warning:#b8872e;
+  --success:#26784f;
+  --warning:#a97922;
   --danger:#a92f32;
 }
-/* 全站圖示：淡朱紅底；獎盃與重點徽章使用香檳金 */
-.metric-icon,
-.admin-action .menu-icon,
-.announcement-icon,
-.query-search-icon,
-.query-person-icon,
-.query-history .list-icon,
+/* 全站底色與品牌識別 */
+body{background:#f7f2eb !important;color:#292421;}
+.top-brand-icon{background:#a92f32 !important;color:#fff !important;}
+/* 主要操作按鈕、目前選取項目：明確朱紅 */
+button.primary,.primary,.manual-return-save,
+.tabs button.active,.choice.selected,button[type=submit],
+.query-search-button,.signin-page-toggle.is-on{
+  background:#a92f32 !important;
+  border-color:#a92f32 !important;
+  color:#fff !important;
+}
+button.primary:hover,.primary:hover,.manual-return-save:hover,
+.query-search-button:hover{
+  background:#8f2529 !important;
+  border-color:#8f2529 !important;
+}
+/* 次要操作維持白底，但加入暖金色邊框 */
+button.secondary,.manual-return-discard,
+.admin-actions button,.officer-actions button{
+  border-color:#e4d3c0;
+}
+/* 圖示底色加強：一般功能用淡朱紅，重點統計用香檳金 */
+.metric-icon,.admin-action .menu-icon,.announcement-icon,
+.query-search-icon,.query-person-icon,.query-history .list-icon,
 #app .admin-menu-grid > .admin-square .menu-icon,
 #app .statistics-info-summary .metric-icon,
 #app .cumulative-category-icon{
-  background:#f8efeb;
-  color:#a92f32;
+  background:#f4e1dc !important;
+  color:#a92f32 !important;
 }
-.metric-icon svg,
-.admin-action .menu-icon svg,
-.announcement-icon svg,
-.query-search-icon svg,
-.query-person-icon svg,
-.query-history .list-icon svg,
+.metric-icon svg,.admin-action .menu-icon svg,.announcement-icon svg,
+.query-search-icon svg,.query-person-icon svg,.query-history .list-icon svg,
 #app .admin-menu-grid > .admin-square .menu-icon svg,
 #app .statistics-info-summary .metric-icon svg,
 #app .cumulative-category-icon svg{
-  color:#a92f32;
-  stroke:currentColor;
+  color:#a92f32 !important;
+  stroke:#a92f32 !important;
 }
-#app .top-attendance-metric .metric-icon,
+#app .top-attendance-metric .metric-icon{
+  background:#f2e2b9 !important;
+  color:#87611e !important;
+}
 #app .top-attendance-metric .metric-icon svg{
-  background:#f7f0df;
-  color:#a98235;
-  stroke:#a98235;
+  color:#87611e !important;
+  stroke:#87611e !important;
 }
-/* 全站主要操作與選取狀態 */
-button.primary,
-.primary,
-.manual-return-save,
-.tabs button.active,
-.choice.selected,
-button[type=submit]{
-  background-color:#a92f32;
-  border-color:#a92f32;
+/* 活動類別與搜尋識別 */
+.event-category-label{background:#f8e8e3 !important;color:#a92f32 !important;}
+.query-search-icon,.query-person-icon{background:#f4e1dc !important;color:#a92f32 !important;}
+/* 狀態色保留清楚語意，統一為沉穩的朱紅／金色／綠色 */
+.status.open,.history-status.present,.check,.officer-state{color:#26784f !important;}
+.status.future,.status.manual{
+  color:#8c641e !important;background:#f6ebcf !important;
 }
-button.primary:hover,
-.primary:hover,
-.manual-return-save:hover{
-  background-color:#922629;
-  border-color:#922629;
-}
-button.secondary,
-.manual-return-discard{
-  border-color:#e6d8d0;
-}
-/* 全站狀態色保留原意，調整為朱紅金色系 */
-.status.open,
-.history-status.present,
-.check,
-.officer-state{color:#25845a;}
-.status.future,
-.status.manual{
-  color:#9b742b;
-  background:#fbf4e4;
-}
-.history-status.absent{
-  color:#b8872e;
-  background:#fbf4e4;
-}
-.icon-btn.danger,
-.admin-actions button.danger,
-.officer-actions button.danger,
-.danger-btn{color:#a92f32;}
-.event-category-label,
-.query-search-icon,
-.query-person-icon{
-  background:#fbefeb;
-  color:#a92f32;
-}
+.history-status.absent{color:#9a6a1b !important;background:#f6ebcf !important;}
+.icon-btn.danger,.admin-actions button.danger,
+.officer-actions button.danger,.danger-btn{color:#a92f32 !important;}
+.countdown-box{background:#f6ebcf !important;color:#805b19 !important;}
 
 </style>
 
