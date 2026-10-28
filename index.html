@@ -3041,6 +3041,31 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   box-sizing:border-box !important;
 }
 #app.admin-home-view .statistics-info-summary > .metric > b{overflow-wrap:anywhere}
+/* 管理首頁各區塊圖示尺寸統一 */
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon,
+#app.admin-home-view .statistics-info-summary .metric-icon,
+#app.admin-home-view .cumulative-category-icon{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  min-height:34px !important;
+  flex:0 0 34px !important;
+  border-radius:11px !important;
+  display:grid !important;
+  place-items:center !important;
+  box-sizing:border-box !important;
+}
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
+#app.admin-home-view .statistics-info-summary .metric-icon svg,
+#app.admin-home-view .cumulative-category-icon svg{
+  width:18px !important;
+  height:18px !important;
+  min-width:18px !important;
+  min-height:18px !important;
+  max-width:18px !important;
+  max-height:18px !important;
+  stroke-width:2 !important;
+}
 /* 管理首頁卡片視覺統一，提升輔助文字可讀性 */
 #app.admin-home-view .admin-menu-grid > .admin-action,
 #app.admin-home-view .statistics-info-summary > .metric,
