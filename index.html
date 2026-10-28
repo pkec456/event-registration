@@ -3031,7 +3031,8 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 #app.admin-home-view .signin-page-setting-tile .signin-tile-copy{min-width:0 !important;}
 #app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{display:block !important;font-size:12px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
 #app.admin-home-view .signin-page-setting-tile .signin-tile-copy small{display:block !important;margin-top:3px !important;font-size:10px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-page-toggle{min-width:40px !important;min-height:42px !important;padding:4px 6px !important;border-radius:8px !important;font-size:10px !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:1px !important;line-height:1.1 !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle{min-width:40px !important;min-height:30px !important;padding:4px 6px !important;border-radius:8px !important;font-size:10px !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:0 !important;line-height:1.1 !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{display:block !important;font-size:10px !important;line-height:1.2 !important;margin-top:1px !important;text-align:center !important;}
 #app.admin-home-view .signin-page-setting-tile .signin-page-toggle svg{width:15px !important;height:15px !important;flex:0 0 15px !important;}
 @media(max-width:900px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}
 @media(max-width:520px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important}#app.admin-home-view .admin-menu-grid > .admin-action{min-height:100px !important;padding:10px !important}}
@@ -4987,8 +4988,9 @@ function renderAdmin(el){
   <div class="admin-action admin-square signin-page-setting-tile">
     <div class="signin-tile-copy"><strong>簽到頁面</strong></div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
-      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i><span>${signinPageVisible?"隱藏":"開啟"}</span>
+      <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
+    <span class="signin-page-toggle-label">${signinPageVisible?"隱藏":"開啟"}</span>
   </div>
 </div>
 
