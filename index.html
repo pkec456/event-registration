@@ -4850,13 +4850,23 @@ function renderAdmin(el){
   const todayKey=localDateKey();
   const todayActs=acts.filter(a=>String(a.date||"").slice(0,10)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況沿用 V2.3：顯示非隱藏活動總數、今日簽到紀錄，以及排除隊長後的年度最高出席率。
+  // 今日概況沿用 V2.3：開放中活動、今日簽到紀錄，以及排除隊長後的年度最高出席率。
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  // 累積統計：所有未隱藏活動及其登記紀錄，依活動類別彙總。
+  // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
-  const cumulativeRegistrationCount=cumulativeActivities.reduce((sum,a)=>sum+regsOf(a.id).length,0);
+  const openActivityCount=cumulativeActivities.filter(a=>!!a.open).length;
+  const cumulativeRegistrantKeys=new Set();
+  cumulativeActivities.forEach(a=>{
+    regsOf(a.id).forEach(r=>{
+      const name=norm(r.name);
+      if(!name||/[()（）]/.test(name))return;
+      const nameKey=keyOf(name);
+      if(nameKey)cumulativeRegistrantKeys.add(nameKey);
+    });
+  });
+  const cumulativeRegistrationCount=cumulativeRegistrantKeys.size;
   const activityCategories=["廟","禮聘","隊","北港進香","福宴"];
   const cumulativeCategoryStats=activityCategories.map(category=>({
     category,
@@ -4923,7 +4933,7 @@ function renderAdmin(el){
 </div>
 <div class="section-head"><h2>今日概況</h2><span>即時資料</span></div>
 <div class="admin-summary dashboard-today-summary">
-  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${cumulativeActivities.length}</b><span>累積活動</span></div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div>
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
