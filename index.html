@@ -3539,7 +3539,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 }
 
 
-/* V2.5 UI 配色微調：朱紅 × 香檳金；只調整圖示、按鈕與狀態色 */
+/* V2.5 全站配色預覽：朱紅 × 香檳金；僅調整圖示、按鈕與狀態色 */
 :root{
   --accent:#a92f32;
   --accent-soft:#fbefeb;
@@ -3548,33 +3548,44 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   --warning:#b8872e;
   --danger:#a92f32;
 }
-/* 管理首頁圖示：淡朱紅與香檳金，不更動尺寸或版面 */
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon,
-#app.admin-home-view .statistics-info-summary .metric-icon,
-#app.admin-home-view .cumulative-category-icon{
-  background:#f8efeb !important;
-  color:#a92f32 !important;
+/* 全站圖示：淡朱紅底；獎盃與重點徽章使用香檳金 */
+.metric-icon,
+.admin-action .menu-icon,
+.announcement-icon,
+.query-search-icon,
+.query-person-icon,
+.query-history .list-icon,
+#app .admin-menu-grid > .admin-square .menu-icon,
+#app .statistics-info-summary .metric-icon,
+#app .cumulative-category-icon{
+  background:#f8efeb;
+  color:#a92f32;
 }
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
-#app.admin-home-view .statistics-info-summary .metric-icon svg,
-#app.admin-home-view .cumulative-category-icon svg{
-  color:#a92f32 !important;
-  stroke:#a92f32 !important;
+.metric-icon svg,
+.admin-action .menu-icon svg,
+.announcement-icon svg,
+.query-search-icon svg,
+.query-person-icon svg,
+.query-history .list-icon svg,
+#app .admin-menu-grid > .admin-square .menu-icon svg,
+#app .statistics-info-summary .metric-icon svg,
+#app .cumulative-category-icon svg{
+  color:#a92f32;
+  stroke:currentColor;
 }
-#app.admin-home-view .statistics-info-summary .top-attendance-metric .metric-icon{
-  background:#f7f0df !important;
-  color:#a98235 !important;
+#app .top-attendance-metric .metric-icon,
+#app .top-attendance-metric .metric-icon svg{
+  background:#f7f0df;
+  color:#a98235;
+  stroke:#a98235;
 }
-#app.admin-home-view .statistics-info-summary .top-attendance-metric .metric-icon svg{
-  color:#a98235 !important;
-  stroke:#a98235 !important;
-}
-/* 主要按鈕與選取狀態統一使用朱紅 */
+/* 全站主要操作與選取狀態 */
 button.primary,
 .primary,
 .manual-return-save,
 .tabs button.active,
-.choice.selected{
+.choice.selected,
+button[type=submit]{
   background-color:#a92f32;
   border-color:#a92f32;
 }
@@ -3582,18 +3593,36 @@ button.primary:hover,
 .primary:hover,
 .manual-return-save:hover{
   background-color:#922629;
+  border-color:#922629;
 }
-/* 保留成功、關閉與警示的語意，僅調整為較沉穩色調 */
+button.secondary,
+.manual-return-discard{
+  border-color:#e6d8d0;
+}
+/* 全站狀態色保留原意，調整為朱紅金色系 */
 .status.open,
 .history-status.present,
 .check,
 .officer-state{color:#25845a;}
 .status.future,
-.status.manual{color:#9b742b;background:#fbf4e4;}
-.history-status.absent{color:#b8872e;background:#fbf4e4;}
+.status.manual{
+  color:#9b742b;
+  background:#fbf4e4;
+}
+.history-status.absent{
+  color:#b8872e;
+  background:#fbf4e4;
+}
 .icon-btn.danger,
 .admin-actions button.danger,
+.officer-actions button.danger,
 .danger-btn{color:#a92f32;}
+.event-category-label,
+.query-search-icon,
+.query-person-icon{
+  background:#fbefeb;
+  color:#a92f32;
+}
 
 </style>
 
