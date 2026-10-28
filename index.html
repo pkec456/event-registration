@@ -4413,11 +4413,21 @@ function renderAdmin(el){
   if(!adminUnlocked)return renderAdminLock(el);
   const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
-  const todayKey=new Date().toLocaleDateString('sv-SE');
-  const todayActs=acts.filter(a=>String(a.date||'').slice(0,10)===todayKey);
+  const todayKey=localDateKey();
+  const todayActs=acts.filter(a=>String(a.date||"").slice(0,10)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況：統計年度出席率落在橘色級距（60%～未滿80%）的人數。
-  const orangeAttendanceCount=rows.filter(r=>getAttendanceTone(r.rate).name==="orange").length;
+  // 今日概況沿用 V2.3：顯示非隱藏活動總數、今日簽到紀錄，以及排除隊長後的年度最高出席率。
+  const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
+  const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
+  const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
+  // 累積統計：所有未隱藏活動及其登記紀錄，依活動類別彙總。
+  const cumulativeActivities=acts.filter(a=>!a.hidden);
+  const cumulativeRegistrationCount=cumulativeActivities.reduce((sum,a)=>sum+regsOf(a.id).length,0);
+  const activityCategories=["廟","禮聘","隊","北港進香","福宴"];
+  const cumulativeCategoryStats=activityCategories.map(category=>({
+    category,
+    count:cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category).length
+  }));
   // 出席率上升：比較最近三個月與前一個三個月的出席率。
   const trendNow=new Date(),trendMonth=trendNow.getMonth();
   const trendRecentStart=new Date(trendNow.getFullYear(),Math.max(0,trendMonth-2),1);
@@ -4537,7 +4547,24 @@ function renderAdmin(el){
     </button>
   </div>
 </div>
-<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div><div class="admin-summary"><div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${acts.filter(a=>!a.hidden).length}</b><span>累積活動</span></div><div class="metric"><div class="metric-icon"><i data-lucide="trending-up"></i></div><b>${names.length}</b><span>總人數</span></div><div class="metric top-attendance-metric" id="top-attendance-metric"><div class="metric-icon"><i data-lucide="users"></i></div><b id="top-attendance-count">${orangeAttendanceCount}</b><span id="top-attendance-rate">橘色人數（60%～未滿80%）</span></div></div><div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
+<div class="section-head"><h2>今日概況</h2><span>即時資料</span></div>
+<div class="admin-summary dashboard-today-summary">
+  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${cumulativeActivities.length}</b><span>累積活動</span></div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
+  <div class="metric top-attendance-metric" id="top-attendance-metric">
+    <div class="metric-icon"><i data-lucide="trophy"></i></div>
+    <b class="top-attendance-name" id="top-attendance-name">${topAttendanceNames.length?escapeHtml(topAttendanceNames[0].name):"—"}</b>
+    <span id="top-attendance-rate">${topAttendanceNames.length?`${topAttendanceNames[0].rate}% 最高出席率`:"尚無出席資料"}</span>
+  </div>
+</div>
+<div class="section-head cumulative-section-head"><h2>累積統計</h2><span>即時資料</span></div>
+<div class="admin-summary cumulative-summary">
+  <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
+  <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
+</div>
+<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
+<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<div class="cumulative-category-card"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"calendar-check":item.category==="隊"?"users":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>累積活動場次</span></div><b>${item.count}<small> 場</small></b></div>`).join("")}</div>
+<div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>建立活動</strong>
@@ -5950,6 +5977,66 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 }
 </style>
 
+
+<style id="dashboard-cumulative-statistics-v1">
+/* 管理首頁統計區：以獨立、可維護的元件樣式取代零散覆寫 */
+#app.admin-home-view .dashboard-today-summary,
+#app.admin-home-view .cumulative-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  align-items:stretch;
+}
+#app.admin-home-view .cumulative-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+#app.admin-home-view .dashboard-today-summary .metric,
+#app.admin-home-view .cumulative-summary .metric{
+  min-width:0;
+  box-sizing:border-box;
+}
+#app.admin-home-view .top-attendance-name{
+  display:block;
+  overflow-wrap:anywhere;
+  font-size:clamp(14px,4vw,20px);
+  line-height:1.3;
+}
+#app.admin-home-view .cumulative-category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:14px;
+}
+#app.admin-home-view .cumulative-category-card{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  padding:12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-sizing:border-box;
+}
+#app.admin-home-view .cumulative-category-icon{
+  display:grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:12px;
+  background:#f2f2ef;
+}
+#app.admin-home-view .cumulative-category-icon svg{width:21px;height:21px}
+#app.admin-home-view .cumulative-category-info{display:flex;flex:1;flex-direction:column;min-width:0;gap:3px}
+#app.admin-home-view .cumulative-category-info strong{font-size:14px;line-height:1.3}
+#app.admin-home-view .cumulative-category-info span{font-size:11px;color:#777;line-height:1.3}
+#app.admin-home-view .cumulative-category-card > b{flex:0 0 auto;font-size:20px;white-space:nowrap}
+#app.admin-home-view .cumulative-category-card > b small{font-size:11px;font-weight:700}
+@media(max-width:360px){
+  #app.admin-home-view .dashboard-today-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #app.admin-home-view .dashboard-today-summary .top-attendance-metric{grid-column:1/-1}
+  #app.admin-home-view .cumulative-category-grid{grid-template-columns:minmax(0,1fr)}
+}
+</style>
 </body>
 
 
