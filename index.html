@@ -3499,7 +3499,46 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
     height: 18px !important;
   }
 }
-.event-category-field .event-category-choices > .choice{font-size:16px}</style>
+.event-category-field .event-category-choices > .choice{font-size:16px}
+/* 手機版管理首頁：放大圖示與文字，桌機版維持原樣 */
+@media(max-width:520px){
+  #app.admin-home-view .admin-menu-grid > .admin-square .menu-icon{
+    width:46px !important;height:46px !important;min-width:46px !important;min-height:46px !important;flex:0 0 46px !important;border-radius:13px !important;
+  }
+  #app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg{
+    width:26px !important;height:26px !important;min-width:26px !important;min-height:26px !important;max-width:26px !important;max-height:26px !important;
+  }
+  #app.admin-home-view .admin-menu-grid > .admin-square strong,
+  #app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{
+    font-size:17px !important;line-height:1.4 !important;
+  }
+  #app.admin-home-view .admin-menu-grid > .admin-action small,
+  #app.admin-home-view .signin-page-setting-tile .signin-tile-copy small{
+    font-size:14px !important;line-height:1.4 !important;
+  }
+  #app.admin-home-view .statistics-info-summary .metric-icon,
+  #app.admin-home-view .cumulative-category-icon{
+    width:50px !important;height:50px !important;min-width:50px !important;min-height:50px !important;flex:0 0 50px !important;border-radius:14px !important;
+  }
+  #app.admin-home-view .statistics-info-summary .metric-icon svg,
+  #app.admin-home-view .cumulative-category-icon svg{
+    width:29px !important;height:29px !important;min-width:29px !important;min-height:29px !important;max-width:29px !important;max-height:29px !important;
+  }
+  #app.admin-home-view .statistics-info-summary > .metric > b{
+    font-size:32px !important;line-height:1.2 !important;
+  }
+  #app.admin-home-view .statistics-info-summary > .metric > span{
+    font-size:16px !important;line-height:1.4 !important;
+  }
+  #app.admin-home-view .top-attendance-slideshow{height:52px !important;}
+  #app.admin-home-view .top-attendance-slide-name{font-size:18px !important;line-height:1.3 !important;}
+  #app.admin-home-view .cumulative-category-card{padding:18px 10px !important;}
+  #app.admin-home-view .cumulative-category-card > b{font-size:30px !important;line-height:1.2 !important;}
+  #app.admin-home-view .cumulative-category-card > strong{font-size:16px !important;line-height:1.4 !important;}
+  #app.admin-home-view .section-head > span{font-size:15px !important;}
+}
+
+</style>
 
 
 
