@@ -4944,7 +4944,7 @@ function renderAdmin(el){
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  const topAttendanceSlides=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")).slice(0,3).map((r,i)=>({name:r.name,rate:Number(r.rate)||0,rank:i+1}));
+  const topAttendanceSlides=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")).slice(0,3).map((r,i)=>({name:r.name,rate:Number(r.rate)||0,rank:i+2}));
   const topAttendanceSlideHtml=topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide" data-attendance-slide="${item.rank}"><b class="top-attendance-slide-name">${item.rank}. ${escapeHtml(item.name)}</b><span class="top-attendance-slide-detail">${item.rate}% 出席率</span></div>`).join(""):'<div class="top-attendance-slide"><b class="top-attendance-slide-name">尚無出席資料</b></div>';
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
