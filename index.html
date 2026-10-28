@@ -300,7 +300,7 @@ textarea:focus{
 }
 input::placeholder,
 textarea::placeholder{color:#aaa}
-input[type=number]{appearance:textfield}
+
 
 /* All action buttons share the same red pressed/selected state. */
 button.primary,
@@ -378,7 +378,7 @@ button.secondary:focus-visible,
   display:flex;align-items:center;gap:8px;
   flex:0 0 auto;white-space:nowrap;color:var(--ink);
 }
-.query-search-label strong{font-size:14px}
+
 .query-search-icon{
   width:36px;height:36px;border-radius:12px;
   display:grid;place-items:center;
@@ -417,10 +417,10 @@ button.secondary:focus-visible,
 .officer-role,.role-officer{color:var(--accent)}
 
 @media(max-width:430px){
-  .query-search-row{gap:8px;padding:9px}
-  .query-search-label{gap:6px}
-  .query-search-label strong{font-size:13px}
-  .query-search-icon{width:34px;height:34px}
+  
+  
+  
+  
   .query-search-input input{height:46px;min-height:46px}
   .query-search-button{width:40px;height:40px}
 }
@@ -436,13 +436,13 @@ button.secondary:focus-visible,
   border-color:#efb8bb;
   background:#fff0f0;
 }
-.top-admin-access.officer svg{color:var(--accent)}
+
 .top-admin-access.super{
   color:var(--admin-super);
   border-color:#f2d39a;
   background:#fff7e6;
 }
-.top-admin-access.super svg{color:var(--admin-super)}
+
 
 
 .admin-role-title{font-size:22px;line-height:1.15;font-weight:900}
@@ -626,50 +626,20 @@ button.secondary:focus-visible,
 }
 
 
-.activity-status-clock.countdown{
-  min-width:78px;
-  width:auto;
-  height:48px;
-  padding:0 10px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  flex:0 0 auto;
-  box-sizing:border-box;
-  background:var(--accent);
-  color:#fff;
-}
-.activity-status-clock.countdown svg{
-  position:static;
-  width:19px;
-  height:19px;
-  transform:none;
-}
-.activity-status-clock.countdown svg circle{display:none}
+
+
+
 .activity-status-clock.countdown i{
   width:19px;
   height:19px;
   color:#fff;
   flex:0 0 auto;
 }
-.activity-status-clock.countdown span{
-  position:static;
-  color:#fff;
-  font-size:13px;
-  font-weight:900;
-  letter-spacing:.02em;
-  line-height:1;
-}
+
 @media(max-width:430px){
-  .activity-status-clock.countdown{
-    min-width:72px;
-    height:44px;
-    padding:0 9px;
-  }
+  
   .activity-status-clock.countdown i{width:18px;height:18px}
-  .activity-status-clock.countdown span{font-size:12px}
+  
 }
 
 
@@ -687,14 +657,7 @@ button.secondary:focus-visible,
   background:var(--accent);
   color:#fff;
 }
-.activity-status-clock.countdown span{
-  position:static;
-  color:#fff;
-  font-size:13px;
-  font-weight:900;
-  letter-spacing:.02em;
-  line-height:1;
-}
+
 .activity-status-clock.countdown svg,
 .activity-status-clock.countdown i{display:none}
 @media(max-width:430px){
@@ -704,7 +667,7 @@ button.secondary:focus-visible,
     height:40px;
     flex-basis:62px;
   }
-  .activity-status-clock.countdown span{font-size:12px}
+  
 }
 
 .field-label .field-slot-no{
@@ -766,7 +729,7 @@ button.secondary:focus-visible,
   align-items:center;
 }
 .signin-list-head{padding:0 10px 9px;margin-bottom:0}
-.signin-list-head > div:first-child{grid-column:2}
+
 .signin-list-head > div{min-width:0;text-align:center}
 .signin-list-head > div:nth-child(2){text-align:left}
 .block.tight .list-row:has(.signin-field-value){padding:10px}
@@ -842,7 +805,7 @@ button.secondary:focus-visible,
   background:transparent;
   color:var(--ink);
 }
-#back-link svg{width:18px;height:18px}
+
 #back-link .back-text{display:none}
 
 
@@ -860,7 +823,7 @@ button.secondary:focus-visible,
 .subpage-header{position:static !important;display:flex;align-items:center;gap:10px;min-height:54px;padding:8px 0 12px;background:var(--bg)}
 .subpage-header h1{margin:0;font-size:20px;line-height:1.2;font-weight:900}
 .subpage-back{width:36px;height:36px;min-width:36px;padding:0;border:0;background:transparent;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer}
-.subpage-back svg{width:19px;height:19px}
+
 .subpage-header .subpage-back:last-child{margin-left:auto}
 .admin-role-header{display:none !important}
 .admin-child-header{background:transparent !important;color:var(--ink) !important;box-shadow:none !important;border:0 !important}
@@ -1092,7 +1055,7 @@ body .app-header:not(.home-header){
   color:var(--ink) !important;
   display:inline-flex !important;align-items:center !important;justify-content:center !important;
 }
-.child-back svg{width:20px !important;height:20px !important}
+
 #app.child-view .admin-hero,
 #app.child-view .admin-head,
 #app.child-view .admin-header,
@@ -1164,7 +1127,7 @@ body .app-header:not(.home-header){
   border-radius:12px;background:#f1f1ef;color:var(--ink);
 }
 .admin-square .menu-icon svg{width:22px;height:22px}
-.admin-square strong{font-size:15px;font-weight:900}
+
 .admin-square small,.admin-square .menu-text,.admin-square .chev{display:none !important}
 
 /* Admin child pages: exactly one arrow, no textual/second back button. */
@@ -1197,7 +1160,7 @@ body .app-header:not(.home-header){
 }
 .admin-main-hero.officer{background:#d71920}
 .admin-main-hero.super{background:#f59e0b}
-.admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+
 .admin-main-hero-shield{
   width:48px;height:48px;border-radius:14px;
   display:flex;align-items:center;justify-content:center;
@@ -1217,7 +1180,7 @@ body .app-header:not(.home-header){
 .admin-main-hero-logout svg{width:22px;height:22px}
 
 /* Home fixed top: only team name + shield, no subtitle. */
-.home-fixed-header .top-brand p{display:none !important}
+
 
 
 .home-fixed-header{
@@ -1226,7 +1189,7 @@ body .app-header:not(.home-header){
   z-index:100 !important;
   background:var(--bg) !important;
 }
-.home-fixed-header .top-brand p{display:none !important}
+
 .home-tabs{
   position:static !important;
   display:flex !important;
@@ -1264,7 +1227,7 @@ body .app-header:not(.home-header){
   color:var(--ink) !important;display:inline-flex !important;
   align-items:center !important;justify-content:center !important;
 }
-#app.child-view .child-back svg{width:20px !important;height:20px !important}
+
 
 
 .home-tabs{
@@ -1453,13 +1416,7 @@ body .app-header:not(.home-header){
   line-height:1.15 !important;
   font-weight:950 !important;
 }
-.admin-main-hero-role{
-  margin-top:4px !important;
-  font-size:12px !important;
-  line-height:1.2 !important;
-  font-weight:750 !important;
-  opacity:.9 !important;
-}
+
 
 
 .admin-main-hero{
@@ -1468,18 +1425,8 @@ body .app-header:not(.home-header){
   justify-content:space-between !important;
 }
 .admin-main-hero-brand{display:flex !important;align-items:center !important}
-.admin-main-hero-title{
-  font-size:22px !important;
-  line-height:1.15 !important;
-  font-weight:950 !important;
-}
-.admin-main-hero-role{
-  margin-top:4px !important;
-  font-size:12px !important;
-  line-height:1.2 !important;
-  font-weight:750 !important;
-  opacity:.9 !important;
-}
+
+
 .admin-main-hero-actions{
   display:flex !important;
   align-items:center !important;
@@ -1632,12 +1579,8 @@ body .app-header:not(.home-header){
   height:21px !important;
   display:block !important;
 }
-.activity-status-clock.closed{
-  color:#171717 !important;
-}
-.activity-status-clock.open{
-  color:#22a35a !important;
-}
+
+
 
 
 .activity-status-clock.closed,
@@ -1661,12 +1604,8 @@ body .app-header:not(.home-header){
   margin:0 !important;
   padding:0 !important;
 }
-.activity-status-clock.closed{
-  color:#171717 !important;
-}
-.activity-status-clock.open{
-  color:#22a35a !important;
-}
+
+
 
 
 .activity-card.activity-card-open .activity-icon{
@@ -1794,12 +1733,8 @@ body .app-header:not(.home-header){
 .admin-login-card .field-label{
   margin-bottom:7px;
 }
-.admin-password-wrap{
-  position:relative;
-}
-.admin-password-wrap input{
-  padding-right:48px !important;
-}
+
+
 .admin-password-toggle{
   position:absolute;
   right:5px;
@@ -1822,10 +1757,7 @@ body .app-header:not(.home-header){
   background:var(--accent-soft);
   outline:none;
 }
-.admin-password-toggle svg{
-  width:19px;
-  height:19px;
-}
+
 .admin-login-button{
   width:100%;
   margin-top:6px;
@@ -2450,10 +2382,7 @@ body .app-header:not(.home-header){
 }
 
 /* 子頁原本的 Header 若仍由舊版 class 產生，避免與新 Header 疊加 */
-#app.child-view .app-header,
-#app.subpage-view .app-header{
-  display:none !important;
-}
+
 
 @media(max-width:430px){
   .top.home-fixed-header,
@@ -2627,12 +2556,8 @@ html{
 
 
 /* V2.1：管理頁面固定垂直捲軸空間，避免切換管理內容造成 Header 位移 */
-html{
-  overflow-y:scroll;
-}
-body{
-  overflow-y:scroll;
-}
+
+
 
 
 
