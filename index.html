@@ -4957,7 +4957,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
 </div>
 <div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
-<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"calendar-check":item.category==="隊"?"users":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
+<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"users":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
 <div class="section-head"><h2>管理功能</h2></div><div class="admin-menu admin-menu-grid">
   <button class="admin-action admin-square" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
