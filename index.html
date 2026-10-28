@@ -3050,43 +3050,26 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 
 #app.admin-home-view .cumulative-category-grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:8px;
   margin-bottom:14px;
+  align-items:stretch;
 }
 #app.admin-home-view .cumulative-category-card{
-  width:100%;
-  text-align:left;
-  color:inherit;
-  font:inherit;
-  cursor:pointer;
-  appearance:none;
-
-  display:flex;
-  align-items:center;
-  gap:9px;
-  min-width:0;
-  padding:12px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-sizing:border-box;
+  width:100%; min-width:0; box-sizing:border-box;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  gap:0; padding:14px 8px; text-align:center; color:inherit; font:inherit;
+  cursor:pointer; appearance:none; background:#fff; border:1px solid var(--line); border-radius:18px;
 }
 #app.admin-home-view .cumulative-category-icon{
-  display:grid;
-  place-items:center;
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  border-radius:12px;
-  background:#f2f2ef;
+  display:grid; place-items:center; width:34px; height:34px; flex:0 0 34px;
+  margin:0 auto 7px; border-radius:11px; background:#f2f2ef;
 }
-#app.admin-home-view .cumulative-category-icon svg{width:21px;height:21px}
-#app.admin-home-view .cumulative-category-info{display:flex;flex:1;flex-direction:column;min-width:0;gap:3px}
-#app.admin-home-view .cumulative-category-info strong{font-size:14px;line-height:1.3}
-#app.admin-home-view .cumulative-category-info span{font-size:11px;color:#777;line-height:1.3}
-#app.admin-home-view .cumulative-category-card > b{flex:0 0 auto;font-size:20px;white-space:nowrap}
-#app.admin-home-view .cumulative-category-card > b small{font-size:11px;font-weight:700}
+#app.admin-home-view .cumulative-category-icon svg{width:19px;height:19px}
+#app.admin-home-view .cumulative-category-card > b{display:block;font-size:22px;line-height:1.25;white-space:nowrap;margin:0 0 4px}
+#app.admin-home-view .cumulative-category-card > strong{display:block;font-size:10px;line-height:1.3;color:#777;overflow-wrap:anywhere;font-weight:600}
+@media(max-width:900px){#app.admin-home-view .cumulative-category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){#app.admin-home-view .cumulative-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:360px) {
 #app.admin-home-view .dashboard-today-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
 #app.admin-home-view .dashboard-today-summary .top-attendance-metric{grid-column:1/-1}
@@ -5008,8 +4991,8 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div>
 </div>
-<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>累積場次</span></div>
-<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><div class="cumulative-category-info"><strong>${escapeHtml(item.category)}</strong><span>點擊查看活動</span></div><b>${item.count}<small> 場</small></b></button>`).join("")}</div>
+<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>點擊查看</span></div>
+<div class="cumulative-category-grid">${cumulativeCategoryStats.map(item=>`<button type="button" class="cumulative-category-card" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button>`).join("")}</div>
 `;
   if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
