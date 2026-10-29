@@ -98,6 +98,20 @@ jobs:
                           break
               i += 1
           require(depth == 0 and state != "comment", "CSS braces and comments are balanced")
+
+          # Management-home icon size consistency: desktop 20px; mobile 26px across all three icon groups.
+          require(
+              re.search(r"#app\.admin-home-view \.admin-menu-grid > \.admin-square \.menu-icon svg,\s*#app\.admin-home-view \.statistics-info-summary \.metric-icon svg,\s*#app\.admin-home-view \.cumulative-category-icon svg\s*\{[^}]*width:20px !important;[^}]*height:20px !important;", css, re.S) is not None,
+              "management-home desktop SVG icons share 20x20px sizing"
+          )
+          require(
+              re.search(r"@media\s*\(max-width:\s*520px\)\s*\{.*?#app\.admin-home-view \.admin-menu-grid > \.admin-square \.menu-icon svg\s*\{[^}]*width:26px !important;height:26px !important;[^}]*\}.*?#app\.admin-home-view \.statistics-info-summary \.metric-icon svg,\s*#app\.admin-home-view \.cumulative-category-icon svg\s*\{[^}]*width:26px !important;height:26px !important;", css, re.S) is not None,
+              "management-home mobile SVG icons share 26x26px sizing"
+          )
+          require(
+              not re.search(r"@media\s*\(max-width:\s*520px\)\s*\{.*?#app\.admin-home-view \.statistics-info-summary \.metric-icon svg,\s*#app\.admin-home-view \.cumulative-category-icon svg\s*\{[^}]*width:29px", css, re.S),
+              "no conflicting 29px mobile management-home icon override"
+          )
           require("#app.admin-home-view .activity-admin-card.activity-card-pending" in css and "background:#f3f3f1 !important" in css, "future pending admin cards retain grey styling")
           require(not re.search(r'\s/\s+class\s*=', html), "no malformed slash-before-class attribute")
           require("function activityDateKey(" in html, "centralized local activity date helper exists")
