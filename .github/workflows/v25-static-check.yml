@@ -56,6 +56,49 @@ jobs:
           style_close = len(re.findall(r"</style\s*>", html, re.I))
           require(script_open == script_close, f"script tags balanced ({script_open}/{script_close})")
           require(style_open == style_close, f"style tags balanced ({style_open}/{style_close})")
+          require(style_open == 1, "single inline CSS block retained")
+
+          style_match = re.search(r"<style\\b[^>]*>(.*?)</style\\s*>", html, re.I | re.S)
+          require(style_match is not None, "inline CSS block can be extracted")
+          css = style_match.group(1)
+          # Check CSS brace balance while ignoring comments and quoted strings.
+          depth = 0
+          state = "normal"
+          quote = None
+          escaped = False
+          i = 0
+          while i < len(css):
+              ch = css[i]
+              nxt = css[i + 1] if i + 1 < len(css) else ""
+              if state == "comment":
+                  if ch == "*" and nxt == "/":
+                      state = "normal"
+                      i += 2
+                      continue
+              elif state == "string":
+                  if escaped:
+                      escaped = False
+                  elif ch == "\\\\":
+                      escaped = True
+                  elif ch == quote:
+                      state = "normal"
+              else:
+                  if ch == "/" and nxt == "*":
+                      state = "comment"
+                      i += 2
+                      continue
+                  if ch in ("'", '"'):
+                      state = "string"
+                      quote = ch
+                  elif ch == "{":
+                      depth += 1
+                  elif ch == "}":
+                      depth -= 1
+                      if depth < 0:
+                          break
+              i += 1
+          require(depth == 0 and state != "comment", "CSS braces and comments are balanced")
+          require("#app.admin-home-view .activity-admin-card.activity-card-pending" in css and "background:#f3f3f1 !important" in css, "future pending admin cards retain grey styling")
           require(not re.search(r'\s/\s+class\s*=', html), "no malformed slash-before-class attribute")
           require("function activityDateKey(" in html, "centralized local activity date helper exists")
           require('if(a.hidden) return false;' in html, "hidden activities excluded from annual attendance stats")
