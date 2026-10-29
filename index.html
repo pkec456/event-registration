@@ -4187,29 +4187,6 @@ function startActivityExpiryWatcher(){
   activityExpiryTimer=setInterval(async()=>{
     if(!Array.isArray(state.activities))return;
     const now=Date.now();
-    const todayKey=localDateKey(new Date(now));
-
-    // 未來活動的 publishAt 作為自動開放時間；只在活動當天開啟，避免補開過期活動。
-    const dueToOpen=state.activities.filter(a=>{
-      if(a.hidden || a.open || isManualRegistrationActivity(a))return false;
-      const activityDay=activityDateKey(a.date);
-      const publishTs=a.publishAt?new Date(a.publishAt).getTime():NaN;
-      return activityDay===todayKey && Number.isFinite(publishTs) && publishTs<=now;
-    });
-    for(const a of dueToOpen){
-      const previous={open:a.open,closeAt:a.closeAt,autoCloseMinutes:a.autoCloseMinutes,publishAt:a.publishAt};
-      try{
-        const opened={...a,open:true,closeAt:null,autoCloseMinutes:0,publishAt:null};
-        await updateActivityRemote(opened);
-        Object.assign(a,opened);
-        window.v93CountdownDeadlines?.delete(String(a.id));
-        console.log("[活動管理] 到達排定開放時間，自動開放活動",a.name);
-      }catch(e){
-        Object.assign(a,previous);
-        console.error("[活動管理] 活動當天自動開放失敗",a.name,e);
-      }
-    }
-
     const expired=state.activities.filter(a=>{
       const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
       const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
@@ -4219,16 +4196,7 @@ function startActivityExpiryWatcher(){
         isActivityDateExpired(a, now)
       );
     });
-    if(!expired.length){
-      if(dueToOpen.length){
-        if(typeof window.refreshActivityListClocks==="function")window.refreshActivityListClocks();
-        if(typeof renderAdmin==="function" && activeTab==="admin"){
-          const tab=document.getElementById("tab-content");if(tab)renderAdmin(tab);
-        }
-        if(dueToOpen.some(a=>String(a.id)===String(openEventId)))render();
-      }
-      return;
-    }
+    if(!expired.length)return;
 
     for(const a of expired){
       // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
@@ -4269,10 +4237,7 @@ function startActivityExpiryWatcher(){
     if(typeof window.refreshActivityListClocks==="function"){
       window.refreshActivityListClocks();
     }
-    if(dueToOpen.length && typeof renderAdmin==="function" && activeTab==="admin"){
-      const tab=document.getElementById("tab-content");if(tab)renderAdmin(tab);
-    }
-    if(dueToOpen.some(a=>String(a.id)===String(openEventId)) || expired.some(a=>String(a.id)===String(openEventId))){
+    if(expired.some(a=>String(a.id)===String(openEventId))){
       render();
     }
   },1000);
