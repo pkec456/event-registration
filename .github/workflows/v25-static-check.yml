@@ -123,6 +123,35 @@ jobs:
           require("public_check_attendance_eligibility" in html, "attendance eligibility RPC reference exists")
           require("function annualStats(" in html, "annual attendance calculation exists")
 
+          # Status and countdown tiles: preserve the established 50px square, 15px radius, and 5px gap.
+          require(
+              re.search(r"\.status-box\s*\{[^}]*width:50px !important;[^}]*height:50px !important;[^}]*border-radius:15px !important;", css, re.S) is not None,
+              "status tiles remain 50x50px with 15px corner radius"
+          )
+          require(
+              re.search(r"\.status-box-group\s*\{[^}]*gap:5px !important;", css, re.S) is not None,
+              "status tile group keeps 5px spacing"
+          )
+          require(
+              re.search(r"\.activity-list-rate-slot \.activity-list-attendance-rate\s*\{[^}]*width:50px !important;[^}]*height:50px !important;[^}]*border-radius:15px !important;", css, re.S) is not None
+              and re.search(r"\.activity-list-countdown-slot \.activity-status-clock\s*\{[^}]*width:50px !important;[^}]*height:50px !important;[^}]*border-radius:15px !important;", css, re.S) is not None,
+              "activity list attendance-rate and countdown tiles remain 50x50px"
+          )
+          # Search control: visible 46px red button, with a 22px white search icon.
+          require(
+              re.search(r"\.query-search-button\s*\{[^}]*width:46px !important;[^}]*height:46px !important;", css, re.S) is not None,
+              "search button remains 46x46px"
+          )
+          require(
+              re.search(r"\.query-search-button svg\s*\{[^}]*width:22px !important;[^}]*height:22px !important;", css, re.S) is not None
+              and re.search(r"#query-btn\.query-search-button svg,\s*\.query-search-button svg\s*\{[^}]*color:#ffffff !important;[^}]*stroke:#ffffff !important;", css, re.S) is not None,
+              "search icon remains 22x22px and white"
+          )
+          require(
+              re.search(r"button\.primary,.primary,.manual-return-save,[\s\S]*?\.query-search-button,.signin-page-toggle\.is-on\s*\{[^}]*background:#a92f32 !important;", css) is not None,
+              "search button retains the vermilion brand background"
+          )
+
           scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
           inline_scripts = [(attrs, body) for attrs, body in scripts if not re.search(r'\bsrc\s*=', attrs, re.I) and body.strip()]
           require(len(inline_scripts) > 0, "inline JavaScript blocks found")
