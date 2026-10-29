@@ -5289,7 +5289,7 @@ function setupCreateActivityPage(el){
       }
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
-      showToast(isFutureActivityDate ? "活動已建立，將於活動當天整點自動開放簽到" : (publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈"));
+      showToast(isFutureActivityDate ? "活動已建立，將於活動當天排定時間自動開放簽到" : (publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈"));
       adminPage="activities";
       draftFields=["公用哨角"]; draftName="";
       draftEventCategory="";
