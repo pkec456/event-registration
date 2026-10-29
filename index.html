@@ -4868,7 +4868,7 @@ function renderRegister(el){
     const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
   });
   if(openEventId){
-    const activity=acts.find(a=>a.id===openEventId);
+    const activity=acts.find(a=>String(a.id)===String(openEventId));
     if(!activity){openEventId=null;return renderRegister(el);}
     const list=regsOf(activity.id), fields=activity.fields||[];
     el.innerHTML=`
