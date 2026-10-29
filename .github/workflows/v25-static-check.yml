@@ -58,7 +58,7 @@ jobs:
           require(style_open == style_close, f"style tags balanced ({style_open}/{style_close})")
           require(style_open == 1, "single inline CSS block retained")
 
-          style_match = re.search(r"<style\\b[^>]*>(.*?)</style\\s*>", html, re.I | re.S)
+          style_match = re.search(r"<style[^>]*>(.*?)</style[ \t\r\n]*>", html, re.I | re.S)
           require(style_match is not None, "inline CSS block can be extracted")
           css = style_match.group(1)
           # Check CSS brace balance while ignoring comments and quoted strings.
@@ -78,7 +78,7 @@ jobs:
               elif state == "string":
                   if escaped:
                       escaped = False
-                  elif ch == "\\\\":
+                  elif ch == chr(92):
                       escaped = True
                   elif ch == quote:
                       state = "normal"
