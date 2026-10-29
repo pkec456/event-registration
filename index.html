@@ -5194,6 +5194,37 @@ function renderAdmin(el){
   const accountText=escapeHtml(session?.username||"—");
   el.innerHTML=`${content}`;
   if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
+  // 跑馬燈改由 JavaScript 控制：每 4 秒切換一位，播完最後一位後回到第一位。
+  const topAttendanceCarousel=el.querySelector("#top-attendance-metric .top-attendance-slideshow");
+  if(adminPage==="home"&&topAttendanceCarousel){
+    const topAttendanceSlidesEls=Array.from(topAttendanceCarousel.querySelectorAll(".top-attendance-slide"));
+    if(topAttendanceSlidesEls.length>1){
+      let topAttendanceCarouselIndex=0;
+      topAttendanceSlidesEls.forEach((slide,index)=>{
+        slide.style.animation="none";
+        slide.style.transition="opacity .35s ease";
+        slide.style.transform="none";
+        slide.style.opacity=index===0?"1":"0";
+        slide.style.zIndex=index===0?"1":"0";
+      });
+      window.__topAttendanceCarouselTimer=setInterval(()=>{
+        if(!document.body.contains(topAttendanceCarousel)){
+          clearInterval(window.__topAttendanceCarouselTimer);
+          window.__topAttendanceCarouselTimer=null;
+          return;
+        }
+        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.opacity="0";
+        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.zIndex="0";
+        topAttendanceCarouselIndex=(topAttendanceCarouselIndex+1)%topAttendanceSlidesEls.length;
+        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.opacity="1";
+        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.zIndex="1";
+      },4000);
+    }else if(topAttendanceSlidesEls.length===1){
+      topAttendanceSlidesEls[0].style.animation="none";
+      topAttendanceSlidesEls[0].style.opacity="1";
+      topAttendanceSlidesEls[0].style.transform="none";
+    }
+  }
   if(adminPage==="attendance")el.querySelectorAll("[data-attendance-person]").forEach(card=>{card.onclick=()=>{window.__adminAttendancePersonName=card.getAttribute("data-attendance-person")||"";adminPage="attendance-person";render();};});
   const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
   const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
