@@ -3758,6 +3758,32 @@ button.secondary,.manual-return-discard,
 .activity-card.activity-card-pending .event-category-label{
   color:#f2d28a !important;
 }
+
+/* V2.5 修正：管理頁的卡片使用 activity-admin-card，需獨立套用等待開放反黑 */
+.activity-admin-card.activity-card-pending{
+  background:#171717 !important;
+  border-color:#171717 !important;
+  color:#fff !important;
+}
+.activity-admin-card.activity-card-pending .admin-card-name,
+.activity-admin-card.activity-card-pending .admin-card-name *,
+.activity-admin-card.activity-card-pending .admin-card-meta,
+.activity-admin-card.activity-card-pending .admin-card-title-block,
+.activity-admin-card.activity-card-pending .admin-card-subtitle-block{
+  color:#fff !important;
+}
+.activity-admin-card.activity-card-pending .event-category-label{
+  color:#f2d28a !important;
+}
+.activity-admin-card.activity-card-pending .admin-card-status .pending-publish,
+.activity-admin-card.activity-card-pending .admin-card-status .pending-publish *{
+  color:#946200 !important;
+}
+.activity-admin-card.activity-card-pending .admin-actions button{
+  color:#fff;
+  border-color:#4a4a4a;
+  background:#292929;
+}
 </style>
 
 
@@ -5386,7 +5412,7 @@ function renderAdmin(el){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
-    <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card">
+    <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card ${isWaitingForPublish(a)?"activity-card-pending":""}">
       <div class="admin-card-top">
         <div class="admin-card-info">
           <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
@@ -5685,7 +5711,7 @@ function activityAdminRow(a,hidden=false){
   // 管理頁採 V2.1：名單按鈕維持中性；開放／停止只由活動切換按鈕呈現顏色。
   const adminStatusIconClass = a.open ? "open-icon" : "closed-icon";
   const adminStatusButtonClass = a.open ? "is-on" : "is-off";
-  return `<div class="activity-admin-card ${hidden?"hidden":""}" data-admin-activity-row="${escapeHtml(a.id)}">
+  return `<div class="activity-admin-card ${hidden?"hidden":""} ${future?"activity-card-pending":""}" data-admin-activity-row="${escapeHtml(a.id)}">
   <div class="admin-card-top">
     <div class="admin-card-info">
       <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
