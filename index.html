@@ -30,6 +30,7 @@
  * H. 手機版管理首頁 RWD 微調
  * I. 共用圖示尺寸與搜尋按鈕視覺
  * J. V2.5 品牌配色與語意狀態色
+ * K. 待開放活動灰化與年度出席率名單呈現
  *
  * 注意：分區註解是導覽，不代表已將規則搬移、合併或完成視覺驗收。
  * ============================================================
@@ -3151,6 +3152,8 @@ button.secondary,.manual-return-discard,
 .icon-btn.danger,.admin-actions button.danger,
 .officer-actions button.danger,.danger-btn{color:#a92f32 !important;}
 
+/* CSS 區塊 K：待開放活動灰化與年度出席率名單呈現 */
+/* 本區只處理狀態卡片與名單視覺；不修改活動開放／關閉邏輯。 */
 /* V2.5 修正：管理端尚未開放活動也要灰化，避免被管理首頁卡片底色覆寫。 */
 #app.admin-home-view .activity-admin-card.activity-card-pending{
   background:#f3f3f1 !important;
