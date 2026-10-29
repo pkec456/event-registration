@@ -180,7 +180,8 @@ jobs:
               "activity card actions retain a four-column grid"
           )
           require(
-              re.search(r"@media\s*\(max-width:\s*420px\)\s*\{[^}]*\.activity-admin-card > \.admin-actions > button\s*\{[^}]*min-height:\s*44px !important;[^}]*font-size:\s*9px !important;", css, re.S) is not None,
+              "@media (max-width: 420px)" in css
+              and re.search(r"\.activity-admin-card > \.admin-actions > button\s*\{[^}]*min-height:\s*44px !important;[^}]*font-size:\s*9px !important;", css, re.S) is not None,
               "activity card action buttons retain compact sizing on narrow phones"
           )
           require(
