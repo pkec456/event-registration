@@ -4341,7 +4341,7 @@ function renderRegister(el){
       <div class="checkin-card">
         <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${isWaitingForPublish(activity)?'pending-publish-status':(activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed')}"><span class="dot"></span>${isWaitingForPublish(activity)?'等待開放':(activity.open?'開放簽到中':'已停止簽到')}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
-          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
+          <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" class="register-name-input" placeholder="請輸入姓名"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
           <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
         `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
