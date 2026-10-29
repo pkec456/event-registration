@@ -5757,14 +5757,6 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
              btn.getAttribute("data-activity-hide") ||
              btn.getAttribute("data-activity-delete");
 
-    console.log("[活動管理] 按鈕被點擊", {
-      id:id,
-      close:btn.getAttribute("data-activity-close"),
-      edit:btn.getAttribute("data-activity-edit"),
-      hide:btn.getAttribute("data-activity-hide"),
-      delete:btn.getAttribute("data-activity-delete")
-    });
-
     let a=(window.state && Array.isArray(state.activities))
       ? state.activities.find(x=>String(x.id)===String(id))
       : null;
