@@ -4860,8 +4860,15 @@ function renderAdmin(el){
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
   // 跑馬燈顯示年度出席率前三名「個人」，不再把相同出席率的人合併成一組。
-  const topAttendanceRanked=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0).sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0)||a.name.localeCompare(b.name,"zh-Hant"));
-  const topAttendanceSlides=topAttendanceRanked.slice(0,3).map(r=>({
+  // 先依完整年度排名排序，再排除隊長；輪播資料直接由排名陣列提供，不從畫面 DOM 反推。
+  const topAttendanceRanked=rows
+    .filter(r=>Number(r.total)>0)
+    .sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0)||a.name.localeCompare(b.name,"zh-Hant"));
+  const captainRankIndex=topAttendanceRanked.findIndex(r=>keyOf(r.name)===keyOf("陳冠豪"));
+  const topAttendanceRankedForDisplay=captainRankIndex===0
+    ? topAttendanceRanked.slice(1)
+    : topAttendanceRanked.filter(r=>keyOf(r.name)!==keyOf("陳冠豪"));
+  const topAttendanceSlides=topAttendanceRankedForDisplay.slice(0,3).map(r=>({
     names:[r.name],
     rate:Number(r.rate)||0
   }));
@@ -5197,8 +5204,8 @@ function renderAdmin(el){
   // 跑馬燈改由 JavaScript 直接替換姓名文字，避免多個絕對定位元素或 CSS 疊加造成漏顯。
   const topAttendanceCarousel=el.querySelector("#top-attendance-metric .top-attendance-slideshow");
   if(adminPage==="home"&&topAttendanceCarousel){
-    const topAttendanceNamesToRotate=Array.from(topAttendanceCarousel.querySelectorAll(".top-attendance-slide-name"))
-      .map(node=>node.textContent.trim()).filter(Boolean);
+    // 直接使用年度排名資料，避免 DOM 子元素數量或重繪時機影響輪播名單。
+    const topAttendanceNamesToRotate=topAttendanceSlides.map(item=>item.names.join("、")).filter(Boolean);
     if(topAttendanceNamesToRotate.length){
       let topAttendanceCarouselIndex=0;
       topAttendanceCarousel.innerHTML='<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;transition:opacity .25s ease;z-index:1"><b class="top-attendance-slide-name"></b></div>';
