@@ -1,0 +1,84 @@
+name: V2.5 Static Regression Checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '.github/workflows/v25-static-check.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - '.github/workflows/v25-static-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    name: HTML and JavaScript checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check inline JavaScript syntax and key regression rules
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+          import sys
+          import tempfile
+
+          path = Path("index.html")
+          if not path.exists():
+              sys.exit("FAIL: index.html not found")
+          html = path.read_text(encoding="utf-8")
+
+          def require(condition, message):
+              if not condition:
+                  print(f"FAIL: {message}")
+                  sys.exit(1)
+              print(f"PASS: {message}")
+
+          script_open = len(re.findall(r"<script\b", html, re.I))
+          script_close = len(re.findall(r"</script\s*>", html, re.I))
+          style_open = len(re.findall(r"<style\b", html, re.I))
+          style_close = len(re.findall(r"</style\s*>", html, re.I))
+          require(script_open == script_close, f"script tags balanced ({script_open}/{script_close})")
+          require(style_open == style_close, f"style tags balanced ({style_open}/{style_close})")
+          require(not re.search(r'\s/\s+class\s*=', html), "no malformed slash-before-class attribute")
+          require("function activityDateKey(" in html, "centralized local activity date helper exists")
+          require('if(a.hidden) return false;' in html, "hidden activities excluded from annual attendance stats")
+          require('if(a.open) return false;' in html, "open normal activities excluded from annual attendance stats")
+          require("function isActivityDateExpired(" in html, "activity date auto-close rule exists")
+          require("function isWaitingForPublish(" in html, "scheduled publish-state rule exists")
+          require("activityExpiryTimer=setInterval" in html, "activity expiry watcher exists")
+          require("public_check_attendance_eligibility" in html, "attendance eligibility RPC reference exists")
+          require("function annualStats(" in html, "annual attendance calculation exists")
+
+          scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
+          inline_scripts = [(attrs, body) for attrs, body in scripts if not re.search(r'\bsrc\s*=', attrs, re.I) and body.strip()]
+          require(len(inline_scripts) > 0, "inline JavaScript blocks found")
+          with tempfile.TemporaryDirectory() as tmp:
+              for i, (_, body) in enumerate(inline_scripts, 1):
+                  js = Path(tmp) / f"inline-{i}.js"
+                  js.write_text(body, encoding="utf-8")
+                  result = subprocess.run(["node", "--check", str(js)], text=True, capture_output=True)
+                  if result.returncode:
+                      print(f"FAIL: inline JavaScript block {i} syntax check")
+                      print(result.stdout)
+                      print(result.stderr)
+                      sys.exit(result.returncode)
+                  print(f"PASS: inline JavaScript block {i} syntax")
+          print(f"\nAll static checks passed. Checked {len(inline_scripts)} inline JavaScript blocks.")
+          PY
