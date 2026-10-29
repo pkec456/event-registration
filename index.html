@@ -4870,10 +4870,9 @@ function renderAdmin(el){
   const topAttendanceRanked=rows
     .filter(r=>Number(r.total)>0)
     .sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0)||a.name.localeCompare(b.name,"zh-Hant"));
-  const captainRankIndex=topAttendanceRanked.findIndex(r=>keyOf(r.name)===keyOf("陳冠豪"));
-  const topAttendanceRankedForDisplay=captainRankIndex===0
-    ? topAttendanceRanked.slice(1)
-    : topAttendanceRanked.filter(r=>keyOf(r.name)!==keyOf("陳冠豪"));
+  // 先排除隊長，再取剩餘排名前三位；隊長不占名額，顯示時也不加名次數字或圖示。
+  const topAttendanceRankedForDisplay=topAttendanceRanked
+    .filter(r=>keyOf(r.name)!==keyOf("陳冠豪"));
   const topAttendanceSlides=topAttendanceRankedForDisplay.slice(0,3).map(r=>({
     names:[r.name],
     rate:Number(r.rate)||0
