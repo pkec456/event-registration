@@ -5194,35 +5194,33 @@ function renderAdmin(el){
   const accountText=escapeHtml(session?.username||"—");
   el.innerHTML=`${content}`;
   if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
-  // 跑馬燈改由 JavaScript 控制：每 4 秒切換一位，播完最後一位後回到第一位。
+  // 跑馬燈改由 JavaScript 直接替換姓名文字，避免多個絕對定位元素或 CSS 疊加造成漏顯。
   const topAttendanceCarousel=el.querySelector("#top-attendance-metric .top-attendance-slideshow");
   if(adminPage==="home"&&topAttendanceCarousel){
-    const topAttendanceSlidesEls=Array.from(topAttendanceCarousel.querySelectorAll(".top-attendance-slide"));
-    if(topAttendanceSlidesEls.length>1){
+    const topAttendanceNamesToRotate=Array.from(topAttendanceCarousel.querySelectorAll(".top-attendance-slide-name"))
+      .map(node=>node.textContent.trim()).filter(Boolean);
+    if(topAttendanceNamesToRotate.length){
       let topAttendanceCarouselIndex=0;
-      topAttendanceSlidesEls.forEach((slide,index)=>{
-        slide.style.animation="none";
-        slide.style.transition="opacity .35s ease";
-        slide.style.transform="none";
-        slide.style.opacity=index===0?"1":"0";
-        slide.style.zIndex=index===0?"1":"0";
-      });
-      window.__topAttendanceCarouselTimer=setInterval(()=>{
-        if(!document.body.contains(topAttendanceCarousel)){
-          clearInterval(window.__topAttendanceCarouselTimer);
-          window.__topAttendanceCarouselTimer=null;
-          return;
-        }
-        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.opacity="0";
-        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.zIndex="0";
-        topAttendanceCarouselIndex=(topAttendanceCarouselIndex+1)%topAttendanceSlidesEls.length;
-        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.opacity="1";
-        topAttendanceSlidesEls[topAttendanceCarouselIndex].style.zIndex="1";
-      },4000);
-    }else if(topAttendanceSlidesEls.length===1){
-      topAttendanceSlidesEls[0].style.animation="none";
-      topAttendanceSlidesEls[0].style.opacity="1";
-      topAttendanceSlidesEls[0].style.transform="none";
+      topAttendanceCarousel.innerHTML='<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;transition:opacity .25s ease;z-index:1"><b class="top-attendance-slide-name"></b></div>';
+      const topAttendanceNameNode=topAttendanceCarousel.querySelector(".top-attendance-slide-name");
+      topAttendanceNameNode.textContent=topAttendanceNamesToRotate[0];
+      topAttendanceCarousel.setAttribute("aria-label",`年度出席率前三名，共 ${topAttendanceNamesToRotate.length} 位`);
+      if(topAttendanceNamesToRotate.length>1){
+        window.__topAttendanceCarouselTimer=setInterval(()=>{
+          if(!document.body.contains(topAttendanceCarousel)){
+            clearInterval(window.__topAttendanceCarouselTimer);
+            window.__topAttendanceCarouselTimer=null;
+            return;
+          }
+          topAttendanceCarouselIndex=(topAttendanceCarouselIndex+1)%topAttendanceNamesToRotate.length;
+          topAttendanceNameNode.style.opacity="0";
+          setTimeout(()=>{
+            if(!document.body.contains(topAttendanceNameNode))return;
+            topAttendanceNameNode.textContent=topAttendanceNamesToRotate[topAttendanceCarouselIndex];
+            topAttendanceNameNode.style.opacity="1";
+          },180);
+        },4000);
+      }
     }
   }
   if(adminPage==="attendance")el.querySelectorAll("[data-attendance-person]").forEach(card=>{card.onclick=()=>{window.__adminAttendancePersonName=card.getAttribute("data-attendance-person")||"";adminPage="attendance-person";render();};});
