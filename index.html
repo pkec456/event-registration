@@ -3651,6 +3651,13 @@ button.secondary,.manual-return-discard,
 .officer-actions button.danger,.danger-btn{color:#a92f32 !important;}
 
 
+/* V2.5 修正：管理端尚未開放活動也要灰化，避免被管理首頁卡片底色覆寫。 */
+#app.admin-home-view .activity-admin-card.activity-card-pending{
+  background:#f3f3f1 !important;
+  border-color:#e2e2df !important;
+  opacity:.72 !important;
+}
+
 </style>
 
 
