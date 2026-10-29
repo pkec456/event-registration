@@ -3397,6 +3397,12 @@ button.secondary,.manual-return-discard,
 #app.admin-home-view .top-attendance-slideshow{width:100%;min-width:0;max-width:100%;height:auto!important;min-height:36px;overflow:visible!important;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:5px;padding:2px 0;box-sizing:border-box;}
 #app.admin-home-view .top-attendance-slideshow .top-attendance-slide{position:relative!important;inset:auto!important;display:flex!important;flex:0 0 auto;width:100%;min-width:0;min-height:24px;opacity:1!important;transform:none!important;animation:none!important;align-items:center;justify-content:center;box-sizing:border-box;padding:3px 6px;}
 #app.admin-home-view .top-attendance-slideshow .top-attendance-slide-name{display:block;width:100%;max-width:100%;min-width:0;margin:0;font-size:clamp(12px,2.6vw,14px)!important;line-height:1.45!important;font-weight:700;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-align:center;box-sizing:border-box;}
+
+/* 年度高出席率前三名：顯示 1、2、3 名次，隊長已先排除，不占排名名額 */
+#app.admin-home-view .top-attendance-slide{position:relative;}
+#app.admin-home-view .top-attendance-slide-rank{display:inline-flex;flex:0 0 20px;width:20px;height:20px;align-items:center;justify-content:center;margin-right:7px;border-radius:50%;background:var(--accent-color, #b33a32);color:#fff;font-size:12px;line-height:1;font-weight:800;}
+#app.admin-home-view .top-attendance-slide .top-attendance-slide-name{width:auto;flex:1;text-align:center;}
+
 </style>
 
 
@@ -4873,7 +4879,8 @@ function renderAdmin(el){
   // 先排除隊長，再取剩餘排名前三位；隊長不占名額，顯示時也不加名次數字或圖示。
   const topAttendanceRankedForDisplay=topAttendanceRanked
     .filter(r=>keyOf(r.name)!==keyOf("陳冠豪"));
-  const topAttendanceSlides=topAttendanceRankedForDisplay.slice(0,3).map(r=>({
+  const topAttendanceSlides=topAttendanceRankedForDisplay.slice(0,3).map((r,index)=>({
+    rank:index+1,
     names:[r.name],
     rate:Number(r.rate)||0
   }));
@@ -5006,7 +5013,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-slideshow" aria-label="年度出席率前三名" style="height:auto;min-height:36px;overflow:visible;display:flex;flex-direction:column;justify-content:center;gap:3px">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;width:100%;min-width:0;flex:0 0 auto;align-items:center;justify-content:center;padding:3px 6px;box-sizing:border-box;"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
+    <div class="top-attendance-slideshow" aria-label="年度出席率前三名" style="height:auto;min-height:36px;overflow:visible;display:flex;flex-direction:column;justify-content:center;gap:3px">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;width:100%;min-width:0;flex:0 0 auto;align-items:center;justify-content:center;padding:3px 6px;box-sizing:border-box;"><span class="top-attendance-slide-rank">${item.rank}</span><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
     <span id="top-attendance-rate">高出席率</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
