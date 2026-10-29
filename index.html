@@ -3867,6 +3867,18 @@ function localDateKey(d=new Date()){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
+function activityDateKey(value){
+  const raw=String(value?.date ?? value ?? "").trim();
+  if(!raw)return "";
+  // 純日期字串保留原值；含時區的 ISO 時間則轉回瀏覽器當地日曆日。
+  if(!/[Tt]/.test(raw)){
+    const match=raw.match(/^(\d{4}-\d{2}-\d{2})/);
+    return match?match[1]:"";
+  }
+  const parsed=new Date(raw);
+  return Number.isFinite(parsed.getTime())?localDateKey(parsed):"";
+}
+
 function isWaitingForPublish(activity){
   const ts=activity?.publishAt ? new Date(activity.publishAt).getTime() : null;
   return Number.isFinite(ts) && ts>Date.now();
@@ -3877,7 +3889,7 @@ function recentOrOpenActivities(){
   return state.activities.filter(a=>{
     if(a.hidden) return false;
     // 預定發布時間尚未到的活動也顯示在近期活動列表，標示「等待開放」。
-    const activityDate = String(a.date||"").slice(0,10);
+    const activityDate = activityDateKey(a.date);
     if(activityDate && activityDate < todayKey) return false;
     return true;
   });
@@ -4626,7 +4638,7 @@ function renderAdmin(el){
   const acts=[...state.activities].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const names=allKnownNames(),yearActs=activitiesThisYear(),rows=names.map(n=>({name:n,...annualStats(n)})).sort((a,b)=>b.rate-a.rate||a.name.localeCompare(b.name,'zh-Hant'));
   const todayKey=localDateKey();
-  const todayActs=acts.filter(a=>String(a.date||"").slice(0,10)===todayKey);
+  const todayActs=acts.filter(a=>activityDateKey(a.date)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
   // 今日概況沿用 V2.3：開放中活動、今日簽到紀錄，以及排除隊長後的年度最高出席率。
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
@@ -4660,7 +4672,7 @@ function renderAdmin(el){
   const monthlyChartYear=new Date().getFullYear();
   const monthlyActivityCounts=Array(12).fill(0);
   cumulativeActivities.forEach(a=>{
-    const dateKey=String(a.date||"").slice(0,10);
+    const dateKey=activityDateKey(a.date);
     const match=dateKey.match(/^(\d{4})-(\d{2})-\d{2}$/);
     if(!match||Number(match[1])!==monthlyChartYear)return;
     const month=Number(match[2]);
@@ -4814,7 +4826,7 @@ function renderAdmin(el){
       const statusOK=activityManagementStatus==="all" || (activityManagementStatus==="hidden"&&!!a.hidden) || (!manual&&activityManagementStatus==="open"&&!!a.open) || (!manual&&activityManagementStatus==="closed"&&!a.open);
       const searchOK=!search || String(a.name||"").toLowerCase().includes(search);
       // 日期篩選依活動實際舉辦日期，使用與建立活動相同的日期格式。
-      const activityDate=String(a.date||"").slice(0,10);
+      const activityDate=activityDateKey(a.date);
       const dateFromOK=!activityManagementDateFrom || activityDate>=activityManagementDateFrom;
       const dateToOK=!activityManagementDateTo || activityDate<=activityManagementDateTo;
       return categoryOK&&statusOK&&searchOK&&dateFromOK&&dateToOK;
@@ -4839,7 +4851,7 @@ function renderAdmin(el){
       ? state.activities.find(a=>String(a.id)===String(manualRegisterActivityId))
       : null;
     const list=current ? regsOf(current.id) : [];
-    const activityDate=current ? String(current.date||"").slice(0,10) : manualRegisterActivityDate;
+    const activityDate=current ? activityDateKey(current.date) : manualRegisterActivityDate;
     const activityName=current?.name ?? manualRegisterActivityName;
     if(current && !manualRegisterActivityEditing){
       manualRegisterFields=Array.isArray(current.fields)&&current.fields.length ? current.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
@@ -4984,13 +4996,13 @@ function renderAdmin(el){
       const detail=document.getElementById("monthly-chart-detail");
       if(!detail||!Number.isInteger(month)||month<1||month>12)return;
       const monthActs=cumulativeActivities.filter(a=>{
-        const dateKey=String(a.date||"").slice(0,10);
+        const dateKey=activityDateKey(a.date);
         const match=dateKey.match(/^(\d{4})-(\d{2})-\d{2}$/);
         return match&&Number(match[1])===monthlyChartYear&&Number(match[2])===month;
       }).sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
       detail.hidden=false;
       detail.innerHTML='<div class="monthly-chart-detail-title">'+month+' 月活動（'+monthActs.length+' 場）</div>'+
-        (monthActs.length?monthActs.map(a=>'<div class="monthly-chart-activity"><div class="monthly-chart-activity-name">'+escapeHtml(a.name||"未命名活動")+'</div><div class="monthly-chart-activity-meta">'+escapeHtml(String(a.date||"").slice(0,10)||"日期未設定")+(a.eventCategory?' · '+escapeHtml(a.eventCategory):"")+'</div></div>').join(""):'<div class="empty" style="padding:12px 0">本月沒有活動</div>');
+        (monthActs.length?monthActs.map(a=>'<div class="monthly-chart-activity"><div class="monthly-chart-activity-name">'+escapeHtml(a.name||"未命名活動")+'</div><div class="monthly-chart-activity-meta">'+escapeHtml(activityDateKey(a.date)||"日期未設定")+(a.eventCategory?' · '+escapeHtml(a.eventCategory):"")+'</div></div>').join(""):'<div class="empty" style="padding:12px 0">本月沒有活動</div>');
     };
     point.addEventListener("click",showMonthActivities);
     point.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();showMonthActivities();}});
@@ -5063,7 +5075,7 @@ function openManualRegistrationEditor(a){
   if(!a) return;
   manualRegisterActivityId=a.id;
   manualRegisterActivityName=a.name||"";
-  manualRegisterActivityDate=String(a.date||"").slice(0,10);
+  manualRegisterActivityDate=activityDateKey(a.date);
   manualRegisterFields=Array.isArray(a.fields)&&a.fields.length ? a.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
   manualRegisterActivityEditing=false;
   adminPage="manual-register";
@@ -5308,7 +5320,7 @@ async function saveManualRegistrationDraft(){
   const nameInput=document.getElementById("manual-activity-name");
   const dateInput=document.getElementById("manual-activity-date");
   const newName=norm(nameInput?.value||manualRegisterActivityName||activity.name||"");
-  const newDate=dateInput?.value||manualRegisterActivityDate||String(activity.date||"").slice(0,10);
+  const newDate=dateInput?.value||manualRegisterActivityDate||activityDateKey(activity.date);
   // 手動登記活動允許修改為過去、今天或未來日期，不限制不得早於今天。
   if(!newName || !newDate) throw new Error("活動資料不完整");
   document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
