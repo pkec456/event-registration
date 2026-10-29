@@ -3363,6 +3363,42 @@ button.secondary,.manual-return-discard,
   opacity:.72 !important;
 }
 
+
+/* 統計資訊跑馬燈修正：依實際組數播放，避免一組時閃現、兩組時空等。 */
+#app.admin-home-view .top-attendance-slideshow.slides-1 .top-attendance-slide{
+  animation:none !important;
+  opacity:1 !important;
+  transform:none !important;
+}
+#app.admin-home-view .top-attendance-slideshow.slides-2 .top-attendance-slide{
+  animation-duration:10s;
+}
+#app.admin-home-view .top-attendance-slideshow.slides-2 .top-attendance-slide:nth-child(1){
+  animation-name:topAttendanceTwoSlide1;
+}
+#app.admin-home-view .top-attendance-slideshow.slides-2 .top-attendance-slide:nth-child(2){
+  animation-name:topAttendanceTwoSlide2;
+}
+@keyframes topAttendanceTwoSlide1{
+  0%,4%{opacity:0;transform:translateY(4px)}
+  8%,38%{opacity:1;transform:translateY(0)}
+  42%,100%{opacity:0;transform:translateY(-3px)}
+}
+@keyframes topAttendanceTwoSlide2{
+  0%,54%{opacity:0;transform:translateY(4px)}
+  58%,88%{opacity:1;transform:translateY(0)}
+  92%,100%{opacity:0;transform:translateY(-3px)}
+}
+@media(prefers-reduced-motion:reduce){
+  #app.admin-home-view .top-attendance-slideshow .top-attendance-slide{
+    animation:none !important;
+    opacity:0 !important;
+    transform:none !important;
+  }
+  #app.admin-home-view .top-attendance-slideshow .top-attendance-slide:first-child{
+    opacity:1 !important;
+  }
+}
 </style>
 
 
@@ -4972,7 +5008,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-slideshow" aria-label="年度出席率前三組">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
+    <div class="top-attendance-slideshow slides-${Math.min(topAttendanceSlides.length,3)}" aria-label="年度出席率前三組">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
     <span id="top-attendance-rate">高出席率</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
