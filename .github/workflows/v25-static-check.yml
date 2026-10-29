@@ -191,12 +191,15 @@ jobs:
 
           # Icon containers also need stable dimensions; equal SVG sizes alone can still look inconsistent if their holders differ unexpectedly.
           require(
-              re.search(r"#app\\.admin-home-view \\.admin-menu-grid > \\.admin-square \\.menu-icon,\\s*#app\\.admin-home-view \\.statistics-info-summary \\.metric-icon,\\s*#app\\.admin-home-view \\.cumulative-category-icon\\s*\\{[^}]*width:34px !important;[^}]*height:34px !important;", css, re.S) is not None,
+              "#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon," in css
+              and "#app.admin-home-view .statistics-info-summary .metric-icon," in css
+              and "#app.admin-home-view .cumulative-category-icon{" in css
+              and re.search(r"#app\.admin-home-view \.admin-menu-grid > \.admin-square \.menu-icon,\s*#app\.admin-home-view \.statistics-info-summary \.metric-icon,\s*#app\.admin-home-view \.cumulative-category-icon\s*\{[^}]*width:34px !important;[^}]*height:34px !important;", css, re.S) is not None,
               "management-home desktop icon containers share 34x34px sizing"
           )
           require(
-              re.search(r"@media\\s*\\(max-width:\\s*520px\\)\\s*\\{\\s*#app\\.admin-home-view \\.admin-menu-grid > \\.admin-square \\.menu-icon\\s*\\{[^}]*width:46px !important;height:46px !important;", css, re.S) is not None
-              and re.search(r"@media\\s*\\(max-width:\\s*520px\\)\\s*\\{[\\s\\S]*?#app\\.admin-home-view \\.statistics-info-summary \\.metric-icon,\\s*#app\\.admin-home-view \\.cumulative-category-icon\\s*\\{[^}]*width:50px !important;height:50px !important;", css, re.S) is not None,
+              re.search(r"@media\s*\(max-width:\s*520px\)\s*\{\s*#app\.admin-home-view \.admin-menu-grid > \.admin-square \.menu-icon\s*\{[^}]*width:46px !important;height:46px !important;", css, re.S) is not None
+              and re.search(r"@media\s*\(max-width:\s*520px\)\s*\{[\s\S]*?#app\.admin-home-view \.statistics-info-summary \.metric-icon,\s*#app\.admin-home-view \.cumulative-category-icon\s*\{[^}]*width:50px !important;height:50px !important;", css, re.S) is not None,
               "mobile icon containers retain their designated 46px menu and 50px metric sizes"
           )
           scripts = re.findall(r"<script\b([^>]*)>(.*?)</script\s*>", html, re.I | re.S)
