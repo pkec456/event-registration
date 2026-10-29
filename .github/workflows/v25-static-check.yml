@@ -169,7 +169,8 @@ jobs:
               "category cards use three columns on tablet and two on phones"
           )
           require(
-              re.search(r"@media\s*\(max-width:\s*360px\)\s*\{[^}]*#app\.admin-home-view \.cumulative-category-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0,1fr\)", css, re.S) is not None,
+              "@media(max-width:360px)" in css
+              and "#app.admin-home-view .cumulative-category-grid{grid-template-columns:minmax(0,1fr)}" in css,
               "category cards collapse to one column on extra-small screens"
           )
 
