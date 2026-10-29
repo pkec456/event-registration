@@ -113,6 +113,7 @@ jobs:
               "no conflicting 29px mobile management-home icon override"
           )
           require("#app.admin-home-view .activity-admin-card.activity-card-pending" in css and "background:#f3f3f1 !important" in css, "future pending admin cards retain grey styling")
+          require("\\n#app.admin-home-view .admin-menu-grid > .admin-action small" not in css, "no escaped literal newline before management-home CSS selector")
           require(not re.search(r'\s/\s+class\s*=', html), "no malformed slash-before-class attribute")
           require("function activityDateKey(" in html, "centralized local activity date helper exists")
           require('if(a.hidden) return false;' in html, "hidden activities excluded from annual attendance stats")
