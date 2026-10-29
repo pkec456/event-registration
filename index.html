@@ -656,18 +656,21 @@ button.secondary:focus-visible,
 .activity-card.activity-card-open .activity-meta{
   color:var(--ink);
 }
+/* 等待發布只強調狀態，不把整張活動卡片灰化或淡化。 */
 .activity-card.activity-card-pending{
-  background:#fff8e8;
-  border:1px solid #f0d58a;
-  opacity:.88;
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  opacity:1 !important;
 }
 .activity-card.activity-card-pending .activity-icon{
-  background:#fff0c7;
-  color:#9a6700;
+  background:#f1f1ef;
+  color:var(--ink);
 }
-.activity-card.activity-card-pending .activity-name,
+.activity-card.activity-card-pending .activity-name{
+  color:var(--ink);
+}
 .activity-card.activity-card-pending .activity-meta{
-  color:#76551a;
+  color:#777;
 }
 .activity-status-clock.pending-publish{
   width:auto;
