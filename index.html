@@ -3878,6 +3878,8 @@ function activityDateKey(value){
   const parsed=new Date(raw);
   return Number.isFinite(parsed.getTime())?localDateKey(parsed):"";
 }
+window.localDateKey=localDateKey;
+window.activityDateKey=activityDateKey;
 
 function isWaitingForPublish(activity){
   const ts=activity?.publishAt ? new Date(activity.publishAt).getTime() : null;
@@ -4185,6 +4187,29 @@ function startActivityExpiryWatcher(){
   activityExpiryTimer=setInterval(async()=>{
     if(!Array.isArray(state.activities))return;
     const now=Date.now();
+    const todayKey=localDateKey(new Date(now));
+
+    // 未來活動的 publishAt 作為自動開放時間；只在活動當天開啟，避免補開過期活動。
+    const dueToOpen=state.activities.filter(a=>{
+      if(a.hidden || a.open || isManualRegistrationActivity(a))return false;
+      const activityDay=activityDateKey(a.date);
+      const publishTs=a.publishAt?new Date(a.publishAt).getTime():NaN;
+      return activityDay===todayKey && Number.isFinite(publishTs) && publishTs<=now;
+    });
+    for(const a of dueToOpen){
+      const previous={open:a.open,closeAt:a.closeAt,autoCloseMinutes:a.autoCloseMinutes,publishAt:a.publishAt};
+      try{
+        const opened={...a,open:true,closeAt:null,autoCloseMinutes:0,publishAt:null};
+        await updateActivityRemote(opened);
+        Object.assign(a,opened);
+        window.v93CountdownDeadlines?.delete(String(a.id));
+        console.log("[活動管理] 到達排定開放時間，自動開放活動",a.name);
+      }catch(e){
+        Object.assign(a,previous);
+        console.error("[活動管理] 活動當天自動開放失敗",a.name,e);
+      }
+    }
+
     const expired=state.activities.filter(a=>{
       const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
       const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
@@ -4194,7 +4219,16 @@ function startActivityExpiryWatcher(){
         isActivityDateExpired(a, now)
       );
     });
-    if(!expired.length)return;
+    if(!expired.length){
+      if(dueToOpen.length){
+        if(typeof window.refreshActivityListClocks==="function")window.refreshActivityListClocks();
+        if(typeof renderAdmin==="function" && activeTab==="admin"){
+          const tab=document.getElementById("tab-content");if(tab)renderAdmin(tab);
+        }
+        if(dueToOpen.some(a=>String(a.id)===String(openEventId)))render();
+      }
+      return;
+    }
 
     for(const a of expired){
       // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
@@ -4235,7 +4269,10 @@ function startActivityExpiryWatcher(){
     if(typeof window.refreshActivityListClocks==="function"){
       window.refreshActivityListClocks();
     }
-    if(expired.some(a=>String(a.id)===String(openEventId))){
+    if(dueToOpen.length && typeof renderAdmin==="function" && activeTab==="admin"){
+      const tab=document.getElementById("tab-content");if(tab)renderAdmin(tab);
+    }
+    if(dueToOpen.some(a=>String(a.id)===String(openEventId)) || expired.some(a=>String(a.id)===String(openEventId))){
       render();
     }
   },1000);
@@ -5086,7 +5123,7 @@ window.openManualRegistrationEditor=openManualRegistrationEditor;
 function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
   const expanded=window.adminAttendanceExpandedId===a.id;
-  const future=a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
+  const future=!isManualRegistrationActivity(a) && !a.open && a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
   let detail="";
   if(expanded){
     const rows=list.map((r,i)=>{
@@ -5098,7 +5135,7 @@ function activityAdminRow(a,hidden=false){
   }
   const manualRegistration=isManualRegistrationActivity(a);
   const statusClass=future?"future":(a.open?"open":"closed");
-  const statusText=future?"未發佈":(a.open?"開放中":"已停止");
+  const statusText=future?"等待開放":(a.open?"開放中":"已停止");
   // 管理頁採 V2.1：名單按鈕維持中性；開放／停止只由活動切換按鈕呈現顏色。
   const adminStatusIconClass = a.open ? "open-icon" : "closed-icon";
   const adminStatusButtonClass = a.open ? "is-on" : "is-off";
@@ -5262,8 +5299,12 @@ function setupCreateActivityPage(el){
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
     const isFutureActivityDate=draftDate>todayKey;
-    const closeBaseTime=publishAt?new Date(publishAt).getTime():Date.now();
-    const activity={id:uid(),name,date,fields,open:!isFutureActivityDate,maxParticipants,createdBy:session?.username||"",closeAt:(!isFutureActivityDate&&closeMinutes)?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:isFutureActivityDate?0:closeMinutes,hidden:false,publishAt:publishAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
+    const activityStartAt=new Date(draftDate+"T00:00:00");
+    const scheduledOpenAt=isFutureActivityDate
+      ? new Date(Math.max(activityStartAt.getTime(),publishAt?new Date(publishAt).getTime():0)).toISOString()
+      : publishAt;
+    const closeBaseTime=scheduledOpenAt?new Date(scheduledOpenAt).getTime():Date.now();
+    const activity={id:uid(),name,date,fields,open:!isFutureActivityDate,maxParticipants,createdBy:session?.username||"",closeAt:(!isFutureActivityDate&&closeMinutes)?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:isFutureActivityDate?0:closeMinutes,hidden:false,publishAt:scheduledOpenAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
@@ -5283,7 +5324,7 @@ function setupCreateActivityPage(el){
       }
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
-      showToast(isFutureActivityDate ? "活動已建立，日期尚未到，簽到維持關閉" : (publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈"));
+      showToast(isFutureActivityDate ? "活動已建立，將於活動當天整點自動開放簽到" : (publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈"));
       adminPage="activities";
       draftFields=["公用哨角"]; draftName="";
       draftEventCategory="";
@@ -5833,8 +5874,13 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     if(next){
       const activityDay=window.activityDateKey?window.activityDateKey(a.date):"";
       const today=window.localDateKey?window.localDateKey():new Date().toISOString().slice(0,10);
+      const scheduledAt=a.publishAt?new Date(a.publishAt).getTime():NaN;
       if(activityDay && activityDay>today){
-        window.showToast("活動日期為 "+activityDay+"，請於活動當天再開放簽到。","error");
+        window.showToast("活動日期為 "+activityDay+"，請等待活動當天自動開放簽到。","error");
+        return;
+      }
+      if(Number.isFinite(scheduledAt) && scheduledAt>Date.now()){
+        window.showToast("此活動尚在等待開放，請等到排定時間。","error");
         return;
       }
     }
