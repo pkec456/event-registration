@@ -4000,7 +4000,8 @@ async function loadData(){
         .eq("hidden",false)
         .order("date",{ascending:false});
       if(aErr) throw aErr;
-      acts=(publicActs||[]).filter(a=>!a.publish_at || new Date(a.publish_at).getTime()<=Date.now());
+      // 隊員頁也載入尚未到發布時間的公開活動，讓活動卡片可顯示「等待開放」；點擊限制由列表事件處理。
+      acts=(publicActs||[]);
     }
 
     state.activities=(acts||[]).map(a=>({
