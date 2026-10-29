@@ -4635,8 +4635,8 @@ function renderAdmin(el){
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
-  // 跑馬燈顯示年度出席率前三名「個人」，不再把相同出席率的人合併成一組。
-  // 先依完整年度排名排序，再排除隊長；輪播資料直接由排名陣列提供，不從畫面 DOM 反推。
+  // 年度出席率前三名依個人排名計算，固定逐行顯示，不合併同率者。
+  // 先依完整年度排名排序，再排除隊長，剩餘隊員取前三位。
   const topAttendanceRanked=rows
     .filter(r=>Number(r.total)>0)
     .sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0)||a.name.localeCompare(b.name,"zh-Hant"));
@@ -4644,10 +4644,8 @@ function renderAdmin(el){
   const topAttendanceRankedForDisplay=topAttendanceRanked
     .filter(r=>keyOf(r.name)!==keyOf("陳冠豪"));
   const topAttendanceSlides=topAttendanceRankedForDisplay.slice(0,3).map(r=>({
-    names:[r.name],
-    rate:Number(r.rate)||0
+    names:[r.name]
   }));
-  const topAttendanceSlideHtml=topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>';
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
   const openActivityCount=cumulativeActivities.filter(a=>!!a.open).length;
