@@ -4976,7 +4976,7 @@ function renderRegister(el){
   </div>
 </div>`).join("")}</div>
   `;
-  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{openEventId=row.dataset.open;render();});refreshIcons();
+  el.querySelectorAll("[data-open]").forEach(row=>row.onclick=()=>{const activity=state.activities.find(a=>String(a.id)===String(row.dataset.open));if(activity && isWaitingForPublish(activity)){showToast("此活動尚未開放");return;}openEventId=row.dataset.open;render();});refreshIcons();
 
 }
 
