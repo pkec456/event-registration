@@ -5001,7 +5001,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-slideshow slides-${Math.min(topAttendanceSlides.length,3)}" aria-label="年度出席率前三名">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
+    <div class="top-attendance-slideshow" aria-label="年度出席率前三名" style="height:auto;min-height:36px;overflow:visible;display:flex;flex-direction:column;justify-content:center;gap:3px">${topAttendanceSlides.length?topAttendanceSlides.map((item,index)=>`<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;width:100%;"><b class="top-attendance-slide-name">${index+2}. ${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
     <span id="top-attendance-rate">高出席率</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
@@ -5200,36 +5200,8 @@ function renderAdmin(el){
   const roleClass=superAdmin?"super-admin":"officer-admin";
   const accountText=escapeHtml(session?.username||"—");
   el.innerHTML=`${content}`;
+  // 年度出席率前三名改為同時列出，移除輪播計時器，避免重繪／動畫狀態造成名單漏顯。
   if(window.__topAttendanceCarouselTimer){clearInterval(window.__topAttendanceCarouselTimer);window.__topAttendanceCarouselTimer=null;}
-  // 跑馬燈改由 JavaScript 直接替換姓名文字，避免多個絕對定位元素或 CSS 疊加造成漏顯。
-  const topAttendanceCarousel=el.querySelector("#top-attendance-metric .top-attendance-slideshow");
-  if(adminPage==="home"&&topAttendanceCarousel){
-    // 直接使用年度排名資料，避免 DOM 子元素數量或重繪時機影響輪播名單。
-    const topAttendanceNamesToRotate=topAttendanceSlides.map(item=>item.names.join("、")).filter(Boolean);
-    if(topAttendanceNamesToRotate.length){
-      let topAttendanceCarouselIndex=0;
-      topAttendanceCarousel.innerHTML='<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;transition:opacity .25s ease;z-index:1"><b class="top-attendance-slide-name"></b></div>';
-      const topAttendanceNameNode=topAttendanceCarousel.querySelector(".top-attendance-slide-name");
-      topAttendanceNameNode.textContent=topAttendanceNamesToRotate[0];
-      topAttendanceCarousel.setAttribute("aria-label",`年度出席率前三名，共 ${topAttendanceNamesToRotate.length} 位`);
-      if(topAttendanceNamesToRotate.length>1){
-        window.__topAttendanceCarouselTimer=setInterval(()=>{
-          if(!document.body.contains(topAttendanceCarousel)){
-            clearInterval(window.__topAttendanceCarouselTimer);
-            window.__topAttendanceCarouselTimer=null;
-            return;
-          }
-          topAttendanceCarouselIndex=(topAttendanceCarouselIndex+1)%topAttendanceNamesToRotate.length;
-          topAttendanceNameNode.style.opacity="0";
-          setTimeout(()=>{
-            if(!document.body.contains(topAttendanceNameNode))return;
-            topAttendanceNameNode.textContent=topAttendanceNamesToRotate[topAttendanceCarouselIndex];
-            topAttendanceNameNode.style.opacity="1";
-          },180);
-        },4000);
-      }
-    }
-  }
   if(adminPage==="attendance")el.querySelectorAll("[data-attendance-person]").forEach(card=>{card.onclick=()=>{window.__adminAttendancePersonName=card.getAttribute("data-attendance-person")||"";adminPage="attendance-person";render();};});
   const adminBack=document.getElementById("admin-back-home");if(adminBack)adminBack.onclick=()=>{activeTab="register";openEventId=null;adminPage="home";render();};
   const adminLogoutBtn=document.getElementById("admin-logout");if(adminLogoutBtn)adminLogoutBtn.onclick=async()=>{await adminLogout();adminPage="home";showToast("已登出管理者");render();};
