@@ -5803,7 +5803,8 @@ function setupCreateActivityPage(el){
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
-    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(Date.now()+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
+    const closeBaseTime=publishAt?new Date(publishAt).getTime():Date.now();
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:publishAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
