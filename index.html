@@ -2758,9 +2758,10 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 #app.admin-home-view .top-attendance-slide:nth-child(3){animation-name:topAttendanceSlide3;}
 #app.admin-home-view .top-attendance-slide-name{display:block;max-width:100%;font-size:clamp(11px,2.8vw,14px);font-weight:600;line-height:1.2;overflow-wrap:anywhere;}
 
-@keyframes topAttendanceSlide1{0%,1%{opacity:0;transform:translateY(4px)}2%,8%{opacity:1;transform:translateY(0)}10%,100%{opacity:0;transform:translateY(-3px)}}
-@keyframes topAttendanceSlide2{0%,32%{opacity:0;transform:translateY(4px)}34%,40%{opacity:1;transform:translateY(0)}42%,100%{opacity:0;transform:translateY(-3px)}}
-@keyframes topAttendanceSlide3{0%,65%{opacity:0;transform:translateY(4px)}67%,73%{opacity:1;transform:translateY(0)}75%,100%{opacity:0;transform:translateY(-3px)}}
+/* 三組輪播：每組約顯示 4 秒，切換時短暫淡入淡出，避免長時間空白。 */
+@keyframes topAttendanceSlide1{0%,2%{opacity:0;transform:translateY(4px)}5%,29%{opacity:1;transform:translateY(0)}33%,100%{opacity:0;transform:translateY(-3px)}}
+@keyframes topAttendanceSlide2{0%,32%{opacity:0;transform:translateY(4px)}36%,62%{opacity:1;transform:translateY(0)}66%,100%{opacity:0;transform:translateY(-3px)}}
+@keyframes topAttendanceSlide3{0%,65%{opacity:0;transform:translateY(4px)}69%,95%{opacity:1;transform:translateY(0)}99%,100%{opacity:0;transform:translateY(-3px)}}
 /* 今日概況與累積統計合併為統計資訊 */
 #app.admin-home-view .statistics-info-summary{
   display:grid !important;
@@ -3389,16 +3390,7 @@ button.secondary,.manual-return-discard,
   58%,88%{opacity:1;transform:translateY(0)}
   92%,100%{opacity:0;transform:translateY(-3px)}
 }
-@media(prefers-reduced-motion:reduce){
-  #app.admin-home-view .top-attendance-slideshow .top-attendance-slide{
-    animation:none !important;
-    opacity:0 !important;
-    transform:none !important;
-  }
-  #app.admin-home-view .top-attendance-slideshow .top-attendance-slide:first-child{
-    opacity:1 !important;
-  }
-}
+/* 統計輪播不再被系統「減少動態效果」設定整段停用，確保資訊可輪流顯示。 */
 </style>
 
 
