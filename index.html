@@ -65,6 +65,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .announcement-admin{margin-top:12px}
 .announcement-admin textarea{width:100%;min-height:92px;resize:vertical;padding:12px 14px;background:#f7f7f5;border:1px solid #e2e2de;border-radius:14px;outline:none;font:inherit;font-size:14px;line-height:1.5}
 .announcement-admin textarea:focus{border-color:#999;box-shadow:0 0 0 3px #eee}
+/* CSS 區塊 B：隊員端活動列表、活動卡片與狀態元件 */
 .activity-grid{display:grid;gap:12px}
 .activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
 .activity-card:active{transform:scale(.99)}
@@ -141,6 +142,7 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .history-status svg{width:18px;height:18px;stroke-width:3}
 .history-status.present{color:#22a35a;background:#eaf8ee}
 .history-status.absent{color:#f59e0b;background:#fff4df}
+/* CSS 區塊 C：隊員查詢、搜尋表單與出席資料 */
 .query-search-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
 .query-search-label{display:flex;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap;color:var(--text)}
 .query-search-label strong{font-size:14px}
@@ -180,6 +182,7 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .monthly-chart-activity:last-child{border-bottom:0}
 .monthly-chart-activity-name{font-size:13px;font-weight:800;overflow-wrap:anywhere}
 .monthly-chart-activity-meta{font-size:11px;color:var(--muted);margin-top:3px}
+/* CSS 區塊 D：管理首頁、管理活動卡片與管理操作 */
 .admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}
 .metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}
@@ -312,6 +315,7 @@ font-size:8px;
 .donut-center strong{font-size:28px}
 .donut::before{inset:9px}
 }
+/* CSS 區塊 E：管理者角色標頭與登入介面 */
 .admin-role-header{
   width:100%;
   min-height:104px;
@@ -666,6 +670,7 @@ button.secondary:focus-visible,
 .checkin-countdown svg{width:14px;height:14px}
 .checkin-countdown.no-countdown{min-width:32px;width:32px;padding:0}
 }
+/* CSS 區塊 F：活動狀態、簽到名單與倒數顯示 */
 .activity-card.activity-card-open{
   background:#edf8f0;
   border-color:#ccebd4;
@@ -3085,6 +3090,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   color:#171717 !important;
   stroke:#171717 !important;
 }
+/* CSS 區塊 G：管理首頁統計、類別卡片與圖表 */
 #app.admin-home-view .dashboard-today-summary,
 #app.admin-home-view .cumulative-summary{
   display:grid;
@@ -3592,6 +3598,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   }
 }
 .event-category-field .event-category-choices > .choice{font-size:16px}
+/* CSS 區塊 H：手機版管理首頁 RWD 微調 */
 /* 手機版管理首頁：放大圖示與文字，桌機版維持原樣 */
 @media(max-width:520px){
   #app.admin-home-view .admin-menu-grid > .admin-square .menu-icon{
@@ -3631,6 +3638,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 }
 
 
+/* CSS 區塊 I：共用圖示尺寸與搜尋按鈕視覺 */
 /* 搜尋資料頁：公告、出席率圖示與搜尋按鈕圖示統一尺寸 */
 .announcement-icon,
 .query-search-icon{
@@ -3679,6 +3687,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
   color:#ffffff !important;
   stroke:#ffffff !important;
 }
+/* CSS 區塊 J：V2.5 品牌配色與語意狀態色 */
 /* V2.5 全站配色加強：朱紅 × 香檳金（提高辨識度，不改版面／字級） */
 :root{
   --bg:#f7f2eb;
