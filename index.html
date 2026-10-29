@@ -3964,12 +3964,26 @@ function showToast(msg){
 }
 
 function isActivityDateExpired(activity, now=Date.now()){
-  // 活動日期為 YYYY-MM-DD；隔日 00:00 起視為「已過一天」。
-  // 沒有有效日期時不介入，避免影響既有活動。
+  // 活動日期以台灣／瀏覽器當地日曆日為準，隔日 00:00 才自動關閉。
+  // date 欄位目前是 timestamptz；由日期輸入轉成 ISO 後，UTC 日期可能比台灣日期早一天。
+  // 因此含時間的 ISO 值必須先轉回當地年月日，不能直接擷取字串前 10 碼。
   const raw=String(activity?.date||"").trim();
-  const m=raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-  if(!m) return false;
-  const end=new Date(Number(m[1]),Number(m[2])-1,Number(m[3])+1,0,0,0,0).getTime();
+  if(!raw) return false;
+  let year,month,day;
+  if(/[Tt]/.test(raw)){
+    const parsed=new Date(raw);
+    if(!Number.isFinite(parsed.getTime())) return false;
+    year=parsed.getFullYear();
+    month=parsed.getMonth();
+    day=parsed.getDate();
+  }else{
+    const m=raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+    if(!m) return false;
+    year=Number(m[1]);
+    month=Number(m[2])-1;
+    day=Number(m[3]);
+  }
+  const end=new Date(year,month,day+1,0,0,0,0).getTime();
   return Number.isFinite(end) && now>=end;
 }
 
