@@ -3763,81 +3763,6 @@ button.secondary,.manual-return-discard,
 .countdown-box{background:#f6ebcf !important;color:#805b19 !important;}
 
 
-/* V2.5：等待開放活動卡片改為淺灰色，僅套用待發布活動 */
-.activity-card.activity-card-pending{
-  background:#eeeeee !important;
-  border-color:#d6d6d6 !important;
-  color:#333 !important;
-}
-.activity-card.activity-card-pending .activity-icon{
-  background:#dedede !important;
-  color:#444 !important;
-}
-.activity-card.activity-card-pending .activity-icon svg,
-.activity-card.activity-card-pending .activity-icon i{
-  color:#444 !important;
-  stroke:#444 !important;
-}
-.activity-card.activity-card-pending .activity-name,
-.activity-card.activity-card-pending .activity-name *,
-.activity-card.activity-card-pending .activity-main{
-  color:#333 !important;
-}
-.activity-card.activity-card-pending .activity-meta{
-  color:#666 !important;
-}
-.activity-card.activity-card-pending .event-category-label{
-  color:#946f18 !important;
-}
-
-/* V2.5 修正：等待開放管理卡片改為柔和灰色，避免黑底過重 */
-.activity-admin-card.activity-card-pending{
-  background:#eeeeee !important;
-  border-color:#d6d6d6 !important;
-  color:#333 !important;
-}
-.activity-admin-card.activity-card-pending .admin-card-name,
-.activity-admin-card.activity-card-pending .admin-card-name *,
-.activity-admin-card.activity-card-pending .admin-card-meta,
-.activity-admin-card.activity-card-pending .admin-card-title-block,
-.activity-admin-card.activity-card-pending .admin-card-subtitle-block{
-  color:#333 !important;
-}
-.activity-admin-card.activity-card-pending .event-category-label{
-  color:#946f18 !important;
-}
-.activity-admin-card.activity-card-pending .admin-card-status .pending-publish,
-.activity-admin-card.activity-card-pending .admin-card-status .pending-publish *{
-  color:#946200 !important;
-}
-.activity-admin-card.activity-card-pending .admin-actions button{
-  color:#333;
-  border-color:#d0d0d0;
-  background:#f8f8f8;
-}
-
-/* 強制修正：待發布隊員端卡片直接由狀態 class 控制灰底與深色文字 */
-.activity-grid > .activity-card.activity-card-pending,
-.activity-grid .activity-card.activity-card-pending{
-  background-color:#eeeeee !important;
-  background-image:none !important;
-  border-color:#d6d6d6 !important;
-  color:#333333 !important;
-}
-.activity-grid .activity-card.activity-card-pending .activity-icon{
-  background:#dedede !important;
-  color:#444444 !important;
-}
-.activity-grid .activity-card.activity-card-pending .activity-icon svg,
-.activity-grid .activity-card.activity-card-pending .activity-icon i{
-  color:#444444 !important;
-  stroke:#444444 !important;
-}
-.activity-grid .activity-card.activity-card-pending .activity-name,
-.activity-grid .activity-card.activity-card-pending .activity-name *,
-.activity-grid .activity-card.activity-card-pending .activity-meta{
-  color:#333333 !important;
-}
 </style>
 
 
@@ -5081,7 +5006,7 @@ function renderRegister(el){
         <span><span class="dot closed-dot"></span>已關閉</span>
       <span><span class="dot" style="background:#f2c94c"></span>出席率限制</span></div>
     </div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" ${isWaitingForPublish(a)?'style="background:#eeeeee !important;border-color:#d6d6d6 !important;color:#333 !important"':""} data-open="${a.id}">
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
   <div class="activity-top">
     <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="${String(a.eventCategory||"").trim()==="廟"?"landmark":String(a.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(a.eventCategory||"").trim()==="隊"?"flag":String(a.eventCategory||"").trim()==="北港進香"?"route":String(a.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
     <div class="activity-main">
