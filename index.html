@@ -4859,18 +4859,12 @@ function renderAdmin(el){
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
+  // 跑馬燈顯示年度出席率前三名「個人」，不再把相同出席率的人合併成一組。
   const topAttendanceRanked=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0).sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0)||a.name.localeCompare(b.name,"zh-Hant"));
-  const topAttendanceSlides=[];
-  topAttendanceRanked.forEach(r=>{
-    const rate=Number(r.rate)||0;
-    let group=topAttendanceSlides.find(item=>item.rate===rate);
-    if(!group){
-      if(topAttendanceSlides.length>=3)return;
-      group={names:[],rate};
-      topAttendanceSlides.push(group);
-    }
-    group.names.push(r.name);
-  });
+  const topAttendanceSlides=topAttendanceRanked.slice(0,3).map(r=>({
+    names:[r.name],
+    rate:Number(r.rate)||0
+  }));
   const topAttendanceSlideHtml=topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>';
   // 累積統計：所有未隱藏活動；總登記人數以姓名去重，排除姓名含半形／全形括號的附註名稱。
   const cumulativeActivities=acts.filter(a=>!a.hidden);
@@ -5000,7 +4994,7 @@ function renderAdmin(el){
   <div class="metric"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div>
   <div class="metric top-attendance-metric" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
-    <div class="top-attendance-slideshow slides-${Math.min(topAttendanceSlides.length,3)}" aria-label="年度出席率前三組">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
+    <div class="top-attendance-slideshow slides-${Math.min(topAttendanceSlides.length,3)}" aria-label="年度出席率前三名">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
     <span id="top-attendance-rate">高出席率</span>
   </div>
   <div class="metric"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div>
