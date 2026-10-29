@@ -671,21 +671,21 @@ button.secondary:focus-visible,
 .activity-card.activity-card-open .activity-meta{
   color:var(--ink);
 }
-/* 等待發布只強調狀態，不把整張活動卡片灰化或淡化。 */
+/* 尚未開放的活動以灰階淡化，和可簽到活動明確區分。 */
 .activity-card.activity-card-pending{
-  background:#fff !important;
-  border:1px solid var(--line) !important;
-  opacity:1 !important;
+  background:#f3f3f1 !important;
+  border:1px solid #e2e2df !important;
+  opacity:.72 !important;
 }
 .activity-card.activity-card-pending .activity-icon{
-  background:#f1f1ef;
-  color:var(--ink);
+  background:#e7e7e4;
+  color:#777;
 }
 .activity-card.activity-card-pending .activity-name{
-  color:var(--ink);
+  color:#777;
 }
 .activity-card.activity-card-pending .activity-meta{
-  color:#777;
+  color:#92928d;
 }
 .activity-status-clock.pending-publish{
   width:auto;
