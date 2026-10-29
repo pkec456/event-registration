@@ -656,6 +656,52 @@ button.secondary:focus-visible,
 .activity-card.activity-card-open .activity-meta{
   color:var(--ink);
 }
+.activity-card.activity-card-pending{
+  background:#fff8e8;
+  border:1px solid #f0d58a;
+  opacity:.88;
+}
+.activity-card.activity-card-pending .activity-icon{
+  background:#fff0c7;
+  color:#9a6700;
+}
+.activity-card.activity-card-pending .activity-name,
+.activity-card.activity-card-pending .activity-meta{
+  color:#76551a;
+}
+.activity-status-clock.pending-publish{
+  width:auto;
+  height:30px;
+  min-width:72px;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:0 8px;
+  border-radius:999px;
+  background:#fff0c7;
+  color:#946200;
+  font-size:10px;
+  font-weight:850;
+}
+.activity-status-clock.pending-publish svg{
+  position:static;
+  width:13px;
+  height:13px;
+  transform:none;
+  stroke:currentColor;
+}
+.activity-status-clock.pending-publish span{
+  color:inherit;
+  font-size:10px;
+  white-space:nowrap;
+}
+.status.pending-publish-status{
+  background:#fff0c7;
+  color:#946200;
+}
+.status.pending-publish-status .dot{background:currentColor}
 .activity-list-head{
   display:flex;
   align-items:center;
@@ -4367,12 +4413,16 @@ function localDateKey(d=new Date()){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
+function isWaitingForPublish(activity){
+  const ts=activity?.publishAt ? new Date(activity.publishAt).getTime() : null;
+  return Number.isFinite(ts) && ts>Date.now();
+}
+
 function recentOrOpenActivities(){
   const todayKey = localDateKey();
   return state.activities.filter(a=>{
     if(a.hidden) return false;
-    const ts = a.publishAt ? new Date(a.publishAt).getTime() : null;
-    if(Number.isFinite(ts) && ts > Date.now()) return false;
+    // 預定發布時間尚未到的活動也顯示在近期活動列表，標示「等待開放」。
     const activityDate = String(a.date||"").slice(0,10);
     if(activityDate && activityDate < todayKey) return false;
     return true;
@@ -4651,6 +4701,9 @@ function activityStatusClock(activity){
   const end=localDeadline||dbDeadline||null;
   const remaining=end?end-Date.now():0;
 
+  if(isWaitingForPublish(activity)){
+    return `<div class="activity-status-clock pending-publish" aria-label="等待開放"><i data-lucide="clock"></i><span>等待開放</span></div>`;
+  }
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i class="activity-list-icon ${((Number(activity.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon"}" data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
   }
@@ -4832,8 +4885,8 @@ function renderRegister(el){
         </div>
       </div>
       <div class="checkin-card">
-        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed'}"><span class="dot"></span>${activity.open?'開放簽到中':'已停止簽到'}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
-        ${activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
+        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${isWaitingForPublish(activity)?'pending-publish-status':(activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed')}"><span class="dot"></span>${isWaitingForPublish(activity)?'等待開放':(activity.open?'開放簽到中':'已停止簽到')}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" placeholder="請輸入姓名" / class="register-name-input"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
           <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
@@ -4903,7 +4956,7 @@ function renderRegister(el){
         <span><span class="dot closed-dot"></span>已關閉</span>
       <span><span class="dot" style="background:#f2c94c"></span>出席率限制</span></div>
     </div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${a.open?'activity-card-open':''}" data-open="${a.id}">
+    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
   <div class="activity-top">
     <div class="activity-icon"><i class="activity-list-icon ${a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="${String(a.eventCategory||"").trim()==="廟"?"landmark":String(a.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(a.eventCategory||"").trim()==="隊"?"flag":String(a.eventCategory||"").trim()==="北港進香"?"route":String(a.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
     <div class="activity-main">
