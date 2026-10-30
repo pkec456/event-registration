@@ -386,27 +386,57 @@ font-size:8px;
   word-break:break-word;
 }
 .member-announcement{
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:14px;
-  padding:15px 16px;
-  border:1px solid rgba(201,20,27,.14);
-  border-left:4px solid var(--primary);
-  border-radius:16px;
-  background:linear-gradient(110deg,#fffaf5 0%,#fff 72%);
-  box-shadow:0 3px 12px rgba(83,45,24,.045);
+  display:block;
+  overflow:hidden;
+  margin:0 0 18px;
+  padding:0;
+  border:1px solid rgba(156,105,43,.24);
+  border-radius:18px;
+  background:#fffdf9;
+  box-shadow:0 5px 18px rgba(82,48,20,.08);
 }
-.member-announcement .announcement-icon{
-  width:38px;height:38px;border-radius:12px;
-  background:#fff0e4;color:#b7833e;
+.member-announcement .member-announcement-bar{
+  min-height:54px;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 15px;
+  background:linear-gradient(105deg,#a9141c 0%,#c91c25 72%,#a9141c 100%);
+  color:#fff;
 }
-.member-announcement .announcement-icon svg{width:20px;height:20px}
-.member-announcement-content{flex:1;min-width:0}
-.member-announcement-heading{display:flex;align-items:center;gap:8px;margin:1px 0 5px}
-.member-announcement-heading h3{margin:0;color:var(--primary);font-size:14px;font-weight:850}
-.member-announcement-heading span{padding:2px 7px;border-radius:999px;background:#f8eddb;color:#98713b;font-size:10px;font-weight:750;letter-spacing:.04em}
-.member-announcement .announcement-text{font-size:13px;line-height:1.65;color:#51483f}
-@media(max-width:430px){.member-announcement{padding:13px 14px;gap:10px}.member-announcement .announcement-icon{width:36px;height:36px}}
+.member-announcement-mark{
+  width:34px;height:34px;flex:0 0 34px;
+  display:grid;place-items:center;
+  border:1px solid rgba(244,218,170,.48);
+  border-radius:11px;
+  background:rgba(255,255,255,.12);
+  color:#f4d9a5;
+}
+.member-announcement-mark svg{width:19px;height:19px}
+.member-announcement-heading{display:flex;align-items:center;gap:9px;min-width:0}
+.member-announcement-heading h3{margin:0;color:#fff;font-size:15px;font-weight:850;letter-spacing:.04em}
+.member-announcement-heading span{
+  padding:3px 8px;border:1px solid rgba(244,218,170,.5);
+  border-radius:999px;color:#f8e3b9;font-size:10px;font-weight:750;
+  white-space:nowrap;
+}
+.member-announcement-chevron{width:17px;height:17px;margin-left:auto;color:#f4d9a5;opacity:.9}
+.member-announcement-body{padding:14px 16px 16px}
+.member-announcement-kicker{
+  margin-bottom:5px;color:#b28a51;font-size:9px;
+  font-weight:850;letter-spacing:.18em;
+}
+.member-announcement .announcement-text{
+  min-width:0;color:#40372f;font-size:14px;line-height:1.75;
+  font-weight:550;white-space:pre-wrap;word-break:break-word;
+}
+@media(max-width:430px){
+  .member-announcement{border-radius:16px;margin-bottom:15px}
+  .member-announcement .member-announcement-bar{min-height:50px;padding:8px 12px}
+  .member-announcement-body{padding:12px 14px 14px}
+  .member-announcement .announcement-text{font-size:13px;line-height:1.7}
+}
 .announcement-edit{
   flex:0 0 auto;
   min-height:40px;
@@ -4440,7 +4470,7 @@ function renderRegister(el){
     renderCountdown(activity);refreshIcons();return;
   }
   el.innerHTML=`
-    <div class="announcement member-announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div class="member-announcement-content"><div class="member-announcement-heading"><h3>最新公告</h3><span>隊務通知</span></div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></div>
+    <section class="announcement member-announcement"><div class="member-announcement-bar"><div class="member-announcement-mark"><i data-lucide="megaphone"></i></div><div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div><i class="member-announcement-chevron" data-lucide="chevron-right"></i></div><div class="member-announcement-body"><div class="member-announcement-kicker">NOTICE</div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></section>
     <div class="section-head activity-list-head">
       <h2>近期活動</h2>
       <div class="activity-list-status-legend">
@@ -4481,7 +4511,7 @@ function getAttendanceTone(rate){
 function renderQuery(el){
   el.innerHTML=`
 
-    <div class="announcement member-announcement"><div class="announcement-icon"><i data-lucide="megaphone"></i></div><div class="member-announcement-content"><div class="member-announcement-heading"><h3>最新公告</h3><span>隊務通知</span></div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></div>
+    <section class="announcement member-announcement"><div class="member-announcement-bar"><div class="member-announcement-mark"><i data-lucide="megaphone"></i></div><div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div><i class="member-announcement-chevron" data-lucide="chevron-right"></i></div><div class="member-announcement-body"><div class="member-announcement-kicker">NOTICE</div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></section>
 
     <div class="section-head" style="margin-top:12px">
       <h2>搜尋資料</h2>
