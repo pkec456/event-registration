@@ -121,6 +121,9 @@ jobs:
           require("function isActivityDateExpired(" in html, "activity date auto-close rule exists")
           require("function isWaitingForPublish(" in html, "scheduled publish-state rule exists")
           require("activityExpiryTimer=setInterval" in html, "activity expiry watcher exists")
+          require("window.v25ExpiryInFlight=window.v25ExpiryInFlight||new Set()" in html, "expiry watcher prevents duplicate in-flight close requests")
+          require("window.v25ExpiryRetryAt.set(id,Date.now()+5000)" in html, "failed automatic close retries after five seconds")
+          require("const sharedCloseAt=new Date(deadline).toISOString();" in html and "await window.updateActivityRemote(a);" in html, "activity opening and countdown deadline are saved in one RPC")
           require("public_check_attendance_eligibility" in html, "attendance eligibility RPC reference exists")
           require("function annualStats(" in html, "annual attendance calculation exists")
 
