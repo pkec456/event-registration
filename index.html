@@ -3732,6 +3732,104 @@ button.secondary,.manual-return-discard,
   #app.admin-home-view .admin-menu-grid{gap:0 7px!important}
 }
 
+
+/* V2.5 按鈕位置整理：只調整版面，不變更按鈕節點、事件或功能 */
+#app.home-view .home-tabs,
+#app.admin-home-view .home-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:4px;
+  padding:4px;
+}
+#app.home-view .home-tabs button,
+#app.admin-home-view .home-tabs button{
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  padding:8px 10px;
+}
+#app.admin-home-view .admin-menu-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:0 16px!important;
+  align-items:stretch;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square{
+  width:100%;
+  min-width:0;
+  min-height:94px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:13px 6px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  gap:7px!important;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square strong{
+  max-width:100%;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+#app.admin-home-view .admin-menu-grid>.signin-page-setting-tile{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  text-align:center!important;
+}
+#app.admin-home-view .admin-menu-grid>.signin-page-setting-tile .activity-toggle-btn{
+  margin:0;
+}
+#app.admin-home-view .activity-admin-card>.admin-actions,
+#app.admin-home-view .activity-admin-card>.admin-actions.is-expanded{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+#app.admin-home-view .activity-admin-card>.admin-actions>button{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  justify-content:center;
+}
+#app.child-view .manual-return-actions,
+#app.child-view .form-actions,
+#app.child-view .button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+#app.child-view .manual-return-actions>button,
+#app.child-view .form-actions>button,
+#app.child-view .button-row>button{
+  flex:1 1 140px;
+  min-width:0;
+}
+@media(max-width:700px){
+  #app.admin-home-view .admin-menu-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:0 12px!important;
+  }
+  #app.admin-home-view .admin-menu-grid>.admin-square{
+    min-height:88px!important;
+    padding:11px 5px!important;
+  }
+  #app.admin-home-view .activity-admin-card>.admin-actions,
+  #app.admin-home-view .activity-admin-card>.admin-actions.is-expanded{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:360px){
+  #app.admin-home-view .admin-menu-grid{gap:0 8px!important}
+  #app.admin-home-view .admin-menu-grid>.admin-square{min-height:82px!important}
+  #app.home-view .home-tabs button,
+  #app.admin-home-view .home-tabs button{font-size:12px;padding:7px 5px}
+}
+
 </style>
 
 
