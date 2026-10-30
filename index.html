@@ -3956,6 +3956,22 @@ button.secondary,.manual-return-discard,
 @media(max-width:380px){#app.home-view{padding-left:14px;padding-right:14px}#app.home-view .home-fixed-header{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}#app.home-view .top-brand h1{font-size:14px}#app.home-view .activity-card{padding:12px}#app.home-view .query-search-row{grid-template-columns:minmax(0,1fr) 42px}#app.home-view .query-search-button{width:42px;height:42px;min-height:42px}}
 @media(min-width:600px){#app.home-view{padding-left:22px;padding-right:22px}}
 
+
+/* V2.5 隊員端活動內頁 App UI：只限含活動簽到內容的隊員內頁 */
+#app.child-view:has(.checkin-hero){max-width:520px;padding:0 18px 32px;background:#f7f7f5}
+#app.child-view:has(.checkin-hero) .subpage-fixed-header{position:sticky;top:0;z-index:30;margin:0 -18px 14px;padding:10px 18px;background:rgba(255,255,255,.97);border-bottom:1px solid #ece9e5;backdrop-filter:blur(14px)}
+#app.child-view:has(.checkin-hero) .subpage-title{color:#292724;font-size:14px;font-weight:750}
+#app.child-view:has(.checkin-hero) .subpage-back-top,#app.child-view:has(.checkin-hero) .top-admin-access{width:36px;height:36px;min-width:36px;border-radius:10px;background:#fff;border:1px solid #e9e6e1}
+#app.child-view:has(.checkin-hero) .checkin-hero{display:flex;align-items:center;gap:12px;min-height:unset;margin:0 0 12px;padding:16px;border:1px solid #e9e5de;border-radius:14px;background:#fff;color:#292724;box-shadow:none}
+#app.child-view:has(.checkin-hero) .checkin-hero-main{flex:1;min-width:0}
+#app.child-view:has(.checkin-hero) .checkin-hero h2{color:#292724;font-size:16px;line-height:1.4;font-weight:800}
+#app.child-view:has(.checkin-hero) .checkin-hero p{margin-top:4px;color:#817b73;font-size:11px}
+#app.child-view:has(.checkin-hero) .checkin-card{margin-top:0;padding:16px;border:1px solid #e9e5de;border-radius:14px;background:#fff;box-shadow:none}
+#app.child-view:has(.checkin-hero) .checkin-button{min-height:50px;margin-top:12px;border-radius:11px;background:#a92f32;font-size:15px;font-weight:750;box-shadow:none}
+#app.child-view:has(.checkin-hero) .section-head{margin:20px 1px 9px}
+#app.child-view:has(.checkin-hero) .block.tight{padding:12px;border:1px solid #e9e5de;border-radius:14px;background:#fff;box-shadow:none}
+@media(max-width:380px){#app.child-view:has(.checkin-hero){padding-left:14px;padding-right:14px}#app.child-view:has(.checkin-hero) .subpage-fixed-header{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}
+
 </style>
 
 
