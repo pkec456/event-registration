@@ -3210,6 +3210,168 @@ button.secondary,.manual-return-discard,
 #app.admin-home-view .top-attendance-slideshow .top-attendance-slide-name{display:block;width:100%;max-width:100%;min-width:0;margin:0;font-size:clamp(12px,2.6vw,14px)!important;line-height:1.45!important;font-weight:700;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-align:center;box-sizing:border-box;}
 
 /* 高出席率名單維持純姓名顯示，不加名次標記。 */
+
+/* V2.5 隊員端整體排版整理：僅調整視覺，不變更功能與資料流程 */
+#app.home-view{
+  max-width:520px;
+  min-height:100dvh;
+  padding:0 18px calc(104px + env(safe-area-inset-bottom));
+  background:var(--bg);
+}
+#app.home-view .home-fixed-header{
+  position:relative;
+  min-height:72px;
+  padding:14px 0 12px;
+  gap:10px;
+  border-bottom:1px solid rgba(168,143,116,.16);
+  background:transparent;
+}
+#app.home-view .home-header-left-slot,
+#app.home-view .home-header-left-slot .home-link{
+  width:38px!important;height:38px!important;min-width:38px!important;
+  border-radius:12px!important;
+}
+#app.home-view .top-brand{flex:1;justify-content:flex-start}
+#app.home-view .top-brand h1{
+  font-size:15px;line-height:1.35;font-weight:850;letter-spacing:.015em;
+}
+#app.home-view .top-admin-access{
+  width:38px;height:38px;border-radius:12px;
+  background:#fff;border-color:rgba(168,143,116,.22);
+}
+#app.home-view .top-admin-logout{width:34px;height:34px;border-radius:10px}
+#app.home-view .home-tabs{
+  position:fixed!important;
+  left:50%!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;
+  width:min(484px,calc(100vw - 28px))!important;
+  min-height:62px!important;height:62px;
+  padding:6px!important;gap:6px!important;
+  border:1px solid rgba(168,143,116,.22);
+  border-radius:19px;
+  background:rgba(255,253,249,.96);
+  box-shadow:0 8px 28px rgba(56,38,22,.12);
+  backdrop-filter:blur(18px);
+}
+#app.home-view .home-tabs button{
+  min-height:48px;border-radius:14px;
+  color:#786d65;font-size:13px;font-weight:800;
+  transition:background .18s ease,color .18s ease;
+}
+#app.home-view .home-tabs button.active{
+  background:#a92f32;color:#fff;
+  box-shadow:0 2px 7px rgba(169,47,50,.18);
+}
+#app.home-view .home-tabs button svg{width:18px;height:18px}
+#app.home-view #tab-content{padding-top:17px}
+#app.home-view .member-announcement{
+  margin:0 0 24px;
+  border:1px solid #eadfce;border-radius:17px;
+  background:#fff;box-shadow:0 2px 9px rgba(58,42,26,.035);
+}
+#app.home-view .member-announcement .member-announcement-bar{
+  min-height:46px;padding:8px 13px;
+  background:#fbf6ed;color:#a92f32;
+  border-bottom:1px solid #f0e7d9;
+}
+#app.home-view .member-announcement-mark{
+  width:30px;height:30px;flex-basis:30px;
+  border:0;border-radius:9px;background:#f5e8d8;color:#a8793e;
+}
+#app.home-view .member-announcement-heading h3{color:#6e3933;font-size:13px}
+#app.home-view .member-announcement-heading span{
+  border:0;background:#f1e6d5;color:#957344;font-size:9px;
+}
+#app.home-view .member-announcement-chevron{color:#a8793e}
+#app.home-view .member-announcement-body{padding:12px 14px 14px}
+#app.home-view .member-announcement-kicker{display:none}
+#app.home-view .member-announcement .announcement-text{
+  color:#4c443c;font-size:13px;line-height:1.7;font-weight:450;
+}
+#app.home-view .section-head{
+  margin:0 1px 11px;align-items:center;
+}
+#app.home-view .section-head h2{
+  font-size:17px;font-weight:850;letter-spacing:.01em;color:#302923;
+}
+#app.home-view .activity-list-status-legend{gap:9px;font-size:10px}
+#app.home-view .activity-grid{gap:10px}
+#app.home-view .activity-card{
+  padding:14px;border:1px solid #eee5d9;border-radius:16px;
+  background:#fff;box-shadow:0 2px 7px rgba(53,39,24,.025);
+  transition:border-color .15s ease,transform .15s ease;
+}
+#app.home-view .activity-card:active{
+  transform:scale(.992);border-color:#d9c6ad;
+}
+#app.home-view .activity-top{gap:11px;align-items:center}
+#app.home-view .activity-icon{
+  width:42px;height:42px;flex-basis:42px;border-radius:13px;
+  background:#f7f1e8;color:#a8793e;
+}
+#app.home-view .activity-name{font-size:15px;line-height:1.4;font-weight:800;color:#302923}
+#app.home-view .event-category-label{
+  margin-bottom:3px;padding:2px 7px;border-radius:6px;
+  background:#f8eee8;color:#a92f32;font-size:11px;line-height:1.4;
+}
+#app.home-view .activity-meta{font-size:11px;color:#84796e}
+#app.home-view .activity-right{gap:7px}
+#app.home-view .activity-status-clock{width:40px;height:40px;flex-basis:40px}
+#app.home-view .activity-status-clock svg{width:40px;height:40px}
+#app.home-view .count{font-size:11px;color:#74695f}
+#app.home-view .status{font-size:10px;padding:4px 7px}
+#app.home-view .arrow{color:#b5a99b}
+#app.home-view .query-search-row{
+  display:grid;grid-template-columns:auto minmax(0,1fr) 44px;
+  gap:9px;align-items:center;padding:10px;
+  border:1px solid #e9dfd2;border-radius:16px;
+  background:#fff;box-shadow:0 2px 8px rgba(53,39,24,.035);
+}
+#app.home-view .query-search-label{gap:7px}
+#app.home-view .query-search-label strong{font-size:13px}
+#app.home-view .query-search-icon{
+  width:34px;height:34px;display:grid;place-items:center;
+  border-radius:10px;background:#f7eee5;color:#a8793e;
+}
+#app.home-view .query-search-input input{
+  min-height:44px;height:44px;padding:0 12px;
+  border:1px solid #eee5da;border-radius:11px;background:#fbfaf8;
+  font-size:14px;
+}
+#app.home-view .query-search-button{
+  width:44px;height:44px;min-height:44px;border-radius:12px;
+  background:#a92f32;color:#fff;display:grid;place-items:center;
+}
+#app.home-view .query-search-button svg{width:19px;height:19px}
+#app.home-view #query-result{margin-top:14px}
+#app.home-view .query-no-person{
+  min-height:180px;border-color:#eee5d9;border-radius:16px;background:#fff;
+}
+#app.home-view .query-no-person svg{width:44px;height:44px}
+#app.home-view .query-no-person-title{font-size:17px}
+#app.child-view .checkin-hero{
+  min-height:unset;padding:18px;border-radius:18px;
+  background:#a92f32;box-shadow:0 5px 16px rgba(112,35,35,.12);
+}
+#app.child-view .checkin-hero h2{font-size:19px;line-height:1.35}
+#app.child-view .checkin-card{
+  margin-top:12px;padding:16px;border:1px solid #eee5d9;
+  border-radius:17px;background:#fff;
+}
+#app.child-view .checkin-button{
+  min-height:48px;border-radius:13px;font-weight:850;
+}
+@media(max-width:380px){
+  #app.home-view{padding-left:14px;padding-right:14px}
+  #app.home-view .top-brand h1{font-size:14px}
+  #app.home-view .activity-card{padding:12px}
+  #app.home-view .activity-icon{width:38px;height:38px;flex-basis:38px}
+  #app.home-view .query-search-row{grid-template-columns:1fr 44px}
+  #app.home-view .query-search-label{grid-column:1/-1}
+}
+@media(min-width:600px){
+  #app.home-view{padding-left:22px;padding-right:22px}
+}
+
 </style>
 
 
