@@ -5090,7 +5090,7 @@ window.openManualRegistrationEditor=openManualRegistrationEditor;
 function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
   const expanded=window.adminAttendanceExpandedId===a.id;
-  const future=!isManualRegistrationActivity(a) && !a.open && a.publishAt&&Number.isFinite(new Date(a.publishAt).getTime())&&new Date(a.publishAt).getTime()>Date.now();
+  const future=!isManualRegistrationActivity(a) && isWaitingForPublish(a);
   let detail="";
   if(expanded){
     const rows=list.map((r,i)=>{
@@ -5122,7 +5122,7 @@ function activityAdminRow(a,hidden=false){
   </div>
   <div class="admin-actions">
     <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded ? "收起名單" : `名單 ${list.length}`}</button>
-    ${isManualRegistrationActivity(a) ? `<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>` : `<button class="activity-toggle-btn ${adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${a.open ? "關閉活動" : "開啟活動"}"><i data-lucide="${a.open ? "toggle-right" : "toggle-left"}"></i><span>${a.open ? "開放中" : "已停止"}</span></button>`}
+    ${isManualRegistrationActivity(a) ? `<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>` : `<button class="activity-toggle-btn ${future?"is-off":adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${future?"取消預定開放":(a.open ? "關閉活動" : "開啟活動")}"><i data-lucide="${future?"clock":(a.open ? "toggle-right" : "toggle-left")}"></i><span>${future?"等待開放":(a.open ? "開放中" : "已停止")}</span></button>`}
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden ? "eye" : "eye-off"}"></i>${hidden ? "取消隱藏" : "隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
   </div>${detail}</div>`;
@@ -5634,32 +5634,7 @@ async function init(){
     );
     if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
 
-    // 自動關閉計時器：到時間後將活動設為停止簽到
-    const now = Date.now();
-    // 原本建立活動的 close_at 自動關閉保留。
-    // 「重新開啟 30 秒」由 startActivityExpiryWatcher 單獨處理，
-    // 避免 loadData 每 6 秒把本機 30 秒 deadline 洗掉。
-    const expired = state.activities.filter(a =>
-      a.open &&
-      !window.v93CountdownDeadlines?.has(String(a.id)) &&
-      (
-        (a.closeAt && new Date(a.closeAt).getTime() <= now) ||
-        isActivityDateExpired(a, now)
-      )
-    );
-
-    for(const a of expired){
-      try{
-        a.open = false;
-        a.closeAt = null;
-        a.autoCloseMinutes = 0;
-        window.v93CountdownDeadlines?.delete(String(a.id));
-        await updateActivityRemote(a);
-      }catch(e){
-        console.error("活動自動關閉失敗", e);
-        a.open = true;
-      }
-    }
+    // 自動關閉統一由 startActivityExpiryWatcher 處理，避免兩套流程同時更新同一筆活動。
 
     if(activeTab !== "admin"){
       await loadData();
