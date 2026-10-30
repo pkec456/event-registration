@@ -4177,7 +4177,8 @@ window.v25ExpiryInFlight=window.v25ExpiryInFlight||new Set();
 window.v25ExpiryRetryAt=window.v25ExpiryRetryAt||new Map();
 
 function startActivityExpiryWatcher(){
-  if(activityExpiryTimer)clearInterval(activityExpiryTimer);
+  // loadData 會被背景同步反覆呼叫；監控器只允許建立一次，避免計時器反覆重置。
+  if(activityExpiryTimer)return;
   activityExpiryTimer=setInterval(async()=>{
     if(!Array.isArray(state.activities))return;
     const now=Date.now();
@@ -4205,6 +4206,14 @@ function startActivityExpiryWatcher(){
           closeAt:null,
           autoCloseMinutes:0
         });
+        // loadData 可能在 RPC 等待期間替換整個 state.activities 陣列，
+        // 因此必須依 ID 更新目前 state 中的物件，而非只改舊參照。
+        const current=state.activities.find(item=>String(item.id)===id);
+        if(current){
+          current.open=false;
+          current.closeAt=null;
+          current.autoCloseMinutes=0;
+        }
         a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
@@ -5262,7 +5271,9 @@ function setupCreateActivityPage(el){
       ? new Date(Math.max(activityStartAt.getTime(),publishAt?new Date(publishAt).getTime():0)).toISOString()
       : publishAt;
     const closeBaseTime=scheduledOpenAt?new Date(scheduledOpenAt).getTime():Date.now();
-    const activity={id:uid(),name,date,fields,open:!isFutureActivityDate,maxParticipants,createdBy:session?.username||"",closeAt:(!isFutureActivityDate&&closeMinutes)?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:isFutureActivityDate?0:closeMinutes,hidden:false,publishAt:scheduledOpenAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
+    // open=true 代表已排定開放；實際能否簽到由 publishAt 控制。
+    // 未來日期也必須預先寫入 closeAt，否則到達排定開放時間後不會自動關閉。
+    const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:scheduledOpenAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
     createBtn.disabled=true;
     try{
       const saved=await createActivityRemote(activity);
@@ -5882,6 +5893,14 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
         await window.updateActivityRemote(a);
 
         window.v93CountdownDeadlines.delete(String(a.id));
+        window.v25ExpiryRetryAt.delete(String(a.id));
+        // 確保關閉狀態寫回目前 state；背景 loadData 可能已替換活動物件。
+        const current=window.state?.activities?.find(item=>String(item.id)===String(a.id));
+        if(current){
+          current.open=false;
+          current.closeAt=null;
+          current.autoCloseMinutes=0;
+        }
         window.showToast("活動已關閉");
       }
 
