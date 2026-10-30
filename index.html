@@ -4213,10 +4213,13 @@ function startActivityExpiryWatcher(){
           current.open=false;
           current.closeAt=null;
           current.autoCloseMinutes=0;
+          // 手動關閉／倒數關閉後，取消預定發布，避免 UI 仍顯示等待開放。
+          current.publishAt=null;
         }
         a.open=false;
         a.closeAt=null;
         a.autoCloseMinutes=0;
+        a.publishAt=null;
         window.v93CountdownDeadlines.delete(id);
         window.v25ExpiryRetryAt.delete(id);
         console.log("[活動管理] 倒數到期，已自動關閉活動",a.name,closed?.id||id);
