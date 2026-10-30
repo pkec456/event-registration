@@ -4172,6 +4172,9 @@ function activityStatusClock(activity){
 
 let activityExpiryTimer=null;
 window.v93CountdownDeadlines=window.v93CountdownDeadlines||new Map();
+// 每個活動獨立鎖定，避免網路延遲時每秒重複送出關閉 RPC。
+window.v25ExpiryInFlight=window.v25ExpiryInFlight||new Set();
+window.v25ExpiryRetryAt=window.v25ExpiryRetryAt||new Map();
 
 function startActivityExpiryWatcher(){
   if(activityExpiryTimer)clearInterval(activityExpiryTimer);
@@ -4181,55 +4184,54 @@ function startActivityExpiryWatcher(){
     const expired=state.activities.filter(a=>{
       const localEnd=window.v93CountdownDeadlines?.get(String(a.id))||0;
       const dbEnd=a.closeAt?new Date(a.closeAt).getTime():0;
-      const end=localEnd||dbEnd;
+      // DB close_at 為跨裝置共用期限；本機期限僅作為尚未同步時的備援。
+      const end=dbEnd||localEnd;
+      const retryAt=window.v25ExpiryRetryAt.get(String(a.id))||0;
       return a.open && (
-        (end && end<=now) ||
-        isActivityDateExpired(a, now)
-      );
+        (end && end<=now) || isActivityDateExpired(a,now)
+      ) && retryAt<=now && !window.v25ExpiryInFlight.has(String(a.id));
     });
     if(!expired.length)return;
 
     for(const a of expired){
-      // 先保留活動資料，使用目前已驗證可正常工作的 update RPC 關閉。
-      const oldCloseAt=a.closeAt;
-      const oldAuto=a.autoCloseMinutes;
-      const localDeadline=window.v93CountdownDeadlines?.get(String(a.id))||0;
-      a.open=false;
-      a.closeAt=null;
-      a.autoCloseMinutes=0;
-      window.v93CountdownDeadlines?.delete(String(a.id));
-
+      const id=String(a.id);
+      if(window.v25ExpiryInFlight.has(id))continue;
+      window.v25ExpiryInFlight.add(id);
       try{
-        await updateActivityRemote({
-          id:a.id,
-          name:a.name,
-          date:a.date,
-          fields:a.fields||[],
+        // 保留完整活動欄位，只變更開放狀態與倒數欄位，避免覆蓋其他設定。
+        const closed=await updateActivityRemote({
+          ...a,
           open:false,
-          maxParticipants:a.maxParticipants==null?null:a.maxParticipants,
-          createdBy:a.createdBy||"",
           closeAt:null,
-          autoCloseMinutes:0,
-          hidden:!!a.hidden,
-          publishAt:a.publishAt||null
+          autoCloseMinutes:0
         });
-        console.log("[活動管理] 30 秒到，自動關閉活動",a.name);
+        a.open=false;
+        a.closeAt=null;
+        a.autoCloseMinutes=0;
+        window.v93CountdownDeadlines.delete(id);
+        window.v25ExpiryRetryAt.delete(id);
+        console.log("[活動管理] 倒數到期，已自動關閉活動",a.name,closed?.id||id);
       }catch(e){
-        // 更新失敗時恢復本機狀態，避免畫面與資料庫不一致。
-        a.open=true;
-        a.closeAt=oldCloseAt;
-        a.autoCloseMinutes=oldAuto;
-        if(localDeadline) window.v93CountdownDeadlines?.set(String(a.id),localDeadline);
-        console.error("[活動管理] 30 秒自動關閉失敗",e);
+        // 不假裝已關閉；保留活動開放狀態並於 5 秒後重試，直到雲端更新成功。
+        window.v25ExpiryRetryAt.set(id,Date.now()+5000);
+        console.error("[活動管理] 自動關閉失敗，5 秒後重試",a.name,e);
+        if(typeof window.showToast==="function" && adminUnlocked){
+          window.showToast("「"+a.name+"」自動關閉同步失敗，系統將重試。","error");
+        }
+      }finally{
+        window.v25ExpiryInFlight.delete(id);
       }
     }
 
-    // 倒數到 0 秒並成功關閉後，立即同步畫面，確實停止接受簽到。
     if(typeof window.refreshActivityListClocks==="function"){
       window.refreshActivityListClocks();
     }
     if(expired.some(a=>String(a.id)===String(openEventId))){
       render();
+    }
+    if(typeof renderAdmin==="function" && adminUnlocked){
+      const tab=document.getElementById("tab-content");
+      if(tab)renderAdmin(tab);
     }
   },1000);
 }
@@ -5849,29 +5851,17 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
     try{
       if(next){
-        // 第一次 RPC：只負責把活動正常開啟。
+        // 開啟與 30 秒截止時間同一次寫入，避免先開啟成功、期限寫入失敗而永不自動關閉。
+        const deadline=Date.now()+30000;
+        const sharedCloseAt=new Date(deadline).toISOString();
         a.open=true;
-        a.closeAt=null;
+        a.closeAt=sharedCloseAt;
         a.autoCloseMinutes=0;
         await window.updateActivityRemote(a);
 
-        // 第二階段：30 秒只使用 closeAt 作為共享截止時間。
-        // 不再送 0.5 分鐘，避免資料庫若為 integer 造成 22P02。
-        const deadline=Date.now()+30000;
-        const sharedCloseAt=new Date(deadline).toISOString();
-
-        const sharedActivity={
-          ...a,
-          open:true,
-          closeAt:sharedCloseAt,
-          autoCloseMinutes:0
-        };
-
-        // 將同一個絕對時間寫入 DB；所有手機／電腦都從 close_at 讀取。
-        await window.updateActivityRemote(sharedActivity);
-
         a.closeAt=sharedCloseAt;
         a.autoCloseMinutes=0;
+        window.v25ExpiryRetryAt.delete(String(a.id));
         window.v93CountdownDeadlines.set(String(a.id),deadline);
 
         // 更新本機 state，但不重新 loadData，避免輸入框／倒數被重建。
