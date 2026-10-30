@@ -3932,7 +3932,7 @@ function render(){
   const app=document.getElementById("app");
   signinPageVisible=isSigninPageVisible();
   if(!signinPageVisible && activeTab==="register"){ activeTab="query"; openEventId=null; }
-  const isChild=!!(openEventId || activeTab==="query" || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
+  const isChild=!!(openEventId || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
   app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
@@ -3951,14 +3951,14 @@ function render(){
         ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
       </div>
       </header>
-      ${signinPageVisible?`<nav class="tabs home-tabs">
-        <button data-tab="register" class="${activeTab==='register'?'active':''}">
+      <nav class="tabs home-tabs">
+        ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
           <i data-lucide="check"></i>簽到
-        </button>
+        </button>`:""}
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
-          <i data-lucide="search"></i>查詢
+          <i data-lucide="search"></i>出席率
         </button>
-      </nav>`:""}
+      </nav>
       <div id="tab-content"></div>`;
   }else{
     const queryHomeMode=activeTab==="query" && !signinPageVisible;
