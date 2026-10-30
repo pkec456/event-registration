@@ -3372,6 +3372,173 @@ button.secondary,.manual-return-discard,
   #app.home-view{padding-left:22px;padding-right:22px}
 }
 
+
+/* V2.5 管理端 App 化排版：只整理視覺層級，保留既有功能 */
+#app.admin-home-view{
+  max-width:520px;
+  min-height:100dvh;
+  padding:0 18px calc(104px + env(safe-area-inset-bottom));
+  background:var(--bg);
+}
+#app.admin-home-view .home-fixed-header{
+  min-height:68px;padding:12px 0 10px;
+  border-bottom:1px solid rgba(168,143,116,.16);
+  background:var(--bg);
+}
+#app.admin-home-view .top-brand h1{font-size:15px;line-height:1.35}
+#app.admin-home-view .home-header-left-slot,
+#app.admin-home-view .home-header-left-slot .home-link{
+  width:38px!important;height:38px!important;min-width:38px!important;border-radius:12px!important;
+}
+#app.admin-home-view .top-admin-access{
+  width:38px;height:38px;border-radius:12px;
+}
+#app.admin-home-view .home-tabs{
+  position:fixed!important;left:50%!important;
+  bottom:calc(10px + env(safe-area-inset-bottom))!important;
+  width:min(484px,calc(100vw - 28px))!important;height:62px;min-height:62px!important;
+  padding:6px!important;gap:6px!important;
+  border:1px solid rgba(168,143,116,.22);border-radius:19px;
+  background:rgba(255,253,249,.96);
+  box-shadow:0 8px 28px rgba(56,38,22,.12);
+  backdrop-filter:blur(18px);
+}
+#app.admin-home-view .home-tabs button{min-height:48px;border-radius:14px;font-size:13px}
+#app.admin-home-view .home-tabs button.active{background:#a92f32;color:#fff}
+#app.admin-home-view #tab-content{padding-top:17px}
+#app.admin-home-view .admin-main-hero{
+  min-height:82px;margin:0 0 22px;padding:16px 18px;
+  border:1px solid rgba(244,217,165,.25);border-radius:18px;
+  background:linear-gradient(115deg,#98252b 0%,#b83a39 65%,#8e292d 100%);
+  box-shadow:0 6px 18px rgba(112,35,35,.12);
+}
+#app.admin-home-view .admin-main-hero-brand{display:flex;align-items:center;gap:12px}
+#app.admin-home-view .admin-main-hero-icon{
+  width:44px;height:44px;border-radius:13px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.13);color:#f4d9a5;
+}
+#app.admin-home-view .admin-main-hero-icon svg{width:23px;height:23px}
+#app.admin-home-view .admin-main-hero-title{font-size:16px;font-weight:850}
+#app.admin-home-view .admin-main-hero-role{margin-top:3px;font-size:11px;color:#f4dfc4}
+#app.admin-home-view .section-head{
+  margin:22px 1px 11px;align-items:center;
+}
+#app.admin-home-view .section-head h2{font-size:16px;font-weight:850;color:#302923}
+#app.admin-home-view .section-head>span{font-size:11px;color:#918476}
+#app.admin-home-view .announcement-admin{margin:0 0 4px}
+#app.admin-home-view .announcement-simple{
+  min-height:unset;padding:14px;
+  border:1px solid #eadfce;border-radius:15px;
+  background:#fff;box-shadow:0 2px 8px rgba(53,39,24,.03);
+}
+#app.admin-home-view .announcement-simple .announcement-text{
+  font-size:13px;line-height:1.65;color:#51483f;
+}
+#app.admin-home-view .announcement-edit{
+  min-height:36px;padding:0 10px;border-radius:10px;
+  background:#f8eee8;color:#a92f32;font-size:12px;
+}
+#app.admin-home-view .admin-menu-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:9px!important;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square{
+  min-height:106px!important;padding:13px 7px!important;
+  gap:0;border:1px solid #eee4d8;border-radius:16px;
+  background:#fff;box-shadow:0 2px 8px rgba(53,39,24,.025);
+  transition:transform .15s ease,border-color .15s ease;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square:active{
+  transform:scale(.98);border-color:#d8c4a8;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square .menu-icon{
+  width:39px!important;height:39px!important;min-width:39px!important;min-height:39px!important;
+  margin:0 0 9px!important;border-radius:12px!important;
+  background:#f7f0e7!important;color:#a8793e!important;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square .menu-icon svg{
+  width:21px!important;height:21px!important;
+}
+#app.admin-home-view .admin-menu-grid>.admin-square strong{
+  font-size:12px!important;line-height:1.35!important;color:#40372f;
+  white-space:normal!important;
+}
+#app.admin-home-view .admin-menu-grid>.signin-page-setting-tile{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy{margin-bottom:5px}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{font-size:12px!important}
+#app.admin-home-view .signin-page-setting-tile .activity-toggle-btn{
+  width:38px;height:30px;min-height:30px;border-radius:9px;
+  background:#f7f0e7;color:#a8793e;
+}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{
+  margin-top:3px;font-size:10px;color:#84796e;
+}
+#app.admin-home-view .statistics-info-summary{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
+}
+#app.admin-home-view .statistics-info-summary>.metric{
+  min-width:0;padding:13px 8px;border:1px solid #eee4d8;
+  border-radius:15px;background:#fff;box-shadow:0 2px 8px rgba(53,39,24,.025);
+}
+#app.admin-home-view .statistics-info-summary .metric-icon{
+  width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+  margin-bottom:8px;border-radius:10px!important;background:#f7f0e7;color:#a8793e;
+}
+#app.admin-home-view .statistics-info-summary .metric-icon svg{width:18px!important;height:18px!important}
+#app.admin-home-view .statistics-info-summary>.metric>b{font-size:24px!important;line-height:1.15}
+#app.admin-home-view .statistics-info-summary>.metric>span{font-size:10px!important;line-height:1.4;color:#81766b}
+#app.admin-home-view .cumulative-category-card,
+#app.admin-home-view .monthly-chart-card,
+#app.admin-home-view .top-attendance-card{
+  border:1px solid #eee4d8;border-radius:16px;background:#fff;
+  box-shadow:0 2px 8px rgba(53,39,24,.025);
+}
+#app.admin-home-view .cumulative-category-card{padding:14px 10px!important}
+#app.admin-home-view .cumulative-category-card>b{font-size:24px!important}
+#app.admin-home-view .cumulative-category-card>strong{font-size:12px!important}
+#app.child-view .admin-head{margin:0 0 16px;align-items:center}
+#app.child-view .admin-head .page-title,
+#app.child-view .page-title{font-size:21px;line-height:1.25;letter-spacing:-.02em}
+#app.child-view .page-subtitle{margin:5px 0 16px;font-size:12px;line-height:1.6}
+#app.child-view .form-block,
+#app.child-view .activity-admin-card,
+#app.child-view .officer-card,
+#app.child-view .block{
+  border:1px solid #eee4d8;border-radius:16px;background:#fff;
+  box-shadow:0 2px 8px rgba(53,39,24,.025);
+}
+#app.child-view .form-block{padding:16px;margin-bottom:11px}
+#app.child-view .form-title{margin-bottom:12px;font-size:14px}
+#app.child-view input[type=text],
+#app.child-view input[type=date],
+#app.child-view input[type=time],
+#app.child-view input[type=password],
+#app.child-view input[type=number],
+#app.child-view select,
+#app.child-view textarea{
+  border-color:#e9dfd2;border-radius:12px;background:#fbfaf8;
+}
+#app.child-view .primary,
+#app.child-view .secondary,
+#app.child-view .danger-btn{
+  min-height:44px;border-radius:12px;font-weight:800;
+}
+#app.child-view .activity-admin-card{padding:14px;margin-bottom:10px}
+#app.child-view .admin-actions{gap:6px}
+#app.child-view .admin-actions button{
+  min-height:42px;border-radius:10px;background:#f8f5f0;border-color:#eee4d8;
+}
+@media(max-width:380px){
+  #app.admin-home-view{padding-left:14px;padding-right:14px}
+  #app.admin-home-view .admin-menu-grid{gap:7px!important}
+  #app.admin-home-view .admin-menu-grid>.admin-square{min-height:98px!important}
+  #app.admin-home-view .statistics-info-summary{gap:6px}
+  #app.admin-home-view .statistics-info-summary>.metric{padding:11px 5px}
+}
+
 </style>
 
 
