@@ -4102,6 +4102,16 @@ button.secondary,.manual-return-discard,
   .member-feature-header{margin-left:-14px !important;margin-right:-14px !important;padding-left:14px !important;padding-right:14px !important}
 }
 
+
+/* 新版首頁整合：移除隊員端與管理頁底部「簽到／出席率」固定按鈕 */
+#app.member-portal-view .home-tabs,
+#app.member-feature-view .home-tabs,
+#app.admin-home-view .home-tabs{
+  display:none !important;
+}
+/* 以首頁兩張卡片作為隊員唯一入口，不再重複顯示底部導覽 */
+#app.member-portal-view{padding-bottom:32px !important;}
+
 </style>
 
 
