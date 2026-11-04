@@ -3944,6 +3944,31 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   width:100%;
   margin:0 !important;
 }
+
+/* V2.5 Bootstrap layout utilities: login and activity lists */
+#app .admin-login-page{
+  max-width:none;
+  padding:24px 0 32px;
+}
+#app .admin-login-card{
+  width:100%;
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+}
+#app .activity-list{
+  display:grid;
+  gap:12px;
+}
+#app .activity-list .activity-card{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+@media(max-width:576px){
+  #app .admin-login-page{padding:16px 0 24px;}
+  #app .admin-login-card{padding:24px 18px;}
+}
 </style>
 
 
