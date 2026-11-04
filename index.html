@@ -4520,6 +4520,58 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 }
 /* 管理者角色與內容圖示維持原功能色，不套用 Header 圖示規則，避免破壞 V2.5 狀態辨識 */
 
+
+/* 隊務公告：恢復 V2.5 公告卡片視覺規格 */
+.member-portal-view .member-announcement{
+  display:block !important;
+  min-height:70px !important;
+  box-sizing:border-box !important;
+  margin:0 0 18px !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  border-radius:18px !important;
+  box-shadow:none !important;
+}
+.member-portal-view .member-announcement .member-announcement-bar{
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:12px 13px 0 !important;
+  background:transparent !important;
+  color:var(--ink) !important;
+  border:0 !important;
+}
+.member-portal-view .member-announcement-mark{
+  width:36px !important;height:36px !important;flex:0 0 36px !important;
+  display:grid !important;place-items:center !important;
+  border:0 !important;border-radius:12px !important;
+  background:var(--accent-soft) !important;color:var(--accent) !important;
+}
+.member-portal-view .member-announcement-mark svg{width:19px !important;height:19px !important;stroke-width:2 !important;}
+.member-portal-view .member-announcement-heading{display:block !important;min-width:0 !important;}
+.member-portal-view .member-announcement-heading h3{
+  margin:0 !important;color:var(--ink) !important;font-size:14px !important;
+  font-weight:850 !important;letter-spacing:0 !important;
+}
+.member-portal-view .member-announcement-heading span{
+  display:none !important;
+}
+.member-portal-view .member-announcement-chevron{display:none !important;}
+.member-portal-view .member-announcement-body{padding:10px 16px 14px !important;}
+.member-portal-view .member-announcement-kicker{display:none !important;}
+.member-portal-view .member-announcement .announcement-text{
+  min-width:0 !important;flex:1 !important;
+  color:var(--ink) !important;font-size:14px !important;line-height:1.6 !important;
+  font-weight:400 !important;white-space:pre-wrap !important;word-break:break-word !important;
+}
+@media(max-width:430px){
+  .member-portal-view .member-announcement{border-radius:18px !important;}
+  .member-portal-view .member-announcement-body{padding:10px 13px 12px !important;}
+}
+
 </style>
 
 
