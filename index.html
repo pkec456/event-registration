@@ -133,9 +133,6 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .grid-2>.field{width:100% !important;min-width:0 !important}
 #new-publish-time{width:100% !important;max-width:100% !important;min-width:0 !important;min-inline-size:0 !important;box-sizing:border-box !important;font-size:14px !important}
 }
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.choice-grid.four{grid-template-columns:repeat(4,1fr)}
 .choice{min-height:44px;border:1px solid var(--line);background:#f7f7f5;border-radius:13px;font-size:12px;font-weight:800}
 .choice.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
 .draft-field{display:flex;gap:8px;margin-bottom:8px}
@@ -3987,6 +3984,10 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .system-footer .version{font-weight:700;color:var(--muted,#6c757d);}
 .system-footer .maker{font-weight:500;}
 @media(max-width:575.98px){.system-footer{text-align:center;}}
+
+/* V2.5 Bootstrap phase 18: management filter layout */
+#app .activity-filter-date-grid .col{min-width:0;}
+#app .activity-filter-date-grid .field{width:100%;}
 </style>
 
 
@@ -5810,7 +5811,7 @@ function renderAdmin(el){
       <div class="activity-filter-row" style="margin-bottom:10px">
         <div class="choice-grid four activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button><button type="button" class="choice ${activityManagementStatus==='hidden'?'selected':''}" data-activity-filter-status="hidden">隱藏中</button></div>
       </div>
-      <div class="grid-2" style="margin-bottom:10px"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div>
+      <div class="row row-cols-1 row-cols-sm-2 g-2 mb-2 activity-filter-date-grid"><div class="col"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div></div><div class="col"><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div></div>
       <button type="button" class="secondary" id="activity-management-clear-filters" style="width:100%;margin-bottom:10px"><i data-lucide="rotate-ccw"></i>清除篩選</button>
     </div>
     <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.filter(matchActivity).length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.filter(matchActivity).length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
