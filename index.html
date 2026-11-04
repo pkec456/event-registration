@@ -4039,6 +4039,69 @@ button.secondary,.manual-return-discard,
 .member-feature-content{width:100%}
 @media(max-width:380px){#app.member-feature-view{padding-left:14px;padding-right:14px}.member-feature-header{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}
 
+
+/* Header 統一修正：隊員功能頁與管理頁使用相同的頂部高度、按鈕尺寸與置頂方式 */
+#app.member-feature-view{
+  margin-top:0 !important;
+  padding-top:0 !important;
+}
+.member-feature-header,
+.top.home-fixed-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:100 !important;
+  min-height:64px !important;
+  height:64px !important;
+  margin-top:0 !important;
+  background:rgba(255,255,255,.98) !important;
+  border-bottom:1px solid var(--line) !important;
+  box-shadow:none !important;
+}
+.member-feature-header{
+  margin-left:-18px !important;
+  margin-right:-18px !important;
+  margin-bottom:16px !important;
+}
+#app.member-feature-view > .member-feature-header:first-child{
+  margin-top:0 !important;
+}
+.member-feature-back,
+.home-header-left-slot .home-link,
+.top-admin-access,
+.top-admin-logout{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  padding:0 !important;
+  border:1px solid var(--line) !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+.member-feature-back svg,
+.home-header-left-slot .home-link svg,
+.top-admin-access svg,
+.top-admin-logout svg{
+  width:20px !important;
+  height:20px !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.top.home-fixed-header{
+  margin-left:-16px !important;
+  margin-right:-16px !important;
+  padding-left:16px !important;
+  padding-right:16px !important;
+}
+.top.home-fixed-header .top-admin-actions{
+  gap:8px !important;
+}
+@media(max-width:380px){
+  .member-feature-header{margin-left:-14px !important;margin-right:-14px !important;padding-left:14px !important;padding-right:14px !important}
+}
+
 </style>
 
 
