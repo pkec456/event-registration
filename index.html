@@ -4733,6 +4733,21 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   margin:0 !important;stroke-width:2 !important;
 }
 
+
+/* Header 背景全寬修正：內容仍維持 520px，Header 背景延伸至整個視窗寬度 */
+html,body{margin:0 !important;width:100% !important;min-height:100% !important;}
+body{background:#fff !important;}
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  width:100vw !important;
+  max-width:100vw !important;
+  margin-left:calc(50% - 50vw) !important;
+  margin-right:calc(50% - 50vw) !important;
+  background:var(--surface,#fff) !important;
+}
+
 </style>
 
 
