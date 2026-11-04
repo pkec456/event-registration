@@ -4308,6 +4308,85 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .member-feature-header .member-feature-back{border-color:transparent !important;background:transparent !important;}
 .member-feature-header .app-header-menu-slot svg{width:22px !important;height:22px !important;}
 
+
+/* Header 檢查後統一覆蓋：消除舊版 58px/64px、90px 欄位與不同 padding 的衝突 */
+:root{--header-height:64px;--header-pad:16px;--header-btn:42px;}
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  position:sticky !important;top:0 !important;left:0 !important;right:0 !important;
+  width:100% !important;height:var(--header-height) !important;
+  min-height:var(--header-height) !important;max-height:var(--header-height) !important;
+  margin:0 !important;padding:0 var(--header-pad) !important;
+  box-sizing:border-box !important;transform:none !important;
+  background:#fff !important;border-bottom:1px solid var(--line) !important;
+  box-shadow:none !important;z-index:1000 !important;
+  grid-template-rows:1fr !important;column-gap:0 !important;
+}
+/* 所有 Header 一律三欄：42px｜標題｜42px（避免標題因左右按鈕數量歪斜） */
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  display:grid !important;
+  grid-template-columns:var(--header-btn) minmax(0,1fr) var(--header-btn) !important;
+  align-items:center !important;
+}
+#app > .portal-header .app-header-title,
+#app > .member-feature-header .app-header-title,
+#app > .top.home-fixed-header .top-brand,
+#app > .subpage-fixed-header .subpage-title{
+  grid-column:2 !important;grid-row:1 !important;
+  margin:0 !important;text-align:center !important;
+  justify-self:stretch !important;align-self:center !important;
+}
+#app > .portal-header .portal-menu-wrap,
+#app > .member-feature-header .app-header-menu-slot,
+#app > .top.home-fixed-header .top-admin-actions,
+#app > .subpage-fixed-header .subpage-actions{
+  grid-column:3 !important;grid-row:1 !important;
+  width:var(--header-btn) !important;height:var(--header-btn) !important;
+  min-width:var(--header-btn) !important;justify-self:end !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  gap:0 !important;overflow:visible !important;
+}
+#app > .top.home-fixed-header .top-admin-logout,
+#app > .subpage-fixed-header .top-admin-logout{display:none !important;}
+#app > .top.home-fixed-header .top-admin-actions .top-admin-access,
+#app > .subpage-fixed-header .subpage-actions .top-admin-access{
+  display:grid !important;place-items:center !important;
+}
+#app > .portal-header .app-header-spacer,
+#app > .member-feature-header .member-feature-back,
+#app > .top.home-fixed-header .home-header-left-slot,
+#app > .subpage-fixed-header .subpage-back-top{
+  grid-column:1 !important;grid-row:1 !important;
+  width:var(--header-btn) !important;height:var(--header-btn) !important;
+  min-width:var(--header-btn) !important;justify-self:start !important;
+}
+#app > .top.home-fixed-header .home-header-left-slot{
+  display:grid !important;place-items:center !important;
+}
+#app > .top.home-fixed-header .home-link,
+#app > .subpage-fixed-header .subpage-back-top,
+#app > .member-feature-header .member-feature-back,
+#app > .portal-header .portal-more,
+#app > .top.home-fixed-header .top-admin-access,
+#app > .subpage-fixed-header .top-admin-access{
+  width:var(--header-btn) !important;height:var(--header-btn) !important;
+  min-width:var(--header-btn) !important;min-height:var(--header-btn) !important;
+  margin:0 !important;padding:0 !important;border-radius:14px !important;
+  box-sizing:border-box !important;
+}
+#app > .top.home-fixed-header .top-brand h1,
+#app > .subpage-fixed-header .subpage-title,
+#app > .portal-header .app-header-title,
+#app > .member-feature-header .app-header-title{
+  font-size:17px !important;font-weight:900 !important;line-height:1 !important;
+}
+@media(max-width:380px){:root{--header-pad:14px;}}
+
 </style>
 
 
