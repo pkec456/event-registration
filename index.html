@@ -4019,6 +4019,10 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 @media(min-width:576px){
   #app .admin-actions{grid-template-columns:repeat(4,minmax(0,1fr));}
 }
+
+/* V2.5 Bootstrap audit: management status filter grid */
+#app .activity-filter-status-bootstrap{margin-left:0;margin-right:0;}
+#app .activity-filter-status-bootstrap .choice{min-width:0;}
 </style>
 
 
@@ -5839,8 +5843,11 @@ function renderAdmin(el){
     <div class="activity-management-filter form-block">
       <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-search">搜尋活動名稱</label><input type="text" id="activity-management-search" placeholder="請輸入活動名稱" value="${escapeHtml(activityManagementSearch)}"></div>
       <div class="field" style="margin-bottom:10px"><label class="field-label" for="activity-management-category">類別篩選</label><select id="activity-management-category"><option value="all" ${activityManagementCategory==="all"?"selected":""}>全部類別</option>${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<option value="${category}" ${activityManagementCategory===category?"selected":""}>${category}</option>`).join("")}</select></div>
-      <div class="activity-filter-row" style="margin-bottom:10px">
-        <div class="choice-grid four activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button><button type="button" class="choice ${activityManagementStatus==='hidden'?'selected':''}" data-activity-filter-status="hidden">隱藏中</button></div>
+      <div class="row row-cols-2 g-2 mb-2 activity-filter-row activity-filter-status-bootstrap">
+        <div class="col"><button type="button" class="choice w-100 ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button></div>
+        <div class="col"><button type="button" class="choice w-100 ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button></div>
+        <div class="col"><button type="button" class="choice w-100 ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button></div>
+        <div class="col"><button type="button" class="choice w-100 ${activityManagementStatus==='hidden'?'selected':''}" data-activity-filter-status="hidden">隱藏中</button></div>
       </div>
       <div class="row row-cols-1 row-cols-sm-2 g-2 mb-2 activity-filter-date-grid"><div class="col"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div></div><div class="col"><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div></div>
       <button type="button" class="secondary" id="activity-management-clear-filters" style="width:100%;margin-bottom:10px"><i data-lucide="rotate-ccw"></i>清除篩選</button>
