@@ -5363,8 +5363,8 @@ function renderRegister(el){
     }
     renderCountdown(activity);refreshIcons();return;
   }
+  // 公告已整合至唯一的隊員首頁；活動簽到頁直接顯示既有活動列表。
   el.innerHTML=`
-    <section class="announcement member-announcement"><div class="member-announcement-bar"><div class="member-announcement-mark"><i data-lucide="megaphone"></i></div><div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div><i class="member-announcement-chevron" data-lucide="chevron-right"></i></div><div class="member-announcement-body"><div class="member-announcement-kicker">NOTICE</div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></section>
     <div class="section-head activity-list-head">
       <h2>近期活動</h2>
       <div class="activity-list-status-legend">
