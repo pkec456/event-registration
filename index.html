@@ -164,17 +164,28 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .history-status.present{color:#22a35a;background:#eaf8ee}
 .history-status.absent{color:#f59e0b;background:#fff4df}
 /* CSS 區塊 C：隊員查詢、搜尋表單與出席資料 */
-
-.query-search-label{display:flex;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap;color:var(--ink)}
+.query-search-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px 12px;margin-bottom:14px;box-shadow:0 4px 14px rgba(0,0,0,.04)}
+.query-search-label{display:flex;align-items:center;gap:8px;flex:0 0 auto;white-space:nowrap;color:var(--text)}
 .query-search-label strong{font-size:14px}
+.query-search-icon{width:36px;height:36px;border-radius:12px;background:#fff0f0;color:var(--primary);display:grid;place-items:center}
+.query-search-input input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(201,20,27,.10)}
 @media(max-width:430px) {
 .query-search-row{gap:8px;padding:9px}
 .query-search-label{gap:6px}
 .query-search-label strong{font-size:13px}
+.query-search-icon{width:34px;height:34px}
 }
-
+.search-hero h2{margin:0;font-size:19px}
+.search-hero p{margin:6px 0 18px;color:#777;font-size:12px}
+.result-summary{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rate-number{font-size:40px;font-weight:900;line-height:1}
+.rate-label{font-size:11px;color:#777;margin-top:4px}
+.result-name{font-size:18px;font-weight:900}
+.result-year{font-size:12px;color:#888;margin-top:3px}
 .monthly-chart-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 12px 12px;margin:0 0 14px}
-
+.monthly-chart-summary{display:flex;align-items:baseline;gap:8px;padding:0 4px 4px}
+.monthly-chart-summary strong{font-size:26px;font-weight:950;color:var(--accent);line-height:1.1}
+.monthly-chart-summary span{font-size:11px;color:var(--muted);font-weight:750}
 .monthly-chart-wrap{width:100%;overflow:hidden}
 .monthly-chart-svg{display:block;width:100%;height:auto;overflow:visible}
 .monthly-chart-gridline{stroke:#ece8e5;stroke-width:1}
@@ -193,6 +204,7 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .monthly-chart-activity-name{font-size:13px;font-weight:800;overflow-wrap:anywhere}
 .monthly-chart-activity-meta{font-size:11px;color:var(--muted);margin-top:3px}
 /* CSS 區塊 D：管理首頁、管理活動卡片與管理操作 */
+.admin-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .metric{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 8px;text-align:center}
 .metric-icon{width:34px;height:34px;margin:0 auto 7px;border-radius:11px;background:#f2f2ef;display:grid;place-items:center}
 .metric b{display:block;font-size:22px}
@@ -206,13 +218,31 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .admin-action .chev{color:#999}
 .admin-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .admin-head .actions{display:flex;gap:7px}
-/* Legacy admin card layout is superseded by scoped V2.5 admin-home rules below. */
-
+.activity-admin-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:10px}
+.category-activity-admin-card{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.category-activity-admin-card:active{transform:scale(.99)}
+.category-activity-admin-card .admin-card-status{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.activity-admin-card.hidden{opacity:.65}
+.admin-card-top{display:flex;gap:10px;align-items:flex-start}
+.admin-card-icon{width:42px;height:42px;border-radius:13px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}
+.admin-card-info{flex:1;min-width:0}
+.admin-card-name{font-weight:900;font-size:15px}
+.admin-card-meta{font-size:11px;color:#888;margin-top:3px}
+.admin-card-status{margin-top:8px}
+.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+.admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
+.admin-actions button.danger{color:var(--danger)}
+.officer-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;margin-bottom:9px}
 .officer-top{display:flex;align-items:center;gap:11px}
-
+.officer-icon{width:42px;height:42px;border-radius:14px;background:#f1f1ef;display:grid;place-items:center}
 .officer-info{flex:1}
-
+.officer-name{font-weight:900;font-size:14px}
+.officer-role{font-size:11px;color:#888;margin-top:3px}
+.officer-state{font-size:10px;font-weight:800;color:var(--success)}
+.officer-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}
+.officer-actions button{min-height:40px;font-size:11px}
 .admin-edit-box{margin-top:10px}
+.rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 10px 11px;text-align:left;min-width:0;overflow:hidden}
 .rate-head{display:flex;align-items:center;gap:6px;min-height:30px;font-size:20px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rate-head-name{font-size:18px;font-weight:400;overflow:hidden;text-overflow:ellipsis}
@@ -221,24 +251,28 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .rate-rank-icon.up{color:#16a34a}
 .rate-rank-icon.down{color:#dc2626}
 .rate-bar{height:6px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:7px 0 6px}
-.rate-bar-fill{transition:width .2s ease}
+.rate-bar-fill{height:100%;border-radius:999px;transition:width .2s ease}
 .rate-percent{font-size:20px;font-weight:950;line-height:1.1}
 .rate-detail {
+font-size:12px;color:var(--muted);font-weight:700;
 font-size:9px;color:#64748b;font-weight:750;white-space:nowrap;
 }
 @media(max-width:600px) {
+.rate-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .rate-card{border-radius:12px;padding:8px 8px 9px}
 .rate-head{font-size:20px;gap:5px;min-height:29px}
 .rate-rank-icon{width:18px;height:18px;flex-basis:18px}
 .rate-bar{height:5px;margin:6px 0 5px}
 .rate-percent{font-size:20px}
 .rate-detail {
+font-size:11px;
 font-size:8px;
 }
 }
 .empty{text-align:center;color:#888;padding:28px 10px;font-size:13px}
 .debug-error-box{display:none;margin-top:10px;padding:12px;border-radius:14px;background:#fff0f0;border:1px solid #f0b6b6;color:#a00;font-size:12px;white-space:pre-wrap;word-break:break-word}
 .debug-error-box.show{display:block}
+.countdown-box{margin-top:12px;padding:10px 12px;border-radius:13px;background:#fff5dd;color:#9b6800;text-align:center;font-size:12px;font-weight:850}
 .note-shared{font-size:11px;color:#888;background:#f5f5f3;border-radius:13px;padding:10px 12px;line-height:1.5;margin-top:10px}
 .divider{height:1px;background:var(--line);margin:14px 0}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#171717;color:#fff;padding:11px 17px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:90vw}
@@ -251,18 +285,30 @@ font-size:8px;
 .manual-return-actions button{min-height:46px;border-radius:14px;font-weight:850;font-size:13px}
 .manual-return-save{background:var(--accent);color:#fff;border:1px solid var(--accent)}
 .manual-return-discard{background:#fff;color:#555;border:1px solid var(--line)}
+.system-footer{margin-top:28px;padding:10px 0;text-align:center;color:#aaa;font-size:10px;line-height:1.6}
+.system-footer .version{font-weight:800}
+.system-footer .maker{margin-top:1px}
 .table-wrap{overflow-x:auto}
 .list-table{width:100%;border-collapse:collapse;font-size:12px}
 .list-table th{text-align:left;color:#888;font-size:10px;padding:8px;border-bottom:1px solid var(--line)}
 .list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
 .list-table td.name{font-weight:800}
+.rate-bar-wrap{display:flex;align-items:center;gap:8px}
+.rate-bar-track{flex:1;height:6px;border-radius:99px;background:#eee;overflow:hidden}
 .rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}
-
+.rate-num{font-weight:850;min-width:38px;text-align:right;font-size:11px}
+@media(max-width:420px) {
+.grid-2{grid-template-columns:1fr}
+.choice-grid.four{grid-template-columns:repeat(2,1fr)}
+.admin-actions{grid-template-columns:repeat(2,1fr)}
+.officer-actions{grid-template-columns:1fr 1fr}
+.officer-actions button:first-child{grid-column:1/-1}
+}
 .query-person{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .query-person-icon{width:46px;height:46px;border-radius:15px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}
 .result-name{font-size:21px;font-weight:900;line-height:1.2}
 .result-year{display:flex;align-items:center;gap:5px;font-size:12px;color:#888;margin-top:5px}
-.query-metrics{margin-bottom:16px}
+.query-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .query-metric-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px 10px;text-align:center;min-width:0}
 .metric-card-title{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:850;margin-bottom:10px}
 .metric-card-title svg{width:17px;height:17px;color:var(--accent)}
@@ -284,6 +330,7 @@ font-size:8px;
 .query-history .status{white-space:nowrap}
 .query-history .status svg{width:15px;height:15px}
 @media(max-width:420px) {
+.query-metrics{gap:8px}
 .query-metric-card{padding:14px 7px}
 .donut{width:116px;height:116px}
 .donut-center strong{font-size:28px}
