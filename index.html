@@ -262,7 +262,7 @@ font-size:8px;
 .manual-return-modal{width:min(360px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
 .manual-return-modal h3{margin:0;font-size:17px;font-weight:900;text-align:center}
 .manual-return-modal p{margin:8px 0 18px;color:#777;font-size:13px;text-align:center}
-.manual-return-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.manual-return-actions{margin-top:4px}
 .manual-return-actions button{min-height:46px;border-radius:14px;font-weight:850;font-size:13px}
 .manual-return-save{background:var(--accent);color:#fff;border:1px solid var(--accent)}
 .manual-return-discard{background:#fff;color:#555;border:1px solid var(--line)}
@@ -4022,6 +4022,10 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 @media(max-width:575.98px){
   .system-footer{text-align:center;}
 }
+
+/* V2.5 Bootstrap phase 16: modal action layout */
+.manual-return-actions button{width:100%;}
+@media(min-width:576px){.manual-return-actions{grid-template-columns:1fr 1fr !important;display:grid !important;}}
 </style>
 
 
@@ -6369,7 +6373,7 @@ function showManualReturnDialog(){
     const overlay=document.createElement("div");
     overlay.id="manual-return-overlay";
     overlay.className="manual-return-overlay";
-    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
+    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="d-grid gap-2 manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
     document.body.appendChild(overlay);
     overlay.querySelector('[data-manual-return="save"]').onclick=()=>{overlay.remove();resolve(true);};
     overlay.querySelector('[data-manual-return="discard"]').onclick=()=>{overlay.remove();resolve(false);};
