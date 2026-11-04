@@ -4476,6 +4476,50 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .admin-header-menu{position:absolute !important;right:0 !important;top:48px !important;z-index:1200 !important;}
 @media(max-width:380px){:root{--v25-header-pad:14px;}}
 
+
+/* V2.5 圖示統一規格：Header 與 Header 選單只使用同一套尺寸、顏色與線條 */
+:root{
+  --v25-header-icon-size:20px;
+  --v25-header-icon-color:var(--ink);
+  --v25-header-icon-stroke:2;
+}
+#app > .portal-header .portal-more,
+#app > .member-feature-header .member-feature-back,
+#app > .subpage-fixed-header .subpage-back-top,
+#app > .top.home-fixed-header .portal-more{
+  color:var(--v25-header-icon-color) !important;
+}
+#app > .portal-header .portal-more svg,
+#app > .member-feature-header .member-feature-back svg,
+#app > .subpage-fixed-header .subpage-back-top svg,
+#app > .top.home-fixed-header .portal-more svg{
+  width:var(--v25-header-icon-size) !important;
+  height:var(--v25-header-icon-size) !important;
+  min-width:var(--v25-header-icon-size) !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+  stroke-width:var(--v25-header-icon-stroke) !important;
+}
+/* Header 的空白欄位不得繼承任何圖示樣式 */
+#app > .portal-header .app-header-spacer,
+#app > .member-feature-header .app-header-spacer,
+#app > .top.home-fixed-header .home-header-left-slot[aria-hidden="true"]{
+  color:transparent !important;
+}
+/* … 下拉選單圖示與文字使用 V2.5 相同的深色系統色 */
+.portal-menu button{
+  color:var(--ink) !important;
+}
+.portal-menu button svg{
+  width:18px !important;
+  height:18px !important;
+  min-width:18px !important;
+  color:var(--ink) !important;
+  stroke:currentColor !important;
+  stroke-width:2 !important;
+}
+/* 管理者角色與內容圖示維持原功能色，不套用 Header 圖示規則，避免破壞 V2.5 狀態辨識 */
+
 </style>
 
 
