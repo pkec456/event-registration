@@ -270,10 +270,7 @@ font-size:8px;
 .list-table td.name{font-weight:800}
 .rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}
 @media(max-width:420px) {
-.grid-2{grid-template-columns:1fr}
-.choice-grid.four{grid-template-columns:repeat(2,1fr)}
 .admin-actions{grid-template-columns:repeat(2,1fr)}
-
 }
 .query-person{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .query-person-icon{width:46px;height:46px;border-radius:15px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}
@@ -4011,6 +4008,14 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .query-person{min-width:0;}
 #app .query-person > div:last-child{min-width:0;}
 #app .query-metrics-bootstrap .query-metric-card{width:100%;}
+
+/* V2.5 Bootstrap phase 23: query history overflow safety */
+#app .query-history .list-row{min-width:0;}
+#app .query-history .list-main{min-width:0;}
+#app .query-history .list-meta{overflow-wrap:anywhere;}
+@media(max-width:420px){
+  #app .query-history .status{flex:0 0 auto;}
+}
 </style>
 
 
