@@ -4695,45 +4695,54 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 }
 
 
-/* 管理頁專用最終校正：管理首頁與管理功能內頁的主要功能圖示，
-   一律覆蓋舊版 32/34/40/42/46px 規則，統一 V2.5 最大正常功能尺寸。 */
+
+
+
+
+
+/* 管理頁圖示：恢復 V2.5 原本尺寸，不使用後續 50px 統一規則 */
 #app.admin-home-view .metric-icon,
-#app.admin-home-view .admin-square .menu-icon,
-#app.admin-home-view .cumulative-category-icon,
-#app.admin-home-view .admin-main-hero-icon,
-#app.admin-home-view .admin-role-icon,
-#app.admin-home-view .officer-icon,
-#app.child-view .metric-icon,
-#app.child-view .admin-square .menu-icon,
-#app.child-view .cumulative-category-icon,
-#app.child-view .admin-main-hero-icon,
-#app.child-view .admin-role-icon,
-#app.child-view .officer-icon{
-  width:50px !important;height:50px !important;
-  min-width:50px !important;min-height:50px !important;
-  max-width:50px !important;max-height:50px !important;
-  flex:0 0 50px !important;box-sizing:border-box !important;
-  display:grid !important;place-items:center !important;
+#app.admin-home-view .admin-action .menu-icon,
+#app.admin-home-view .admin-square .menu-icon{
+  width:40px !important;height:40px !important;
+  min-width:40px !important;min-height:40px !important;
+  max-width:40px !important;max-height:40px !important;
+  box-sizing:border-box !important;display:grid !important;place-items:center !important;
+  flex:0 0 40px !important;
 }
 #app.admin-home-view .metric-icon svg,
-#app.admin-home-view .admin-square .menu-icon svg,
-#app.admin-home-view .cumulative-category-icon svg,
-#app.admin-home-view .admin-main-hero-icon svg,
-#app.admin-home-view .admin-role-icon svg,
-#app.admin-home-view .officer-icon svg,
-#app.child-view .metric-icon svg,
-#app.child-view .admin-square .menu-icon svg,
-#app.child-view .cumulative-category-icon svg,
-#app.child-view .admin-main-hero-icon svg,
-#app.child-view .admin-role-icon svg,
-#app.child-view .officer-icon svg{
-  width:26px !important;height:26px !important;
-  min-width:26px !important;min-height:26px !important;
-  max-width:26px !important;max-height:26px !important;
-  margin:0 !important;stroke-width:2 !important;
+#app.admin-home-view .admin-action .menu-icon svg,
+#app.admin-home-view .admin-square .menu-icon svg{
+  width:32px !important;height:32px !important;
+  min-width:32px !important;min-height:32px !important;
+  max-width:32px !important;max-height:32px !important;
+  margin:0 !important;flex:0 0 32px !important;
 }
 
-
+/* Header 背景全寬：只延伸背景層，不改變 Header 本身的寬度、定位或 #app 版面 */
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  isolation:isolate !important;
+  overflow:visible !important;
+}
+#app > .portal-header::before,
+#app > .member-feature-header::before,
+#app > .top.home-fixed-header::before,
+#app > .subpage-fixed-header::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  background:var(--surface,#fff);
+  border-bottom:1px solid var(--line);
+  pointer-events:none;
+}
 
 </style>
 
