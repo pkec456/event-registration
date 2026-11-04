@@ -4789,6 +4789,45 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   stroke-width:2 !important;
 }
 
+
+/* V2.5 Bootstrap icon normalization */
+#app.admin-home-view .metric-icon,
+#app.admin-home-view .admin-action .menu-icon,
+#app.admin-home-view .admin-square .menu-icon{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  max-width:42px !important;
+  max-height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  box-sizing:border-box !important;
+  flex:0 0 42px !important;
+}
+#app.admin-home-view .metric-icon svg,
+#app.admin-home-view .admin-action .menu-icon svg,
+#app.admin-home-view .admin-square .menu-icon svg{
+  width:20px !important;
+  height:20px !important;
+  min-width:20px !important;
+  min-height:20px !important;
+  max-width:20px !important;
+  max-height:20px !important;
+  margin:0 !important;
+  flex:0 0 20px !important;
+}
+#app.admin-home-view .admin-bootstrap-grid > .col,
+#app.admin-home-view .statistics-bootstrap-grid > .col{
+  min-width:0;
+  display:flex;
+}
+#app.admin-home-view .admin-bootstrap-grid .admin-square,
+#app.admin-home-view .statistics-bootstrap-grid .metric{
+  width:100%;
+  margin:0 !important;
+}
 </style>
 
 
