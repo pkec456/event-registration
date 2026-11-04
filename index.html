@@ -2038,9 +2038,28 @@ body .app-header:not(.home-header){
   align-items:center;
   min-width:0;
 }
-.app-navbar-left{justify-content:flex-start;flex:1 1 0;}
-.app-navbar-brand{justify-content:center;flex:0 1 auto;}
-.app-navbar-right{justify-content:flex-end;flex:1 1 0;}
+.app-navbar{
+  position:relative;
+}
+.app-navbar-left,
+.app-navbar-right{
+  position:relative;
+  z-index:2;
+  flex:1 1 0;
+}
+.app-navbar-left{justify-content:flex-start;}
+.app-navbar-right{justify-content:flex-end;}
+/* The brand is centered against the viewport/header, independent of unequal side controls. */
+.app-navbar-brand{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  justify-content:center;
+  z-index:1;
+  pointer-events:none;
+}
+.app-navbar-brand > *{pointer-events:auto;}
 
 .app-navbar.navbar-expand-lg{
   display:flex;
