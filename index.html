@@ -3871,74 +3871,94 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 @media(max-width:380px){#app.admin-login-view .member-feature-content{padding-left:14px !important;padding-right:14px !important;}}
 
 
-/* V2.5 Header 單一規格（唯一最終覆蓋層）
-   所有 Header：64px、16px 安全距、42px 左右欄位、標題真正置中。
-   隊員首頁：空白｜四紅哨角隊｜…
-   隊員功能：返回｜四紅哨角隊｜空白
-   管理首頁：空白｜四紅哨角隊｜…
-   管理內頁：返回｜四紅哨角隊｜… */
-:root{--v25-header-h:64px;--v25-header-pad:16px;--v25-header-side:42px;}
+/* V2.5 Header 統一規格 */
+:root{
+  --v25-header-h:64px;
+  --v25-header-pad:16px;
+  --v25-header-side:42px;
+  --v25-header-icon-size:20px;
+  --v25-header-icon-color:var(--ink);
+}
 #app > .portal-header,
 #app > .member-feature-header,
 #app > .top.home-fixed-header,
 #app > .subpage-fixed-header{
-  position:sticky !important;top:0 !important;left:auto !important;right:auto !important;
-  width:100% !important;height:var(--v25-header-h) !important;
-  min-height:var(--v25-header-h) !important;max-height:var(--v25-header-h) !important;
-  margin:0 !important;padding:0 var(--v25-header-pad) !important;
-  display:grid !important;grid-template-columns:var(--v25-header-side) minmax(0,1fr) var(--v25-header-side) !important;
-  align-items:center !important;box-sizing:border-box !important;transform:none !important;
-  background:var(--surface,#fff) !important;border-bottom:1px solid var(--line) !important;
-  box-shadow:none !important;z-index:1000 !important;
+  position:sticky !important;
+  top:0 !important;
+  z-index:1000 !important;
+  width:100% !important;
+  height:var(--v25-header-h) !important;
+  min-height:var(--v25-header-h) !important;
+  margin:0 !important;
+  padding:0 var(--v25-header-pad) !important;
+  display:grid !important;
+  grid-template-columns:var(--v25-header-side) minmax(0,1fr) var(--v25-header-side) !important;
+  align-items:center !important;
+  box-sizing:border-box !important;
+  background:var(--surface,#fff) !important;
+  border-bottom:1px solid var(--line) !important;
+  box-shadow:none !important;
 }
 #app > .portal-header .app-header-title,
 #app > .member-feature-header .app-header-title,
 #app > .top.home-fixed-header .top-brand,
 #app > .subpage-fixed-header .subpage-title{
-  grid-column:2 !important;grid-row:1 !important;margin:0 !important;
-  width:100% !important;min-width:0 !important;text-align:center !important;
-  justify-self:stretch !important;align-self:center !important;
-  white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+  margin:0 !important;
+  overflow:hidden;
+  text-align:center;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 #app > .portal-header .app-header-spacer,
 #app > .member-feature-header .member-feature-back,
-#app > .member-feature-header .app-header-spacer,
 #app > .top.home-fixed-header .home-header-left-slot,
 #app > .subpage-fixed-header .subpage-back-top{
-  grid-column:1 !important;grid-row:1 !important;width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
+  grid-column:1;
+  grid-row:1;
+  width:var(--v25-header-side);
+  height:var(--v25-header-side);
 }
-#app > .member-feature-header .app-header-spacer{grid-column:3 !important;}
+#app > .member-feature-header .app-header-spacer{
+  grid-column:3;
+  grid-row:1;
+  width:var(--v25-header-side);
+  height:var(--v25-header-side);
+}
 #app > .portal-header .portal-menu-wrap,
 #app > .member-feature-header .app-header-menu-slot,
 #app > .top.home-fixed-header .top-admin-actions,
 #app > .subpage-fixed-header .subpage-actions{
-  grid-column:3 !important;grid-row:1 !important;width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
-  min-width:var(--v25-header-side) !important;justify-self:end !important;position:relative !important;overflow:visible !important;
+  grid-column:3;
+  grid-row:1;
+  width:var(--v25-header-side);
+  height:var(--v25-header-side);
+  min-width:var(--v25-header-side);
+  justify-self:end;
+  position:relative;
+  overflow:visible;
 }
-#app > .top.home-fixed-header .home-header-left-slot{display:block !important;}
 #app > .member-feature-header .member-feature-back,
 #app > .subpage-fixed-header .subpage-back-top,
 #app > .portal-header .portal-more,
 #app > .top.home-fixed-header .portal-more{
-  width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
-  min-width:var(--v25-header-side) !important;min-height:var(--v25-header-side) !important;
-  margin:0 !important;padding:0 !important;box-sizing:border-box !important;
+  width:var(--v25-header-side) !important;
+  height:var(--v25-header-side) !important;
+  min-width:var(--v25-header-side) !important;
+  min-height:var(--v25-header-side) !important;
+  margin:0 !important;
+  padding:0 !important;
 }
 #app > .top.home-fixed-header .top-brand h1,
 #app > .subpage-fixed-header .subpage-title,
 #app > .portal-header .app-header-title,
 #app > .member-feature-header .app-header-title{
-  margin:0 !important;font-size:17px !important;font-weight:900 !important;line-height:1 !important;
-}
-.admin-header-menu{position:absolute !important;right:0 !important;top:48px !important;z-index:1200 !important;}
-@media(max-width:380px){:root{--v25-header-pad:14px;}}
-
-
-/* V2.5 圖示統一規格：Header 與 Header 選單只使用同一套尺寸、顏色與線條 */
-:root{
-  --v25-header-icon-size:20px;
-  --v25-header-icon-color:var(--ink);
-  --v25-header-icon-stroke:2;
+  margin:0 !important;
+  font-size:17px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
 }
 #app > .portal-header .portal-more,
 #app > .member-feature-header .member-feature-back,
@@ -3955,18 +3975,20 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   min-width:var(--v25-header-icon-size) !important;
   color:currentColor !important;
   stroke:currentColor !important;
-  stroke-width:var(--v25-header-icon-stroke) !important;
+  stroke-width:2 !important;
 }
-/* Header 的空白欄位不得繼承任何圖示樣式 */
 #app > .portal-header .app-header-spacer,
 #app > .member-feature-header .app-header-spacer,
 #app > .top.home-fixed-header .home-header-left-slot[aria-hidden="true"]{
   color:transparent !important;
 }
-/* … 下拉選單圖示與文字使用 V2.5 相同的深色系統色 */
-.portal-menu button{
-  color:var(--ink) !important;
+.admin-header-menu{
+  position:absolute !important;
+  right:0 !important;
+  top:48px !important;
+  z-index:1200 !important;
 }
+.portal-menu button{color:var(--ink) !important;}
 .portal-menu button svg{
   width:18px !important;
   height:18px !important;
@@ -3975,8 +3997,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   stroke:currentColor !important;
   stroke-width:2 !important;
 }
-/* 管理者角色與內容圖示維持原功能色，不套用 Header 圖示規則，避免破壞 V2.5 狀態辨識 */
-
+@media(max-width:380px){
+  :root{--v25-header-pad:14px;}
+}
 
 /* 隊務公告：恢復 V2.5 公告卡片視覺規格 */
 .member-portal-view .member-announcement{
