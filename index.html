@@ -3979,6 +3979,49 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .event-category-bootstrap-grid .choice{width:100%;}
 #app .choice-bootstrap-grid > .col{min-width:0;display:flex;}
 #app .choice-bootstrap-grid .choice{width:100%;}
+
+/* V2.5 Bootstrap-inspired global Header & Footer */
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  box-shadow:0 .125rem .25rem rgba(0,0,0,.035) !important;
+}
+#app > .portal-header .portal-more,
+#app > .member-feature-header .member-feature-back,
+#app > .subpage-fixed-header .subpage-back-top,
+#app > .top.home-fixed-header .portal-more{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border:0 !important;
+  background:transparent !important;
+  border-radius:.375rem !important;
+  transition:background-color .15s ease,color .15s ease;
+}
+#app > .portal-header .portal-more:hover,
+#app > .member-feature-header .member-feature-back:hover,
+#app > .subpage-fixed-header .subpage-back-top:hover,
+#app > .top.home-fixed-header .portal-more:hover{
+  background:rgba(0,0,0,.05) !important;
+}
+.system-footer{
+  width:100%;
+  margin-top:32px;
+  padding:16px 0 calc(16px + env(safe-area-inset-bottom));
+  background:transparent;
+  color:var(--muted,#6c757d);
+  font-size:.75rem;
+  line-height:1.5;
+}
+.system-footer .container-fluid{max-width:720px;}
+.system-footer .version,
+.system-footer .maker{margin:0;white-space:nowrap;}
+.system-footer .version{font-weight:700;color:var(--muted,#6c757d);}
+.system-footer .maker{font-weight:500;}
+@media(max-width:575.98px){
+  .system-footer{text-align:center;}
+}
 </style>
 
 
@@ -6943,9 +6986,13 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 })();
 </script>
 
-  <footer class="system-footer" aria-label="系統資訊">
-    <div class="version">系統版本 V2.5</div>
-    <div class="maker">製作者：小樂</div>
+  <footer class="system-footer border-top" aria-label="系統資訊">
+    <div class="container-fluid px-3">
+      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-1">
+        <div class="version">系統版本 V2.5</div>
+        <div class="maker">製作者：小樂</div>
+      </div>
+    </div>
   </footer>
 
 <script>
