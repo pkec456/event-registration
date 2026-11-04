@@ -262,7 +262,7 @@ font-size:8px;
 .manual-return-modal{width:min(360px,100%);background:#fff;border-radius:22px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
 .manual-return-modal h3{margin:0;font-size:17px;font-weight:900;text-align:center}
 .manual-return-modal p{margin:8px 0 18px;color:#777;font-size:13px;text-align:center}
-.manual-return-actions{margin-top:4px}
+.manual-return-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .manual-return-actions button{min-height:46px;border-radius:14px;font-weight:850;font-size:13px}
 .manual-return-save{background:var(--accent);color:#fff;border:1px solid var(--accent)}
 .manual-return-discard{background:#fff;color:#555;border:1px solid var(--line)}
@@ -3973,13 +3973,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .query-metrics-bootstrap .col{min-width:0;display:flex;}
 #app .query-metrics-bootstrap .query-metric-card{width:100%;}
 
-/* V2.5 Bootstrap layout phase 14: shared responsive form grids */
-#app .bootstrap-grid-2 > .col{min-width:0;}
-#app .event-category-bootstrap-grid > .col{min-width:0;}
-#app .event-category-bootstrap-grid .choice{width:100%;}
-#app .choice-bootstrap-grid > .col{min-width:0;display:flex;}
-#app .choice-bootstrap-grid .choice{width:100%;}
-
 /* V2.5 Bootstrap-inspired global Header & Footer */
 #app > .portal-header,
 #app > .member-feature-header,
@@ -4019,13 +4012,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .system-footer .maker{margin:0;white-space:nowrap;}
 .system-footer .version{font-weight:700;color:var(--muted,#6c757d);}
 .system-footer .maker{font-weight:500;}
-@media(max-width:575.98px){
-  .system-footer{text-align:center;}
-}
-
-/* V2.5 Bootstrap phase 16: modal action layout */
-.manual-return-actions button{width:100%;}
-@media(min-width:576px){.manual-return-actions{grid-template-columns:1fr 1fr !important;display:grid !important;}}
+@media(max-width:575.98px){.system-footer{text-align:center;}}
 </style>
 
 
@@ -4447,7 +4434,7 @@ async function setEventCategoryRemote(activityId, eventCategory){
   return data;
 }
 function eventCategoryButtons(selected="",prefix="event-category"){
-  return `<div class="field event-category-field"><label class="field-label">活動分類</label><div class="row row-cols-2 row-cols-sm-3 row-cols-lg-5 g-2 event-category-bootstrap-grid">${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<button type="button" class="choice ${selected===category?"selected":""}" style="font-size:16px !important" data-event-category="${category}" data-event-category-prefix="${prefix}">${category}</button>`).join("")}</div></div>`;
+  return `<div class="field event-category-field"><label class="field-label">活動分類</label><div class="choice-grid four event-category-choices">${["廟","禮聘","隊","北港進香","福宴"].map(category=>`<button type="button" class="choice ${selected===category?"selected":""}" style="font-size:16px !important" data-event-category="${category}" data-event-category-prefix="${prefix}">${category}</button>`).join("")}</div></div>`;
 }
 async function setActivityTypeRemote(activityId, activityType){
   const session=getAdminSession();
@@ -5825,7 +5812,7 @@ function renderAdmin(el){
       </div>
     </div>`).join(""):`<div class="block"><div class="empty">此類別目前沒有活動</div></div>`}</div>`;
   }
-  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"><div class="field-hint">提醒：未來日期的活動建立後會先保持關閉，活動當天才能開放簽到。</div></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="row row-cols-2 row-cols-sm-4 g-2 choice-bootstrap-grid"><div class="col"><button type="button" class="choice w-100 ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button></div><div class="col"><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button></div><div class="col"><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button></div><div class="col"><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="row row-cols-1 row-cols-sm-2 g-2 bootstrap-grid-2"><div class="col"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div></div><div class="col"><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<h1 class="page-title">建立活動</h1><p class="page-subtitle">填寫一次即可建立，不需要分步驟。</p><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span>活動基本資訊</div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"><div class="field-hint">提醒：未來日期的活動建立後會先保持關閉，活動當天才能開放簽到。</div></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     const search=norm(activityManagementSearch).toLowerCase();
@@ -5849,7 +5836,7 @@ function renderAdmin(el){
       <div class="activity-filter-row" style="margin-bottom:10px">
         <div class="choice-grid four activity-filter-status"><button type="button" class="choice ${activityManagementStatus==='all'?'selected':''}" data-activity-filter-status="all">全部狀態</button><button type="button" class="choice ${activityManagementStatus==='open'?'selected':''}" data-activity-filter-status="open">開放中</button><button type="button" class="choice ${activityManagementStatus==='closed'?'selected':''}" data-activity-filter-status="closed">已停止</button><button type="button" class="choice ${activityManagementStatus==='hidden'?'selected':''}" data-activity-filter-status="hidden">隱藏中</button></div>
       </div>
-      <div class="row row-cols-1 row-cols-sm-2 g-2 bootstrap-grid-2" style="margin-bottom:10px"><div class="col"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div></div><div class="col"><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div></div>
+      <div class="grid-2" style="margin-bottom:10px"><div class="field"><label class="field-label" for="activity-management-date-from">開始日期</label><input type="date" id="activity-management-date-from" value="${escapeHtml(activityManagementDateFrom)}"></div><div class="field"><label class="field-label" for="activity-management-date-to">結束日期</label><input type="date" id="activity-management-date-to" value="${escapeHtml(activityManagementDateTo)}"></div></div>
       <button type="button" class="secondary" id="activity-management-clear-filters" style="width:100%;margin-bottom:10px"><i data-lucide="rotate-ccw"></i>清除篩選</button>
     </div>
     <div class="section-head"><h2>顯示中的活動</h2><span>${filteredVisible.length} / ${visibleActs.filter(matchActivity).length} 場</span></div>${filteredVisible.length?filteredVisible.map(a=>activityAdminRow(a)).join(""):`<div class="block"><div class="empty">目前沒有符合條件的活動</div></div>`}<div class="section-head" id="hidden-activities-section"><h2>已隱藏活動</h2><span>${filteredHidden.length} / ${hiddenActs.filter(matchActivity).length} 場</span></div>${filteredHidden.length?filteredHidden.map(a=>activityAdminRow(a,true)).join(""):`<div class="block" id="hidden-activities-empty"><div class="empty">目前沒有符合條件的活動</div></div>`}`;
@@ -6373,7 +6360,7 @@ function showManualReturnDialog(){
     const overlay=document.createElement("div");
     overlay.id="manual-return-overlay";
     overlay.className="manual-return-overlay";
-    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="d-grid gap-2 manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
+    overlay.innerHTML=`<div class="manual-return-modal" role="dialog" aria-modal="true" aria-label="儲存目前活動"><h3>是否儲存目前活動？</h3><p>返回後將重置手動登記頁面。</p><div class="manual-return-actions"><button type="button" class="manual-return-save" data-manual-return="save">儲存並返回</button><button type="button" class="manual-return-discard" data-manual-return="discard">不儲存並返回</button></div></div>`;
     document.body.appendChild(overlay);
     overlay.querySelector('[data-manual-return="save"]').onclick=()=>{overlay.remove();resolve(true);};
     overlay.querySelector('[data-manual-return="discard"]').onclick=()=>{overlay.remove();resolve(false);};
