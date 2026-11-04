@@ -4028,6 +4028,17 @@ button.secondary,.manual-return-discard,
   .portal-card-desc{font-size:11px}
 }
 
+
+
+/* 隊員功能頁：由新首頁直接進入既有內容，移除舊首頁導覽層 */
+#app.member-feature-view{max-width:520px;min-height:100dvh;margin:0 auto;padding:0 18px 32px;background:var(--bg)}
+.member-feature-header{height:64px;margin:0 -18px 16px;padding:0 18px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;background:#fff;border-bottom:1px solid var(--line)}
+.member-feature-back{width:40px;height:40px;display:grid;place-items:center;background:transparent;color:var(--ink)}
+.member-feature-back svg{width:22px;height:22px}
+.member-feature-title{text-align:center;font-size:15px;font-weight:850;color:var(--ink)}
+.member-feature-content{width:100%}
+@media(max-width:380px){#app.member-feature-view{padding-left:14px;padding-right:14px}.member-feature-header{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}
+
 </style>
 
 
@@ -4882,6 +4893,24 @@ function render(){
   }
 
   app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
+
+  // 隊員功能頁直接呈現既有內容，不再經過舊版簽到／出席率首頁。
+  if(!isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
+    app.className="member-feature-view";
+    app.innerHTML=`
+      <header class="member-feature-header">
+        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回首頁"><i data-lucide="chevron-left"></i></button>
+        <div class="member-feature-title">${activeTab==="register"?"活動簽到":"出席率查詢"}</div>
+        <div class="member-feature-spacer"></div>
+      </header>
+      <div id="tab-content" class="member-feature-content"></div>`;
+    app.querySelector("#member-feature-back")?.addEventListener("click",()=>{memberHome=true;openEventId=null;queryResultVisible=false;render();});
+    const tabContent=app.querySelector("#tab-content");
+    if(activeTab==="register") renderRegister(tabContent);
+    else renderQuery(tabContent);
+    refreshIcons();
+    return;
+  }
 
   if(!isChild && !window.__adminAccountsViewOpen){
     app.innerHTML=`
