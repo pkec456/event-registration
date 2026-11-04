@@ -3972,6 +3972,64 @@ button.secondary,.manual-return-discard,
 #app.child-view:has(.checkin-hero) .block.tight{padding:12px;border:1px solid #e9e5de;border-radius:14px;background:#fff;box-shadow:none}
 @media(max-width:380px){#app.child-view:has(.checkin-hero){padding-left:14px;padding-right:14px}#app.child-view:has(.checkin-hero) .subpage-fixed-header{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}
 
+
+/* V2.5 隊員入口首頁：沿用既有品牌色與元件語言，首頁僅保留兩張功能卡 */
+#app.member-portal-view{
+  width:100%;max-width:520px;min-height:100dvh;margin:0 auto;padding:0 18px calc(32px + env(safe-area-inset-bottom));
+  background:var(--bg);color:var(--ink);
+}
+.member-portal-view .portal-header{
+  min-height:76px;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 2px;border-bottom:1px solid var(--line);
+}
+.portal-brand-name{font-size:19px;font-weight:900;letter-spacing:.02em;line-height:1.25}
+.portal-brand-sub{margin-top:3px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em}
+.portal-menu-wrap{position:relative}
+.portal-more{
+  width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:#fff;
+  color:var(--ink);display:grid;place-items:center;
+}
+.portal-more svg{width:21px;height:21px}
+.portal-menu{
+  position:absolute;right:0;top:48px;z-index:80;width:176px;padding:6px;
+  background:#fff;border:1px solid var(--line);border-radius:15px;
+  box-shadow:0 10px 28px rgba(41,36,33,.13);
+}
+.portal-menu[hidden]{display:none}
+.portal-menu button{
+  width:100%;min-height:44px;display:flex;align-items:center;gap:10px;padding:0 11px;
+  background:transparent;border-radius:10px;text-align:left;font-size:13px;font-weight:750;
+}
+.portal-menu button:active{background:var(--accent-soft);color:var(--accent)}
+.portal-menu button svg{width:18px;height:18px;color:var(--accent)}
+.portal-main{padding-top:34px}
+.portal-intro{margin:0 2px 24px}
+.portal-intro p{margin:0 0 7px;color:var(--muted);font-size:13px;font-weight:700;letter-spacing:.08em}
+.portal-intro h1{margin:0;font-size:30px;line-height:1.25;font-weight:900;letter-spacing:.01em}
+.portal-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.portal-card{
+  min-height:190px;padding:20px 16px 18px;border:1px solid var(--line);border-radius:22px;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  cursor:pointer;user-select:none;transition:transform .14s ease,box-shadow .14s ease;
+}
+.portal-card:active{transform:scale(.985)}
+.portal-card:focus-visible{outline:3px solid rgba(169,47,50,.25);outline-offset:3px}
+.portal-card-checkin{background:var(--accent);border-color:var(--accent);color:#fff}
+.portal-card-attendance{background:#fff;color:var(--ink)}
+.portal-card-icon{width:44px;height:44px;margin-bottom:20px;display:grid;place-items:center}
+.portal-card-icon svg{width:34px;height:34px;stroke-width:1.8}
+.portal-card-checkin .portal-card-icon{color:#fff}
+.portal-card-attendance .portal-card-icon{color:var(--accent)}
+.portal-card-title{font-size:19px;line-height:1.35;font-weight:900;letter-spacing:.01em}
+.portal-card-desc{margin-top:6px;font-size:12px;line-height:1.5;opacity:.78}
+@media(max-width:360px){
+  #app.member-portal-view{padding-left:14px;padding-right:14px}
+  .portal-card-grid{gap:9px}
+  .portal-card{min-height:170px;padding:16px 12px}
+  .portal-card-title{font-size:17px}
+  .portal-card-desc{font-size:11px}
+}
+
 </style>
 
 
@@ -4080,6 +4138,7 @@ async function checkAdminSession(){
 const STORAGE_KEY = "event-registration-data";
 let state = { activities: [], registrations: {}, adminPin: null };
 let activeTab = "register";
+let memberHome = true; // 隊員入口首頁；進入既有功能頁後關閉
 let queryResultVisible = false;
 let loaded = false;
 let openEventId = null;      // which event card is expanded in register view
@@ -4749,6 +4808,73 @@ function render(){
   const isChild=!!(openEventId || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
+  // 新增隊員入口首頁：只提供既有的簽到與出席率兩個入口，不改動功能頁內容。
+  if(memberHome && !isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
+    app.className="member-portal-view";
+    app.innerHTML=`
+      <header class="portal-header">
+        <div class="portal-brand">
+          <div class="portal-brand-name">台中浩天宮</div>
+          <div class="portal-brand-sub">四紅哨角隊</div>
+        </div>
+        <div class="portal-menu-wrap">
+          <button class="portal-more" type="button" id="portal-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
+          <div class="portal-menu" id="portal-menu" hidden>
+            <button type="button" id="portal-admin-login"><i data-lucide="shield"></i><span>管理員登入</span></button>
+          </div>
+        </div>
+      </header>
+      <main class="portal-main">
+        <div class="portal-intro">
+          <p>浩天宮｜四紅哨角隊</p>
+          <h1>隊員服務</h1>
+        </div>
+        <div class="portal-card-grid">
+          ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動簽到">
+            <div class="portal-card-icon"><i data-lucide="calendar-check"></i></div>
+            <div class="portal-card-title">活動簽到</div>
+            <div class="portal-card-desc">查看活動與進行簽到</div>
+          </div>`:''}
+          <div class="portal-card portal-card-attendance" id="portal-attendance" role="button" tabindex="0" aria-label="進入出席率查詢">
+            <div class="portal-card-icon"><i data-lucide="chart-no-axes-column-increasing"></i></div>
+            <div class="portal-card-title">出席率查詢</div>
+            <div class="portal-card-desc">查詢個人出席紀錄</div>
+          </div>
+        </div>
+      </main>`;
+    const more=app.querySelector("#portal-more");
+    const menu=app.querySelector("#portal-menu");
+    more?.addEventListener("click",()=>{
+      const opening=menu.hidden;
+      menu.hidden=!opening;
+      more.setAttribute("aria-expanded",String(opening));
+    });
+    app.querySelector("#portal-admin-login")?.addEventListener("click",()=>{
+      memberHome=false;
+      activeTab="admin";
+      openEventId=null;
+      adminPage="home";
+      queryResultVisible=false;
+      render();
+    });
+    const enter=(tab)=>{
+      memberHome=false;
+      activeTab=tab;
+      openEventId=null;
+      adminExpandedId=null;
+      queryResultVisible=false;
+      render();
+    };
+    const checkin=app.querySelector("#portal-checkin");
+    const attendance=app.querySelector("#portal-attendance");
+    checkin?.addEventListener("click",()=>enter("register"));
+    checkin?.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();enter("register");}});
+    attendance?.addEventListener("click",()=>enter("query"));
+    attendance?.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();enter("query");}});
+    refreshIcons();
+    return;
+  }
+
   app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
 
   if(!isChild && !window.__adminAccountsViewOpen){
@@ -4811,7 +4937,7 @@ function render(){
       }
       adminPage="home";render();return;
     }
-    activeTab="register";openEventId=null;render();
+    memberHome=true;activeTab="register";openEventId=null;render();
   };
   const subpageAdminAccess=app.querySelector("#subpage-admin-access");
   if(subpageAdminAccess)subpageAdminAccess.onclick=()=>{activeTab="admin";openEventId=null;queryResultVisible=false;if(adminUnlocked)adminPage="home";render();};
