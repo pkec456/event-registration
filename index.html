@@ -2412,17 +2412,7 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 #app.admin-home-view .activity-admin-card .admin-card-name{font-size:16px;line-height:1.4}
 #app.admin-home-view .activity-admin-card .admin-card-subtitle-block .admin-card-meta{font-size:12px}
 }
-#app.admin-home-view .activity-admin-card .admin-actions{
-  display:grid !important;
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  gap:5px !important;
-}
-#app.admin-home-view .activity-admin-card .admin-actions button{
-  min-width:0 !important;
-  padding:4px 2px !important;
-  font-size:10px !important;
-  white-space:nowrap !important;
-}
+/* Admin actions use the shared two-column layout; avoid a later fixed four-column override. */
 .activity-admin-card .admin-actions button.status-open,
 .activity-admin-card .admin-actions button.status-open:active,
 .activity-admin-card .admin-actions button.status-open:hover { color:#2e9b57 !important; }
