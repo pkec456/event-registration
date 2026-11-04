@@ -3969,6 +3969,11 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   #app .admin-login-page{padding:16px 0 24px;}
   #app .admin-login-card{padding:24px 18px;}
 }
+
+/* V2.5 Bootstrap layout: attendance result metrics */
+#app .query-metrics-bootstrap{margin-bottom:16px;}
+#app .query-metrics-bootstrap .col{min-width:0;display:flex;}
+#app .query-metrics-bootstrap .query-metric-card{width:100%;}
 </style>
 
 
@@ -5486,8 +5491,8 @@ function renderQuery(el){
         </div>
       </div>
 
-      <div class="query-metrics">
-        <div class="query-metric-card attendance-metric ${tone.name}">
+      <div class="row row-cols-1 row-cols-sm-2 g-2 mb-3 query-metrics-bootstrap">
+        <div class="col"><div class="query-metric-card attendance-metric ${tone.name} h-100">
           <div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div>
           <div class="donut" style="--value:${rate}%;--donut-color:${tone.color}">
             <div class="donut-center">
@@ -5922,8 +5927,8 @@ function renderAdmin(el){
     const attendancePercent=total>0?Math.max(0,Math.min(100,(attended/total)*100)):0;
     content=`<div class="query-person"><div class="query-person-icon"><i data-lucide="user-round"></i></div><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div></div></div>
       <div class="query-metrics">
-        <div class="query-metric-card attendance-metric ${tone.name}"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div>
-        <div class="query-metric-card attendance-metric signins"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div>
+        <div class="query-metric-card attendance-metric ${tone.name}"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div></div>
+        <div class="col"><div class="query-metric-card attendance-metric signins h-100"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div></div>
       </div>
       <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
       <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
