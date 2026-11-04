@@ -4572,6 +4572,76 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   .member-portal-view .member-announcement-body{padding:10px 13px 12px !important;}
 }
 
+
+/* V2.5 前端功能圖示統一最大規格：功能圖示容器一律 50×50px。
+   Header 導覽圖示、狀態小圖示與清單輔助圖示維持各自資訊層級，不納入此規格。 */
+:root{--v25-function-icon-box:50px;--v25-function-icon-glyph:26px;}
+#app .metric-icon,
+#app .admin-action .menu-icon,
+#app .admin-square .menu-icon,
+#app .cumulative-category-icon,
+#app .announcement-icon,
+#app .query-search-icon,
+#app .query-person-icon,
+#app .query-history .list-icon,
+#app .activity-icon,
+#app .officer-icon,
+#app .portal-card-icon,
+#app .admin-login-heading-icon{
+  width:var(--v25-function-icon-box) !important;
+  height:var(--v25-function-icon-box) !important;
+  min-width:var(--v25-function-icon-box) !important;
+  min-height:var(--v25-function-icon-box) !important;
+  max-width:var(--v25-function-icon-box) !important;
+  max-height:var(--v25-function-icon-box) !important;
+  flex:0 0 var(--v25-function-icon-box) !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  place-items:center !important;
+}
+#app .metric-icon svg,
+#app .admin-action .menu-icon svg,
+#app .admin-square .menu-icon svg,
+#app .cumulative-category-icon svg,
+#app .announcement-icon svg,
+#app .query-search-icon svg,
+#app .query-person-icon svg,
+#app .query-history .list-icon svg,
+#app .activity-icon svg,
+#app .officer-icon svg,
+#app .portal-card-icon svg,
+#app .admin-login-heading-icon svg{
+  width:var(--v25-function-icon-glyph) !important;
+  height:var(--v25-function-icon-glyph) !important;
+  min-width:var(--v25-function-icon-glyph) !important;
+  min-height:var(--v25-function-icon-glyph) !important;
+  max-width:var(--v25-function-icon-glyph) !important;
+  max-height:var(--v25-function-icon-glyph) !important;
+  margin:0 !important;
+  stroke-width:2 !important;
+}
+/* 響應式不縮小功能圖示，避免手機版再次產生不同尺寸 */
+@media(max-width:640px){
+  #app .metric-icon,
+  #app .admin-action .menu-icon,
+  #app .admin-square .menu-icon,
+  #app .cumulative-category-icon,
+  #app .announcement-icon,
+  #app .query-search-icon,
+  #app .query-person-icon,
+  #app .query-history .list-icon,
+  #app .activity-icon,
+  #app .officer-icon,
+  #app .portal-card-icon,
+  #app .admin-login-heading-icon{
+    width:var(--v25-function-icon-box) !important;
+    height:var(--v25-function-icon-box) !important;
+    min-width:var(--v25-function-icon-box) !important;
+    min-height:var(--v25-function-icon-box) !important;
+    flex-basis:var(--v25-function-icon-box) !important;
+  }
+}
+
 </style>
 
 
