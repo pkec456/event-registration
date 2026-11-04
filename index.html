@@ -4244,6 +4244,47 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   .member-feature-header{padding-left:14px !important;padding-right:14px !important;}
 }
 
+
+/* 全站 Header 最終統一規格：所有入口與內頁共用同一高度、左右安全距與按鈕尺寸 */
+:root{--app-header-h:64px;--app-header-pad:16px;--app-header-btn:42px;}
+.member-portal-view .portal-header,
+.member-feature-header,
+.top.home-fixed-header,
+.subpage-fixed-header{
+  position:sticky !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  width:100% !important;
+  max-width:none !important;
+  height:var(--app-header-h) !important;
+  min-height:var(--app-header-h) !important;
+  max-height:var(--app-header-h) !important;
+  margin:0 !important;
+  padding:0 var(--app-header-pad) !important;
+  box-sizing:border-box !important;
+  transform:none !important;
+  background:#fff !important;
+  border-bottom:1px solid var(--line) !important;
+  box-shadow:none !important;
+  z-index:1000 !important;
+}
+.member-portal-view .portal-header{display:grid !important;grid-template-columns:minmax(0,1fr) var(--app-header-btn) !important;align-items:center !important;}
+.member-feature-header{display:grid !important;grid-template-columns:var(--app-header-btn) minmax(0,1fr) var(--app-header-btn) !important;align-items:center !important;}
+.top.home-fixed-header,
+.subpage-fixed-header{display:grid !important;grid-template-columns:var(--app-header-btn) minmax(0,1fr) auto !important;align-items:center !important;}
+
+.member-feature-back,.portal-more,.home-header-left-slot .home-link,
+.top-admin-access,.top-admin-logout,.subpage-fixed-header .subpage-back-top{
+  width:var(--app-header-btn) !important;height:var(--app-header-btn) !important;
+  min-width:var(--app-header-btn) !important;min-height:var(--app-header-btn) !important;
+  margin:0 !important;padding:0 !important;box-sizing:border-box !important;
+  border:1px solid var(--line) !important;border-radius:14px !important;
+  background:#fff !important;display:grid !important;place-items:center !important;
+}
+.member-feature-title{text-align:center !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media(max-width:380px){:root{--app-header-pad:14px;}}
+
 </style>
 
 
