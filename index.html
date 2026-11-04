@@ -2631,6 +2631,58 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card{
   margin:0;
 }
+/* 活動類別統計沿用管理功能卡片的視覺比例，只保留類別專屬內容 */
+#app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card{
+  min-height:128px;
+  padding:14px 8px;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:7px;
+}
+#app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-icon{
+  width:42px;
+  height:42px;
+  margin:0 0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+}
+#app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-icon svg{
+  width:20px;
+  height:20px;
+}
+#app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card > b{
+  font-size:22px;
+  line-height:1;
+}
+#app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card > strong{
+  font-size:14px;
+  line-height:1.4;
+  white-space:nowrap;
+}
+@media(max-width:520px){
+  #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card{
+    min-height:108px;
+    padding:9px 3px;
+    gap:5px;
+  }
+  #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-icon{
+    width:34px;
+    height:34px;
+    margin-bottom:7px;
+  }
+  #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-icon svg{
+    width:18px;
+    height:18px;
+  }
+  #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card > b{font-size:20px;}
+  #app.admin-home-view .cumulative-category-bootstrap-grid .cumulative-category-card > strong{font-size:11px;}
+}
 /* CSS 區塊 H：手機版管理首頁 RWD 微調 */
 /* 手機版管理首頁：放大圖示與文字，桌機版維持原樣 */
 @media(max-width:520px){
