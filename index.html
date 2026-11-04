@@ -214,7 +214,7 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .admin-card-name{font-weight:900;font-size:15px}
 .admin-card-meta{font-size:11px;color:#888;margin-top:3px}
 .admin-card-status{margin-top:8px}
-.admin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+.admin-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
 .admin-actions button{min-height:42px;padding:5px 4px;background:#f7f7f5;border:1px solid var(--line);border-radius:12px;font-size:10px;font-weight:800;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
 .admin-actions button.danger{color:var(--danger)}
 
@@ -269,9 +269,7 @@ font-size:8px;
 .list-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
 .list-table td.name{font-weight:800}
 .rate-bar-fill{height:100%;background:var(--accent);border-radius:99px}
-@media(max-width:420px) {
-.admin-actions{grid-template-columns:repeat(2,1fr)}
-}
+
 .query-person{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .query-person-icon{width:46px;height:46px;border-radius:15px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:0 0 auto}
 .result-name{font-size:21px;font-weight:900;line-height:1.2}
@@ -4015,6 +4013,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .query-history .list-meta{overflow-wrap:anywhere;}
 @media(max-width:420px){
   #app .query-history .status{flex:0 0 auto;}
+}
+
+/* V2.5 Bootstrap phase 24: management action controls */
+#app .admin-actions{width:100%;}
+#app .admin-actions button{width:100%;min-width:0;}
+@media(min-width:576px){
+  #app .admin-actions{grid-template-columns:repeat(4,minmax(0,1fr));}
 }
 </style>
 
