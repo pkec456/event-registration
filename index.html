@@ -4006,6 +4006,11 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   width:100%;
   min-width:0;
 }
+
+/* V2.5 Bootstrap phase 22: query profile card alignment */
+#app .query-person{min-width:0;}
+#app .query-person > div:last-child{min-width:0;}
+#app .query-metrics-bootstrap .query-metric-card{width:100%;}
 </style>
 
 
@@ -5958,8 +5963,8 @@ function renderAdmin(el){
     const tone=getAttendanceTone(rate);
     const attendancePercent=total>0?Math.max(0,Math.min(100,(attended/total)*100)):0;
     content=`<div class="query-person"><div class="query-person-icon"><i data-lucide="user-round"></i></div><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div></div></div>
-      <div class="query-metrics">
-        <div class="query-metric-card attendance-metric ${tone.name}"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div></div>
+      <div class="row row-cols-1 row-cols-sm-2 g-2 mb-3 query-metrics-bootstrap">
+        <div class="col"><div class="query-metric-card attendance-metric ${tone.name} h-100"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div></div>
         <div class="col"><div class="query-metric-card attendance-metric signins h-100"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div></div>
       </div>
       <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
