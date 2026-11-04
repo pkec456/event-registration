@@ -223,7 +223,6 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 .officer-info{flex:1}
 
 .admin-edit-box{margin-top:10px}
-.rate-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .rate-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 10px 11px;text-align:left;min-width:0;overflow:hidden}
 .rate-head{display:flex;align-items:center;gap:6px;min-height:30px;font-size:20px;font-weight:850;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rate-head-name{font-size:18px;font-weight:400;overflow:hidden;text-overflow:ellipsis}
@@ -238,7 +237,6 @@ input[type=date],input[type=time]{width:100%;max-width:100%;min-width:0;min-inli
 font-size:9px;color:#64748b;font-weight:750;white-space:nowrap;
 }
 @media(max-width:600px) {
-.rate-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .rate-card{border-radius:12px;padding:8px 8px 9px}
 .rate-head{font-size:20px;gap:5px;min-height:29px}
 .rate-rank-icon{width:18px;height:18px;flex-basis:18px}
@@ -3985,7 +3983,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 /* V2.5 Bootstrap phase 20: attendance rate cards responsive grid */
 #app .rate-list-bootstrap{margin-left:0;margin-right:0;}
 #app .rate-list-bootstrap > .rate-card{
-  width:auto;
+  width:100%;
   min-width:0;
 }
 
