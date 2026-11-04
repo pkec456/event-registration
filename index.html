@@ -2025,7 +2025,19 @@ body .app-header:not(.home-header){
   display:none !important;
 }
 @media(max-width:430px) {
-  /* Bootstrap-compatible Header structure: framework classes provide semantic outer layout only.
+  /* Unified Bootstrap Header contract: every application Header uses the same navbar base.
+   Page-specific classes only control V2.5 visual differences, never the framework structure. */
+.app-navbar{
+  width:100%;
+  box-sizing:border-box;
+}
+.app-navbar.navbar-expand-lg{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* Bootstrap-compatible Header structure: framework classes provide semantic outer layout only.
    V2.5 component rules below remain the sole authority for visual size and positioning. */
   /* V2.5 Header 最終規格：標題尺寸與欄位間距由下方單一 Header 規則統一控制 */
 }
@@ -4711,7 +4723,7 @@ function render(){
   if(memberHome && !isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
     app.className="member-portal-view";
     app.innerHTML=`
-      <header class="portal-header navbar container-fluid" role="banner">
+      <header class="portal-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
         <div class="app-header-spacer" aria-hidden="true"></div>
         <div class="app-header-title">四紅哨角隊</div>
         <div class="portal-menu-wrap">
@@ -4786,7 +4798,7 @@ function render(){
   if(activeTab==="admin" && !adminUnlocked && !isChild && !window.__adminAccountsViewOpen){
     app.className="admin-login-view";
     app.innerHTML=`
-      <header class="member-feature-header navbar container-fluid" role="banner">
+      <header class="member-feature-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
         <button type="button" class="member-feature-back" id="admin-login-home" aria-label="返回"><i data-lucide="arrow-left"></i></button>
         <div class="app-header-title">四紅哨角隊</div>
         <div class="app-header-spacer" aria-hidden="true"></div>
@@ -4802,7 +4814,7 @@ function render(){
   if(!isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
     app.className="member-feature-view";
     app.innerHTML=`
-      <header class="member-feature-header navbar container-fluid" role="banner">
+      <header class="member-feature-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
         <button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回"><i data-lucide="arrow-left"></i></button>
         <div class="app-header-title">四紅哨角隊</div>
         <div class="app-header-spacer" aria-hidden="true"></div>
@@ -4818,7 +4830,7 @@ function render(){
 
   if(!isChild && !window.__adminAccountsViewOpen){
     app.innerHTML=`
-      <header class="top home-fixed-header navbar navbar-expand-lg container-fluid" role="banner">
+      <header class="top home-fixed-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
         <div class="home-header-left-slot" aria-hidden="true"></div>
         <div class="top-brand"><h1>四紅哨角隊</h1></div>
         <div class="top-admin-actions admin-header-menu-wrap">
@@ -4842,7 +4854,7 @@ function render(){
     const queryHomeMode=activeTab==="query" && !signinPageVisible;
     const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(queryHomeMode?"首頁":(activeTab==="query"?"返回首頁":"返回管理後台")));
     app.innerHTML=`
-      <header class="subpage-fixed-header navbar navbar-expand-lg container-fluid" role="banner">
+      <header class="subpage-fixed-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
         <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${(!adminUnlocked && queryHomeMode)?"house":"arrow-left"}"></i></button>
         <h1 class="subpage-title">四紅哨角隊</h1>
         <div class="subpage-actions admin-header-menu-wrap">
