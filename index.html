@@ -4394,6 +4394,25 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app.admin-login-view .admin-login-page{padding-top:24px !important;}
 @media(max-width:380px){#app.admin-login-view .member-feature-content{padding-left:14px !important;padding-right:14px !important;}}
 
+
+/* Header 操作最終整合：
+   隊員功能頁＝返回鍵｜四紅哨角隊｜空白
+   首頁＝空白｜四紅哨角隊｜…
+   管理頁＝返回／首頁｜四紅哨角隊｜…（首頁、登出） */
+.member-feature-header .app-header-spacer{grid-column:3 !important;grid-row:1 !important;}
+.member-feature-header .member-feature-back{border:0 !important;background:transparent !important;}
+.admin-header-menu-wrap{position:relative !important;overflow:visible !important;}
+.admin-header-menu{
+  position:absolute !important;
+  right:0 !important;
+  top:48px !important;
+  z-index:1200 !important;
+}
+#app > .top.home-fixed-header .top-admin-actions,
+#app > .subpage-fixed-header .subpage-actions{
+  overflow:visible !important;
+}
+
 </style>
 
 
@@ -5252,9 +5271,9 @@ function render(){
     app.className="admin-login-view";
     app.innerHTML=`
       <header class="member-feature-header">
-        <button type="button" class="member-feature-back" id="admin-login-home" aria-label="回首頁"><i data-lucide="house"></i></button>
+        <button type="button" class="member-feature-back" id="admin-login-home" aria-label="返回"><i data-lucide="arrow-left"></i></button>
         <div class="app-header-title">四紅哨角隊</div>
-        <div class="app-header-menu-slot"><i data-lucide="ellipsis"></i></div>
+        <div class="app-header-spacer" aria-hidden="true"></div>
       </header>
       <div id="tab-content" class="member-feature-content"></div>`;
     app.querySelector("#admin-login-home")?.addEventListener("click",()=>{memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;render();});
@@ -5268,9 +5287,9 @@ function render(){
     app.className="member-feature-view";
     app.innerHTML=`
       <header class="member-feature-header">
-        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="回首頁"><i data-lucide="house"></i></button>
+        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回"><i data-lucide="arrow-left"></i></button>
         <div class="app-header-title">四紅哨角隊</div>
-        <div class="app-header-menu-slot"><i data-lucide="ellipsis"></i></div>
+        <div class="app-header-spacer" aria-hidden="true"></div>
       </header>
       <div id="tab-content" class="member-feature-content"></div>`;
     app.querySelector("#member-feature-back")?.addEventListener("click",()=>{memberHome=true;openEventId=null;queryResultVisible=false;render();});
@@ -5286,13 +5305,12 @@ function render(){
       <header class="top home-fixed-header">
         <div class="home-header-left-slot"><button class="home-link" type="button" id="home-signin-link" aria-label="簽到首頁" title="簽到首頁"><i data-lucide="house"></i></button></div>
         <div class="top-brand"><h1>四紅哨角隊</h1></div>
-        <div class="top-admin-actions">
-        <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
-          type="button" id="top-admin-access" aria-label="管理者"
-          title="${adminUnlocked?"進入管理者":"管理者登入"}">
-          <i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i>
-        </button>
-        ${adminUnlocked?`<button class="top-admin-logout" type="button" id="top-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
+        <div class="top-admin-actions admin-header-menu-wrap">
+        <button class="portal-more" type="button" id="admin-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
+        <div class="portal-menu admin-header-menu" id="admin-header-menu" hidden>
+          <button type="button" id="admin-menu-home"><i data-lucide="house"></i><span>首頁</span></button>
+          <button type="button" id="admin-menu-logout"><i data-lucide="log-out"></i><span>登出</span></button>
+        </div>
       </div>
       </header>
       <nav class="tabs home-tabs">
@@ -5311,9 +5329,12 @@ function render(){
       <header class="subpage-fixed-header">
         <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${queryHomeMode?"house":"arrow-left"}"></i></button>
         <h1 class="subpage-title">四紅哨角隊</h1>
-        <div class="subpage-actions">
-          <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="subpage-admin-access" aria-label="管理者" title="${adminUnlocked?"進入管理者":"管理者登入"}"><i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i></button>
-          ${adminUnlocked?`<button class="top-admin-logout" type="button" id="subpage-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
+        <div class="subpage-actions admin-header-menu-wrap">
+          <button class="portal-more" type="button" id="admin-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
+          <div class="portal-menu admin-header-menu" id="admin-header-menu" hidden>
+            <button type="button" id="admin-menu-home"><i data-lucide="house"></i><span>首頁</span></button>
+            <button type="button" id="admin-menu-logout"><i data-lucide="log-out"></i><span>登出</span></button>
+          </div>
         </div>
       </header>
       <div id="tab-content"></div>`;
@@ -5343,6 +5364,34 @@ function render(){
     }
     memberHome=true;activeTab="register";openEventId=null;render();
   };
+  const adminMore=app.querySelector("#admin-more");
+  const adminHeaderMenu=app.querySelector("#admin-header-menu");
+  adminMore?.addEventListener("click",()=>{
+    const opening=adminHeaderMenu.hidden;
+    adminHeaderMenu.hidden=!opening;
+    adminMore.setAttribute("aria-expanded",String(opening));
+  });
+  app.querySelector("#admin-menu-home")?.addEventListener("click",()=>{
+    memberHome=true;
+    activeTab=signinPageVisible?"register":"query";
+    openEventId=null;
+    adminPage="home";
+    queryResultVisible=false;
+    window.__adminAccountsViewOpen=false;
+    render();
+  });
+  app.querySelector("#admin-menu-logout")?.addEventListener("click",async()=>{
+    await adminLogout();
+    memberHome=true;
+    activeTab=signinPageVisible?"register":"query";
+    adminPage="home";
+    openEventId=null;
+    queryResultVisible=false;
+    window.__adminAccountsViewOpen=false;
+    showToast("已登出管理者");
+    render();
+  });
+
   const subpageAdminAccess=app.querySelector("#subpage-admin-access");
   if(subpageAdminAccess)subpageAdminAccess.onclick=()=>{activeTab="admin";openEventId=null;queryResultVisible=false;if(adminUnlocked)adminPage="home";render();};
   const subpageAdminLogout=app.querySelector("#subpage-admin-logout");
@@ -5802,8 +5851,6 @@ function getAttendanceTone(rate){
 
 function renderQuery(el){
   el.innerHTML=`
-
-    <section class="announcement member-announcement"><div class="member-announcement-bar"><div class="member-announcement-mark"><i data-lucide="megaphone"></i></div><div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div><i class="member-announcement-chevron" data-lucide="chevron-right"></i></div><div class="member-announcement-body"><div class="member-announcement-kicker">NOTICE</div><div class="announcement-text">${escapeHtml(announcementText)}</div></div></section>
 
     <div class="section-head" style="margin-top:12px">
       <h2>搜尋資料</h2>
