@@ -6519,34 +6519,34 @@ function renderAdmin(el){
        </div>`}
 </div>
 
-<div class="section-head"><h2>管理功能</h2><span>常用操作</span></div><div class="admin-menu admin-menu-grid">
-  <button class="admin-action admin-square" data-admin-page="create">
+<div class="section-head"><h2>管理功能</h2><span>常用操作</span></div><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
+  <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>活動簽到</strong>
-  </button>
-  <button class="admin-action admin-square" data-admin-page="manual-register">
+  </button></div>
+  <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="manual-register">
      <span class="menu-icon"><i data-lucide="clipboard-pen-line"></i></span>
      <strong>手動登記</strong>
-   </button>
-  <button class="admin-action admin-square" data-admin-page="activities">
+   </button></div>
+  <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="activities">
     <span class="menu-icon"><i data-lucide="clipboard-list"></i></span>
     <strong>活動管理</strong>
-  </button>
-  <button class="admin-action admin-square" data-admin-page="attendance">
+  </button></div>
+  <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="attendance">
     <span class="menu-icon"><i data-lucide="chart-no-axes-combined"></i></span>
     <strong>出席率</strong>
-  </button>
-  ${isSuperAdmin()?`<button class="admin-action admin-square" id="admin-accounts-btn">
+  </button></div>
+  ${isSuperAdmin()?`<div class="col"><button class="admin-action admin-square w-100 h-100" id="admin-accounts-btn">
     <span class="menu-icon"><i data-lucide="users"></i></span>
     <strong>幹部管理</strong>
-  </button>`:""}
-  <div class="admin-action admin-square signin-page-setting-tile">
+  </button></div>`:""}
+  <div class="col"><div class="admin-action admin-square signin-page-setting-tile w-100 h-100">
     <div class="signin-tile-copy"><strong>簽到頁面</strong></div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
     <span class="signin-page-toggle-label">${signinPageVisible?"隱藏":"開啟"}</span>
-  </div>
+  </div></div>
 </div>
 
 <div class="section-head statistics-info-head"><h2>統計資訊</h2><span>即時資料</span></div>
