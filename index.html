@@ -4285,6 +4285,29 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .member-feature-title{text-align:center !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 @media(max-width:380px){:root{--app-header-pad:14px;}}
 
+
+/* 統一 Header 內容：首頁與各功能頁皆為「左側操作｜四紅哨角隊｜右側選單」 */
+.app-header-title,
+.member-feature-header .app-header-title{
+  min-width:0 !important;text-align:center !important;font-size:17px !important;
+  font-weight:900 !important;letter-spacing:.04em !important;line-height:1 !important;
+  white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;
+}
+.app-header-spacer,.app-header-menu-slot{
+  width:var(--app-header-btn) !important;height:var(--app-header-btn) !important;
+  display:grid !important;place-items:center !important;
+}
+.app-header-menu-slot{color:var(--muted);pointer-events:none;}
+.member-portal-view .portal-header,
+.member-feature-header{
+  grid-template-columns:var(--app-header-btn) minmax(0,1fr) var(--app-header-btn) !important;
+  display:grid !important;align-items:center !important;
+}
+.member-portal-view .portal-menu-wrap{width:var(--app-header-btn) !important;height:var(--app-header-btn) !important;}
+.member-portal-view .portal-more{width:var(--app-header-btn) !important;height:var(--app-header-btn) !important;}
+.member-feature-header .member-feature-back{border-color:transparent !important;background:transparent !important;}
+.member-feature-header .app-header-menu-slot svg{width:22px !important;height:22px !important;}
+
 </style>
 
 
@@ -5068,10 +5091,8 @@ function render(){
     app.className="member-portal-view";
     app.innerHTML=`
       <header class="portal-header">
-        <div class="portal-brand">
-          <div class="portal-brand-name">台中浩天宮</div>
-          <div class="portal-brand-sub">四紅哨角隊</div>
-        </div>
+        <div class="app-header-spacer" aria-hidden="true"></div>
+        <div class="app-header-title">四紅哨角隊</div>
         <div class="portal-menu-wrap">
           <button class="portal-more" type="button" id="portal-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
           <div class="portal-menu" id="portal-menu" hidden>
@@ -5145,9 +5166,9 @@ function render(){
     app.className="member-feature-view";
     app.innerHTML=`
       <header class="member-feature-header">
-        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回首頁"><i data-lucide="chevron-left"></i></button>
-        <div class="member-feature-title">${activeTab==="register"?"活動簽到":"出席率查詢"}</div>
-        <div class="member-feature-spacer"></div>
+        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="回首頁"><i data-lucide="house"></i></button>
+        <div class="app-header-title">四紅哨角隊</div>
+        <div class="app-header-menu-slot"><i data-lucide="ellipsis"></i></div>
       </header>
       <div id="tab-content" class="member-feature-content"></div>`;
     app.querySelector("#member-feature-back")?.addEventListener("click",()=>{memberHome=true;openEventId=null;queryResultVisible=false;render();});
@@ -5162,7 +5183,7 @@ function render(){
     app.innerHTML=`
       <header class="top home-fixed-header">
         <div class="home-header-left-slot"><button class="home-link" type="button" id="home-signin-link" aria-label="簽到首頁" title="簽到首頁"><i data-lucide="house"></i></button></div>
-        <div class="top-brand"><h1>台中浩天宮四紅哨角隊</h1></div>
+        <div class="top-brand"><h1>四紅哨角隊</h1></div>
         <div class="top-admin-actions">
         <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}"
           type="button" id="top-admin-access" aria-label="管理者"
@@ -5187,7 +5208,7 @@ function render(){
     app.innerHTML=`
       <header class="subpage-fixed-header">
         <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${queryHomeMode?"house":"arrow-left"}"></i></button>
-        <h1 class="subpage-title">台中浩天宮四紅哨角隊</h1>
+        <h1 class="subpage-title">四紅哨角隊</h1>
         <div class="subpage-actions">
           <button class="top-admin-access ${adminUnlocked?(isSuperAdmin()?"super":"officer"):"guest"}" type="button" id="subpage-admin-access" aria-label="管理者" title="${adminUnlocked?"進入管理者":"管理者登入"}"><i data-lucide="${adminUnlocked?(isSuperAdmin()?"shield-check":"shield"):"shield"}"></i></button>
           ${adminUnlocked?`<button class="top-admin-logout" type="button" id="subpage-admin-logout" aria-label="登出管理者" title="登出管理者"><i data-lucide="log-out"></i></button>`:""}
