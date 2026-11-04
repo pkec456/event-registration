@@ -3993,6 +3993,19 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   width:auto;
   min-width:0;
 }
+
+/* V2.5 Bootstrap phase 21: normalize activity list container */
+#app.home-view .activity-grid-bootstrap{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  width:100%;
+}
+#app.home-view .activity-grid-bootstrap > .activity-card,
+#app.home-view .activity-grid-bootstrap > .block{
+  width:100%;
+  min-width:0;
+}
 </style>
 
 
@@ -5399,7 +5412,7 @@ function renderRegister(el){
         <span><span class="dot closed-dot"></span>已關閉</span>
       <span><span class="dot" style="background:#f2c94c"></span>出席率限制</span></div>
     </div>
-    <div class="activity-grid">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
+    <div class="activity-grid activity-grid-bootstrap">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
   <div class="activity-top">
     <div class="activity-icon"><i class="activity-list-icon ${!isWaitingForPublish(a)&&a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="${String(a.eventCategory||"").trim()==="廟"?"landmark":String(a.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(a.eventCategory||"").trim()==="隊"?"flag":String(a.eventCategory||"").trim()==="北港進香"?"route":String(a.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
     <div class="activity-main">
