@@ -4919,7 +4919,7 @@ function render(){
   if(subpageBack)subpageBack.onclick=()=>{
     if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
     if(openEventId){openEventId=null;render();return;}
-    if(activeTab==="query"){if(!signinPageVisible){activeTab="query";openEventId=null;queryResultVisible=false;render();return;} activeTab="register";openEventId=null;queryResultVisible=false;render();return;}
+    if(activeTab==="query"){memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;queryResultVisible=false;render();return;}
     if(activeTab==="admin" && adminUnlocked){
       if(adminPage==="attendance-person"){adminPage="attendance";render();return;}
       if(adminPage==="manual-register" && manualRegisterActivityId){
