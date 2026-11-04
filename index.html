@@ -4387,6 +4387,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 }
 @media(max-width:380px){:root{--header-pad:14px;}}
 
+
+/* 管理者登入頁納入同一 App Header，內容區沿用功能頁安全邊距 */
+#app.admin-login-view{padding:0 !important;max-width:520px !important;margin:0 auto !important;}
+#app.admin-login-view .member-feature-content{padding:0 18px !important;}
+#app.admin-login-view .admin-login-page{padding-top:24px !important;}
+@media(max-width:380px){#app.admin-login-view .member-feature-content{padding-left:14px !important;padding-right:14px !important;}}
+
 </style>
 
 
@@ -5239,6 +5246,22 @@ function render(){
   }
 
   app.className=isChild?"child-view":(isAdminHome?"admin-home-view":"home-view");
+
+  // 管理者登入頁也使用統一 Header，避免登入頁缺少 App 導覽。
+  if(activeTab==="admin" && !adminUnlocked && !isChild && !window.__adminAccountsViewOpen){
+    app.className="admin-login-view";
+    app.innerHTML=`
+      <header class="member-feature-header">
+        <button type="button" class="member-feature-back" id="admin-login-home" aria-label="回首頁"><i data-lucide="house"></i></button>
+        <div class="app-header-title">四紅哨角隊</div>
+        <div class="app-header-menu-slot"><i data-lucide="ellipsis"></i></div>
+      </header>
+      <div id="tab-content" class="member-feature-content"></div>`;
+    app.querySelector("#admin-login-home")?.addEventListener("click",()=>{memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;render();});
+    renderAdminLock(app.querySelector("#tab-content"));
+    refreshIcons();
+    return;
+  }
 
   // 隊員功能頁直接呈現既有內容，不再經過舊版簽到／出席率首頁。
   if(!isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
