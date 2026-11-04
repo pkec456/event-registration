@@ -2622,95 +2622,54 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 #app.admin-home-view .top-attendance-slideshow{position:relative;width:100%;min-width:0;height:auto;overflow:visible;text-align:center;}
 #app.admin-home-view .top-attendance-slide{position:relative;inset:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100%;opacity:1;animation:none;transform:none;}
 #app.admin-home-view .top-attendance-slide-name{display:block;max-width:100%;font-size:clamp(11px,2.8vw,14px);font-weight:600;line-height:1.2;overflow-wrap:anywhere;}
-/* 今日概況與累積統計合併為統計資訊 */
-#app.admin-home-view .statistics-info-summary{
-  display:grid !important;
-  grid-template-columns:repeat(5,minmax(0,1fr)) !important;
-  gap:8px !important;
-  align-items:stretch !important;
+/* CSS 區塊 G：管理首頁 Bootstrap Grid */
+#app.admin-home-view .admin-bootstrap-grid,
+#app.admin-home-view .statistics-bootstrap-grid{
+  align-items:stretch;
   margin-bottom:14px;
 }
-/* 管理功能與簽到頁面設定合併為同一組橫向入口 */
-#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(6,minmax(0,1fr)) !important;gap:10px !important;align-items:stretch !important;}
-#app.admin-home-view .admin-menu-grid > .admin-action{min-width:0 !important;height:112px !important;min-height:112px !important;max-height:112px !important;padding:12px !important;border-radius:14px !important;box-sizing:border-box !important;}
-#app.admin-home-view .admin-menu-grid > .admin-square{align-items:center !important;justify-content:center !important;text-align:center !important;gap:7px !important;}
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon{width:34px !important;height:34px !important;margin:0 !important;flex:0 0 34px !important;border-radius:10px !important;}
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg{width:18px !important;height:18px !important;}
-#app.admin-home-view .admin-menu-grid > .admin-square strong{display:block !important;font-size:14px !important;line-height:1.4 !important;overflow-wrap:anywhere !important;}
-#app.admin-home-view .admin-menu-grid > .admin-action small{font-size:12px !important;line-height:1.4 !important;}
-#app.admin-home-view .admin-menu-grid > .signin-page-setting-tile{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:6px !important;text-align:center !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-tile-copy{min-width:0 !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{display:block !important;font-size:14px !important;line-height:1.4 !important;overflow-wrap:anywhere !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-tile-copy small{display:block !important;margin-top:3px !important;font-size:10px !important;line-height:1.35 !important;overflow-wrap:anywhere !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-page-toggle{min-width:40px !important;min-height:30px !important;padding:4px 6px !important;border-radius:8px !important;font-size:10px !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:0 !important;line-height:1.1 !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{display:block !important;margin-top:1px !important;text-align:center !important;}
-#app.admin-home-view .signin-page-setting-tile .signin-page-toggle svg{width:15px !important;height:15px !important;flex:0 0 15px !important;}
-@media(max-width:900px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}
-@media(max-width:520px){#app.admin-home-view .admin-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important}#app.admin-home-view .admin-menu-grid > .admin-action{min-height:100px !important;padding:10px !important}}
-#app.admin-home-view .statistics-info-summary > .metric{
-  min-width:0 !important;
-  box-sizing:border-box !important;
+#app.admin-home-view .admin-bootstrap-grid > .col,
+#app.admin-home-view .statistics-bootstrap-grid > .col{
+  min-width:0;
 }
-#app.admin-home-view .statistics-info-summary > .metric > b{overflow-wrap:anywhere}
-/* 管理首頁各區塊圖示尺寸統一 */
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon,
-#app.admin-home-view .statistics-info-summary .metric-icon,
-#app.admin-home-view .cumulative-category-icon{
-  width:34px !important;
-  height:34px !important;
-  min-width:34px !important;
-  min-height:34px !important;
-  flex:0 0 34px !important;
-  border-radius:11px !important;
-  display:grid !important;
-  place-items:center !important;
-  box-sizing:border-box !important;
+#app.admin-home-view .admin-bootstrap-grid .admin-action{
+  min-width:0;
+  min-height:112px;
+  padding:12px;
+  border-radius:14px;
+  box-sizing:border-box;
 }
-#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
-#app.admin-home-view .statistics-info-summary .metric-icon svg,
-#app.admin-home-view .cumulative-category-icon svg{
-  width:20px !important;
-  height:20px !important;
-  min-width:20px !important;
-  min-height:20px !important;
-  max-width:20px !important;
-  max-height:20px !important;
-  stroke-width:2 !important;
+#app.admin-home-view .admin-bootstrap-grid .admin-square{
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:7px;
 }
-/* 管理首頁卡片視覺統一，提升輔助文字可讀性 */
-#app.admin-home-view .admin-menu-grid > .admin-action,
-#app.admin-home-view .statistics-info-summary > .metric,
-#app.admin-home-view .cumulative-category-card{
-  border-radius:18px !important;
-  border:1px solid var(--line) !important;
-  box-sizing:border-box !important;
-}
-#app.admin-home-view .statistics-info-summary > .metric > span{
+#app.admin-home-view .admin-bootstrap-grid .admin-square strong{
   display:block;
-  font-size:12px !important;
-  line-height:1.45 !important;
+  font-size:14px;
+  line-height:1.4;
   overflow-wrap:anywhere;
 }
-#app.admin-home-view .cumulative-category-card > strong{
-  font-size:12px !important;
-  line-height:1.4 !important;
+#app.admin-home-view .statistics-bootstrap-grid .metric{
+  min-width:0;
+  box-sizing:border-box;
 }
-#app.admin-home-view .section-head > span{
-  font-size:12px !important;
-  line-height:1.4 !important;
+#app.admin-home-view .statistics-bootstrap-grid .metric > b{
+  overflow-wrap:anywhere;
 }
-#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{
-  font-size:12px !important;
-  line-height:1.3 !important;
+#app.admin-home-view .statistics-bootstrap-grid .metric > span{
+  display:block;
+  font-size:12px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
 }
-
-@media(max-width:760px){
-  #app.admin-home-view .statistics-info-summary{
-    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+@media(max-width:520px){
+  #app.admin-home-view .admin-bootstrap-grid .admin-action{
+    min-height:100px;
+    padding:10px;
   }
-  #app.admin-home-view .statistics-info-summary .top-attendance-metric{grid-column:1/-1}
 }
-
 #app.admin-home-view .cumulative-category-grid{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
