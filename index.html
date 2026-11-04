@@ -4003,9 +4003,6 @@ button.secondary,.manual-return-discard,
 .portal-menu button:active{background:var(--accent-soft);color:var(--accent)}
 .portal-menu button svg{width:18px;height:18px;color:var(--accent)}
 .portal-main{padding-top:34px}
-.portal-intro{margin:0 2px 24px}
-.portal-intro p{margin:0 0 7px;color:var(--muted);font-size:13px;font-weight:700;letter-spacing:.08em}
-.portal-intro h1{margin:0;font-size:30px;line-height:1.25;font-weight:900;letter-spacing:.01em}
 .portal-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .portal-card{
   min-height:190px;padding:20px 16px 18px;border:1px solid var(--line);border-radius:22px;
@@ -4825,10 +4822,6 @@ function render(){
         </div>
       </header>
       <main class="portal-main">
-        <div class="portal-intro">
-          <p>浩天宮｜四紅哨角隊</p>
-          <h1>隊員服務</h1>
-        </div>
         <div class="portal-card-grid">
           ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動簽到">
             <div class="portal-card-icon"><i data-lucide="calendar-check"></i></div>
