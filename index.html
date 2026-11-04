@@ -4744,6 +4744,73 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   pointer-events:none;
 }
 
+
+/* 最終修正：Header 背景層置於 Header 內容下方，桌機與手機皆填滿視窗 */
+#app > .portal-header,
+#app > .member-feature-header,
+#app > .top.home-fixed-header,
+#app > .subpage-fixed-header{
+  position:relative !important;
+  z-index:1000 !important;
+  isolation:auto !important;
+  overflow:visible !important;
+}
+#app > .portal-header::before,
+#app > .member-feature-header::before,
+#app > .top.home-fixed-header::before,
+#app > .subpage-fixed-header::before{
+  z-index:-1 !important;
+}
+#app > .portal-header::after,
+#app > .member-feature-header::after,
+#app > .top.home-fixed-header::after,
+#app > .subpage-fixed-header::after{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  top:0;
+  bottom:0;
+  left:50%;
+  width:100vw;
+  transform:translateX(-50%);
+  background:var(--surface,#fff);
+  border-bottom:1px solid var(--line);
+  pointer-events:none;
+}
+
+/* 管理頁圖示完全恢復 V2.5 最終規格，覆蓋先前錯誤的 50px 規則 */
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon,
+#app.admin-home-view .statistics-info-summary .metric-icon,
+#app.admin-home-view .cumulative-category-icon{
+  width:34px !important;height:34px !important;
+  min-width:34px !important;min-height:34px !important;
+  max-width:none !important;max-height:none !important;
+  flex:0 0 34px !important;border-radius:11px !important;
+  display:grid !important;place-items:center !important;box-sizing:border-box !important;
+}
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
+#app.admin-home-view .statistics-info-summary .metric-icon svg,
+#app.admin-home-view .cumulative-category-icon svg{
+  width:20px !important;height:20px !important;
+  min-width:20px !important;min-height:20px !important;
+  max-width:20px !important;max-height:20px !important;
+  stroke-width:2 !important;
+}
+@media(max-width:640px){
+  #app.admin-home-view .statistics-info-summary .metric-icon,
+  #app.admin-home-view .cumulative-category-icon{
+    width:50px !important;height:50px !important;
+    min-width:50px !important;min-height:50px !important;
+    flex:0 0 50px !important;border-radius:14px !important;
+  }
+  #app.admin-home-view .statistics-info-summary .metric-icon svg,
+  #app.admin-home-view .cumulative-category-icon svg{
+    width:26px !important;height:26px !important;
+    min-width:26px !important;min-height:26px !important;
+    max-width:26px !important;max-height:26px !important;
+  }
+}
+
 </style>
 
 
