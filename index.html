@@ -2031,6 +2031,17 @@ body .app-header:not(.home-header){
   width:100%;
   box-sizing:border-box;
 }
+.app-navbar-left,
+.app-navbar-brand,
+.app-navbar-right{
+  display:flex;
+  align-items:center;
+  min-width:0;
+}
+.app-navbar-left{justify-content:flex-start;flex:1 1 0;}
+.app-navbar-brand{justify-content:center;flex:0 1 auto;}
+.app-navbar-right{justify-content:flex-end;flex:1 1 0;}
+
 .app-navbar.navbar-expand-lg{
   display:flex;
   align-items:center;
@@ -4724,9 +4735,9 @@ function render(){
     app.className="member-portal-view";
     app.innerHTML=`
       <header class="portal-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
-        <div class="app-header-spacer" aria-hidden="true"></div>
-        <div class="app-header-title">四紅哨角隊</div>
-        <div class="portal-menu-wrap">
+        <div class="app-navbar-left"><div class="app-header-spacer" aria-hidden="true"></div></div>
+        <div class="app-navbar-brand app-header-title">四紅哨角隊</div>
+        <div class="app-navbar-right portal-menu-wrap">
           <button class="portal-more" type="button" id="portal-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
           <div class="portal-menu" id="portal-menu" hidden>
             <button type="button" id="portal-admin-login"><i data-lucide="shield"></i><span>管理員登入</span></button>
@@ -4799,9 +4810,9 @@ function render(){
     app.className="admin-login-view";
     app.innerHTML=`
       <header class="member-feature-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
-        <button type="button" class="member-feature-back" id="admin-login-home" aria-label="返回"><i data-lucide="arrow-left"></i></button>
-        <div class="app-header-title">四紅哨角隊</div>
-        <div class="app-header-spacer" aria-hidden="true"></div>
+        <div class="app-navbar-left"><button type="button" class="member-feature-back" id="admin-login-home" aria-label="返回"><i data-lucide="arrow-left"></i></button></div>
+        <div class="app-navbar-brand app-header-title">四紅哨角隊</div>
+        <div class="app-navbar-right"><div class="app-header-spacer" aria-hidden="true"></div></div>
       </header>
       <div id="tab-content" class="member-feature-content"></div>`;
     app.querySelector("#admin-login-home")?.addEventListener("click",()=>{memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;render();});
@@ -4815,9 +4826,9 @@ function render(){
     app.className="member-feature-view";
     app.innerHTML=`
       <header class="member-feature-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
-        <button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回"><i data-lucide="arrow-left"></i></button>
-        <div class="app-header-title">四紅哨角隊</div>
-        <div class="app-header-spacer" aria-hidden="true"></div>
+        <div class="app-navbar-left"><button type="button" class="member-feature-back" id="member-feature-back" aria-label="返回"><i data-lucide="arrow-left"></i></button></div>
+        <div class="app-navbar-brand app-header-title">四紅哨角隊</div>
+        <div class="app-navbar-right"><div class="app-header-spacer" aria-hidden="true"></div></div>
       </header>
       <div id="tab-content" class="member-feature-content"></div>`;
     app.querySelector("#member-feature-back")?.addEventListener("click",()=>{memberHome=true;openEventId=null;queryResultVisible=false;render();});
@@ -4831,9 +4842,9 @@ function render(){
   if(!isChild && !window.__adminAccountsViewOpen){
     app.innerHTML=`
       <header class="top home-fixed-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
-        <div class="home-header-left-slot" aria-hidden="true"></div>
-        <div class="top-brand"><h1>四紅哨角隊</h1></div>
-        <div class="top-admin-actions admin-header-menu-wrap">
+        <div class="app-navbar-left"><div class="home-header-left-slot" aria-hidden="true"></div></div>
+        <div class="app-navbar-brand top-brand"><h1>四紅哨角隊</h1></div>
+        <div class="app-navbar-right top-admin-actions admin-header-menu-wrap">
         <button class="portal-more" type="button" id="admin-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
         <div class="portal-menu admin-header-menu" id="admin-header-menu" hidden>
           <button type="button" id="admin-menu-home"><i data-lucide="house"></i><span>首頁</span></button>
@@ -4855,9 +4866,9 @@ function render(){
     const backLabel=openEventId?"返回活動列表":(window.__adminAccountsViewOpen?"返回管理後台":(queryHomeMode?"首頁":(activeTab==="query"?"返回首頁":"返回管理後台")));
     app.innerHTML=`
       <header class="subpage-fixed-header app-navbar navbar navbar-expand-lg container-fluid" role="banner">
-        <button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${(!adminUnlocked && queryHomeMode)?"house":"arrow-left"}"></i></button>
-        <h1 class="subpage-title">四紅哨角隊</h1>
-        <div class="subpage-actions admin-header-menu-wrap">
+        <div class="app-navbar-left"><button class="subpage-back-top" type="button" aria-label="${escapeHtml(backLabel)}" title="${escapeHtml(backLabel)}"><i data-lucide="${(!adminUnlocked && queryHomeMode)?"house":"arrow-left"}"></i></button></div>
+        <div class="app-navbar-brand"><h1 class="subpage-title">四紅哨角隊</h1></div>
+        <div class="app-navbar-right subpage-actions admin-header-menu-wrap">
           <button class="portal-more" type="button" id="admin-more" aria-label="更多選項" aria-expanded="false"><i data-lucide="ellipsis"></i></button>
           <div class="portal-menu admin-header-menu" id="admin-header-menu" hidden>
             <button type="button" id="admin-menu-home"><i data-lucide="house"></i><span>首頁</span></button>
