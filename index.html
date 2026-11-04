@@ -3957,8 +3957,8 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 
 /* V2.5 Bootstrap phase 21: normalize activity list container */
 #app.home-view .activity-grid-bootstrap{
-  display:flex;
-  flex-direction:column;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
   gap:12px;
   width:100%;
 }
