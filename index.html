@@ -4642,6 +4642,58 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   }
 }
 
+
+/* 最終圖示統一補正：掃描舊 CSS 後補齊所有主要「功能圖示容器」。
+   統一以 V2.5 最大正常功能尺寸 50×50px；Header／狀態微圖示不納入。 */
+#app .top-brand-icon,
+#app .announcement-icon,
+#app .member-announcement-mark,
+#app .activity-icon,
+#app .query-search-icon,
+#app .metric-icon,
+#app .admin-action .menu-icon,
+#app .admin-square .menu-icon,
+#app .query-person-icon,
+#app .query-history .list-icon,
+#app .admin-role-icon,
+#app .checkin-hero-icon,
+#app .admin-login-heading-icon,
+#app .admin-main-hero-icon,
+#app .admin-login-hero-icon,
+#app .cumulative-category-icon,
+#app .officer-icon,
+#app .portal-card-icon{
+  width:50px !important;height:50px !important;
+  min-width:50px !important;min-height:50px !important;
+  max-width:50px !important;max-height:50px !important;
+  flex:0 0 50px !important;
+  box-sizing:border-box !important;
+  display:grid !important;place-items:center !important;
+}
+#app .top-brand-icon svg,
+#app .announcement-icon svg,
+#app .member-announcement-mark svg,
+#app .activity-icon svg,
+#app .query-search-icon svg,
+#app .metric-icon svg,
+#app .admin-action .menu-icon svg,
+#app .admin-square .menu-icon svg,
+#app .query-person-icon svg,
+#app .query-history .list-icon svg,
+#app .admin-role-icon svg,
+#app .checkin-hero-icon svg,
+#app .admin-login-heading-icon svg,
+#app .admin-main-hero-icon svg,
+#app .admin-login-hero-icon svg,
+#app .cumulative-category-icon svg,
+#app .officer-icon svg,
+#app .portal-card-icon svg{
+  width:26px !important;height:26px !important;
+  min-width:26px !important;min-height:26px !important;
+  max-width:26px !important;max-height:26px !important;
+  margin:0 !important;stroke-width:2 !important;
+}
+
 </style>
 
 
