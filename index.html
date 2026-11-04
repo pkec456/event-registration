@@ -4003,7 +4003,7 @@ button.secondary,.manual-return-discard,
 .portal-menu button:active{background:var(--accent-soft);color:var(--accent)}
 .portal-menu button svg{width:18px;height:18px;color:var(--accent)}
 .portal-main{padding-top:34px}
-.portal-announcement{margin-top:18px}
+.portal-announcement{margin:0 0 18px}
 .portal-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .portal-card{
   min-height:190px;padding:20px 16px 18px;border:1px solid var(--line);border-radius:22px;
@@ -4823,6 +4823,17 @@ function render(){
         </div>
       </header>
       <main class="portal-main">
+        <section class="announcement member-announcement portal-announcement">
+          <div class="member-announcement-bar">
+            <div class="member-announcement-mark"><i data-lucide="megaphone"></i></div>
+            <div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div>
+            <i class="member-announcement-chevron" data-lucide="chevron-right"></i>
+          </div>
+          <div class="member-announcement-body">
+            <div class="member-announcement-kicker">NOTICE</div>
+            <div class="announcement-text">${escapeHtml(announcementText)}</div>
+          </div>
+        </section>
         <div class="portal-card-grid">
           ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動簽到">
             <div class="portal-card-icon"><i data-lucide="calendar-check"></i></div>
@@ -4835,17 +4846,7 @@ function render(){
             <div class="portal-card-desc">查詢個人出席紀錄</div>
           </div>
         </div>
-        <section class="announcement member-announcement portal-announcement">
-          <div class="member-announcement-bar">
-            <div class="member-announcement-mark"><i data-lucide="megaphone"></i></div>
-            <div class="member-announcement-heading"><h3>隊務公告</h3><span>最新通知</span></div>
-            <i class="member-announcement-chevron" data-lucide="chevron-right"></i>
-          </div>
-          <div class="member-announcement-body">
-            <div class="member-announcement-kicker">NOTICE</div>
-            <div class="announcement-text">${escapeHtml(announcementText)}</div>
-          </div>
-        </section>
+
       </main>`;
     const more=app.querySelector("#portal-more");
     const menu=app.querySelector("#portal-menu");
