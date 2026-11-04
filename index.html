@@ -4112,6 +4112,87 @@ button.secondary,.manual-return-discard,
 /* 以首頁兩張卡片作為隊員唯一入口，不再重複顯示底部導覽 */
 #app.member-portal-view{padding-bottom:32px !important;}
 
+
+/* App UI 整合：採用單一行動版 App Shell，統一首頁／隊員功能／管理頁的版面邏輯 */
+#app.member-portal-view,
+#app.member-feature-view,
+#app.admin-home-view,
+#app.home-view,
+#app.child-view{
+  width:100% !important;
+  max-width:520px !important;
+  box-sizing:border-box !important;
+  overflow-x:hidden !important;
+}
+.portal-header,
+.member-feature-header,
+.top.home-fixed-header,
+.subpage-fixed-header{
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:520px !important;
+}
+/* 取消先前負 margin 造成手機右側裁切，所有頁面共用完整頂欄 */
+.member-feature-header,
+.top.home-fixed-header{
+  margin-left:0 !important;
+  margin-right:0 !important;
+}
+#app.member-feature-view{padding-left:0 !important;padding-right:0 !important;}
+#app.member-feature-view .member-feature-content{padding:0 18px;}
+.member-feature-header{
+  padding-left:18px !important;
+  padding-right:18px !important;
+}
+.top.home-fixed-header{
+  margin-left:0 !important;
+  margin-right:0 !important;
+  padding-left:16px !important;
+  padding-right:16px !important;
+}
+/* 共用 App Header：返回／標題／操作三欄，避免各頁自行偏移 */
+.member-feature-header,
+.top.home-fixed-header,
+.subpage-fixed-header{
+  display:grid !important;
+  align-items:center !important;
+  min-height:64px !important;
+  height:64px !important;
+  background:#fff !important;
+  border-bottom:1px solid var(--line) !important;
+  box-shadow:none !important;
+}
+/* 隊員首頁改為資訊優先：公告 → 主要功能，減少大面積留白 */
+.member-portal-view .portal-header{
+  min-height:64px !important;
+  height:64px !important;
+  padding:0 2px !important;
+}
+.member-portal-view .portal-main{padding-top:18px !important;}
+.member-portal-view .portal-announcement{margin-bottom:14px !important;}
+.member-portal-view .portal-card{min-height:164px !important;}
+.member-portal-view .portal-card-icon{margin-bottom:14px !important;}
+/* 管理端沿用同一個頂欄操作尺寸，不再與隊員端產生兩套按鈕規格 */
+.top-admin-actions,
+.subpage-actions{display:flex !important;align-items:center !important;gap:8px !important;}
+.member-feature-back,
+.home-header-left-slot .home-link,
+.top-admin-access,
+.top-admin-logout,
+.subpage-fixed-header .subpage-back-top{
+  flex:0 0 42px !important;
+  box-sizing:border-box !important;
+}
+@media(max-width:380px){
+  #app.member-feature-view .member-feature-content{padding-left:14px;padding-right:14px;}
+  .member-feature-header{padding-left:14px !important;padding-right:14px !important;}
+}
+/* 新版入口已承擔導覽功能，徹底隱藏舊版底部簽到／出席率導覽 */
+.member-portal-view .home-tabs,
+.member-feature-view .home-tabs,
+.admin-home-view .home-tabs,
+.child-view .home-tabs{display:none !important;}
+
 </style>
 
 
