@@ -3660,6 +3660,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   max-width:48px !important;
   max-height:48px !important;
 }
+
+/* Admin menu: sign-in visibility tile follows the same icon scale and bounds as Officer Management. */
+#app.admin-home-view .signin-page-setting-tile{position:relative !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:8px !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy{margin:0 !important;order:2;}
+#app.admin-home-view .signin-page-setting-tile .activity-toggle-btn{position:static !important;width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;max-width:42px !important;max-height:42px !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:14px !important;display:flex !important;align-items:center !important;justify-content:center !important;order:1;}
+#app.admin-home-view .signin-page-setting-tile .activity-toggle-btn svg{width:20px !important;height:20px !important;min-width:20px !important;min-height:20px !important;max-width:20px !important;max-height:20px !important;}
+#app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{display:none !important;}
 </style>
 
 
@@ -5412,11 +5419,10 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button></div>`:""}
   <div class="col"><div class="admin-action admin-square signin-page-setting-tile w-100 h-100">
-    <div class="signin-tile-copy"><strong>簽到頁面</strong></div>
+    <div class="signin-tile-copy"><strong>隱藏位置</strong></div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
-    <span class="signin-page-toggle-label">${signinPageVisible?"隱藏":"開啟"}</span>
   </div></div>
 </div>
 
