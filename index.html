@@ -3990,6 +3990,80 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 /* V2.5 Bootstrap audit: management status filter grid */
 #app .activity-filter-status-bootstrap{margin-left:0;margin-right:0;}
 #app .activity-filter-status-bootstrap .choice{min-width:0;}
+
+/* ===== Header final unified layout =====
+   All application headers share the same three-column Bootstrap-compatible shell. */
+#app > .app-navbar{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:42px minmax(0,1fr) 42px !important;
+  align-items:center !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+#app > .app-navbar > .app-navbar-left,
+#app > .app-navbar > .app-navbar-brand,
+#app > .app-navbar > .app-navbar-right{
+  position:static !important;
+  transform:none !important;
+  min-width:0 !important;
+  height:42px !important;
+  display:flex !important;
+  align-items:center !important;
+}
+#app > .app-navbar > .app-navbar-left{
+  grid-column:1 !important;
+  justify-content:flex-start !important;
+}
+#app > .app-navbar > .app-navbar-brand{
+  grid-column:2 !important;
+  justify-content:center !important;
+  text-align:center !important;
+  overflow:hidden !important;
+}
+#app > .app-navbar > .app-navbar-right{
+  grid-column:3 !important;
+  justify-content:flex-end !important;
+}
+#app > .app-navbar .app-header-title,
+#app > .app-navbar .top-brand,
+#app > .app-navbar .subpage-title{
+  margin:0 !important;
+  text-align:center !important;
+}
+#app > .app-navbar .app-header-title,
+#app > .app-navbar .top-brand h1,
+#app > .app-navbar .subpage-title{
+  width:100% !important;
+  max-width:100% !important;
+}
+#app > .app-navbar .member-feature-back,
+#app > .app-navbar .subpage-back-top,
+#app > .app-navbar .portal-more,
+#app > .app-navbar .top-admin-access,
+#app > .app-navbar .top-admin-logout{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+#app > .app-navbar .app-navbar-right .portal-menu-wrap,
+#app > .app-navbar .app-navbar-right .top-admin-actions,
+#app > .app-navbar .app-navbar-right .subpage-actions{
+  width:auto !important;
+  min-width:42px !important;
+  height:42px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+}
+
 </style>
 
 
