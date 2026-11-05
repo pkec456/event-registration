@@ -3777,6 +3777,29 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     line-height:1.35 !important;
   }
 }
+
+/* Mobile admin dashboard: preserve Bootstrap's two-column row.
+   Do not use CSS gap on a .row: 50% Bootstrap columns + gap caused each card to wrap. */
+@media(max-width:576px){
+  #app.admin-home-view .admin-bootstrap-grid{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:0 !important;
+    --bs-gutter-x:14px !important;
+    --bs-gutter-y:14px !important;
+  }
+  #app.admin-home-view .admin-bootstrap-grid > .col{
+    flex:0 0 50% !important;
+    width:50% !important;
+    max-width:50% !important;
+    display:flex !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid{
+    gap:0 !important;
+    --bs-gutter-x:14px !important;
+    --bs-gutter-y:14px !important;
+  }
+}
 </style>
 
 
