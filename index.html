@@ -3663,67 +3663,27 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 }
 
 
-/* V2.5 Header 單一規格（唯一最終覆蓋層）
-   所有 Header：64px、16px 安全距、42px 左右欄位、標題真正置中。
-   隊員首頁：空白｜四紅哨角隊｜…
-   隊員功能：返回｜四紅哨角隊｜空白
-   管理首頁：空白｜四紅哨角隊｜…
-   管理內頁：返回｜四紅哨角隊｜… */
-:root{--v25-header-h:64px;--v25-header-pad:16px;--v25-header-side:42px;}
-#app > .portal-header,
-#app > .member-feature-header,
-#app > .top.home-fixed-header,
-#app > .subpage-fixed-header{
-  position:sticky !important;top:0 !important;left:auto !important;right:auto !important;
-  width:100% !important;height:var(--v25-header-h) !important;
-  min-height:var(--v25-header-h) !important;max-height:var(--v25-header-h) !important;
-  margin:0 !important;padding:0 var(--v25-header-pad) !important;
-  display:grid !important;grid-template-columns:var(--v25-header-side) minmax(0,1fr) var(--v25-header-side) !important;
-  align-items:center !important;box-sizing:border-box !important;transform:none !important;
-  background:var(--surface,#fff) !important;border-bottom:1px solid var(--line) !important;
-  z-index:1000 !important;
+/* ===== Header canonical unified layout =====
+:root{--app-header-h:64px;--app-header-pad:16px;--app-header-side:42px;}
+#app > header.app-navbar{
+ position:sticky !important;top:0 !important;width:100% !important;height:var(--app-header-h) !important;min-height:var(--app-header-h) !important;max-height:var(--app-header-h) !important;margin:0 !important;padding:0 var(--app-header-pad) !important;display:grid !important;grid-template-columns:var(--app-header-side) minmax(0,1fr) var(--app-header-side) !important;align-items:center !important;box-sizing:border-box !important;background:var(--surface,#fff) !important;border-bottom:1px solid var(--line) !important;z-index:1000 !important;
 }
-#app > .portal-header .app-header-title,
-#app > .member-feature-header .app-header-title,
-#app > .top.home-fixed-header .top-brand,
-#app > .subpage-fixed-header .subpage-title{
-  grid-column:2 !important;grid-row:1 !important;margin:0 !important;
-  width:100% !important;min-width:0 !important;text-align:center !important;
-  justify-self:stretch !important;align-self:center !important;
-  white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;
+#app > header.app-navbar > .app-navbar-left,#app > header.app-navbar > .app-navbar-brand,#app > header.app-navbar > .app-navbar-right{
+ position:static !important;transform:none !important;width:auto !important;height:var(--app-header-side) !important;min-width:0 !important;min-height:var(--app-header-side) !important;margin:0 !important;padding:0 !important;display:flex !important;align-items:center !important;
 }
-#app > .portal-header .app-header-spacer,
-#app > .member-feature-header .member-feature-back,
-#app > .member-feature-header .app-header-spacer,
-#app > .top.home-fixed-header .home-header-left-slot,
-#app > .subpage-fixed-header .subpage-back-top{
-  grid-column:1 !important;grid-row:1 !important;width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
+#app > header.app-navbar > .app-navbar-left{grid-column:1 !important;justify-content:flex-start !important;}
+#app > header.app-navbar > .app-navbar-brand{grid-column:2 !important;justify-content:center !important;text-align:center !important;overflow:hidden !important;}
+#app > header.app-navbar > .app-navbar-right{grid-column:3 !important;justify-content:flex-end !important;}
+#app > header.app-navbar .app-header-title,#app > header.app-navbar .top-brand,#app > header.app-navbar .subpage-title,#app > header.app-navbar .top-brand h1{
+ position:static !important;transform:none !important;width:100% !important;margin:0 !important;padding:0 !important;text-align:center !important;font-size:17px !important;font-weight:900 !important;line-height:1 !important;white-space:nowrap !important;
 }
-#app > .member-feature-header .app-header-spacer{grid-column:3 !important;}
-#app > .portal-header .portal-menu-wrap,
-#app > .member-feature-header .app-header-menu-slot,
-#app > .top.home-fixed-header .top-admin-actions,
-#app > .subpage-fixed-header .subpage-actions{
-  grid-column:3 !important;grid-row:1 !important;width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
-  min-width:var(--v25-header-side) !important;justify-self:end !important;position:relative !important;overflow:visible !important;
+#app > header.app-navbar .member-feature-back,#app > header.app-navbar .subpage-back-top,#app > header.app-navbar .portal-more,#app > header.app-navbar .app-header-spacer,#app > header.app-navbar .home-header-left-slot{
+ width:var(--app-header-side) !important;height:var(--app-header-side) !important;min-width:var(--app-header-side) !important;min-height:var(--app-header-side) !important;margin:0 !important;padding:0 !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;box-sizing:border-box !important;
 }
-#app > .top.home-fixed-header .home-header-left-slot{display:block !important;}
-#app > .member-feature-header .member-feature-back,
-#app > .subpage-fixed-header .subpage-back-top,
-#app > .portal-header .portal-more,
-#app > .top.home-fixed-header .portal-more{
-  width:var(--v25-header-side) !important;height:var(--v25-header-side) !important;
-  min-width:var(--v25-header-side) !important;min-height:var(--v25-header-side) !important;
-  margin:0 !important;padding:0 !important;box-sizing:border-box !important;
+#app > header.app-navbar .portal-menu-wrap,#app > header.app-navbar .top-admin-actions,#app > header.app-navbar .subpage-actions{
+ width:var(--app-header-side) !important;height:var(--app-header-side) !important;min-width:var(--app-header-side) !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:flex-end !important;
 }
-#app > .top.home-fixed-header .top-brand h1,
-#app > .subpage-fixed-header .subpage-title,
-#app > .portal-header .app-header-title,
-#app > .member-feature-header .app-header-title{
-  margin:0 !important;font-size:17px !important;font-weight:900 !important;line-height:1 !important;
-}
-.admin-header-menu{position:absolute !important;right:0 !important;top:48px !important;z-index:1200 !important;}
-@media(max-width:380px){:root{--v25-header-pad:14px;}}
+@media(max-width:380px){:root{--app-header-pad:14px;}}
 
 
 /* V2.5 圖示統一規格：Header 與 Header 選單只使用同一套尺寸、顏色與線條 */
