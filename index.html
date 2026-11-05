@@ -4064,6 +4064,46 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   justify-content:flex-end !important;
 }
 
+
+/* ===== Header single visual contract (final) ===== */
+#app .app-navbar{
+  display:grid !important;
+  grid-template-columns:52px minmax(0,1fr) 52px !important;
+  align-items:center !important;
+  height:58px !important;
+  min-height:58px !important;
+  padding:0 8px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+#app .app-navbar .app-navbar-left,
+#app .app-navbar .app-navbar-brand,
+#app .app-navbar .app-navbar-right{
+  height:42px !important;
+  min-height:42px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+}
+#app .app-navbar .app-navbar-left{grid-column:1 !important;justify-content:flex-start !important;}
+#app .app-navbar .app-navbar-brand{grid-column:2 !important;position:static !important;transform:none !important;justify-content:center !important;text-align:center !important;overflow:hidden !important;}
+#app .app-navbar .app-navbar-right{grid-column:3 !important;justify-content:flex-end !important;}
+#app .app-navbar .app-header-title,
+#app .app-navbar .top-brand,
+#app .app-navbar .subpage-title,
+#app .app-navbar .top-brand h1{
+  position:static !important;
+  transform:none !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:42px !important;
+  text-align:center !important;
+}
+#app .app-navbar .app-header-spacer,
+#app .app-navbar .home-header-left-slot{width:42px !important;height:42px !important;margin:0 !important;}
+
 </style>
 
 
