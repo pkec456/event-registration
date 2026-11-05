@@ -3549,6 +3549,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   border-radius:12px !important;
   overflow:hidden;
 }
+
+/* Header background follows the app canvas on mobile: no white strip mismatch. */
+@media(max-width:520px){
+  #app header.app-navbar{
+    background:var(--bg,#f5f2ec) !important;
+  }
+}
 </style>
 
 
