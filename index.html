@@ -3556,6 +3556,23 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     background:var(--bg,#f5f2ec) !important;
   }
 }
+
+/* ===== Public sign-in page: inherit the same canvas and header treatment as Manual Registration ===== */
+#app .checkin-page,
+#app .checkin-wrap,
+#app .activity-signin-page{
+  background:transparent !important;
+}
+#app header.app-navbar{
+  background:var(--bg,#f5f2ec) !important;
+}
+/* Keep the sign-in content on the same V2.5 canvas; remove the legacy white page strip. */
+@media(max-width:520px){
+  #app:has(.checkin-card) header.app-navbar,
+  #app:has(.checkin-card){
+    background:var(--bg,#f5f2ec) !important;
+  }
+}
 </style>
 
 
