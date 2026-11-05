@@ -3526,15 +3526,20 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 
 /* Mobile: every header escapes its page-content padding and uses the exact viewport width. */
 @media(max-width:520px){
+  /* Center relative to the viewport, not to each page's padded content container. */
   #app header.app-navbar{
+    position:sticky !important;
     width:100vw !important;
     max-width:100vw !important;
-    left:50% !important;
+    left:auto !important;
     right:auto !important;
-    margin-left:-50vw !important;
-    margin-right:0 !important;
+    margin-left:calc(50% - 50vw) !important;
+    margin-right:calc(50% - 50vw) !important;
     padding:0 16px !important;
+    grid-template-columns:48px minmax(0,1fr) 48px !important;
   }
+  #app header.app-navbar > .app-navbar-left{justify-self:start !important;}
+  #app header.app-navbar > .app-navbar-right{justify-self:end !important;}
 }
 </style>
 
