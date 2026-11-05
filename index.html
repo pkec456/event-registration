@@ -4909,7 +4909,21 @@ function render(){
 
   const subpageBack=app.querySelector(".subpage-back-top");
   if(subpageBack)subpageBack.onclick=()=>{
-    if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
+    // V2.6.2 管理首頁收合：保存展開狀態，避免任何重新渲染後自動彈開。
+  if(isAdminHome){
+    window.__adminCollapseState=window.__adminCollapseState||{};
+    app.querySelectorAll("details.admin-collapsible").forEach((detail,i)=>{
+      const key=detail.querySelector("summary h2")?.textContent?.trim()||String(i);
+      if(Object.prototype.hasOwnProperty.call(window.__adminCollapseState,key)){
+        detail.open=!!window.__adminCollapseState[key];
+      }
+      detail.addEventListener("toggle",()=>{
+        window.__adminCollapseState[key]=detail.open;
+      });
+    });
+  }
+
+  if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
     if(openEventId){openEventId=null;render();return;}
     if(activeTab==="query"){memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;queryResultVisible=false;render();return;}
     if(activeTab==="admin" && adminUnlocked){
@@ -6969,9 +6983,4 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </html>
 
 <script>
-// V2.6.1：收合標題僅控制自身 details，避免點擊事件冒泡觸發管理首頁重新渲染。
-document.addEventListener('click',(e)=>{
-  const summary=e.target.closest('#app.admin-home-view details.admin-collapsible > summary');
-  if(summary) e.stopPropagation();
-},true);
 </script>
