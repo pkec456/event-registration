@@ -1863,17 +1863,67 @@ body .app-header:not(.home-header){
   transform:none !important;
 }
 
-/* V2.6 管理首頁收合區塊 */
-#app.admin-home-view .admin-collapsible{margin:0 0 14px;}
-#app.admin-home-view .admin-collapsible summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 4px;border-bottom:1px solid transparent;}
+/* V2.6 管理首頁收合：延續原本 section-head 視覺，不新增厚重外框 */
+#app.admin-home-view .admin-collapsible{
+  margin:0 0 22px;
+  padding:0;
+}
+#app.admin-home-view .admin-collapsible summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:44px;
+  padding:0 2px 8px;
+  border-bottom:1px solid var(--line,#e8ddd0);
+}
 #app.admin-home-view .admin-collapsible summary::-webkit-details-marker{display:none;}
-#app.admin-home-view .admin-collapsible summary h2{margin:0;}
-#app.admin-home-view .admin-collapsible summary .collapse-meta{display:flex;align-items:center;gap:8px;color:var(--muted,#93877b);font-size:16px;}
-#app.admin-home-view .admin-collapsible summary .collapse-chevron{width:20px;height:20px;transition:transform .2s ease;}
-#app.admin-home-view .admin-collapsible:not([open]) summary .collapse-chevron{transform:rotate(-90deg);}
-#app.admin-home-view .admin-collapsible .admin-collapsible-body{padding-top:10px;}
-#app.admin-home-view .admin-collapsible:not([open]){margin-bottom:4px;}
-@media(max-width:520px){#app.admin-home-view .admin-collapsible summary{min-height:48px;}#app.admin-home-view .admin-collapsible summary h2{font-size:24px!important;}#app.admin-home-view .admin-collapsible summary .collapse-meta{font-size:14px;}}
+#app.admin-home-view .admin-collapsible summary h2{
+  margin:0;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:.01em;
+}
+#app.admin-home-view .admin-collapsible summary .collapse-meta{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted,#9a8f83);
+  font-size:15px;
+  font-weight:700;
+  white-space:nowrap;
+}
+#app.admin-home-view .admin-collapsible summary .collapse-chevron{
+  width:18px;
+  height:18px;
+  stroke-width:2.5;
+  transition:transform .22s ease;
+}
+#app.admin-home-view .admin-collapsible:not([open]) summary .collapse-chevron{
+  transform:rotate(-90deg);
+}
+#app.admin-home-view .admin-collapsible .admin-collapsible-body{
+  padding-top:14px;
+}
+#app.admin-home-view .admin-collapsible:not([open]){
+  margin-bottom:8px;
+}
+#app.admin-home-view .admin-collapsible:not([open]) summary{
+  padding-bottom:4px;
+  border-bottom-color:transparent;
+}
+@media(max-width:520px){
+  #app.admin-home-view .admin-collapsible{margin-bottom:18px;}
+  #app.admin-home-view .admin-collapsible summary{
+    min-height:40px;
+    padding:0 2px 7px;
+  }
+  #app.admin-home-view .admin-collapsible summary h2{font-size:24px!important;}
+  #app.admin-home-view .admin-collapsible summary .collapse-meta{font-size:14px;}
+  #app.admin-home-view .admin-collapsible .admin-collapsible-body{padding-top:12px;}
+}
 /* Shared Header back control: one visual contract for every page. */
 .app-navbar-left .member-feature-back,
 .app-navbar-left .subpage-back-top{
