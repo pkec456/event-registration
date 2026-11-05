@@ -3831,6 +3831,17 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     padding-top:0 !important;
   }
 }
+
+/* Final header/content spacing: the actual shared header class is .app-navbar.
+   Apply spacing to every inner-page tab container, including second-level admin pages. */
+#app > header.app-navbar + #tab-content{
+  padding-top:18px !important;
+}
+@media(max-width:576px){
+  #app > header.app-navbar + #tab-content{
+    padding-top:16px !important;
+  }
+}
 </style>
 
 
