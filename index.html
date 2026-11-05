@@ -3816,6 +3816,21 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     padding-top:16px !important;
   }
 }
+
+/* Nested/second-level pages: apply the same breathing room after the shared header.
+   Covers views whose page wrapper is inserted between header and the actual section. */
+@media(max-width:576px){
+  #app .app-header + *,
+  #app .site-header + *{
+    margin-top:16px !important;
+  }
+  #app .app-header + * > .page-content,
+  #app .site-header + * > .page-content,
+  #app .app-header + * > main,
+  #app .site-header + * > main{
+    padding-top:0 !important;
+  }
+}
 </style>
 
 
