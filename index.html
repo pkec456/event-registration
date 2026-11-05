@@ -5667,7 +5667,7 @@ function renderAdmin(el){
 </div></div></details>
 <details class="admin-collapsible"><summary><h2>活動類別統計</h2><span class="collapse-meta">點擊查看 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2 mb-3 cumulative-category-bootstrap-grid">${cumulativeCategoryStats.map(item=>`<div class="col"><button type="button" class="cumulative-category-card w-100 h-100" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button></div>`).join("")}</div></div></details>
 `;
-  if(adminPage==="category-activities"{
+  if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
