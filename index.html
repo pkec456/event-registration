@@ -1863,6 +1863,17 @@ body .app-header:not(.home-header){
   transform:none !important;
 }
 
+/* V2.6 管理首頁收合區塊 */
+#app.admin-home-view .admin-collapsible{margin:0 0 14px;}
+#app.admin-home-view .admin-collapsible summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 4px;border-bottom:1px solid transparent;}
+#app.admin-home-view .admin-collapsible summary::-webkit-details-marker{display:none;}
+#app.admin-home-view .admin-collapsible summary h2{margin:0;}
+#app.admin-home-view .admin-collapsible summary .collapse-meta{display:flex;align-items:center;gap:8px;color:var(--muted,#93877b);font-size:16px;}
+#app.admin-home-view .admin-collapsible summary .collapse-chevron{width:20px;height:20px;transition:transform .2s ease;}
+#app.admin-home-view .admin-collapsible:not([open]) summary .collapse-chevron{transform:rotate(-90deg);}
+#app.admin-home-view .admin-collapsible .admin-collapsible-body{padding-top:10px;}
+#app.admin-home-view .admin-collapsible:not([open]){margin-bottom:4px;}
+@media(max-width:520px){#app.admin-home-view .admin-collapsible summary{min-height:48px;}#app.admin-home-view .admin-collapsible summary h2{font-size:24px!important;}#app.admin-home-view .admin-collapsible summary .collapse-meta{font-size:14px;}}
 /* Shared Header back control: one visual contract for every page. */
 .app-navbar-left .member-feature-back,
 .app-navbar-left .subpage-back-top{
@@ -5594,11 +5605,7 @@ function renderAdmin(el){
     </div>
   </div>
 
-</div><div class="section-head" style="margin-top:0">
-  <h2>首頁公告</h2>
-  <span></span>
-</div>
-<div class="announcement-admin">
+</div><details class="admin-collapsible" open><summary><h2>首頁公告</h2><span class="collapse-meta"><i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="announcement-admin">
   ${announcementEditing
     ? `<div class="announcement-edit-area">
          <textarea id="announcement-input">${escapeHtml(announcementText)}</textarea>
@@ -5613,9 +5620,8 @@ function renderAdmin(el){
            <i data-lucide="pencil"></i>編輯
          </button>
        </div>`}
-</div>
-
-<div class="section-head"><h2>管理功能</h2><span>常用操作</span></div><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
+</div></div></details>
+<details class="admin-collapsible" open><summary><h2>管理功能</h2><span class="collapse-meta">常用操作 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
   <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>活動簽到</strong>
@@ -5642,10 +5648,8 @@ function renderAdmin(el){
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
   </div></div>
-</div>
-
-<div class="section-head statistics-info-head"><h2>統計資訊</h2><span>即時資料</span></div>
-<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 mb-3 statistics-bootstrap-grid">
+</div></div></details>
+<details class="admin-collapsible"><summary><h2>統計資訊</h2><span class="collapse-meta">即時資料 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 mb-3 statistics-bootstrap-grid">
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div></div>
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div></div>
   <div class="col"><div class="metric top-attendance-metric h-100" id="top-attendance-metric">
@@ -5655,17 +5659,15 @@ function renderAdmin(el){
   </div></div>
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div></div>
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div></div>
-</div>
-<div class="section-head monthly-chart-head"><h2>每月活動場次</h2><span>${monthlyChartYear} 年</span></div>
-<div class="monthly-chart-card">
+</div></div></details>
+<details class="admin-collapsible"><summary><h2>每月活動場次</h2><span class="collapse-meta">${monthlyChartYear} 年 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="monthly-chart-card">
   <div class="monthly-chart-wrap">${monthlyChartSvg}</div>
   <div class="monthly-chart-footnote">點擊圖上的月份資料點，可查看該月活動清單。</div>
   <div id="monthly-chart-detail" class="monthly-chart-detail" hidden></div>
-</div>
-<div class="section-head cumulative-category-head"><h2>活動類別統計</h2><span>點擊查看</span></div>
-<div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2 mb-3 cumulative-category-bootstrap-grid">${cumulativeCategoryStats.map(item=>`<div class="col"><button type="button" class="cumulative-category-card w-100 h-100" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button></div>`).join("")}</div>
+</div></div></details>
+<details class="admin-collapsible"><summary><h2>活動類別統計</h2><span class="collapse-meta">點擊查看 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2 mb-3 cumulative-category-bootstrap-grid">${cumulativeCategoryStats.map(item=>`<div class="col"><button type="button" class="cumulative-category-card w-100 h-100" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button></div>`).join("")}</div></div></details>
 `;
-  if(adminPage==="category-activities"){
+  if(adminPage==="category-activities"{
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
     content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
