@@ -5684,9 +5684,8 @@ function renderAdmin(el){
       manualRegisterFields=Array.isArray(current.fields)&&current.fields.length ? current.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
     }
     const editing=!!current && manualRegisterActivityEditing;
-    content=`<h1 class="page-title">手動登記</h1><p class="page-subtitle">建立活動後，可由管理者直接輸入隊員姓名完成登記。</p>
-    <div class="form-block">
-      <div class="form-title"><span class="ico"><i data-lucide="clipboard-pen-line"></i></span>活動資料</div>
+    content=`<div class="form-block">
+      <div class="form-title"><span class="ico"><i data-lucide="clipboard-pen-line"></i></span><div><div>手動登記</div><div class="page-subtitle" style="margin:4px 0 0;">建立活動後，可由管理者直接輸入隊員姓名完成登記。</div></div></div>
       ${current && !editing ? `
         <div class="manual-activity-summary">
           <div class="manual-activity-summary-main">
