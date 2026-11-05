@@ -5419,7 +5419,7 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button></div>`:""}
   <div class="col"><div class="admin-action admin-square signin-page-setting-tile w-100 h-100">
-    <div class="signin-tile-copy"><strong>隱藏位置</strong></div>
+    <div class="signin-tile-copy"><strong>${signinPageVisible?"簽到隱藏":"簽到開啟"}</strong></div>
     <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
