@@ -3667,6 +3667,25 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app.admin-home-view .signin-page-setting-tile .activity-toggle-btn{position:static !important;width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;max-width:42px !important;max-height:42px !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:14px !important;display:flex !important;align-items:center !important;justify-content:center !important;order:1;}
 #app.admin-home-view .signin-page-setting-tile .activity-toggle-btn svg{width:20px !important;height:20px !important;min-width:20px !important;min-height:20px !important;max-width:20px !important;max-height:20px !important;}
 #app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{display:none !important;}
+
+/* Attendance page debug: .rate-list is a Bootstrap .row, not a CSS grid.
+   The legacy grid rule made Bootstrap .col widths calculate inside each grid track,
+   collapsing cards into narrow vertical strips. */
+#app .rate-list.rate-list-bootstrap{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  width:auto !important;
+}
+#app .rate-list.rate-list-bootstrap > .col{
+  display:block !important;
+  min-width:0 !important;
+}
+#app .rate-list.rate-list-bootstrap > .col > .rate-card{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
 </style>
 
 
