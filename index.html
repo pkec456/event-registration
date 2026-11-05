@@ -3800,6 +3800,22 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     --bs-gutter-y:14px !important;
   }
 }
+
+/* Inner pages: give the shared header breathing room before page content. */
+#app .app-header + .page-content,
+#app .app-header + main,
+#app .site-header + .page-content,
+#app .site-header + main{
+  padding-top:18px !important;
+}
+@media(max-width:576px){
+  #app .app-header + .page-content,
+  #app .app-header + main,
+  #app .site-header + .page-content,
+  #app .site-header + main{
+    padding-top:16px !important;
+  }
+}
 </style>
 
 
