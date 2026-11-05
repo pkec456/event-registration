@@ -64,10 +64,6 @@ button{cursor:pointer;border:0;color:inherit}
 button:disabled{opacity:.5;cursor:not-allowed}
 #app{max-width:520px;margin:0 auto;padding:0 16px 92px}
 .top{padding:22px 2px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.top-brand{display:flex;align-items:center;gap:11px;min-width:0}
-.top-brand-icon{width:42px;height:42px;border-radius:14px;background:#171717;color:#fff;place-items:center;flex:0 0 auto}
-.top-brand h1{margin:0;font-size:18px;line-height:1.2;font-weight:850}
-.top-brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
 .tabs{position:sticky;top:0;z-index:10;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:7px;background:rgba(245,245,243,.94);backdrop-filter:blur(12px);margin:0 -16px 16px;padding-left:16px;padding-right:16px;border-bottom:1px solid var(--line)}
 .tabs button{min-height:42px;background:transparent;border-radius:13px;font-size:13px;font-weight:800;color:#777;display:flex;align-items:center;justify-content:center;gap:6px}
 .tabs button.active{background:var(--accent);color:#fff}
@@ -497,20 +493,6 @@ font-size:8px;
 .announcement-simple{padding:12px 13px}
 .announcement-edit{padding:0 10px}
 }
-/* 原第二組 :root 的共用變數已併入區塊 A，避免重複定義。 */
-.top-admin-access{
-  width:42px;height:42px;border-radius:14px;
-  background:#fff;border:1px solid var(--line);
-  color:var(--ink);display:grid;place-items:center;
-  flex:0 0 auto;cursor:pointer;
-}
-.top-admin-access svg{width:21px;height:21px;color:var(--ink)}
-
-.top-admin-access.super svg{color:var(--admin-super)}
-
-.top-admin-access.officer svg{color:var(--accent)}
-
-.top-admin-access.guest svg{color:var(--ink)}
 input[type=text],
 input[type=date],
 input[type=password],
@@ -569,18 +551,6 @@ button.secondary:focus-visible,
 .back:focus-visible{
   outline:2px solid rgba(201,20,27,.25);
   outline-offset:2px;
-}
-.top-brand-icon,
-.metric-icon,
-.admin-action .menu-icon,
-.activity-icon,
-.admin-card-icon,
-.officer-icon,
-.form-title .ico,
-.icon-btn,
-.query-search-icon{
-  color:var(--ink);
-  background:#f2f2ef;
 }
 .announcement-icon,
 .announcement-edit,
@@ -642,22 +612,6 @@ button.secondary:focus-visible,
 @media(max-width:430px) {
 .query-search-input input{height:46px;min-height:46px}
 .query-search-button{width:40px;height:40px}
-}
-.top-brand-icon{display:none}
-.top-admin-access.guest{
-  color:var(--ink);
-  border-color:var(--line);
-  background:#fff;
-}
-.top-admin-access.officer{
-  color:var(--accent);
-  border-color:#efb8bb;
-  background:#fff0f0;
-}
-.top-admin-access.super{
-  color:var(--admin-super);
-  border-color:#f2d39a;
-  background:#fff7e6;
 }
 .admin-role-title{font-size:22px;line-height:1.15;font-weight:900}
 .admin-role-user{font-size:11px;line-height:1.3;margin-top:5px;font-weight:750;opacity:.9}
@@ -1061,7 +1015,6 @@ body .app-header:not(.home-header){
 .child-view .tabs{
   display:none !important;
 }
-.top-brand p{display:none !important}
 .child-view .back,
 .child-view #back-link,
 .child-view #back-admin-top{
@@ -1093,9 +1046,6 @@ body .app-header:not(.home-header){
   align-items:center !important;
   text-align:center !important;
 }
-
-.home-fixed-header .top-brand p{display:none !important}
-#app.child-view .home-fixed-header,#app.child-view .home-tabs{display:none !important}
 .child-back{
  border-radius:10px !important;
 }
@@ -1180,23 +1130,8 @@ body .app-header:not(.home-header){
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;
 }
-
-.home-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  z-index:100 !important;
-  background:var(--bg) !important;
-}
 .home-tabs{
   position:static !important;
-}
-#app.child-view .home-fixed-header,
-#app.child-view .home-tabs{
-  display:none !important;
-}
-#app.admin-home-view .home-fixed-header,
-#app.admin-home-view .home-tabs{
-  display:flex !important;
 }
 
 #app.home-view .home-tabs,
@@ -1265,21 +1200,6 @@ body .app-header:not(.home-header){
 .admin-square strong{
     font-size:12px !important;
   }
-}
-.home-fixed-header .top-admin-access{
-  transition:color .18s ease, border-color .18s ease, background .18s ease !important;
-}
-.home-fixed-header .top-admin-access:hover,
-.home-fixed-header .top-admin-access:focus-visible{
-  color:#d71920 !important;
-  border-color:#efb8bb !important;
-  background:#fff1f1 !important;
-  outline:none !important;
-}
-.home-fixed-header .top-admin-access:hover svg,
-.home-fixed-header .top-admin-access:focus-visible svg{
-  color:#d71920 !important;
-  stroke:#d71920 !important;
 }
 #app.home-view,
 #app.admin-home-view {
@@ -1643,51 +1563,8 @@ body .app-header:not(.home-header){
 #new-officer-pass + #create-officer{
   margin-top:4px !important;
 }
-.home-fixed-header .top-admin-access {
-
-  cursor:pointer !important;
-
-  color:var(--ink) !important;
-
-}
-.home-fixed-header .top-admin-access svg{
-  color:inherit !important;
-  stroke:currentColor !important;
-}
 .admin-main-hero-logout{
   display:flex !important;
-}
-.top-admin-actions{
-  display:flex !important;
-  align-items:center !important;
-  gap:7px !important;
-}
-.top-admin-access,
-.top-admin-logout{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  border-radius:14px !important;
-  display:grid !important;
-  place-items:center !important;
-  flex:0 0 42px !important;
-  cursor:pointer !important;
-}
-.top-admin-logout{
-  border:1px solid var(--line) !important;
-  background:#fff !important;
-  color:var(--ink) !important;
-}
-.top-admin-logout:hover,
-.top-admin-logout:focus-visible{
-  color:#d71920 !important;
-  border-color:#efb8bb !important;
-  background:#fff1f1 !important;
-  outline:none !important;
-}
-.top-admin-logout svg{
-  width:20px !important;
-  height:20px !important;
 }
 .signin-list-head,
 .block.tight .list-row:has(.signin-field-value){
@@ -1925,96 +1802,6 @@ body .app-header:not(.home-header){
   font-weight: 900 !important;
 }
 .rate-head-name{font-size:18px !important;font-weight:400 !important;}
-.top.home-fixed-header,
-.subpage-fixed-header{
-  box-sizing:border-box !important;
-}
-.home-header-left-slot{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  flex:0 0 42px !important;
-  display:grid !important;
-  place-items:center !important;
-  visibility:visible !important;
-}
-.home-header-left-slot .home-link{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  border-radius:14px !important;
-  background:#fff !important;
-  border:1px solid var(--line) !important;
-  color:var(--ink) !important;
-  display:grid !important;
-  place-items:center !important;
-  padding:0 !important;
-  cursor:pointer !important;
-}
-.home-header-left-slot .home-link svg{
-  width:20px !important;
-  height:20px !important;
-}
-.home-header-left-slot .home-link:hover,
-.home-header-left-slot .home-link:focus-visible{
-  background:#f7f7f5 !important;
-}
-.subpage-fixed-header .subpage-back-top{
-  grid-column:1 !important;
-  grid-row:1 !important;
-  justify-self:start !important;
-  align-self:center !important;
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  margin:0 !important;
-  padding:0 !important;
-  border-radius:14px !important;
-  background:#fff !important;
-  border:1px solid var(--line) !important;
-  color:var(--ink) !important;
-  display:grid !important;
-  place-items:center !important;
-}
-.subpage-fixed-header .subpage-back-top svg{
-  width:20px !important;
-  height:20px !important;
-}
-.top.home-fixed-header .top-brand,
-.subpage-fixed-header .subpage-title{
-  max-width:none !important;
-  display:block !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-
-.top.home-fixed-header .top-admin-actions,
-.subpage-fixed-header .subpage-actions{
-  position:static !important;
-  flex:0 0 auto !important;
-}
-
-.top.home-fixed-header .top-admin-access svg,
-.top.home-fixed-header .top-admin-logout svg,
-.subpage-fixed-header .top-admin-access svg,
-.subpage-fixed-header .top-admin-logout svg{
-  width:20px !important;
-  height:20px !important;
-}
-.top-admin-access.super svg,
-.subpage-fixed-header .top-admin-access.super svg{
-  color:var(--admin-super) !important;
-  fill:var(--admin-super) !important;
-  stroke:var(--surface) !important;
-}
-.top-admin-access.officer svg,
-.subpage-fixed-header .top-admin-access.officer svg{
-  color:var(--accent) !important;
-  fill:var(--accent) !important;
-  stroke:var(--surface) !important;
-}
 #app.child-view .back,
 #app.subpage-view .back,
 #app.child-view #back-link,
@@ -2105,111 +1892,9 @@ html,body{
   min-width:0;
 }
 body{overflow-y:scroll;}
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  z-index:1000 !important;
-  width:100% !important;
-  height:58px !important;
-  min-height:58px !important;
-  max-height:58px !important;
-  margin:0 !important;
-  padding:8px 0 !important;
-  display:grid !important;
-  grid-template-columns:42px minmax(0,1fr) 90px !important;
-  grid-template-rows:42px !important;
-  column-gap:8px !important;
-  align-items:center !important;
-  background:var(--bg) !important;
-  border-bottom:1px solid var(--line) !important;
-}
-.top.home-fixed-header .home-header-left-slot,
-.subpage-fixed-header .subpage-back-top{
-  grid-column:1 !important;
-  grid-row:1 !important;
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  margin:0 !important;
-  padding:0 !important;
-  justify-self:start !important;
-  align-self:center !important;
-}
-.top.home-fixed-header .home-header-left-slot{
-  visibility:visible !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-}
-.top.home-fixed-header .top-brand,
-.subpage-fixed-header .subpage-title{
-  grid-column:2 !important;
-  grid-row:1 !important;
-  width:100% !important;
-  min-width:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  justify-self:stretch !important;
-  align-self:center !important;
-  text-align:center !important;
-}
-.top.home-fixed-header .top-brand h1,
-.subpage-fixed-header .subpage-title{
-  width:100% !important;
-  margin:0 !important;
-  padding:0 !important;
-  font-size:18px !important;
-  line-height:22px !important;
-  font-weight:900 !important;
-  text-align:center !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-.top.home-fixed-header .top-admin-actions,
-.subpage-fixed-header .subpage-actions{
-  grid-column:3 !important;
-  grid-row:1 !important;
-  width:90px !important;
-  min-width:90px !important;
-  height:42px !important;
-  margin:0 !important;
-  padding:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-  gap:6px !important;
-  justify-self:end !important;
-  align-self:center !important;
-}
-.top.home-fixed-header .top-admin-access,
-.top.home-fixed-header .top-admin-logout,
-.subpage-fixed-header .top-admin-access,
-.subpage-fixed-header .top-admin-logout{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  flex:0 0 42px !important;
-  margin:0 !important;
-}
 /* Header 手機尺寸統一由 V2.5 最終 Header 變數管理 */
 html{
   overflow-y:scroll;
-}
-header.top,
-header.subpage-fixed-header,
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:fixed !important;
-  top:0 !important;
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  z-index:1000 !important;
-  width:min(520px,100vw) !important;
-  box-sizing:border-box !important;
 }
 #app{
   padding-top:74px !important;
@@ -2810,7 +2495,6 @@ svg.activity-list-icon.closed-icon{color:#171717!important;stroke:#171717!import
 /* V2.5 品牌變數已集中至 A 區 :root；本區保留品牌元件與狀態樣式。 */
 /* 全站底色與品牌識別 */
 body{background:#f7f2eb !important;color:#292421;}
-.top-brand-icon{background:#a92f32 !important;color:#fff !important;}
 /* 主要操作按鈕、目前選取項目：明確朱紅 */
 button.primary,.primary,.manual-return-save,
 .tabs button.active,.choice.selected,button[type=submit],
@@ -2892,28 +2576,6 @@ button.secondary,.manual-return-discard,
   padding:0 18px calc(104px + env(safe-area-inset-bottom));
   background:var(--bg);
 }
-#app.home-view .home-fixed-header{
-  position:relative;
-  min-height:72px;
-  padding:14px 0 12px;
-  gap:10px;
-  border-bottom:1px solid rgba(168,143,116,.16);
-  background:transparent;
-}
-#app.home-view .home-header-left-slot,
-#app.home-view .home-header-left-slot .home-link{
-  width:38px!important;height:38px!important;min-width:38px!important;
-  border-radius:12px!important;
-}
-#app.home-view .top-brand{flex:1;justify-content:flex-start}
-#app.home-view .top-brand h1{
-  font-size:15px;line-height:1.35;font-weight:850;letter-spacing:.015em;
-}
-#app.home-view .top-admin-access{
-  width:38px;height:38px;border-radius:12px;
-  background:#fff;border-color:rgba(168,143,116,.22);
-}
-#app.home-view .top-admin-logout{width:34px;height:34px;border-radius:10px}
 
 #app.home-view .home-tabs button{
   min-height:48px;border-radius:14px;
@@ -2978,19 +2640,6 @@ button.secondary,.manual-return-discard,
   min-height:100dvh;
   padding:0 18px calc(104px + env(safe-area-inset-bottom));
   background:var(--bg);
-}
-#app.admin-home-view .home-fixed-header{
-  min-height:68px;padding:12px 0 10px;
-  border-bottom:1px solid rgba(168,143,116,.16);
-  background:var(--bg);
-}
-#app.admin-home-view .top-brand h1{font-size:15px;line-height:1.35}
-#app.admin-home-view .home-header-left-slot,
-#app.admin-home-view .home-header-left-slot .home-link{
-  width:38px!important;height:38px!important;min-width:38px!important;border-radius:12px!important;
-}
-#app.admin-home-view .top-admin-access{
-  width:38px;height:38px;border-radius:12px;
 }
 #app.admin-home-view .home-tabs{
   position:fixed!important;left:50%!important;
@@ -3103,19 +2752,6 @@ button.secondary,.manual-return-discard,
 }
 #app.home-view,#app.admin-home-view{
   background:var(--bg)!important;
-}
-#app.home-view .home-fixed-header,
-#app.admin-home-view .home-fixed-header{
-  border-bottom:1px solid var(--simple-line);
-  box-shadow:none!important;
-}
-#app.home-view .top-brand h1,
-#app.admin-home-view .top-brand h1{
-  color:var(--simple-ink);font-weight:750;letter-spacing:0;
-}
-#app.home-view .top-admin-access,
-#app.admin-home-view .top-admin-access{
-  background:transparent;border:1px solid var(--simple-line);box-shadow:none;
 }
 #app.home-view .home-tabs,
 #app.admin-home-view .home-tabs{
@@ -3348,10 +2984,6 @@ button.secondary,.manual-return-discard,
 
 /* V2.5 隊員端 App UI 第一階段：只調整隊員端版面 */
 #app.home-view{max-width:520px;min-height:100dvh;padding:0 18px calc(100px + env(safe-area-inset-bottom));background:#f7f7f5}
-#app.home-view .home-fixed-header{position:sticky;top:0;z-index:30;min-height:64px;margin:0 -18px;padding:10px 18px;background:rgba(255,255,255,.97);border-bottom:1px solid #ece9e5;backdrop-filter:blur(14px)}
-#app.home-view .top-brand h1{font-size:15px;line-height:1.35;font-weight:750;color:#292724}
-#app.home-view .home-header-left-slot,#app.home-view .home-header-left-slot .home-link{width:36px!important;height:36px!important;min-width:36px!important;border-radius:11px!important}
-#app.home-view .top-admin-access,#app.home-view .top-admin-logout{width:36px;height:36px;min-width:36px;border-radius:11px;background:#fff;border:1px solid #e9e6e1;box-shadow:none}
 #app.home-view #tab-content{padding-top:16px}
 
 #app.home-view .home-tabs button{min-width:0;min-height:50px;display:flex;align-items:center;justify-content:center;gap:7px;padding:7px 10px;border-radius:12px;color:#77736e;background:transparent;font-size:13px;font-weight:700}
@@ -3389,9 +3021,6 @@ button.secondary,.manual-return-discard,
 
 /* V2.5 隊員端活動內頁 App UI：只限含活動簽到內容的隊員內頁 */
 #app.child-view:has(.checkin-hero){max-width:520px;padding:0 18px 32px;background:#f7f7f5}
-#app.child-view:has(.checkin-hero) .subpage-fixed-header{position:sticky;top:0;z-index:30;margin:0 -18px 14px;padding:10px 18px;background:rgba(255,255,255,.97);border-bottom:1px solid #ece9e5;backdrop-filter:blur(14px)}
-#app.child-view:has(.checkin-hero) .subpage-title{color:#292724;font-size:14px;font-weight:750}
-#app.child-view:has(.checkin-hero) .subpage-back-top,#app.child-view:has(.checkin-hero) .top-admin-access{width:36px;height:36px;min-width:36px;border-radius:10px;background:#fff;border:1px solid #e9e6e1}
 #app.child-view:has(.checkin-hero) .checkin-hero{display:flex;align-items:center;gap:12px;min-height:unset;margin:0 0 12px;padding:16px;border:1px solid #e9e5de;border-radius:14px;background:#fff;color:#292724;box-shadow:none}
 #app.child-view:has(.checkin-hero) .checkin-hero-main{flex:1;min-width:0}
 #app.child-view:has(.checkin-hero) .checkin-hero h2{color:#292724;font-size:16px;line-height:1.4;font-weight:800}
@@ -3408,18 +3037,8 @@ button.secondary,.manual-return-discard,
   width:100%;max-width:520px;min-height:100dvh;margin:0 auto;padding:0 18px calc(32px + env(safe-area-inset-bottom));
   background:var(--bg);color:var(--ink);
 }
-.member-portal-view .portal-header{
-  min-height:76px;display:flex;align-items:center;justify-content:space-between;
-  padding:14px 2px;border-bottom:1px solid var(--line);
-}
 .portal-brand-name{font-size:19px;font-weight:900;letter-spacing:.02em;line-height:1.25}
 .portal-brand-sub{margin-top:3px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em}
-.portal-menu-wrap{position:relative}
-.portal-more{
-  width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:#fff;
-  color:var(--ink);display:grid;place-items:center;
-}
-.portal-more svg{width:21px;height:21px}
 .portal-menu{
   position:absolute;right:0;top:48px;z-index:80;width:176px;padding:6px;
   background:#fff;border:1px solid var(--line);border-radius:15px;
@@ -3462,9 +3081,6 @@ button.secondary,.manual-return-discard,
 
 /* 隊員功能頁：由新首頁直接進入既有內容，移除舊首頁導覽層 */
 #app.member-feature-view{max-width:520px;min-height:100dvh;margin:0 auto;padding:0 18px 32px;background:var(--bg)}
-.member-feature-header{height:64px;margin:0 -18px 16px;padding:0 18px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;background:#fff;border-bottom:1px solid var(--line)}
-.member-feature-back{width:40px;height:40px;display:grid;place-items:center;background:transparent;color:var(--ink)}
-.member-feature-back svg{width:22px;height:22px}
 .member-feature-title{text-align:center;font-size:15px;font-weight:850;color:var(--ink)}
 .member-feature-content{width:100%}
 @media(max-width:380px){#app.member-feature-view{padding-left:14px;padding-right:14px}}
@@ -3474,59 +3090,6 @@ button.secondary,.manual-return-discard,
 #app.member-feature-view{
   margin-top:0 !important;
   padding-top:0 !important;
-}
-.member-feature-header,
-.top.home-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  z-index:100 !important;
-  min-height:64px !important;
-  height:64px !important;
-  margin-top:0 !important;
-  background:rgba(255,255,255,.98) !important;
-  border-bottom:1px solid var(--line) !important;
-  box-shadow:none !important;
-}
-.member-feature-header{
-  margin-left:-18px !important;
-  margin-right:-18px !important;
-  margin-bottom:16px !important;
-}
-#app.member-feature-view > .member-feature-header:first-child{
-  margin-top:0 !important;
-}
-.member-feature-back,
-.home-header-left-slot .home-link,
-.top-admin-access,
-.top-admin-logout{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  padding:0 !important;
-  border:1px solid var(--line) !important;
-  border-radius:14px !important;
-  background:#fff !important;
-  color:var(--ink) !important;
-  box-shadow:none !important;
-}
-.member-feature-back svg,
-.home-header-left-slot .home-link svg,
-.top-admin-access svg,
-.top-admin-logout svg{
-  width:20px !important;
-  height:20px !important;
-  color:currentColor !important;
-  stroke:currentColor !important;
-}
-.top.home-fixed-header{
-  margin-left:-16px !important;
-  margin-right:-16px !important;
-  padding-left:16px !important;
-  padding-right:16px !important;
-}
-.top.home-fixed-header .top-admin-actions{
-  gap:8px !important;
 }
 /* 小螢幕 Header 間距統一由 V2.5 --v25-header-pad 管理 */
 
@@ -3552,55 +3115,12 @@ button.secondary,.manual-return-discard,
   box-sizing:border-box !important;
   overflow-x:hidden !important;
 }
-.portal-header,
-.member-feature-header,
-.top.home-fixed-header,
-.subpage-fixed-header{
-  box-sizing:border-box !important;
-  width:100% !important;
-  max-width:520px !important;
-}
-/* 取消先前負 margin 造成手機右側裁切，所有頁面共用完整頂欄 */
-.member-feature-header,
-.top.home-fixed-header{
-  margin-left:0 !important;
-  margin-right:0 !important;
-}
 #app.member-feature-view{padding-left:0 !important;padding-right:0 !important;}
 #app.member-feature-view .member-feature-content{padding:0 18px;}
-.member-feature-header{
-  padding-left:18px !important;
-  padding-right:18px !important;
-}
-.top.home-fixed-header{
-  margin-left:0 !important;
-  margin-right:0 !important;
-  padding-left:16px !important;
-  padding-right:16px !important;
-}
-/* 共用 App Header：返回／標題／操作三欄，避免各頁自行偏移 */
-/* Header 尺寸、Grid 與視覺規格由下方 V2.5 Header 單一規格統一管理 */
-/* 隊員首頁改為資訊優先：公告 → 主要功能，減少大面積留白 */
-.member-portal-view .portal-header{
-  min-height:64px !important;
-  height:64px !important;
-  padding:0 2px !important;
-}
 .member-portal-view .portal-main{padding-top:18px !important;}
 .member-portal-view .portal-announcement{margin-bottom:14px !important;}
 .member-portal-view .portal-card{min-height:164px !important;}
 .member-portal-view .portal-card-icon{margin-bottom:14px !important;}
-/* 管理端沿用同一個頂欄操作尺寸，不再與隊員端產生兩套按鈕規格 */
-.top-admin-actions,
-.subpage-actions{display:flex !important;align-items:center !important;gap:8px !important;}
-.member-feature-back,
-.home-header-left-slot .home-link,
-.top-admin-access,
-.top-admin-logout,
-.subpage-fixed-header .subpage-back-top{
-  flex:0 0 42px !important;
-  box-sizing:border-box !important;
-}
 @media(max-width:380px){
   #app.member-feature-view .member-feature-content{padding-left:14px;padding-right:14px;}
   .member-feature-header{padding-left:14px !important;padding-right:14px !important;}
@@ -3620,43 +3140,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app.admin-home-view,
 #app.home-view,
 #app.child-view{margin-left:auto !important;margin-right:auto !important;}
-
-.member-portal-view .portal-header,
-.member-feature-header,
-.top.home-fixed-header,
-.subpage-fixed-header{
-  position:sticky !important;
-  top:0 !important;
-  left:auto !important;
-  right:auto !important;
-  transform:none !important;
-  width:100% !important;
-  max-width:none !important;
-  margin:0 !important;
-  box-sizing:border-box !important;
-  z-index:1000 !important;
-}
-
-.member-portal-view .portal-header{
-  display:flex !important;
-  justify-content:space-between !important;
-  padding:0 18px !important;
-  min-height:64px !important;
-  height:64px !important;
-}
-.member-feature-header{
-  display:grid !important;
-  grid-template-columns:42px minmax(0,1fr) 42px !important;
-  padding:0 18px !important;
-  min-height:64px !important;
-  height:64px !important;
-}
 .member-feature-spacer{width:42px;height:42px;}
-.top.home-fixed-header,
-.subpage-fixed-header{
-  padding-left:16px !important;
-  padding-right:16px !important;
-}
 @media(max-width:380px){
   .member-portal-view .portal-header,
   .member-feature-header{padding-left:14px !important;padding-right:14px !important;}
@@ -3665,24 +3149,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 
 /* ===== Header canonical unified layout =====
 :root{--app-header-h:64px;--app-header-pad:16px;--app-header-side:42px;}
-#app > header.app-navbar{
- position:sticky !important;top:0 !important;width:100% !important;height:var(--app-header-h) !important;min-height:var(--app-header-h) !important;max-height:var(--app-header-h) !important;margin:0 !important;padding:0 var(--app-header-pad) !important;display:grid !important;grid-template-columns:var(--app-header-side) minmax(0,1fr) var(--app-header-side) !important;align-items:center !important;box-sizing:border-box !important;background:var(--surface,#fff) !important;border-bottom:1px solid var(--line) !important;z-index:1000 !important;
-}
-#app > header.app-navbar > .app-navbar-left,#app > header.app-navbar > .app-navbar-brand,#app > header.app-navbar > .app-navbar-right{
- position:static !important;transform:none !important;width:auto !important;height:var(--app-header-side) !important;min-width:0 !important;min-height:var(--app-header-side) !important;margin:0 !important;padding:0 !important;display:flex !important;align-items:center !important;
-}
-#app > header.app-navbar > .app-navbar-left{grid-column:1 !important;justify-content:flex-start !important;}
-#app > header.app-navbar > .app-navbar-brand{grid-column:2 !important;justify-content:center !important;text-align:center !important;overflow:hidden !important;}
-#app > header.app-navbar > .app-navbar-right{grid-column:3 !important;justify-content:flex-end !important;}
-#app > header.app-navbar .app-header-title,#app > header.app-navbar .top-brand,#app > header.app-navbar .subpage-title,#app > header.app-navbar .top-brand h1{
- position:static !important;transform:none !important;width:100% !important;margin:0 !important;padding:0 !important;text-align:center !important;font-size:17px !important;font-weight:900 !important;line-height:1 !important;white-space:nowrap !important;
-}
-#app > header.app-navbar .member-feature-back,#app > header.app-navbar .subpage-back-top,#app > header.app-navbar .portal-more,#app > header.app-navbar .app-header-spacer,#app > header.app-navbar .home-header-left-slot{
- width:var(--app-header-side) !important;height:var(--app-header-side) !important;min-width:var(--app-header-side) !important;min-height:var(--app-header-side) !important;margin:0 !important;padding:0 !important;display:inline-flex !important;align-items:center !important;justify-content:center !important;box-sizing:border-box !important;
-}
-#app > header.app-navbar .portal-menu-wrap,#app > header.app-navbar .top-admin-actions,#app > header.app-navbar .subpage-actions{
- width:var(--app-header-side) !important;height:var(--app-header-side) !important;min-width:var(--app-header-side) !important;margin:0 !important;display:flex !important;align-items:center !important;justify-content:flex-end !important;
-}
 @media(max-width:380px){:root{--app-header-pad:14px;}}
 
 
@@ -3691,29 +3157,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   --v25-header-icon-size:20px;
   --v25-header-icon-color:var(--ink);
   --v25-header-icon-stroke:2;
-}
-#app > .portal-header .portal-more,
-#app > .member-feature-header .member-feature-back,
-#app > .subpage-fixed-header .subpage-back-top,
-#app > .top.home-fixed-header .portal-more{
-  color:var(--v25-header-icon-color) !important;
-}
-#app > .portal-header .portal-more svg,
-#app > .member-feature-header .member-feature-back svg,
-#app > .subpage-fixed-header .subpage-back-top svg,
-#app > .top.home-fixed-header .portal-more svg{
-  width:var(--v25-header-icon-size) !important;
-  height:var(--v25-header-icon-size) !important;
-  min-width:var(--v25-header-icon-size) !important;
-  color:currentColor !important;
-  stroke:currentColor !important;
-  stroke-width:var(--v25-header-icon-stroke) !important;
-}
-/* Header 的空白欄位不得繼承任何圖示樣式 */
-#app > .portal-header .app-header-spacer,
-#app > .member-feature-header .app-header-spacer,
-#app > .top.home-fixed-header .home-header-left-slot[aria-hidden="true"]{
-  color:transparent !important;
 }
 /* … 下拉選單圖示與文字使用 V2.5 相同的深色系統色 */
 .portal-menu button{
@@ -3853,27 +3296,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .query-metrics-bootstrap{margin-bottom:16px;}
 #app .query-metrics-bootstrap .col{min-width:0;display:flex;}
 #app .query-metrics-bootstrap .query-metric-card{width:100%;}
-
-/* V2.5 Bootstrap-inspired global Header & Footer */
-/* V2.5 Header 陰影由各 Header 最終視覺規格控制，避免全域覆蓋 */
-#app > .portal-header .portal-more,
-#app > .member-feature-header .member-feature-back,
-#app > .subpage-fixed-header .subpage-back-top,
-#app > .top.home-fixed-header .portal-more{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  border:0 !important;
-  background:transparent !important;
-  border-radius:.375rem !important;
-  transition:background-color .15s ease,color .15s ease;
-}
-#app > .portal-header .portal-more:hover,
-#app > .member-feature-header .member-feature-back:hover,
-#app > .subpage-fixed-header .subpage-back-top:hover,
-#app > .top.home-fixed-header .portal-more:hover{
-  background:rgba(0,0,0,.05) !important;
-}
 .system-footer{
   width:100%;
   margin-top:32px;
@@ -3951,119 +3373,87 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app .activity-filter-status-bootstrap{margin-left:0;margin-right:0;}
 #app .activity-filter-status-bootstrap .choice{min-width:0;}
 
-/* ===== Header final unified layout =====
-   All application headers share the same three-column Bootstrap-compatible shell. */
-#app > .app-navbar{
-  position:relative !important;
-  display:grid !important;
-  grid-template-columns:42px minmax(0,1fr) 42px !important;
-  align-items:center !important;
-  width:100% !important;
-  box-sizing:border-box !important;
-}
-#app > .app-navbar > .app-navbar-left,
-#app > .app-navbar > .app-navbar-brand,
-#app > .app-navbar > .app-navbar-right{
-  position:static !important;
-  transform:none !important;
-  min-width:0 !important;
-  height:42px !important;
-  display:flex !important;
-  align-items:center !important;
-}
-#app > .app-navbar > .app-navbar-left{
-  grid-column:1 !important;
-  justify-content:flex-start !important;
-}
-#app > .app-navbar > .app-navbar-brand{
-  grid-column:2 !important;
-  justify-content:center !important;
-  text-align:center !important;
-  overflow:hidden !important;
-}
-#app > .app-navbar > .app-navbar-right{
-  grid-column:3 !important;
-  justify-content:flex-end !important;
-}
-#app > .app-navbar .app-header-title,
-#app > .app-navbar .top-brand,
-#app > .app-navbar .subpage-title{
-  margin:0 !important;
-  text-align:center !important;
-}
-#app > .app-navbar .app-header-title,
-#app > .app-navbar .top-brand h1,
-#app > .app-navbar .subpage-title{
-  width:100% !important;
-  max-width:100% !important;
-}
-#app > .app-navbar .member-feature-back,
-#app > .app-navbar .subpage-back-top,
-#app > .app-navbar .portal-more,
-#app > .app-navbar .top-admin-access,
-#app > .app-navbar .top-admin-logout{
-  width:42px !important;
-  height:42px !important;
-  min-width:42px !important;
-  min-height:42px !important;
-  margin:0 !important;
-  padding:0 !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-#app > .app-navbar .app-navbar-right .portal-menu-wrap,
-#app > .app-navbar .app-navbar-right .top-admin-actions,
-#app > .app-navbar .app-navbar-right .subpage-actions{
-  width:auto !important;
-  min-width:42px !important;
-  height:42px !important;
-  margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-}
 
 
-/* ===== Header single visual contract (final) ===== */
-#app .app-navbar{
-  display:grid !important;
-  grid-template-columns:52px minmax(0,1fr) 52px !important;
-  align-items:center !important;
-  height:58px !important;
-  min-height:58px !important;
-  padding:0 8px !important;
-  margin:0 !important;
-  box-sizing:border-box !important;
+/* =========================================================
+   APP HEADER — SINGLE SOURCE OF TRUTH
+   Bootstrap-compatible shell. Do not add per-page header layout.
+   ========================================================= */
+#app > header.app-navbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  width:100%;
+  height:64px;
+  min-height:64px;
+  margin:0;
+  padding:0 16px;
+  box-sizing:border-box;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) 48px;
+  align-items:center;
+  background:var(--surface,#fff);
+  border-bottom:1px solid var(--line,#e8dfd4);
 }
-#app .app-navbar .app-navbar-left,
-#app .app-navbar .app-navbar-brand,
-#app .app-navbar .app-navbar-right{
-  height:42px !important;
-  min-height:42px !important;
-  margin:0 !important;
-  padding:0 !important;
-  display:flex !important;
-  align-items:center !important;
+#app > header.app-navbar > .app-navbar-left,
+#app > header.app-navbar > .app-navbar-brand,
+#app > header.app-navbar > .app-navbar-right{
+  min-width:0;
+  height:48px;
+  margin:0;
+  padding:0;
+  display:flex;
+  align-items:center;
 }
-#app .app-navbar .app-navbar-left{grid-column:1 !important;justify-content:flex-start !important;}
-#app .app-navbar .app-navbar-brand{grid-column:2 !important;position:static !important;transform:none !important;justify-content:center !important;text-align:center !important;overflow:hidden !important;}
-#app .app-navbar .app-navbar-right{grid-column:3 !important;justify-content:flex-end !important;}
-#app .app-navbar .app-header-title,
-#app .app-navbar .top-brand,
-#app .app-navbar .subpage-title,
-#app .app-navbar .top-brand h1{
-  position:static !important;
-  transform:none !important;
-  width:100% !important;
-  margin:0 !important;
-  padding:0 !important;
-  line-height:42px !important;
-  text-align:center !important;
+#app > header.app-navbar > .app-navbar-left{justify-content:flex-start;}
+#app > header.app-navbar > .app-navbar-brand{justify-content:center;overflow:hidden;text-align:center;}
+#app > header.app-navbar > .app-navbar-right{justify-content:flex-end;}
+#app > header.app-navbar .app-header-title,
+#app > header.app-navbar .top-brand,
+#app > header.app-navbar .top-brand h1,
+#app > header.app-navbar .subpage-title{
+  width:100%;
+  margin:0;
+  padding:0;
+  text-align:center;
+  line-height:1.2;
+  font-size:18px;
+  font-weight:800;
+  white-space:nowrap;
 }
-#app .app-navbar .app-header-spacer,
-#app .app-navbar .home-header-left-slot{width:42px !important;height:42px !important;margin:0 !important;}
-
+#app > header.app-navbar .member-feature-back,
+#app > header.app-navbar .subpage-back-top,
+#app > header.app-navbar .portal-more,
+#app > header.app-navbar .top-admin-access,
+#app > header.app-navbar .top-admin-logout,
+#app > header.app-navbar .app-header-spacer,
+#app > header.app-navbar .home-header-left-slot{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  min-height:48px;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+#app > header.app-navbar .portal-menu-wrap,
+#app > header.app-navbar .top-admin-actions,
+#app > header.app-navbar .subpage-actions{
+  width:48px;
+  height:48px;
+  margin:0;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+}
+#app > header.app-navbar svg{width:20px;height:20px;}
+@media(max-width:430px){
+  #app > header.app-navbar{height:64px;min-height:64px;padding:0 16px;grid-template-columns:48px minmax(0,1fr) 48px;}
+}
 </style>
 
 
