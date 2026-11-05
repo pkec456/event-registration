@@ -1847,6 +1847,22 @@ body .app-header:not(.home-header){
   pointer-events:none;
 }
 .app-navbar-brand > *{pointer-events:auto;}
+/* V2.6 header alignment: keep both back controls on the same 48px grid. */
+#app header.app-navbar > .app-navbar-left{
+  width:48px !important;
+  min-width:48px !important;
+  justify-self:start !important;
+}
+#app header.app-navbar .member-feature-back,
+#app header.app-navbar .subpage-back-top{
+  width:48px !important;
+  height:48px !important;
+  min-width:48px !important;
+  margin:0 !important;
+  padding:0 !important;
+  transform:none !important;
+}
+
 /* Shared Header back control: one visual contract for every page. */
 .app-navbar-left .member-feature-back,
 .app-navbar-left .subpage-back-top{
