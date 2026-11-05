@@ -3983,6 +3983,12 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 
 /* V2.6.4 final: compact desktop headings */
 #app.admin-home-view details.admin-collapsible>summary h2{font-size:20px!important;}
+
+/* V2.6.5 deterministic collapsible sections */
+#app.admin-home-view .admin-collapse-toggle{width:100%;appearance:none;text-align:left;color:inherit;font:inherit;cursor:pointer;}
+#app.admin-home-view .admin-collapsible:not(.is-open) .admin-collapsible-body{display:none!important;}
+#app.admin-home-view .admin-collapse-toggle .collapse-chevron{transition:transform .18s ease;}
+#app.admin-home-view .admin-collapsible:not(.is-open) .collapse-chevron{transform:rotate(-90deg);}
 </style>
 
 
@@ -4973,19 +4979,21 @@ function render(){
     return;
   }
 
-  // V2.6.3：在管理首頁完成 DOM 渲染後綁定收合狀態。
-  // 只記錄 details 自身的 toggle，不觸發 render，避免收合後又被重新建立成預設展開。
+  // V2.6.5：使用一般按鈕控制，不再使用 details 原生 toggle，避免收合彈開。
   if(isAdminHome){
     window.__adminCollapseState=window.__adminCollapseState||{};
-    app.querySelectorAll("details.admin-collapsible").forEach((detail,i)=>{
-      const key=detail.dataset.collapseKey || detail.querySelector("summary h2")?.textContent?.trim() || String(i);
-      detail.dataset.collapseKey=key;
-      if(Object.prototype.hasOwnProperty.call(window.__adminCollapseState,key)){
-        detail.open=window.__adminCollapseState[key]===true;
-      }
-      detail.addEventListener("toggle",()=>{
-        window.__adminCollapseState[key]=detail.open;
-      });
+    app.querySelectorAll(".admin-collapsible").forEach((section,i)=>{
+      const key=section.querySelector("h2")?.textContent?.trim()||String(i);
+      const saved=window.__adminCollapseState[key];
+      if(saved===false) section.classList.remove("is-open");
+      if(saved===true) section.classList.add("is-open");
+      const btn=section.querySelector(".admin-collapse-toggle");
+      if(btn) btn.onclick=(ev)=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        const open=section.classList.toggle("is-open");
+        window.__adminCollapseState[key]=open;
+      };
     });
   }
 
@@ -5708,7 +5716,7 @@ function renderAdmin(el){
     </div>
   </div>
 
-</div><details class="admin-collapsible" open><summary><h2>首頁公告</h2><span class="collapse-meta"><i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="announcement-admin">
+</div><section class="admin-collapsible is-open"><button type="button" class="admin-collapse-toggle"><h2>首頁公告</h2><span class="collapse-meta"><i data-lucide="chevron-down" class="collapse-chevron"></i></span></button><div class="admin-collapsible-body"><div class="announcement-admin">
   ${announcementEditing
     ? `<div class="announcement-edit-area">
          <textarea id="announcement-input">${escapeHtml(announcementText)}</textarea>
@@ -5724,7 +5732,7 @@ function renderAdmin(el){
          </button>
        </div>`}
 </div></div></details>
-<details class="admin-collapsible" open><summary><h2>管理功能</h2><span class="collapse-meta">常用操作 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
+<section class="admin-collapsible is-open"><button type="button" class="admin-collapse-toggle"><h2>管理功能</h2><span class="collapse-meta">常用操作 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></button><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
   <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
     <strong>活動簽到</strong>
@@ -5752,7 +5760,7 @@ function renderAdmin(el){
     </button>
   </div></div>
 </div></div></details>
-<details class="admin-collapsible"><summary><h2>統計資訊</h2><span class="collapse-meta">即時資料 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 mb-3 statistics-bootstrap-grid">
+<section class="admin-collapsible"><button type="button" class="admin-collapse-toggle"><h2>統計資訊</h2><span class="collapse-meta">即時資料 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></button><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 mb-3 statistics-bootstrap-grid">
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div></div>
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div></div>
   <div class="col"><div class="metric top-attendance-metric h-100" id="top-attendance-metric">
@@ -5763,12 +5771,12 @@ function renderAdmin(el){
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="calendar-check"></i></div><b>${cumulativeActivities.length}</b><span>總場次</span></div></div>
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${cumulativeRegistrationCount}</b><span>總登記人數</span></div></div>
 </div></div></details>
-<details class="admin-collapsible"><summary><h2>每月活動場次</h2><span class="collapse-meta">${monthlyChartYear} 年 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="monthly-chart-card">
+<section class="admin-collapsible"><button type="button" class="admin-collapse-toggle"><h2>每月活動場次</h2><span class="collapse-meta">${monthlyChartYear} 年 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></button><div class="admin-collapsible-body"><div class="monthly-chart-card">
   <div class="monthly-chart-wrap">${monthlyChartSvg}</div>
   <div class="monthly-chart-footnote">點擊圖上的月份資料點，可查看該月活動清單。</div>
   <div id="monthly-chart-detail" class="monthly-chart-detail" hidden></div>
 </div></div></details>
-<details class="admin-collapsible"><summary><h2>活動類別統計</h2><span class="collapse-meta">點擊查看 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2 mb-3 cumulative-category-bootstrap-grid">${cumulativeCategoryStats.map(item=>`<div class="col"><button type="button" class="cumulative-category-card w-100 h-100" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button></div>`).join("")}</div></div></details>
+<section class="admin-collapsible"><button type="button" class="admin-collapse-toggle"><h2>活動類別統計</h2><span class="collapse-meta">點擊查看 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></button><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-2 mb-3 cumulative-category-bootstrap-grid">${cumulativeCategoryStats.map(item=>`<div class="col"><button type="button" class="cumulative-category-card w-100 h-100" data-category-open="${escapeHtml(item.category)}" aria-label="查看${escapeHtml(item.category)}類別活動"><div class="cumulative-category-icon"><i data-lucide="${item.category==="廟"?"landmark":item.category==="禮聘"?"piggy-bank":item.category==="隊"?"flag":item.category==="北港進香"?"route":"utensils"}"></i></div><b>${item.count}</b><strong>${escapeHtml(item.category)}</strong></button></div>`).join("")}</div></div></section>
 `;
   if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
@@ -6989,18 +6997,4 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 
 <script>
 
-// V2.6.4：收合標題使用單一控制流程，阻止後續首頁事件重新 render。
-document.addEventListener("click",(e)=>{
-  const summary=e.target.closest("#app.admin-home-view details.admin-collapsible > summary");
-  if(!summary)return;
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  const detail=summary.parentElement;
-  const key=detail.dataset.collapseKey || summary.querySelector("h2")?.textContent?.trim();
-  detail.open=!detail.open;
-  if(key){
-    window.__adminCollapseState=window.__adminCollapseState||{};
-    window.__adminCollapseState[key]=detail.open;
-  }
-},true);
 </script>
