@@ -3576,12 +3576,21 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 
 /* V2.5 canvas sync: public sign-in uses the same app shell as Manual Registration.
    The sign-in route is .member-feature-view (not .child-view). */
+/* Member feature / public sign-in shell: same canvas geometry as Manual Registration. */
 #app.member-feature-view{
+  width:100% !important;
   max-width:520px !important;
   min-height:100dvh !important;
   margin:0 auto !important;
   padding:0 18px calc(32px + env(safe-area-inset-bottom)) !important;
   box-sizing:border-box !important;
+  background:var(--bg) !important;
+}
+#app.member-feature-view > header.app-navbar{
+  width:calc(100% + 36px) !important;
+  max-width:none !important;
+  margin-left:-18px !important;
+  margin-right:-18px !important;
   background:var(--bg) !important;
 }
 #app.member-feature-view > .member-feature-content{
@@ -3590,8 +3599,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   padding:0 !important;
   background:transparent !important;
 }
-#app.member-feature-view > header.app-navbar{
-  background:var(--bg) !important;
+@media(max-width:380px){
+  #app.member-feature-view{padding-left:14px !important;padding-right:14px !important;}
+  #app.member-feature-view > header.app-navbar{width:calc(100% + 28px) !important;margin-left:-14px !important;margin-right:-14px !important;}
 }
 </style>
 
