@@ -3707,6 +3707,76 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
     gap:8px !important;
   }
 }
+
+/* Admin home mobile readability: restore a larger touch-first scale without changing the grid. */
+@media(max-width:576px){
+  #app.admin-home-view .admin-bootstrap-grid,
+  #app.admin-home-view .admin-menu-grid{
+    gap:14px !important;
+  }
+  #app.admin-home-view .admin-square{
+    min-height:156px !important;
+    padding:18px 10px !important;
+    border-radius:24px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon,
+  #app.admin-home-view .admin-action .menu-icon{
+    width:56px !important;
+    height:56px !important;
+    min-width:56px !important;
+    min-height:56px !important;
+    max-width:56px !important;
+    max-height:56px !important;
+    border-radius:18px !important;
+    margin:0 0 14px !important;
+    flex:0 0 56px !important;
+  }
+  #app.admin-home-view .admin-square .menu-icon svg,
+  #app.admin-home-view .admin-action .menu-icon svg{
+    width:28px !important;
+    height:28px !important;
+    min-width:28px !important;
+    min-height:28px !important;
+    max-width:28px !important;
+    max-height:28px !important;
+    flex:0 0 28px !important;
+  }
+  #app.admin-home-view .admin-square strong{
+    font-size:18px !important;
+    line-height:1.25 !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid .metric{
+    min-height:190px !important;
+    padding:20px 10px !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid .metric-icon{
+    width:56px !important;
+    height:56px !important;
+    min-width:56px !important;
+    min-height:56px !important;
+    max-width:56px !important;
+    max-height:56px !important;
+    border-radius:18px !important;
+    margin-bottom:14px !important;
+    flex:0 0 56px !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid .metric-icon svg{
+    width:28px !important;
+    height:28px !important;
+    min-width:28px !important;
+    min-height:28px !important;
+    max-width:28px !important;
+    max-height:28px !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid .metric b{
+    font-size:32px !important;
+    line-height:1.1 !important;
+  }
+  #app.admin-home-view .statistics-bootstrap-grid .metric span{
+    font-size:15px !important;
+    line-height:1.35 !important;
+  }
+}
 </style>
 
 
