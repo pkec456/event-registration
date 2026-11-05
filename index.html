@@ -3603,6 +3603,18 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   #app.member-feature-view{padding-left:14px !important;padding-right:14px !important;}
   #app.member-feature-view > header.app-navbar{width:calc(100% + 28px) !important;margin-left:-14px !important;margin-right:-14px !important;}
 }
+
+/* Header controls: keep icon contrast independent from the soft button background. */
+#app header.app-navbar .member-feature-back,
+#app header.app-navbar .subpage-back-top,
+#app header.app-navbar .portal-more,
+#app header.app-navbar .member-feature-back svg,
+#app header.app-navbar .subpage-back-top svg,
+#app header.app-navbar .portal-more svg{
+  color:var(--ink,#1f1f1f) !important;
+  stroke:currentColor !important;
+  opacity:1 !important;
+}
 </style>
 
 
