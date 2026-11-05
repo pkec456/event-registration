@@ -3698,6 +3698,19 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 #app.admin-home-view .signin-page-setting-tile .activity-toggle-btn svg{width:20px !important;height:20px !important;min-width:20px !important;min-height:20px !important;max-width:20px !important;max-height:20px !important;}
 #app.admin-home-view .signin-page-setting-tile .signin-page-toggle-label{display:none !important;}
 
+/* V2.6 unify sign-in visibility tile with admin menu on mobile */
+@media(max-width:520px){
+#app.admin-home-view .signin-page-setting-tile .activity-toggle-btn{
+ width:72px!important;height:72px!important;min-width:72px!important;min-height:72px!important;
+ border-radius:22px!important;margin-bottom:12px!important;
+}
+#app.admin-home-view .signin-page-setting-tile .activity-toggle-btn svg{
+ width:34px!important;height:34px!important;
+}
+#app.admin-home-view .signin-page-setting-tile .signin-tile-copy strong{
+ font-size:16px!important;line-height:1.35!important;
+}
+}
 /* Attendance page debug: .rate-list is a Bootstrap .row, not a CSS grid.
    The legacy grid rule made Bootstrap .col widths calculate inside each grid track,
    collapsing cards into narrow vertical strips. */
