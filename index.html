@@ -4909,20 +4909,6 @@ function render(){
 
   const subpageBack=app.querySelector(".subpage-back-top");
   if(subpageBack)subpageBack.onclick=()=>{
-    // V2.6.2 管理首頁收合：保存展開狀態，避免任何重新渲染後自動彈開。
-  if(isAdminHome){
-    window.__adminCollapseState=window.__adminCollapseState||{};
-    app.querySelectorAll("details.admin-collapsible").forEach((detail,i)=>{
-      const key=detail.querySelector("summary h2")?.textContent?.trim()||String(i);
-      if(Object.prototype.hasOwnProperty.call(window.__adminCollapseState,key)){
-        detail.open=!!window.__adminCollapseState[key];
-      }
-      detail.addEventListener("toggle",()=>{
-        window.__adminCollapseState[key]=detail.open;
-      });
-    });
-  }
-
   if(window.__adminAccountsViewOpen){window.__adminAccountsViewOpen=false;adminPage="home";render();return;}
     if(openEventId){openEventId=null;render();return;}
     if(activeTab==="query"){memberHome=true;activeTab=signinPageVisible?"register":"query";openEventId=null;queryResultVisible=false;render();return;}
@@ -4982,6 +4968,22 @@ function render(){
     renderAdminAccounts(document.getElementById("tab-content"));
     refreshIcons();
     return;
+  }
+
+  // V2.6.3：在管理首頁完成 DOM 渲染後綁定收合狀態。
+  // 只記錄 details 自身的 toggle，不觸發 render，避免收合後又被重新建立成預設展開。
+  if(isAdminHome){
+    window.__adminCollapseState=window.__adminCollapseState||{};
+    app.querySelectorAll("details.admin-collapsible").forEach((detail,i)=>{
+      const key=detail.dataset.collapseKey || detail.querySelector("summary h2")?.textContent?.trim() || String(i);
+      detail.dataset.collapseKey=key;
+      if(Object.prototype.hasOwnProperty.call(window.__adminCollapseState,key)){
+        detail.open=window.__adminCollapseState[key]===true;
+      }
+      detail.addEventListener("toggle",()=>{
+        window.__adminCollapseState[key]=detail.open;
+      });
+    });
   }
 
   const homeTabButtons=app.querySelectorAll(".home-tabs button");
