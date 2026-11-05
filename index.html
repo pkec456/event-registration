@@ -3980,6 +3980,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   #app.admin-home-view details.admin-collapsible>summary h2{font-size:18px!important;}
   #app.admin-home-view details.admin-collapsible>summary .collapse-meta{font-size:13px!important;}
 }
+
+/* V2.6.4 final: compact desktop headings */
+#app.admin-home-view details.admin-collapsible>summary h2{font-size:20px!important;}
 </style>
 
 
@@ -6985,4 +6988,19 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
 </html>
 
 <script>
+
+// V2.6.4：收合標題使用單一控制流程，阻止後續首頁事件重新 render。
+document.addEventListener("click",(e)=>{
+  const summary=e.target.closest("#app.admin-home-view details.admin-collapsible > summary");
+  if(!summary)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  const detail=summary.parentElement;
+  const key=detail.dataset.collapseKey || summary.querySelector("h2")?.textContent?.trim();
+  detail.open=!detail.open;
+  if(key){
+    window.__adminCollapseState=window.__adminCollapseState||{};
+    window.__adminCollapseState[key]=detail.open;
+  }
+},true);
 </script>
