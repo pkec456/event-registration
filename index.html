@@ -5178,7 +5178,9 @@ function startActivityExpiryWatcher(){
     if(expired.some(a=>String(a.id)===String(openEventId))){
       render();
     }
-    if(typeof renderAdmin==="function" && adminUnlocked){
+    // V2.6：管理首頁不要由每秒背景監控重建 DOM。
+    // 否則收合中的區塊會被重新建立，造成幾秒後自動展開。
+    if(typeof renderAdmin==="function" && adminUnlocked && adminPage!=="home"){
       const tab=document.getElementById("tab-content");
       if(tab)renderAdmin(tab);
     }
