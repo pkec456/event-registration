@@ -1863,67 +1863,6 @@ body .app-header:not(.home-header){
   transform:none !important;
 }
 
-/* V2.6 管理首頁收合：延續原本 section-head 視覺，不新增厚重外框 */
-#app.admin-home-view .admin-collapsible{
-  margin:0 0 22px;
-  padding:0;
-}
-#app.admin-home-view .admin-collapsible summary{
-  list-style:none;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  min-height:44px;
-  padding:0 2px 8px;
-  border-bottom:1px solid var(--line,#e8ddd0);
-}
-#app.admin-home-view .admin-collapsible summary::-webkit-details-marker{display:none;}
-#app.admin-home-view .admin-collapsible summary h2{
-  margin:0;
-  font-size:26px;
-  font-weight:900;
-  letter-spacing:.01em;
-}
-#app.admin-home-view .admin-collapsible summary .collapse-meta{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:var(--muted,#9a8f83);
-  font-size:15px;
-  font-weight:700;
-  white-space:nowrap;
-}
-#app.admin-home-view .admin-collapsible summary .collapse-chevron{
-  width:18px;
-  height:18px;
-  stroke-width:2.5;
-  transition:transform .22s ease;
-}
-#app.admin-home-view .admin-collapsible:not([open]) summary .collapse-chevron{
-  transform:rotate(-90deg);
-}
-#app.admin-home-view .admin-collapsible .admin-collapsible-body{
-  padding-top:14px;
-}
-#app.admin-home-view .admin-collapsible:not([open]){
-  margin-bottom:8px;
-}
-#app.admin-home-view .admin-collapsible:not([open]) summary{
-  padding-bottom:4px;
-  border-bottom-color:transparent;
-}
-@media(max-width:520px){
-  #app.admin-home-view .admin-collapsible{margin-bottom:18px;}
-  #app.admin-home-view .admin-collapsible summary{
-    min-height:40px;
-    padding:0 2px 7px;
-  }
-  #app.admin-home-view .admin-collapsible summary h2{font-size:24px!important;}
-  #app.admin-home-view .admin-collapsible summary .collapse-meta{font-size:14px;}
-  #app.admin-home-view .admin-collapsible .admin-collapsible-body{padding-top:12px;}
-}
 /* Shared Header back control: one visual contract for every page. */
 .app-navbar-left .member-feature-back,
 .app-navbar-left .subpage-back-top{
@@ -3947,43 +3886,60 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   }
 }
 
-/* V2.6 desktop override: clean collapsible headings */
-#app.admin-home-view details.admin-collapsible{margin:0 0 20px!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;}
-#app.admin-home-view details.admin-collapsible>summary{display:flex!important;align-items:center!important;justify-content:space-between!important;min-height:38px!important;padding:0 0 8px!important;background:transparent!important;border:0!important;border-bottom:1px solid var(--line,#e8ddd0)!important;border-radius:0!important;box-shadow:none!important;}
-#app.admin-home-view details.admin-collapsible>summary h2{margin:0!important;font-size:26px!important;font-weight:900!important;}
-#app.admin-home-view details.admin-collapsible>summary .collapse-meta{font-size:15px!important;color:var(--muted,#9a8f83)!important;font-weight:600!important;}
-#app.admin-home-view details.admin-collapsible>summary .collapse-chevron{width:18px!important;height:18px!important;background:transparent!important;border:0!important;}
-#app.admin-home-view details.admin-collapsible>.admin-collapsible-body{padding-top:14px!important;}
 
-/* V2.6.1 管理首頁收合修正：統一電腦與手機尺寸 */
+/* V2.6 管理首頁收合：唯一樣式來源 */
 #app.admin-home-view details.admin-collapsible{
-  margin:0 0 16px!important;
-  background:transparent!important;border:0!important;box-shadow:none!important;
+  margin:0 0 18px;
+  padding:0;
+  background:transparent;
+  border:0;
+  box-shadow:none;
 }
-#app.admin-home-view details.admin-collapsible>summary{
-  list-style:none!important;cursor:pointer!important;
-  display:flex!important;align-items:center!important;justify-content:space-between!important;
-  min-height:42px!important;padding:0 2px 7px!important;
-  border:0!important;border-bottom:1px solid var(--line,#e8ddd0)!important;
-  background:transparent!important;border-radius:0!important;box-shadow:none!important;
+#app.admin-home-view details.admin-collapsible > summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:42px;
+  margin:0;
+  padding:0 2px 8px;
+  list-style:none;
+  cursor:pointer;
+  background:transparent;
+  border:0;
+  border-bottom:1px solid var(--line,#e8ddd0);
 }
-#app.admin-home-view details.admin-collapsible>summary::-webkit-details-marker{display:none!important;}
-#app.admin-home-view details.admin-collapsible>summary h2{
-  margin:0!important;font-size:20px!important;line-height:1.25!important;font-weight:900!important;
+#app.admin-home-view details.admin-collapsible > summary::-webkit-details-marker{display:none;}
+#app.admin-home-view details.admin-collapsible > summary h2{
+  margin:0;
+  font-size:20px;
+  line-height:1.25;
+  font-weight:800;
 }
-#app.admin-home-view details.admin-collapsible>summary .collapse-meta{
-  font-size:14px!important;font-weight:600!important;
+#app.admin-home-view details.admin-collapsible .collapse-meta{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted,#9a8f83);
+  font-size:14px;
+  white-space:nowrap;
 }
-#app.admin-home-view details.admin-collapsible>.admin-collapsible-body{padding-top:12px!important;}
+#app.admin-home-view details.admin-collapsible .collapse-chevron{
+  width:18px;
+  height:18px;
+  transition:transform .18s ease;
+}
+#app.admin-home-view details.admin-collapsible:not([open]) .collapse-chevron{
+  transform:rotate(-90deg);
+}
+#app.admin-home-view details.admin-collapsible > .admin-collapsible-body{
+  padding-top:12px;
+}
 @media(max-width:520px){
-  #app.admin-home-view details.admin-collapsible{margin-bottom:14px!important;}
-  #app.admin-home-view details.admin-collapsible>summary h2{font-size:18px!important;}
-  #app.admin-home-view details.admin-collapsible>summary .collapse-meta{font-size:13px!important;}
+  #app.admin-home-view details.admin-collapsible{margin-bottom:14px;}
+  #app.admin-home-view details.admin-collapsible > summary h2{font-size:18px;}
+  #app.admin-home-view details.admin-collapsible .collapse-meta{font-size:13px;}
 }
-
-/* V2.6.4 final: compact desktop headings */
-#app.admin-home-view details.admin-collapsible>summary h2{font-size:20px!important;}
-
 </style>
 
 
@@ -5038,6 +4994,23 @@ function renderTab(){
   else if(activeTab==="query") renderQuery(el);
   else if(activeTab==="admin") renderAdmin(el);
   refreshIcons();
+  bindAdminCollapsibles();
+}
+
+function bindAdminCollapsibles(){
+  if(!(activeTab==="admin" && adminUnlocked && adminPage==="home")) return;
+  const root=document.getElementById("app");
+  if(!root) return;
+  window.__adminCollapseState=window.__adminCollapseState||{};
+  root.querySelectorAll("details.admin-collapsible").forEach((detail,index)=>{
+    const key=detail.querySelector("summary h2")?.textContent?.trim()||String(index);
+    if(Object.prototype.hasOwnProperty.call(window.__adminCollapseState,key)){
+      detail.open=window.__adminCollapseState[key]===true;
+    }
+    detail.addEventListener("toggle",()=>{
+      window.__adminCollapseState[key]=detail.open;
+    });
+  });
 }
 
 // ---------- REGISTER TAB ----------
