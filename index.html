@@ -6582,7 +6582,9 @@ async function init(){
       // 管理者頁面先同步最新雲端資料；首頁與出席率頁面需同步重算統計。
       await loadData();
       try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("簽到頁面設定同步失敗",e);}
-      if(activeTab==="admin" && !userIsTyping && ["home","attendance","attendance-person"].includes(adminPage)){
+      // V2.6.6：管理首頁包含使用者操作的收合區塊，不可被 6 秒背景同步重建。
+      // 出席率相關頁面仍維持原本的背景同步。
+      if(activeTab==="admin" && !userIsTyping && ["attendance","attendance-person"].includes(adminPage)){
         const adminContent=document.getElementById("tab-content");
         if(adminContent) renderAdmin(adminContent);
       }
