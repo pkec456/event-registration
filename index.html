@@ -2042,6 +2042,12 @@ html{
 .manual-register-list .list-name{font-weight:800;font-size:14px}
 .manual-register-list .list-meta{font-size:11px;color:#999;margin-top:2px}
 .manual-register-list .check{color:var(--success)}
+.manual-register-list .manual-row-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.manual-register-list .manual-row-action{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--accent);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.manual-register-list .manual-row-action svg{width:17px;height:17px}
+.manual-register-list .manual-row-action:hover{background:#f7f3ee}
+.manual-register-list .manual-row-action.danger{color:#b42318}
+.manual-register-list .manual-row-action.danger:hover{background:#fff1f0}
 
 .manual-activity-summary{display:flex;align-items:center;gap:12px;min-height:48px}
 .manual-activity-summary-main{flex:1;min-width:0}
@@ -5852,7 +5858,7 @@ function renderAdmin(el){
               <div class="list-name">${escapeHtml(r.name)}</div>
               <div class="list-meta">${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</div>
             </div>
-            <i data-lucide="check" class="check"></i>
+            <div class="manual-row-actions"><button type="button" class="manual-row-action" data-manual-edit-reg="${i}" title="修改姓名"><i data-lucide="pencil"></i></button><button type="button" class="manual-row-action danger" data-manual-delete-reg="${i}" title="刪除登記"><i data-lucide="trash-2"></i></button></div>
           </div>`).join("") : `<div class="empty" style="padding:14px">目前尚無登記人員</div>`}
       </div>
     </div>`;
@@ -6375,6 +6381,28 @@ function setupManualRegistrationPage(el){
 
   if(memberInput) memberInput.addEventListener("keydown",e=>{
     if(e.key==="Enter"){e.preventDefault();btn?.click();}
+  });
+
+  el.querySelectorAll("[data-manual-edit-reg]").forEach(editBtn=>editBtn.onclick=async(ev)=>{
+    ev.preventDefault();ev.stopPropagation();
+    const idx=Number(editBtn.dataset.manualEditReg);
+    const current=state.registrations[manualRegisterActivityId]?.[idx];
+    if(!current)return;
+    const next=norm(window.prompt("修改隊員姓名",current.name)||"");
+    if(!next || next===current.name)return;
+    editBtn.disabled=true;
+    try{await renameRegistrationRemote(current.id,next);current.name=next;showToast("姓名已修改");renderAdmin(el);}
+    catch(e){console.error("修改手動登記姓名失敗",e);showToast("修改失敗："+(e?.message||"請稍後再試"));editBtn.disabled=false;}
+  });
+  el.querySelectorAll("[data-manual-delete-reg]").forEach(deleteBtn=>deleteBtn.onclick=async(ev)=>{
+    ev.preventDefault();ev.stopPropagation();
+    const idx=Number(deleteBtn.dataset.manualDeleteReg);
+    const current=state.registrations[manualRegisterActivityId]?.[idx];
+    if(!current)return;
+    if(!window.confirm("確定要刪除「"+current.name+"」的登記嗎？"))return;
+    deleteBtn.disabled=true;
+    try{await deleteRegistrationRemote(current.id);const fresh=await refreshActivityRegistrations(manualRegisterActivityId);state.registrations[manualRegisterActivityId]=fresh;showToast("已刪除登記");renderAdmin(el);}
+    catch(e){console.error("刪除手動登記失敗",e);showToast("刪除失敗："+(e?.message||"請稍後再試"));deleteBtn.disabled=false;}
   });
 
   if(btn) btn.onclick=async()=>{
