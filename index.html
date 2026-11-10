@@ -5858,7 +5858,7 @@ function renderAdmin(el){
               <div class="list-name">${escapeHtml(r.name)}</div>
               <div class="list-meta">${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</div>
             </div>
-            <div class="manual-row-actions"><button type="button" class="manual-row-action" data-manual-edit-reg="${i}" title="修改姓名"><i data-lucide="pencil"></i></button><button type="button" class="manual-row-action danger" data-manual-delete-reg="${i}" title="刪除登記"><i data-lucide="trash-2"></i></button></div>
+            ${editing ? `<div class="manual-row-actions"><button type="button" class="manual-row-action" data-manual-edit-reg="${i}" title="修改姓名" aria-label="修改姓名"><i data-lucide="pencil"></i></button><button type="button" class="manual-row-action danger" data-manual-delete-reg="${i}" title="刪除登記" aria-label="刪除登記"><i data-lucide="trash-2"></i></button></div>` : `<i data-lucide="check" class="check"></i>`}
           </div>`).join("") : `<div class="empty" style="padding:14px">目前尚無登記人員</div>`}
       </div>
     </div>`;
