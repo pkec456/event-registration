@@ -3947,6 +3947,12 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   #app.admin-home-view details.admin-collapsible > summary h2{font-size:18px;}
   #app.admin-home-view details.admin-collapsible .collapse-meta{font-size:13px;}
 }
+
+/* V2.6.2 query layout repair */
+#app .query-metrics-bootstrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 16px;width:100%;}
+#app .query-metrics-bootstrap .col{display:contents;min-width:0;}
+#app .query-metrics-bootstrap .query-metric-card{width:100%;min-width:0;box-sizing:border-box;}
+@media(max-width:420px){#app .query-metrics-bootstrap{gap:8px;}}
 </style>
 
 
@@ -5484,7 +5490,7 @@ function renderQuery(el){
         </div>
       </div>
 
-      <div class="row row-cols-1 row-cols-sm-2 g-2 mb-3 query-metrics-bootstrap">
+      <div class="query-metrics query-metrics-bootstrap">
         <div class="col"><div class="query-metric-card attendance-metric ${tone.name} h-100">
           <div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div>
           <div class="donut" style="--value:${rate}%;--donut-color:${tone.color}">
