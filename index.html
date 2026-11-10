@@ -2034,6 +2034,7 @@ html{
 .home-tabs button.active::after{
   display:none !important;
 }
+.manual-member-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.manual-member-inputs .field{margin:0;position:relative}.manual-member-inputs input{width:100%;box-sizing:border-box;padding-left:32px}.manual-member-number{position:absolute;left:10px;top:50%;transform:translateY(-50%);z-index:1;color:#999;font-size:12px;font-weight:800}@media(max-width:520px){.manual-member-inputs{grid-template-columns:1fr}}
 .manual-register-list{margin-top:8px}
 .manual-register-list .list-row{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--line)}
 .manual-register-list .list-row:last-child{border-bottom:0}
@@ -5833,9 +5834,7 @@ function renderAdmin(el){
 
     <div class="form-block">
       <div class="form-title"><span class="ico"><i data-lucide="user-plus"></i></span>姓名</div>
-      <div class="field">
-        <input type="text" id="manual-member-name" placeholder="請輸入隊員姓名" autocomplete="off">
-      </div>
+      <div class="manual-member-inputs">${Array.from({length:10},(_,i)=>`<div class="field"><label class="manual-member-number">${i+1}</label><input type="text" class="manual-member-name" placeholder="請輸入隊員姓名" autocomplete="off"></div>`).join("")}</div>
       <button type="button" class="primary" id="manual-register-btn">
         <i data-lucide="${current?"plus":"clipboard-plus"}"></i>${current?"新增登記":"建立活動並登記"}
       </button>
@@ -6312,7 +6311,7 @@ function showManualReturnDialog(){
 function setupManualRegistrationPage(el){
   const nameInput=document.getElementById("manual-activity-name");
   const dateInput=document.getElementById("manual-activity-date");
-  const memberInput=document.getElementById("manual-member-name");
+  const memberInputs=[...el.querySelectorAll(".manual-member-name")];
   const syncManualFields=()=>{
     document.querySelectorAll(".manual-draft-field-input").forEach(inp=>{
       const i=Number(inp.dataset.manualIdx);
@@ -6398,14 +6397,14 @@ function setupManualRegistrationPage(el){
   });
 
   if(btn) btn.onclick=async()=>{
-    const member=norm(memberInput?.value||"");
+    const members=[...new Set(memberInputs.map(input=>norm(input.value)).filter(Boolean))];
     if(!manualRegisterActivityId){
       manualRegisterActivityName=norm(nameInput?.value||"");
       manualRegisterActivityDate=dateInput?.value||"";
       if(!manualRegisterActivityName){showToast("請輸入活動名稱");return;}
       if(!manualRegisterActivityDate){showToast("請選擇活動日期");return;}
     }
-    if(!member){showToast("請輸入隊員姓名");return;}
+    if(!members.length){showToast("請至少輸入一位隊員姓名");return;}
     syncManualFields();
 
     btn.disabled=true;
@@ -6439,18 +6438,22 @@ function setupManualRegistrationPage(el){
         activity=state.activities.find(a=>String(a.id)===String(manualRegisterActivityId));
       }
 
-      const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}},true);
-      const r=savedReg||{id:uid(),activity_id:activity.id,name:member,fieldValues:{},ts:new Date().toISOString()};
       if(!state.registrations[activity.id]) state.registrations[activity.id]=[];
-      state.registrations[activity.id].push({
-        id:r.id||uid(),activity_id:r.activity_id||activity.id,name:r.name||member,
-        fieldValues:r.field_values||r.fieldValues||{},ts:r.created_at||r.ts||new Date().toISOString()
-      });
-
-      if(memberInput) memberInput.value="";
-      showToast(state.registrations[activity.id].length===1?"活動建立並完成登記":"已完成登記");
+      let added=0;
+      for(const member of members){
+        if(state.registrations[activity.id].some(r=>keyOf(r.name)===keyOf(member))) continue;
+        const savedReg=await createRegistrationRemote(activity.id,{name:member,fieldValues:{}},true);
+        const r=savedReg||{id:uid(),activity_id:activity.id,name:member,fieldValues:{},ts:new Date().toISOString()};
+        state.registrations[activity.id].push({
+          id:r.id||uid(),activity_id:r.activity_id||activity.id,name:r.name||member,
+          fieldValues:r.field_values||r.fieldValues||{},ts:r.created_at||r.ts||new Date().toISOString()
+        });
+        added++;
+      }
+      memberInputs.forEach(input=>input.value="");
+      showToast(added?"已完成 "+added+" 位登記":"輸入的姓名皆已登記");
       renderAdmin(el);
-      setTimeout(()=>document.getElementById("manual-member-name")?.focus(),50);
+      setTimeout(()=>el.querySelector(".manual-member-name")?.focus(),50);
     }catch(e){
       console.error("手動登記失敗",e);
       if(err){err.textContent="手動登記失敗："+(e?.message||"未知錯誤");err.classList.add("show");}
