@@ -6370,9 +6370,14 @@ function setupManualRegistrationPage(el){
     };
   });
 
-  if(memberInput) memberInput.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){e.preventDefault();btn?.click();}
-  });
+  memberInputs.forEach((memberInput,index)=>memberInput.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      e.preventDefault();
+      const next=memberInputs[index+1];
+      if(next) next.focus();
+      else btn?.click();
+    }
+  }));
 
   el.querySelectorAll("[data-manual-edit-reg]").forEach(editBtn=>editBtn.onclick=async(ev)=>{
     ev.preventDefault();ev.stopPropagation();
