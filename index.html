@@ -5806,9 +5806,6 @@ function renderAdmin(el){
             <div class="manual-activity-summary-name">${escapeHtml(activityName)}</div>
             <div class="manual-activity-summary-date"><i data-lucide="calendar-days"></i>${escapeHtml(activityDate||"—")}</div>
           </div>
-          <button type="button" class="announcement-edit" id="edit-manual-activity-btn">
-            <i data-lucide="pencil"></i>編輯
-          </button>
         </div>` : `
         <div class="field">
           ${eventCategoryButtons(current?.eventCategory||manualRegisterEventCategory,"manual")}
@@ -6017,7 +6014,8 @@ function openManualRegistrationEditor(a){
   manualRegisterActivityName=a.name||"";
   manualRegisterActivityDate=activityDateKey(a.date);
   manualRegisterFields=Array.isArray(a.fields)&&a.fields.length ? a.fields.map(f=>f.label||"").filter(Boolean) : ["公用哨角"];
-  manualRegisterActivityEditing=false;
+  // 從「活動管理 → 編輯」直接進入編輯模式，避免需要再按一次編輯。
+  manualRegisterActivityEditing=true;
   adminPage="manual-register";
   render();
 }
@@ -6325,12 +6323,6 @@ function setupManualRegistrationPage(el){
   const err=document.getElementById("manual-register-error");
 
   el.querySelectorAll("[data-event-category][data-event-category-prefix=\"manual\"]").forEach(btn=>btn.onclick=()=>{manualRegisterEventCategory=btn.dataset.eventCategory||"";el.querySelectorAll("[data-event-category-prefix=\"manual\"]").forEach(b=>b.classList.toggle("selected",b===btn));});
-  const editActivityBtn=document.getElementById("edit-manual-activity-btn");
-  if(editActivityBtn) editActivityBtn.onclick=()=>{
-    manualRegisterActivityEditing=true;
-    renderAdmin(el);
-  };
-
   const cancelActivityBtn=document.getElementById("cancel-manual-activity-btn");
   if(cancelActivityBtn) cancelActivityBtn.onclick=()=>{
     manualRegisterActivityEditing=false;
