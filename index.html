@@ -5453,8 +5453,9 @@ function renderQuery(el){
       return;
     }
 
-    const hasHistory = Object.values(state.registrations).some(list =>
-      (list || []).some(r => keyOf(r.name) === keyOf(name))
+    // 只在今年納入出席率的活動中尋找紀錄，避免歷史或隱藏活動造成查詢結果與統計不一致。
+    const hasHistory = acts.some(a =>
+      regsOf(a.id).some(r => keyOf(r.name) === keyOf(name))
     );
 
     if(!hasHistory){
