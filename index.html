@@ -6098,7 +6098,7 @@ function activityAdminRow(a,hidden=false){
   </div>
   <div class="admin-actions">
     <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded ? "收起名單" : `名單 ${list.length}`}</button>
-    ${isManualRegistrationActivity(a) ? `<button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>` : `<button class="activity-toggle-btn ${future?"is-off":adminStatusButtonClass}" data-activity-close="${escapeHtml(a.id)}" aria-label="${future?"取消預定開放":(a.open ? "關閉活動" : "開啟活動")}"><i data-lucide="${future?"clock":(a.open ? "toggle-right" : "toggle-left")}"></i><span>${future?"等待開放":(a.open ? "開放中" : "已停止")}</span></button>`}
+    <button class="activity-toggle-btn is-off" data-activity-edit="${escapeHtml(a.id)}" aria-label="編輯活動"><i data-lucide="pencil"></i><span>編輯</span></button>
     <button data-activity-hide="${escapeHtml(a.id)}"><i data-lucide="${hidden ? "eye" : "eye-off"}"></i>${hidden ? "取消隱藏" : "隱藏"}</button>
     <button class="danger" data-activity-delete="${escapeHtml(a.id)}"><i data-lucide="trash-2"></i>刪除</button>
   </div>${detail}</div>`;
