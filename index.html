@@ -5401,6 +5401,19 @@ function renderRegister(el){
   `;
   el.querySelectorAll("[data-open]").forEach(row=>row.onclick=async()=>{const activity=state.activities.find(a=>String(a.id)===String(row.dataset.open));if(activity && isWaitingForPublish(activity)){showToast("此活動尚未開放");return;}openEventId=row.dataset.open;try{await refreshActivityRegistrations(openEventId);}catch(e){console.error("活動名單讀取失敗",e);showToast("名單同步失敗，正在顯示目前資料");}render();});refreshIcons();
 
+  // 活動列表的人數必須與雲端即時一致。首次載入若 state 尚未完成同步，
+  // 直接補抓目前列表各活動的報名資料並只更新數字，避免先顯示 0 人。
+  if(!el.__registrationCountSyncing && !openEventId){
+    el.__registrationCountSyncing=true;
+    Promise.all(acts.map(a=>refreshActivityRegistrations(a.id).catch(e=>{
+      console.warn("活動人數同步失敗",a.id,e);
+      return state.registrations[a.id]||[];
+    }))).then(()=>{
+      el.__registrationCountSyncing=false;
+      if(!openEventId && document.body.contains(el)) renderRegister(el);
+    }).catch(()=>{el.__registrationCountSyncing=false;});
+  }
+
 }
 
 // ---------- QUERY TAB ----------
