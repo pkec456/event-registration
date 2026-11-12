@@ -6185,19 +6185,27 @@ function setupCreateActivityPage(el){
   const publishDateInput = document.getElementById("new-publish-date");
   [dateInput, publishDateInput].forEach(input=>{
     if(!input) return;
-    input.min = todayKey;
-    if(input.value && input.value < todayKey){
-      input.value = "";
-      if(input.id === "new-date") draftDate = "";
-      else draftPublishAt = "";
-    }
-    input.addEventListener("change",()=>{
-      const today = localDateKey();
-      if(input.value && input.value < today){
+    // 編輯既有活動時必須保留原日期／歷史資料；日期限制只套用建立新活動。
+    if(!editingActivityId){
+      input.min = todayKey;
+      if(input.value && input.value < todayKey){
         input.value = "";
         if(input.id === "new-date") draftDate = "";
         else draftPublishAt = "";
-        showToast(input.id === "new-date" ? "活動日期不能早於今天" : "發佈日期不能早於今天");
+      }
+    }else{
+      input.removeAttribute("min");
+    }
+    input.addEventListener("change",()=>{
+      // 歷史活動重新編輯時不可因日期已過而被清空。
+      if(!editingActivityId){
+        const today = localDateKey();
+        if(input.value && input.value < today){
+          input.value = "";
+          if(input.id === "new-date") draftDate = "";
+          else draftPublishAt = "";
+          showToast(input.id === "new-date" ? "活動日期不能早於今天" : "發佈日期不能早於今天");
+        }
       }
       rememberCreateDraft();
     });
@@ -6289,7 +6297,7 @@ function setupCreateActivityPage(el){
     const publishAt = draftPublishAt
       ? new Date(draftPublishAt).toISOString()
       : null;
-    if(draftPublishAt && (!Number.isFinite(new Date(draftPublishAt).getTime()) || new Date(draftPublishAt).getTime() <= Date.now())){
+    if(draftPublishAt && (!Number.isFinite(new Date(draftPublishAt).getTime()) || (!editingActivityId && new Date(draftPublishAt).getTime() <= Date.now()))){
       showToast("預先發佈時間必須晚於現在");
       return;
     }
