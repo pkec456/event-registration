@@ -5476,7 +5476,7 @@ function renderRegister(el){
     <div class="activity-grid activity-grid-bootstrap">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card activity-card-simple ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
   <div class="activity-card-count"><i data-lucide="users"></i> ${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div>
   <div class="activity-card-center">
-    <div class="activity-meta activity-card-date" data-month="${fmtDate(a.date).split('/').slice(0,2).join('/')}">${fmtDate(a.date)}</div>
+    <div class="activity-meta activity-card-date" data-month="${fmtDate(a.date).split('/').slice(1,3).join('/')}">${fmtDate(a.date)}</div>
   </div>
   <div class="activity-card-bottom">
     <div class="activity-card-limit">${(Number(a.minimumAttendanceRate)||0)?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:"<div class=\"activity-card-limit-placeholder\"></div>"}</div>
