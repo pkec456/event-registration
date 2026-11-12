@@ -4264,7 +4264,9 @@ async function loadData(){
       eventCategory:a.event_category||""
     }));
 
-    state.registrations={};
+    // 先在暫存物件組合完整報名資料，確認讀取成功後才一次寫入 state。
+    // 不能先清空 state.registrations，否則背景同步查詢短暫失敗／延遲時會把首頁人數覆蓋成 0。
+    const nextRegistrations={};
 
     // 管理者使用安全 RPC；隊員頁只讀取公開簽到名單。
     // 簽到頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
@@ -4277,8 +4279,8 @@ async function loadData(){
       if(rErr) throw rErr;
       if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
       (regData.registrations||[]).forEach(r=>{
-        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
-        state.registrations[r.activity_id].push({
+        if(!nextRegistrations[r.activity_id]) nextRegistrations[r.activity_id]=[];
+        nextRegistrations[r.activity_id].push({
           id:r.id,
           activity_id:r.activity_id,
           name:r.name,
@@ -4294,8 +4296,8 @@ async function loadData(){
       if(rErr) throw rErr;
 
       (regData||[]).forEach(r=>{
-        if(!state.registrations[r.activity_id]) state.registrations[r.activity_id]=[];
-        state.registrations[r.activity_id].push({
+        if(!nextRegistrations[r.activity_id]) nextRegistrations[r.activity_id]=[];
+        nextRegistrations[r.activity_id].push({
           id:r.id,
           activity_id:r.activity_id,
           name:r.name,
@@ -4304,6 +4306,9 @@ async function loadData(){
         });
       });
     }
+
+    // 查詢與分組都成功後才更新，確保背景同步具備原子性。
+    state.registrations=nextRegistrations;
 
     state.adminPin=null;
     // 初次載入完成後立即重新渲染一次。
