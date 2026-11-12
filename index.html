@@ -6934,7 +6934,8 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   }
 
   async function activityActionDelete(a,btn){
-    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的報名資料也會刪除，無法復原。")) return;
+    // 刪除活動前使用明確的確認跳窗，避免誤觸直接刪除。
+    if(!confirm("確認刪除活動？\n\n「"+a.name+"」\n\n刪除後活動及所有報名資料將無法復原。")) return;
     btn.disabled=true;
     try{
       await window.deleteActivityRemote(a.id);
