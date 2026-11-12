@@ -3390,10 +3390,10 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .activity-grid.activity-grid-bootstrap .activity-card-simple{position:relative;min-height:150px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;}
 .activity-card-simple .activity-card-count{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;}
 .activity-card-simple .activity-card-count svg{width:15px;height:15px;}
-.activity-card-simple .activity-card-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 0 8px;}
-.activity-card-simple .activity-card-date{font-size:32px!important;font-weight:800;line-height:1.2;margin:0!important;color:var(--text,#222);}
+.activity-card-simple .activity-card-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0;pointer-events:none;}
+.activity-card-simple .activity-card-date{font-size:42px!important;font-weight:800;line-height:1;margin:0!important;color:var(--text,#222);}
 .activity-card-simple .activity-card-date{font-size:0!important;}
-.activity-card-simple .activity-card-date::after{content:attr(data-month);font-size:32px;font-weight:800;}
+.activity-card-simple .activity-card-date::after{content:attr(data-month);font-size:42px;font-weight:800;}
 .activity-card-simple .activity-card-bottom{justify-content:space-between;gap:8px;}
 .activity-card-simple .activity-card-limit,.activity-card-simple .activity-card-countdown-slot{min-width:56px;min-height:50px;display:flex;align-items:center;justify-content:center;}
 .activity-card-simple .activity-card-limit-placeholder,.activity-card-simple .activity-card-countdown-placeholder{width:56px;height:50px;}
