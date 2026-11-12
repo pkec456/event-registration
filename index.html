@@ -5348,7 +5348,7 @@ function renderRegister(el){
         ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" class="register-name-input" placeholder="請輸入姓名"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
-          <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認簽到</button>
+          <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認報名</button>
         `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
       </div>
       <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
