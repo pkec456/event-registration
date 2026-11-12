@@ -4504,7 +4504,10 @@ async function updateActivityRemote(activity){
     p_close_at:a.closeAt||null,
     p_auto_close_minutes:Number(a.autoCloseMinutes||0),
     p_hidden:!!a.hidden,
-    p_publish_at:a.publishAt||null
+    p_publish_at:a.publishAt||null,
+    p_event_category:a.eventCategory||null,
+    p_minimum_attendance_rate:a.minimumAttendanceRate==null?0:Number(a.minimumAttendanceRate),
+    p_note:a.note||null
   });
 
   if(error){
@@ -6255,8 +6258,7 @@ function setupCreateActivityPage(el){
       createBtn.disabled=true;
       try{
         const saved=await updateActivityRemote(updated);
-        await setEventCategoryRemote(updated.id,draftEventCategory);
-        await setMinimumAttendanceRateRemote(updated.id,minimumAttendanceRate);
+        // 分類與最低出席率已與活動主資料一起儲存，避免多次 RPC 造成不同步。
         const idx=state.activities.findIndex(a=>String(a.id)===String(updated.id));
         if(idx>=0) state.activities[idx]={...updated,...(saved||{}),minimumAttendanceRate,eventCategory:draftEventCategory,note};
         // 儲存後重新讀取資料庫，確認活動頁與管理列表都使用最新資料，
