@@ -3994,8 +3994,22 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   margin-bottom:0;
   height:100%;
 }
+/* 手機版也與首頁一致，維持兩欄卡片 */
 @media (max-width:700px){
-  #app.child-view .activity-admin-list{grid-template-columns:1fr;}
+  #app.child-view .activity-admin-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  #app.child-view .activity-admin-list .activity-admin-card.activity-card{
+    padding:10px;
+  }
+  #app.child-view .activity-admin-list .activity-icon{
+    width:34px;height:34px;min-width:34px;flex-basis:34px;
+  }
+  #app.child-view .activity-admin-list .activity-name{font-size:13px;}
+  #app.child-view .activity-admin-list .activity-meta,
+  #app.child-view .activity-admin-list .admin-card-stat-row{font-size:10px;}
+  #app.child-view .activity-admin-list .admin-actions{gap:5px;}
 }
 </style>
 
