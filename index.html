@@ -26,7 +26,7 @@
  * C. 隊員查詢、搜尋表單與出席資料
  * D. 管理首頁、管理活動卡片與管理操作
  * E. 管理者角色標頭與登入介面
- * F. 活動狀態、簽到名單與倒數顯示
+ * F. 活動狀態、報名名單與倒數顯示
  * G. 管理首頁統計、類別卡片與圖表
  * H. 手機版管理首頁 RWD 微調
  * I. 共用圖示尺寸與搜尋按鈕視覺
@@ -675,13 +675,13 @@ button.secondary:focus-visible,
 .checkin-countdown svg{width:14px;height:14px}
 .checkin-countdown.no-countdown{min-width:32px;width:32px;padding:0}
 }
-/* CSS 區塊 F：活動狀態、簽到名單與倒數顯示 */
+/* CSS 區塊 F：活動狀態、報名名單與倒數顯示 */
 
 .activity-card.activity-card-open .activity-name,
 .activity-card.activity-card-open .activity-meta{
   color:var(--ink);
 }
-/* 尚未開放的活動以灰階淡化，和可簽到活動明確區分。 */
+/* 尚未開放的活動以灰階淡化，和可報名活動明確區分。 */
 .activity-card.activity-card-pending{
   background:#f3f3f1 !important;
   border:1px solid #e2e2df !important;
@@ -2936,7 +2936,7 @@ button.secondary,.manual-return-discard,
 }
 
 
-/* V2.5 第二階段按鈕整理：簽到、篩選、幹部與手動編輯操作；僅 CSS */
+/* V2.5 第二階段按鈕整理：報名、篩選、幹部與手動編輯操作；僅 CSS */
 #app.home-view .checkin-hero-actions{
   display:flex;
   align-items:center;
@@ -3131,7 +3131,7 @@ button.secondary,.manual-return-discard,
 /* 小螢幕 Header 間距統一由 V2.5 --v25-header-pad 管理 */
 
 
-/* 新版首頁整合：移除隊員端與管理頁底部「簽到／出席率」固定按鈕 */
+/* 新版首頁整合：移除隊員端與管理頁底部「報名／出席率」固定按鈕 */
 #app.member-portal-view .home-tabs,
 #app.member-feature-view .home-tabs,
 #app.admin-home-view .home-tabs{
@@ -3162,7 +3162,7 @@ button.secondary,.manual-return-discard,
   #app.member-feature-view .member-feature-content{padding-left:14px;padding-right:14px;}
   .member-feature-header{padding-left:14px !important;padding-right:14px !important;}
 }
-/* 新版入口已承擔導覽功能，徹底隱藏舊版底部簽到／出席率導覽 */
+/* 新版入口已承擔導覽功能，徹底隱藏舊版底部報名／出席率導覽 */
 .member-portal-view .home-tabs,
 .member-feature-view .home-tabs,
 .admin-home-view .home-tabs,
@@ -4082,7 +4082,7 @@ let draftMinimumAttendanceRate = "";
 let draftCloseMinutes = 0;
 let pendingPublishActivity = null;
 let draftPublishAt = "";
-let announcementText = "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+let announcementText = "感謝大家的參與，請留意活動開放狀態與報名資訊。";
 let announcementEditing = false;
 
 
@@ -4101,7 +4101,7 @@ let manualRegisterFields = ["公用哨角"];
 let manualRegisterActivityEditing = false;
 
 
-// 簽到頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
+// 報名頁面總開關：以 Supabase 為唯一來源，讓手機／電腦同步。
 const SIGNIN_PAGE_VISIBILITY_KEY = "haotian-signin-page-visible";
 function isSigninPageVisible(){
   try{return localStorage.getItem(SIGNIN_PAGE_VISIBILITY_KEY) !== "hidden";}catch(e){return true;}
@@ -4129,7 +4129,7 @@ async function saveSigninPageVisibilityRemote(visible){
     p_visible:!!visible
   });
   if(error) throw error;
-  if(data?.ok===false) throw new Error(data?.message||"簽到頁面設定儲存失敗");
+  if(data?.ok===false) throw new Error(data?.message||"報名頁面設定儲存失敗");
   signinPageVisible=!!visible;
   setSigninPageVisibleLocal(!!visible);
   signinPageVisibilityLoaded=true;
@@ -4268,8 +4268,8 @@ async function loadData(){
     // 不能先清空 state.registrations，否則背景同步查詢短暫失敗／延遲時會把首頁人數覆蓋成 0。
     const nextRegistrations={};
 
-    // 管理者使用安全 RPC；隊員頁只讀取公開簽到名單。
-    // 簽到頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
+    // 管理者使用安全 RPC；隊員頁只讀取公開報名名單。
+    // 報名頁本身需要最新人數，否則 maxParticipants 會拿到錯誤的舊數字。
     if(adminUnlocked){
       const session=getAdminSession();
       const {data: regData,error:rErr}=await supabaseClient.rpc("simple_admin_list_registrations",{
@@ -4277,7 +4277,7 @@ async function loadData(){
         p_admin_code:session.access_code
       });
       if(rErr) throw rErr;
-      if(!regData?.ok) throw new Error(regData?.message||"簽到資料讀取失敗");
+      if(!regData?.ok) throw new Error(regData?.message||"報名資料讀取失敗");
       (regData.registrations||[]).forEach(r=>{
         if(!nextRegistrations[r.activity_id]) nextRegistrations[r.activity_id]=[];
         nextRegistrations[r.activity_id].push({
@@ -4539,7 +4539,7 @@ async function checkAttendanceEligibilityRemote(activityId, name){
 }
 
 async function createRegistrationRemote(activityId, registration, adminManual=false){
-  // 一般成員簽到維持原本公開 RPC。
+  // 一般成員報名維持原本公開 RPC。
   // 手動登記由已登入管理者使用管理者 RPC，可在活動已停止後仍手動輸入。
   const session=adminManual?getAdminSession():null;
   const rpcName=adminManual?"simple_admin_create_registration":"public_create_registration";
@@ -4559,7 +4559,7 @@ async function createRegistrationRemote(activityId, registration, adminManual=fa
 
   const { data, error } = await supabaseClient.rpc(rpcName, params);
   if(error) throw error;
-  if(!data?.ok) throw new Error(data?.message || "簽到失敗");
+  if(!data?.ok) throw new Error(data?.message || "報名失敗");
   return data.registration || data;
 }
 
@@ -4580,13 +4580,13 @@ async function deleteRegistrationRemote(registrationId){
 
   if(rpc.error) throw rpc.error;
   if(rpc.data && rpc.data.ok===false){
-    throw new Error(rpc.data.message||"刪除簽到失敗");
+    throw new Error(rpc.data.message||"刪除報名失敗");
   }
 
   const verify2=await supabaseClient.from("registrations")
     .select("id").eq("id",registrationId).maybeSingle();
   if(verify2.error) throw verify2.error;
-  if(verify2.data) throw new Error("資料庫仍存在這筆簽到紀錄");
+  if(verify2.data) throw new Error("資料庫仍存在這筆報名紀錄");
 
   return true;
 }
@@ -4712,7 +4712,7 @@ function recentOrOpenActivities(){
 
     // 恢復 V2.5 的活動列表邏輯：
     // 保留開放中的活動、等待開放／未來活動，以及活動當天；
-    // 已結束且已停止簽到的歷史活動不顯示在隊員首頁，
+    // 已結束且已停止報名的歷史活動不顯示在隊員首頁，
     // 但其 registrations 仍保留在 state，供出席率與管理端使用。
     const activityDay = activityDateKey(a.date);
     if(a.open) return true;
@@ -4768,7 +4768,7 @@ function render(){
   const isChild=!!(openEventId || (activeTab==="admin" && adminUnlocked && adminPage!=="home"));
   const isAdminHome=(activeTab==="admin" && adminUnlocked && adminPage==="home");
 
-  // 新增隊員入口首頁：只提供既有的簽到與出席率兩個入口，不改動功能頁內容。
+  // 新增隊員入口首頁：只提供既有的報名與出席率兩個入口，不改動功能頁內容。
   if(memberHome && !isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
     app.className="member-portal-view";
     app.innerHTML=`
@@ -4798,7 +4798,7 @@ function render(){
           ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動報名">
             <div class="portal-card-icon"><i data-lucide="calendar-check"></i></div>
             <div class="portal-card-title">活動報名</div>
-            <div class="portal-card-desc">查看活動與進行簽到</div>
+            <div class="portal-card-desc">查看活動與進行報名</div>
           </div>`:''}
           <div class="portal-card portal-card-attendance" id="portal-attendance" role="button" tabindex="0" aria-label="進入出席率查詢">
             <div class="portal-card-icon"><i data-lucide="chart-no-axes-column-increasing"></i></div>
@@ -4859,7 +4859,7 @@ function render(){
     return;
   }
 
-  // 隊員功能頁直接呈現既有內容，不再經過舊版簽到／出席率首頁。
+  // 隊員功能頁直接呈現既有內容，不再經過舊版報名／出席率首頁。
   if(!isChild && activeTab!=="admin" && !window.__adminAccountsViewOpen){
     app.className="member-feature-view";
     app.innerHTML=`
@@ -4892,7 +4892,7 @@ function render(){
       </header>
       <nav class="tabs home-tabs navbar-nav" aria-label="主要功能">
         ${signinPageVisible?`<button data-tab="register" class="${activeTab==='register'?'active':''}">
-          <i data-lucide="check"></i>簽到
+          <i data-lucide="check"></i>報名
         </button>`:""}
         <button data-tab="query" class="${activeTab==='query'?'active':''}">
           <i data-lucide="search"></i>出席率
@@ -5075,7 +5075,7 @@ function ensurePublicCountdown(activity){
   if(!activity || !activity.open)return;
   const end=activity.closeAt?new Date(activity.closeAt).getTime():0;
   if(!end || end<=Date.now())return;
-  // 公開簽到頁不依賴管理者本機 Map；closeAt 來自資料庫。
+  // 公開報名頁不依賴管理者本機 Map；closeAt 來自資料庫。
   if(typeof renderCountdown==="function") renderCountdown(activity);
 }
 function renderCountdown(activity){
@@ -5344,16 +5344,16 @@ function renderRegister(el){
         </div>
       </div>
       <div class="checkin-card">
-        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${isWaitingForPublish(activity)?'pending-publish-status':(activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed')}"><span class="dot"></span>${isWaitingForPublish(activity)?'等待開放':(activity.open?'開放簽到中':'已停止簽到')}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
-        ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受簽到。</div></div>` : `
+        <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${isWaitingForPublish(activity)?'pending-publish-status':(activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed')}"><span class="dot"></span>${isWaitingForPublish(activity)?'等待開放':(activity.open?'開放報名中':'已停止報名')}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
+        ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受報名。</div></div>` : `
           <div class="field"><label class="field-label">姓名</label><input type="text" id="reg-name" class="register-name-input" placeholder="請輸入姓名"></div>
           ${fields.map((f,i)=>`<div class="field"><label class="field-label">${displayFieldLabel(f.label, i)}</label><input type="text" class="reg-field-input" data-key="${f.key}" placeholder="請輸入${escapeHtml(f.label)}" /></div>`).join("")}
           <button class="primary checkin-button" id="reg-btn"><i data-lucide="check"></i>確認報名</button>
-        `) : `<div class="empty">這個活動目前已停止簽到。</div>`}
+        `) : `<div class="empty">這個活動目前已停止報名。</div>`}
       </div>
-      <div class="section-head"><h2>已簽到名單</h2><span>${list.length} 人</span></div>
+      <div class="section-head"><h2>已報名名單</h2><span>${list.length} 人</span></div>
       <div class="block tight" style="--field-count:${Math.max(1,fields.length)}"><div class="list">
-        ${list.length===0?`<div class="empty">還沒有人簽到</div>`:`
+        ${list.length===0?`<div class="empty">還沒有人報名</div>`:`
           <div class="signin-list-head">
             <div>姓名</div>
             ${fields.map(f=>`<div>${escapeHtml(f.label)}</div>`).join("")}
@@ -5366,22 +5366,22 @@ function renderRegister(el){
               <div class="list-meta">${r.ts?new Date(r.ts).toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit"}):""}</div>
             </div>
             ${fields.map(f=>`<div class="signin-field-value">${r.fieldValues&&r.fieldValues[f.key]?escapeHtml(r.fieldValues[f.key]):"—"}</div>`).join("")}
-            ${activity.open?`<button class="signin-delete-btn" data-delete-reg="${i}" title="刪除簽到" aria-label="刪除簽到"><i data-lucide="x"></i></button>`:`<i class="check" data-lucide="check"></i>`}
+            ${activity.open?`<button class="signin-delete-btn" data-delete-reg="${i}" title="刪除報名" aria-label="刪除報名"><i data-lucide="x"></i></button>`:`<i class="check" data-lucide="check"></i>`}
           </div>`).join("")}
         `}
-      </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的簽到紀錄，再重新填寫。</div>`:""}</div>
+      </div>${activity.open&&list.length?`<div class="note-shared">如果姓名或欄位填錯，可以刪除自己的報名紀錄，再重新填寫。</div>`:""}</div>
     `;
     if(activity.open){
       el.querySelectorAll("[data-delete-reg]").forEach(btn=>btn.onclick=async(ev)=>{
         ev.preventDefault();ev.stopPropagation();const idx=Number(btn.dataset.deleteReg),reg=list[idx];if(!reg)return;
-        try{await deleteRegistrationRemote(reg.id);const fresh=await refreshActivityRegistrations(activity.id);if(fresh.some(x=>String(x.id)===String(reg.id)))throw new Error("資料庫仍存在這筆簽到紀錄");state.registrations[activity.id]=fresh;forgetLocalSigned(activity.id,reg.name);showToast("已刪除");}catch(e){console.error(e);showToast("刪除失敗："+(e?.message||"未知錯誤"));}renderRegister(el);refreshIcons();
+        try{await deleteRegistrationRemote(reg.id);const fresh=await refreshActivityRegistrations(activity.id);if(fresh.some(x=>String(x.id)===String(reg.id)))throw new Error("資料庫仍存在這筆報名紀錄");state.registrations[activity.id]=fresh;forgetLocalSigned(activity.id,reg.name);showToast("已刪除");}catch(e){console.error(e);showToast("刪除失敗："+(e?.message||"未知錯誤"));}renderRegister(el);refreshIcons();
       });
       const btn=document.getElementById("reg-btn"),nameInput=document.getElementById("reg-name");
       if(btn&&nameInput){
         const doRegister=async()=>{
           const name=norm(nameInput.value);if(!name){showToast("請輸入姓名");return;}
           // 新增功能：先依「輸入姓名」立即做最低出席率資格比對。
-          // 不先抓整份簽到名單，避免簽到名單讀取卡住時，資格判斷根本沒有執行。
+          // 不先抓整份報名名單，避免報名名單讀取卡住時，資格判斷根本沒有執行。
           let eligibility;
           try{
             eligibility=await attendanceEligibilityFor(name,activity);
@@ -5395,12 +5395,12 @@ function renderRegister(el){
             return;
           }
 
-          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新簽到狀態，請稍後再試");return;}
+          let freshList;try{freshList=await refreshActivityRegistrations(activity.id);}catch(e){showToast("無法取得最新報名狀態，請稍後再試");return;}
           if(activity.maxParticipants&&freshList.length>=activity.maxParticipants){showToast(`此活動已達人數上限（${freshList.length}/${activity.maxParticipants}）`);renderRegister(el);return;}
-          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經簽到過了`);nameInput.focus();return;}
+          if(freshList.some(r=>keyOf(r.name)===keyOf(name))){showToast(`${name} 已經報名過了`);nameInput.focus();return;}
           const fieldValues={};el.querySelectorAll(".reg-field-input").forEach(inp=>fieldValues[inp.dataset.key]=norm(inp.value));
           btn.disabled=true;nameInput.disabled=true;el.querySelectorAll(".reg-field-input").forEach(i=>i.disabled=true);
-          try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id||remote.registration_id||uid(),name:remote.name||name,fieldValues:remote.field_values||remote.fieldValues||fieldValues,ts:remote.created_at||remote.ts||new Date().toISOString()};const current=Array.isArray(state.registrations[activity.id])?state.registrations[activity.id]:freshList;state.registrations[activity.id]=[...current.filter(r=>String(r.id)!==String(newReg.id)&&keyOf(r.name)!==keyOf(name)),newReg];rememberLocalSigned(activity.id,name);showToast(`${name} 報名成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已簽到|duplicate|already/i.test(msg)?`${name} 已經簽到過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"簽到失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
+          try{const remote=await createRegistrationRemote(activity.id,{name,fieldValues});const newReg={id:remote.id||remote.registration_id||uid(),name:remote.name||name,fieldValues:remote.field_values||remote.fieldValues||fieldValues,ts:remote.created_at||remote.ts||new Date().toISOString()};const current=Array.isArray(state.registrations[activity.id])?state.registrations[activity.id]:freshList;state.registrations[activity.id]=[...current.filter(r=>String(r.id)!==String(newReg.id)&&keyOf(r.name)!==keyOf(name)),newReg];rememberLocalSigned(activity.id,name);showToast(`${name} 報名成功！`);renderRegister(el);}catch(e){const msg=String(e?.message||"");showToast(/已經|已報名|duplicate|already/i.test(msg)?`${name} 已經報名過了`:(/上限|limit|full|capacity/i.test(msg)?"此活動已達人數上限":"報名失敗："+(msg||"請再試一次")));}finally{refreshIcons();}
         };btn.onclick=doRegister;nameInput.onkeydown=e=>{if(e.key==="Enter")doRegister();};
       }
     }
@@ -5505,7 +5505,7 @@ function renderQuery(el){
       box.innerHTML=`<div class="query-no-person">
         <i data-lucide="user-round-x"></i>
         <div class="query-no-person-title">查無此人</div>
-        <div class="query-no-person-hint">找不到此姓名的歷史簽到紀錄</div>
+        <div class="query-no-person-hint">找不到此姓名的歷史報名紀錄</div>
       </div>`;
       refreshIcons();
       return;
@@ -5540,14 +5540,14 @@ function renderQuery(el){
         </div>
 
         <div class="query-metric-card attendance-metric signins">
-          <div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div>
+          <div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已報名場次</div>
           <div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)">
             <div class="donut-center">
               <strong>${attended}</strong>
               <span>/ ${total} 場</span>
             </div>
           </div>
-          <div class="metric-badge signins-badge">已簽到 ${attended} 場</div>
+          <div class="metric-badge signins-badge">已報名 ${attended} 場</div>
         </div>
       </div>
 
@@ -5559,11 +5559,11 @@ function renderQuery(el){
       <div class="query-history-columns">
         <div class="block tight query-history query-history-present">
           <div class="query-history-head"><span><i data-lucide="check-circle-2"></i> 有參加</span><b>${attended} 場</b></div>
-          <div class="list">${s.detail.slice().reverse().filter(d=>d.present).map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div><span class="history-status present" title="已簽到"><i data-lucide="check"></i></span></div>`).join("") || '<div class="query-history-empty">目前沒有參加紀錄</div>'}</div>
+          <div class="list">${s.detail.slice().reverse().filter(d=>d.present).map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div><span class="history-status present" title="已報名"><i data-lucide="check"></i></span></div>`).join("") || '<div class="query-history-empty">目前沒有參加紀錄</div>'}</div>
         </div>
         <div class="block tight query-history query-history-absent">
           <div class="query-history-head"><span><i data-lucide="x-circle"></i> 沒參加</span><b>${Math.max(0,total-attended)} 場</b></div>
-          <div class="list">${s.detail.slice().reverse().filter(d=>!d.present).map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div><span class="history-status absent" title="未簽到"><i data-lucide="x"></i></span></div>`).join("") || '<div class="query-history-empty">目前沒有未參加紀錄</div>'}</div>
+          <div class="list">${s.detail.slice().reverse().filter(d=>!d.present).map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div><span class="history-status absent" title="未報名"><i data-lucide="x"></i></span></div>`).join("") || '<div class="query-history-empty">目前沒有未參加紀錄</div>'}</div>
         </div>
       </div>
     `;
@@ -5609,7 +5609,7 @@ async function renderAdminAccounts(el){
 async function loadAnnouncementRemote(){
   const {data,error}=await supabaseClient.rpc("get_announcement");
   if(error) throw error;
-  announcementText=(typeof data==="string"?data:(data?.announcement||"")) || "感謝大家的參與，請留意活動開放狀態與簽到資訊。";
+  announcementText=(typeof data==="string"?data:(data?.announcement||"")) || "感謝大家的參與，請留意活動開放狀態與報名資訊。";
   return announcementText;
 }
 async function saveAnnouncementRemote(text){
@@ -5628,7 +5628,7 @@ function renderAdmin(el){
   const todayKey=localDateKey();
   const todayActs=acts.filter(a=>activityDateKey(a.date)===todayKey);
   const todayAttendanceCount=todayActs.reduce((sum,a)=>sum+regsOf(a.id).length,0);
-  // 今日概況沿用 V2.3：開放中活動、今日簽到紀錄，以及排除隊長後的年度最高出席率。
+  // 今日概況沿用 V2.3：開放中活動、今日報名紀錄，以及排除隊長後的年度最高出席率。
   const topAttendanceEligible=rows.filter(r=>keyOf(r.name)!==keyOf("陳冠豪")&&Number(r.total)>0);
   const maxAttendanceRate=topAttendanceEligible.length?Math.max(...topAttendanceEligible.map(r=>Number(r.rate)||0)):-1;
   const topAttendanceNames=topAttendanceEligible.filter(r=>Number(r.rate)===maxAttendanceRate).map(r=>({name:r.name,rate:Number(r.rate)||0}));
@@ -5750,15 +5750,15 @@ function renderAdmin(el){
     <strong>幹部管理</strong>
   </button></div>`:""}
   <div class="col"><div class="admin-action admin-square signin-page-setting-tile w-100 h-100">
-    <div class="signin-tile-copy"><strong>${signinPageVisible?"簽到隱藏":"簽到開啟"}</strong></div>
-    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換簽到頁面顯示">
+    <div class="signin-tile-copy"><strong>${signinPageVisible?"報名隱藏":"報名開啟"}</strong></div>
+    <button type="button" class="activity-toggle-btn signin-page-toggle ${signinPageVisible?"is-on":"is-off"}" id="signin-page-toggle" aria-label="切換報名頁面顯示">
       <i data-lucide="${signinPageVisible?"toggle-right":"toggle-left"}"></i>
     </button>
   </div></div>
 </div></div></details>
 <details class="admin-collapsible"><summary><h2>統計資訊</h2><span class="collapse-meta">即時資料 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 mb-3 statistics-bootstrap-grid">
   <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="calendar-days"></i></div><b>${openActivityCount}</b><span>開放中活動</span></div></div>
-  <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日簽到紀錄</span></div></div>
+  <div class="col"><div class="metric h-100"><div class="metric-icon"><i data-lucide="users"></i></div><b>${todayAttendanceCount}</b><span>今日報名紀錄</span></div></div>
   <div class="col"><div class="metric top-attendance-metric h-100" id="top-attendance-metric">
     <div class="metric-icon"><i data-lucide="trophy"></i></div>
     <div class="top-attendance-slideshow" aria-label="年度出席率前三名" style="height:auto;min-height:36px;overflow:visible;display:flex;flex-direction:column;justify-content:center;gap:3px">${topAttendanceSlides.length?topAttendanceSlides.map(item=>`<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;transform:none;animation:none;width:100%;min-width:0;flex:0 0 auto;align-items:center;justify-content:center;padding:3px 6px;box-sizing:border-box;"><b class="top-attendance-slide-name">${item.names.map(escapeHtml).join("、")}</b></div>`).join(""):'<div class="top-attendance-slide" style="position:relative;inset:auto;display:flex;opacity:1;animation:none"><b class="top-attendance-slide-name">尚無出席資料</b></div>'}</div>
@@ -5777,7 +5777,7 @@ function renderAdmin(el){
   if(adminPage==="category-activities"){
     const category=String(window.__adminSelectedActivityCategory||"");
     const categoryActs=cumulativeActivities.filter(a=>String(a.eventCategory||"").trim()===category);
-    content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看簽到內容。</p></div></div>
+    content=`<div class="admin-head"><div><h1 class="page-title">${escapeHtml(category)}類別活動</h1><p class="page-subtitle">共 ${categoryActs.length} 場，點選活動可查看報名內容。</p></div></div>
     <div class="activity-grid category-activity-admin-list">${categoryActs.length?categoryActs.map(a=>`<div class="activity-admin-card category-activity-admin-card ${isWaitingForPublish(a)?"activity-card-pending":""}">
       <div class="admin-card-top">
         <div class="admin-card-info">
@@ -5787,12 +5787,12 @@ function renderAdmin(el){
         </div>
         <div class="admin-card-summary">
           <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
-          <div class="admin-card-meta">${(state.registrations[a.id]||[]).length} 人簽到</div>
+          <div class="admin-card-meta">${(state.registrations[a.id]||[]).length} 人報名</div>
         </div>
       </div>
     </div>`).join(""):`<div class="block"><div class="empty">此類別目前沒有活動</div></div>`}</div>`;
   }
-  if(adminPage==="create")content=`<div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span><div><div>建立活動</div><div class="page-subtitle" style="margin:4px 0 0;">填寫一次即可建立，不需要分步驟。</div></div></div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span><div><div>建立活動</div><div class="page-subtitle" style="margin:4px 0 0;">填寫一次即可建立，不需要分步驟。</div></div></div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可報名</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     const search=norm(activityManagementSearch).toLowerCase();
@@ -5931,7 +5931,7 @@ function renderAdmin(el){
         <div class="rate-detail">${r.attended} / ${r.total} 場</div>
       </button>`;
     };
-    content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="row row-cols-2 row-cols-md-4 g-2 rate-list rate-list-bootstrap">${rows.map(r=>`<div class="col">${ring(r)}</div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何簽到紀錄</div></div>`}`;
+    content=`<h1 class="page-title">出席率</h1><p class="page-subtitle">今年共 ${yearActs.length} 場活動。</p>${rows.length?`<button class="secondary" id="export-csv-btn" style="width:100%;margin-bottom:12px"><i data-lucide="download"></i>匯出 Excel（CSV）</button><div class="row row-cols-2 row-cols-md-4 g-2 rate-list rate-list-bootstrap">${rows.map(r=>`<div class="col">${ring(r)}</div>`).join("")}</div>`:`<div class="block"><div class="empty">還沒有任何報名紀錄</div></div>`}`;
   }
   if(adminPage==="attendance-person"){
     const name=String(window.__adminAttendancePersonName||"");
@@ -5944,10 +5944,10 @@ function renderAdmin(el){
     content=`<div class="query-person"><div class="query-person-icon"><i data-lucide="user-round"></i></div><div><div class="result-name">${escapeHtml(name)}</div><div class="result-year"><i data-lucide="calendar-days"></i> ${new Date().getFullYear()} 年</div></div></div>
       <div class="row row-cols-1 row-cols-sm-2 g-2 mb-3 query-metrics-bootstrap">
         <div class="col"><div class="query-metric-card attendance-metric ${tone.name} h-100"><div class="metric-card-title"><i data-lucide="chart-no-axes-combined"></i>出席率</div><div class="donut" style="--value:${rate}%;--donut-color:${tone.color}"><div class="donut-center"><strong>${rate}<small>%</small></strong><span>出席率</span></div></div><div class="metric-badge" style="--badge-color:${tone.color}">${tone.label}</div></div></div>
-        <div class="col"><div class="query-metric-card attendance-metric signins h-100"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已簽到場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已簽到 ${attended} 場</div></div></div>
+        <div class="col"><div class="query-metric-card attendance-metric signins h-100"><div class="metric-card-title"><i data-lucide="calendar-check-2"></i>已報名場次</div><div class="donut" style="--value:${attendancePercent}%;--donut-color:var(--success)"><div class="donut-center"><strong>${attended}</strong><span>/ ${total} 場</span></div></div><div class="metric-badge signins-badge">已報名 ${attended} 場</div></div></div>
       </div>
       <div class="section-head"><h2>活動紀錄</h2><span>${total} 場</span></div>
-      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已簽到" aria-label="已簽到"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未簽到" aria-label="未簽到"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
+      <div class="block tight query-history"><div class="list">${personStats.detail.slice().reverse().map(d=>`<div class="list-row"><div class="list-icon"><i data-lucide="${String(d.activity.eventCategory||"").trim()==="廟"?"landmark":String(d.activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(d.activity.eventCategory||"").trim()==="隊"?"flag":String(d.activity.eventCategory||"").trim()==="北港進香"?"route":String(d.activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div><div class="list-main"><div class="list-name">${escapeHtml(d.activity.name)}</div><div class="list-meta">${fmtDate(d.activity.date)}</div></div>${d.present?`<span class="history-status present" title="已報名" aria-label="已報名"><i data-lucide="check"></i></span>`:`<span class="history-status absent" title="未報名" aria-label="未報名"><i data-lucide="x"></i></span>`}</div>`).join("")}</div></div>`;
   }
   const superAdmin=isSuperAdmin();
   const session=getAdminSession();
@@ -5992,11 +5992,11 @@ function renderAdmin(el){
     try{
       await saveSigninPageVisibilityRemote(next);
       if(!next && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
-      showToast(next?"簽到頁面已開啟":"簽到頁面已隱藏");
+      showToast(next?"報名頁面已開啟":"報名頁面已隱藏");
       render();
     }catch(e){
-      console.error("簽到頁面設定儲存失敗",e);
-      showToast("設定儲存失敗："+(e?.message||"請確認 Supabase 已建立簽到頁面設定 RPC"));
+      console.error("報名頁面設定儲存失敗",e);
+      showToast("設定儲存失敗："+(e?.message||"請確認 Supabase 已建立報名頁面設定 RPC"));
       render();
     }
   };
@@ -6068,7 +6068,7 @@ function activityAdminRow(a,hidden=false){
       return `<tr><td>${i+1}</td><td class="name">${escapeHtml(r.name)}</td>${fieldCells}<td>${r.ts?new Date(r.ts).toLocaleString("zh-TW",{hour12:false}):"—"}</td></tr>`;
     }).join("");
     const headers=(a.fields||[]).map(f=>`<th>${escapeHtml(f.label)}</th>`).join("");
-    detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">簽到者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人簽到</div>`}`;
+    detail=`<div class="divider"></div><div style="font-weight:850;font-size:13px;margin-bottom:8px">報名者名單（${list.length} 人）</div>${list.length?`<div class="table-wrap"><table class="list-table"><thead><tr><th>#</th><th>姓名</th>${headers}<th>時間</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty" style="padding:14px">目前還沒有人報名</div>`}`;
   }
   const manualRegistration=isManualRegistrationActivity(a);
   const statusClass=future?"future":(a.open?"open":"closed");
@@ -6087,7 +6087,7 @@ function activityAdminRow(a,hidden=false){
     </div>
     <div class="admin-card-summary">
       <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
-      <div class="admin-card-meta">${list.length} 人簽到</div>
+      <div class="admin-card-meta">${list.length} 人報名</div>
     </div>
   </div>
   <div class="admin-actions">
@@ -6500,7 +6500,7 @@ function setupManualRegistrationPage(el){
 }
 
 function setupActivityManagementPage(el){
-  // 活動管理：查看／隱藏簽到名單
+  // 活動管理：查看／隱藏報名名單
   el.querySelectorAll("[data-admin-attendance]").forEach(btn=>{
     btn.onclick=async(ev)=>{
       ev.preventDefault();
@@ -6509,13 +6509,13 @@ function setupActivityManagementPage(el){
       window.adminAttendanceExpandedId =
         window.adminAttendanceExpandedId===id ? null : id;
 
-      // 若目前 state 沒有該活動的簽到資料，重新載入一次。
+      // 若目前 state 沒有該活動的報名資料，重新載入一次。
       const a=state.activities.find(x=>String(x.id)===String(id));
       if(a && (!state.registrations[a.id] || state.registrations[a.id].length===0)){
         try{
           await loadData();
         }catch(e){
-          console.error("讀取簽到名單失敗",e);
+          console.error("讀取報名名單失敗",e);
         }
       }
       renderAdmin(el);
@@ -6613,7 +6613,7 @@ async function init(){
   try{ await loadAnnouncementRemote(); }
   catch(e){ console.error("公告載入失敗",e); }
   try{ await loadSigninPageVisibilityRemote(); }
-  catch(e){ console.error("簽到頁面設定載入失敗",e); }
+  catch(e){ console.error("報名頁面設定載入失敗",e); }
   render();
   setInterval(async ()=>{
     // 任何輸入框正在使用時，禁止背景資料刷新／DOM 重建。
@@ -6642,7 +6642,7 @@ async function init(){
         const before=signinPageVisible;
         await loadSigninPageVisibilityRemote();
         if(before && !signinPageVisible && activeTab==="register"){activeTab="query";openEventId=null;queryResultVisible=false;}
-      }catch(e){console.error("簽到頁面設定同步失敗",e);}
+      }catch(e){console.error("報名頁面設定同步失敗",e);}
       if(!userIsTyping) renderTab();
       if(openEventId){
         const publicActivity=state.activities.find(x=>String(x.id)===String(openEventId));
@@ -6651,7 +6651,7 @@ async function init(){
     }else if(!userIsTyping){
       // 管理者頁面先同步最新雲端資料；首頁與出席率頁面需同步重算統計。
       await loadData();
-      try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("簽到頁面設定同步失敗",e);}
+      try{ await loadSigninPageVisibilityRemote(); }catch(e){console.error("報名頁面設定同步失敗",e);}
       // V2.6.6：管理首頁包含使用者操作的收合區塊，不可被 6 秒背景同步重建。
       // 出席率相關頁面仍維持原本的背景同步。
       if(activeTab==="admin" && !userIsTyping && ["attendance","attendance-person"].includes(adminPage)){
@@ -6852,7 +6852,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
           }
         }
 
-        window.showToast("活動已開啟，30 秒後關閉簽到");
+        window.showToast("活動已開啟，30 秒後關閉報名");
       }else{
         a.open=false;
         a.closeAt=null;
@@ -6927,7 +6927,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   }
 
   async function activityActionDelete(a,btn){
-    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的簽到資料也會刪除，無法復原。")) return;
+    if(!confirm("確定永久刪除「"+a.name+"」？\n此活動的報名資料也會刪除，無法復原。")) return;
     btn.disabled=true;
     try{
       await window.deleteActivityRemote(a.id);
@@ -6965,9 +6965,9 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       await renameRegistrationRemote(registrationId,clean);
       await loadData();
       renderAdmin(document.getElementById("tab-content"));
-      showToast("已修改簽到資料");
+      showToast("已修改報名資料");
     }catch(e){
-      console.error("修改簽到失敗",e);
+      console.error("修改報名失敗",e);
       showToast("修改失敗："+(e?.message||e),"error");
     }
   },true);
