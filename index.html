@@ -4621,8 +4621,9 @@ function regsOf(activityId){ return state.registrations[activityId] || (state.re
 
 function filledCount(activity){
   const list = regsOf(activity.id);
-  // count registrants who filled in at least one field with a non-empty value
-  return list.filter(r => (activity.fields||[]).some(f => norm((r.fieldValues||{})[f.key]) !== "")).length;
+  // 報名資料本身即代表一位有效報名者。部分活動沒有自訂欄位，
+  // 不能因 fieldValues 為空而把已成功寫入 Supabase 的報名資料計為 0。
+  return list.length;
 }
 
 function allKnownNames(){
