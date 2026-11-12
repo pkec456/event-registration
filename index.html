@@ -3391,6 +3391,9 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .activity-card-simple .activity-card-count{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;}
 .activity-card-simple .activity-card-count svg{width:15px;height:15px;}
 .activity-card-simple .activity-card-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 0 8px;}
+.activity-card-simple .activity-card-date{font-size:24px!important;font-weight:800;line-height:1.2;margin:0!important;color:var(--text,#222);}
+.activity-card-simple .activity-card-countdown{display:flex;align-items:center;justify-content:center;}
+.activity-card-simple .activity-card-countdown .activity-status-clock{margin:0!important;}
 .activity-card-simple .activity-name{font-size:15px;font-weight:700;line-height:1.35;word-break:break-word;}
 .activity-card-simple .activity-meta{margin-top:7px;font-size:12px;}
 .activity-card-simple .event-category-label{font-size:10px;margin-bottom:5px;}
@@ -5468,13 +5471,11 @@ function renderRegister(el){
     <div class="activity-grid activity-grid-bootstrap">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card activity-card-simple ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
   <div class="activity-card-count"><i data-lucide="users"></i> ${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div>
   <div class="activity-card-center">
-    ${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}
-    <div class="activity-name">${escapeHtml(a.name)}</div>
-    <div class="activity-meta">${fmtDate(a.date)}</div>
+    <div class="activity-meta activity-card-date">${fmtDate(a.date)}</div>
   </div>
   <div class="activity-card-bottom">
-    ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:`<span class="activity-status-dot ${a.open?'is-open':'is-closed'}"></span>`}
-    <div class="activity-card-status">${isWaitingForPublish(a)?"等待開放":(a.open?"開放中":"已關閉")}</div>
+    ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div><div class="activity-card-status">出席率限制</div>`:""}
+    ${isWaitingForPublish(a)?`<div class="activity-card-countdown">${activityStatusClock(a)}</div>`:""}
   </div>
 </div>`).join("")}</div>
   `;
