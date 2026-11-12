@@ -4307,7 +4307,17 @@ async function loadData(){
       });
     }
 
-    // 查詢與分組都成功後才更新，確保背景同步具備原子性。
+    // 背景同步保護：registrations 是依 activity_id 分組的。
+    // 若本次公開查詢暫時缺少某一個活動的資料，不可把該活動原本的人數歸零。
+    // 只有成功取得的新資料才覆蓋同活動資料；缺少的活動沿用上一輪資料。
+    const previousRegistrations=state.registrations||{};
+    Object.keys(previousRegistrations).forEach(activityId=>{
+      if(!Object.prototype.hasOwnProperty.call(nextRegistrations,activityId)){
+        nextRegistrations[activityId]=previousRegistrations[activityId];
+      }
+    });
+
+    // 查詢與分組都成功後才更新。
     state.registrations=nextRegistrations;
 
     state.adminPin=null;
