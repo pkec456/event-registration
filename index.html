@@ -3386,6 +3386,17 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   #app.home-view .activity-grid-bootstrap .activity-meta{font-size:10px;}
 }
 
+/* 報名頁近期活動簡化卡片 */
+.activity-grid.activity-grid-bootstrap .activity-card-simple{position:relative;min-height:150px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;}
+.activity-card-simple .activity-card-count{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;}
+.activity-card-simple .activity-card-count svg{width:15px;height:15px;}
+.activity-card-simple .activity-card-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 0 8px;}
+.activity-card-simple .activity-name{font-size:15px;font-weight:700;line-height:1.35;word-break:break-word;}
+.activity-card-simple .activity-meta{margin-top:7px;font-size:12px;}
+.activity-card-simple .event-category-label{font-size:10px;margin-bottom:5px;}
+.activity-card-simple .activity-card-bottom{display:flex;align-items:center;justify-content:center;gap:6px;min-height:22px;font-size:11px;}
+.activity-card-simple .activity-status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}.activity-card-simple .activity-status-dot.is-open{background:#19a85b;}.activity-card-simple .activity-status-dot.is-closed{background:#222;}
+
 /* V2.5 Bootstrap phase 22: query profile card alignment */
 #app .query-person{min-width:0;}
 #app .query-person > div:last-child{min-width:0;}
@@ -5454,20 +5465,16 @@ function renderRegister(el){
         <span><span class="dot closed-dot"></span>已關閉</span>
       <span><span class="dot" style="background:#f2c94c"></span>出席率限制</span></div>
     </div>
-    <div class="activity-grid activity-grid-bootstrap">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
-  <div class="activity-top">
-    <div class="activity-icon"><i class="activity-list-icon ${!isWaitingForPublish(a)&&a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="${String(a.eventCategory||"").trim()==="廟"?"landmark":String(a.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(a.eventCategory||"").trim()==="隊"?"flag":String(a.eventCategory||"").trim()==="北港進香"?"route":String(a.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
-    <div class="activity-main">
-      ${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="activity-name">${escapeHtml(a.name)}</div>
-      <div class="activity-meta">${fmtDate(a.date)}</div>
-
-    </div>
-    <div class="activity-right">
-      <div class="activity-list-rate-slot">${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:""}</div>
-      <div class="activity-list-countdown-slot">${activityStatusClock(a)}</div>
-      <span class="count">${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</span>
-      <span class="arrow"><i class="activity-list-icon ${!isWaitingForPublish(a)&&a.open ? (((Number(a.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon") : "closed-icon"}" data-lucide="chevron-right"></i></span>
-    </div>
+    <div class="activity-grid activity-grid-bootstrap">${acts.length===0?`<div class="block"><div class="empty">目前還沒有任何活動，請等待管理者建立</div></div>`:acts.map(a=>`<div class="activity-card activity-card-simple ${isWaitingForPublish(a)?'activity-card-pending':(a.open?'activity-card-open':'')}" data-open="${a.id}">
+  <div class="activity-card-count"><i data-lucide="users"></i> ${(state.registrations[a.id]||[]).length}${a.maxParticipants?` / ${a.maxParticipants}`:""}</div>
+  <div class="activity-card-center">
+    ${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}
+    <div class="activity-name">${escapeHtml(a.name)}</div>
+    <div class="activity-meta">${fmtDate(a.date)}</div>
+  </div>
+  <div class="activity-card-bottom">
+    ${(Number(a.minimumAttendanceRate)||0)>0?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:`<span class="activity-status-dot ${a.open?'is-open':'is-closed'}"></span>`}
+    <div class="activity-card-status">${isWaitingForPublish(a)?"等待開放":(a.open?"開放中":"已關閉")}</div>
   </div>
 </div>`).join("")}</div>
   `;
