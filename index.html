@@ -3405,7 +3405,22 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 /* V2.5 layout recovery baseline: restore core activity and management card structure.
    報名首頁活動列表已在上方 activity-grid-bootstrap 明確設定兩欄，避免此通用單欄規則覆蓋。 */
 .activity-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%}
-#app.home-view .activity-grid.activity-grid-bootstrap{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+/* 報名頁近期活動：元素本身同時使用兩個 class，直接鎖定 class 組合，
+   不依賴父層是否帶有 home-view，確保手機與首頁入口皆固定兩欄。 */
+.activity-grid.activity-grid-bootstrap{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  width:100%;
+}
+.activity-grid.activity-grid-bootstrap > .activity-card{
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+@media(max-width:430px){
+  .activity-grid.activity-grid-bootstrap{gap:8px;}
+}
 .activity-grid>.activity-card{width:100%;min-width:0;box-sizing:border-box}
 .activity-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-sizing:border-box}
 .activity-top{display:flex;gap:12px;align-items:flex-start;min-width:0}
