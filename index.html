@@ -90,7 +90,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}
 .activity-main{min-width:0;flex:1}
 .activity-name{font-size:17px;font-weight:850}
-.activity-note-card{margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fff}.activity-note-title{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:800;margin-bottom:7px}.activity-note-title svg{width:17px;height:17px}.activity-note{color:#666;font-size:13px;line-height:1.7;white-space:pre-line;word-break:break-word}
+.activity-note-card{margin:14px 0 16px;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}.activity-note-title{padding:13px 16px 9px;font-size:17px;font-weight:850;border-bottom:1px solid var(--line)}.activity-note{padding:16px;color:#666;font-size:14px;line-height:1.7;white-space:pre-line;word-break:break-word;min-height:28px}
 .event-category-label{display:inline-flex;align-items:center;width:max-content;max-width:100%;margin-bottom:4px;padding:3px 9px;border-radius:999px;background:#fff0f0;color:#c9141b;font-size:17px;font-weight:850;line-height:1.4}
 .admin-card-title-block .event-category-label{font-size:16px;margin-bottom:3px}
 .activity-meta{margin-top:4px;color:#777;font-size:12px}
@@ -5341,7 +5341,6 @@ function renderRegister(el){
           <div>
             <h2>${escapeHtml(activity.name)}</h2>
             <p>${fmtDate(activity.date)}</p>
-            ${activity.note ? `<div class="activity-note-card"><div class="activity-note-title"><i data-lucide="notebook-pen"></i>活動備註</div><div class="activity-note">${escapeHtml(activity.note)}</div></div>` : ""}
           </div>
         </div>
         <div class="checkin-hero-actions">
@@ -5349,6 +5348,7 @@ function renderRegister(el){
           <div id="event-countdown" class="checkin-countdown" aria-live="polite"></div>
         </div>
       </div>
+      ${activity.note ? `<div class="activity-note-card"><div class="activity-note-title">活動備註</div><div class="activity-note">${escapeHtml(activity.note)}</div></div>` : ""}
       <div class="checkin-card">
         <div class="hero-row signin-status-count-row" style="color:#171717;margin-bottom:14px"><div><span class="status ${isWaitingForPublish(activity)?'pending-publish-status':(activity.open ? (((Number(activity.minimumAttendanceRate)||0)>0)?'attendance-limited':'open') : 'closed')}"><span class="dot"></span>${isWaitingForPublish(activity)?'等待開放':(activity.open?'開放報名中':'已停止報名')}</span></div><strong style="font-size:13px"><i data-lucide="users" style="vertical-align:-3px"></i> ${list.length}${activity.maxParticipants?` / ${activity.maxParticipants}`:""} 人</strong></div>
         ${isWaitingForPublish(activity) ? `<div class="empty">此活動尚未開放，請等待管理者發布。</div>` : activity.open ? (activity.maxParticipants && list.length>=activity.maxParticipants ? `<div class="block soft" style="margin:12px 0 0"><div class="empty" style="padding:10px">此活動已達人數上限，暫停接受報名。</div></div>` : `
