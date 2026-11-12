@@ -5394,7 +5394,7 @@ function renderRegister(el){
       
       <div class="hero checkin-hero">
         <div class="checkin-hero-main">
-          <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
+          <div class="checkin-hero-icon"><i data-lucide="${String(activity.eventCategory||"").trim()==="廟"?"landmark":String(activity.eventCategory||"").trim()==="禮聘"?"piggy-bank":String(activity.eventCategory||"").trim()==="隊"?"flag":String(activity.eventCategory||"").trim()==="北港進香"?"route":String(activity.eventCategory||"").trim()==="福宴"?"utensils":"calendar-days"}"></i></div>
           <div>
             <h2>${escapeHtml(activity.name)}</h2>
             <p>${fmtDate(activity.date)}</p>
