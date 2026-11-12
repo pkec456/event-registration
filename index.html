@@ -6823,7 +6823,11 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
             closeAt:remoteActivity.close_at||null,
             autoCloseMinutes:remoteActivity.auto_close_minutes==null?0:Number(remoteActivity.auto_close_minutes),
             hidden:!!remoteActivity.hidden,
-            publishAt:remoteActivity.publish_at||null
+            publishAt:remoteActivity.publish_at||null,
+            activityType:remoteActivity.activity_type||"normal",
+            eventCategory:remoteActivity.event_category||"",
+            minimumAttendanceRate:remoteActivity.minimum_attendance_rate,
+            note:remoteActivity.note||""
           };
 
           if(window.state){
@@ -6847,7 +6851,14 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     }
 
     if(btn.hasAttribute("data-activity-edit")){
-      if(typeof window.openActivityEditor==="function"){
+      // 手動登記與一般報名活動使用不同的原始編輯流程。
+      if(String(a.activityType||a.activity_type||"normal")==="manual"){
+        if(typeof window.openManualRegistrationEditor==="function"){
+          window.openManualRegistrationEditor(a);
+        }else{
+          window.showToast("手動登記編輯功能尚未初始化，請重新整理後再試","error");
+        }
+      }else if(typeof window.openActivityEditor==="function"){
         window.openActivityEditor(a);
       }else{
         console.error("[活動管理] openActivityEditor 尚未初始化");
