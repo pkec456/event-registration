@@ -6746,6 +6746,7 @@ window.updateActivityRemote = updateActivityRemote;
 window.deleteActivityRemote = deleteActivityRemote;
 window.loadData = loadData;
 window.renderAdmin = renderAdmin;
+window.renderApp = render;
 
 })().catch(function(e){
   console.error("JavaScript 錯誤：",e);
@@ -6842,7 +6843,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
       draftPublishAt=a.publishAt ? String(a.publishAt).slice(0,16) : "";
       draftNote=a.note||"";
       draftFields=Array.isArray(a.fields)&&a.fields.length?a.fields.map(f=>f.label||"").filter(Boolean):["公用哨角"];
-      adminPage="create"; renderAdmin(document.getElementById("app"));
+      adminPage="create"; window.renderApp?.();
     }else if(btn.hasAttribute("data-activity-close")){
       activityActionClose(a,btn);
     }else if(btn.hasAttribute("data-activity-hide")){
