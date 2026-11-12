@@ -4681,9 +4681,8 @@ function recentOrOpenActivities(){
   const todayKey = localDateKey();
   return state.activities.filter(a=>{
     if(a.hidden) return false;
-    // 公開活動皆顯示於近期活動列表。
-    const activityDate = activityDateKey(a.date);
-    if(activityDate && activityDate < todayKey) return false;
+    // 報名模式：公開活動皆可列出，包含過去活動，避免資料庫日期格式或時區
+    // 導致剛建立的活動與其既有報名人數在首頁被錯誤排除。
     return true;
   });
 }
