@@ -4289,21 +4289,29 @@ async function loadData(){
         });
       });
     }else{
-      const {data: regData,error:rErr}=await supabaseClient
-        .from("registrations")
-        .select("id,activity_id,name,field_values,created_at")
-        .order("created_at",{ascending:true});
-      if(rErr) throw rErr;
+      // 公開首頁改為依活動逐筆讀取 registrations。
+      // 目前活動詳情使用相同的 activity_id 查詢可以取得資料，
+      // 但一次讀取整張 registrations 表在重新整理後可能回傳空集合，
+      // 造成首頁從零開始時所有人數都顯示 0。
+      const publicActivities=(state.activities||[]).filter(a=>!a.hidden);
+      const results=await Promise.all(publicActivities.map(async a=>{
+        const {data,error}=await supabaseClient
+          .from("registrations")
+          .select("id,activity_id,name,field_values,created_at")
+          .eq("activity_id",a.id)
+          .order("created_at",{ascending:true});
+        if(error) throw error;
+        return {activityId:a.id, rows:data||[]};
+      }));
 
-      (regData||[]).forEach(r=>{
-        if(!nextRegistrations[r.activity_id]) nextRegistrations[r.activity_id]=[];
-        nextRegistrations[r.activity_id].push({
+      results.forEach(({activityId,rows})=>{
+        nextRegistrations[activityId]=rows.map(r=>({
           id:r.id,
           activity_id:r.activity_id,
           name:r.name,
           fieldValues:r.field_values||{},
           ts:r.created_at
-        });
+        }));
       });
     }
 
