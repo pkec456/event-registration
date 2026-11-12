@@ -4306,6 +4306,10 @@ async function loadData(){
     }
 
     state.adminPin=null;
+    // 初次載入完成後立即重新渲染一次。
+    // 隊員首頁可能先以空的 registrations 繪製，造成活動人數暫時顯示 0；
+    // 先完成資料讀取再刷新畫面，避免必須進入活動後返回才看到正確人數。
+    if(loaded && !openEventId) render();
   }catch(e){
     console.error("Supabase load error:",e);
     showToast("雲端資料載入失敗："+(e?.message||""));
