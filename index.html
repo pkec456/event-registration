@@ -3984,6 +3984,19 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 }
 #app.child-view .admin-card-stat-row{margin-top:12px;padding-top:10px;color:#817b73;font-size:11px;}
 
+/* V2.6.5：活動管理列表採兩欄卡片 */
+#app.child-view .activity-admin-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+#app.child-view .activity-admin-list .activity-admin-card.activity-card{
+  margin-bottom:0;
+  height:100%;
+}
+@media (max-width:700px){
+  #app.child-view .activity-admin-list{grid-template-columns:1fr;}
+}
 </style>
 
 
