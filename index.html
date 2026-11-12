@@ -7,11 +7,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>台中浩天宮四紅哨角隊 活動簽到簿｜V2.6</title>
+<title>台中浩天宮四紅哨角隊 活動報名簿｜V2.6</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <style>/*
  * ============================================================
- * CSS 架構索引｜活動簽到系統 V2.5
+ * CSS 架構索引｜活動報名系統 V2.5
  * 原則：先分類、再驗證；不新增功能，不以重寫方式整理既有 CSS。
  *
  * 維護規則：
@@ -3056,7 +3056,7 @@ button.secondary,.manual-return-discard,
 
 
 
-/* V2.5 隊員端活動內頁 App UI：只限含活動簽到內容的隊員內頁 */
+/* V2.5 隊員端活動內頁 App UI：只限含活動報名內容的隊員內頁 */
 #app.child-view:has(.checkin-hero){width:100%;max-width:520px;min-height:100dvh;margin:0 auto;padding:0 18px 32px;box-sizing:border-box;background:var(--bg);color:var(--ink)}
 #app.child-view:has(.checkin-hero) .checkin-hero{display:flex;align-items:center;gap:12px;min-height:unset;margin:0 0 12px;padding:16px;border:1px solid #e9e5de;border-radius:14px;background:#fff;color:#292724;box-shadow:none}
 #app.child-view:has(.checkin-hero) .checkin-hero-main{flex:1;min-width:0}
@@ -4762,9 +4762,9 @@ function render(){
           </div>
         </section>
         <div class="portal-card-grid">
-          ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動簽到">
+          ${signinPageVisible?`<div class="portal-card portal-card-checkin" id="portal-checkin" role="button" tabindex="0" aria-label="進入活動報名">
             <div class="portal-card-icon"><i data-lucide="calendar-check"></i></div>
-            <div class="portal-card-title">活動簽到</div>
+            <div class="portal-card-title">活動報名</div>
             <div class="portal-card-desc">查看活動與進行簽到</div>
           </div>`:''}
           <div class="portal-card portal-card-attendance" id="portal-attendance" role="button" tabindex="0" aria-label="進入出席率查詢">
@@ -5373,7 +5373,7 @@ function renderRegister(el){
     }
     renderCountdown(activity);refreshIcons();return;
   }
-  // 公告已整合至唯一的隊員首頁；活動簽到頁直接顯示既有活動列表。
+  // 公告已整合至唯一的隊員首頁；活動報名頁直接顯示既有活動列表。
   el.innerHTML=`
     <div class="section-head activity-list-head">
       <h2>近期活動</h2>
@@ -5698,7 +5698,7 @@ function renderAdmin(el){
 <details class="admin-collapsible" open><summary><h2>管理功能</h2><span class="collapse-meta">常用操作 <i data-lucide="chevron-down" class="collapse-chevron"></i></span></summary><div class="admin-collapsible-body"><div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3 admin-bootstrap-grid">
   <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="create">
     <span class="menu-icon"><i data-lucide="plus"></i></span>
-    <strong>活動簽到</strong>
+    <strong>活動報名</strong>
   </button></div>
   <div class="col"><button class="admin-action admin-square w-100 h-100" data-admin-page="manual-register">
      <span class="menu-icon"><i data-lucide="clipboard-pen-line"></i></span>
