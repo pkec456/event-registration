@@ -6747,6 +6747,20 @@ window.deleteActivityRemote = deleteActivityRemote;
 window.loadData = loadData;
 window.renderAdmin = renderAdmin;
 window.renderApp = render;
+window.openActivityEditor = function(a){
+  editingActivityId=a.id;
+  draftName=a.name||"";
+  draftEventCategory=a.eventCategory||"";
+  draftDate=activityDateKey(a.date);
+  draftMaxParticipants=a.maxParticipants==null?"":String(a.maxParticipants);
+  draftMinimumAttendanceRate=a.minimumAttendanceRate==null?"":String(a.minimumAttendanceRate);
+  draftCloseMinutes=Number(a.autoCloseMinutes||0);
+  draftPublishAt=a.publishAt ? String(a.publishAt).slice(0,16) : "";
+  draftNote=a.note||"";
+  draftFields=Array.isArray(a.fields)&&a.fields.length?a.fields.map(f=>f.label||"").filter(Boolean):["公用哨角"];
+  adminPage="create";
+  render();
+};
 
 })().catch(function(e){
   console.error("JavaScript 錯誤：",e);
@@ -6833,17 +6847,12 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
     }
 
     if(btn.hasAttribute("data-activity-edit")){
-      editingActivityId=a.id;
-      draftName=a.name||"";
-      draftEventCategory=a.eventCategory||"";
-      draftDate=activityDateKey(a.date);
-      draftMaxParticipants=a.maxParticipants==null?"":String(a.maxParticipants);
-      draftMinimumAttendanceRate=a.minimumAttendanceRate==null?"":String(a.minimumAttendanceRate);
-      draftCloseMinutes=Number(a.autoCloseMinutes||0);
-      draftPublishAt=a.publishAt ? String(a.publishAt).slice(0,16) : "";
-      draftNote=a.note||"";
-      draftFields=Array.isArray(a.fields)&&a.fields.length?a.fields.map(f=>f.label||"").filter(Boolean):["公用哨角"];
-      adminPage="create"; window.renderApp?.();
+      if(typeof window.openActivityEditor==="function"){
+        window.openActivityEditor(a);
+      }else{
+        console.error("[活動管理] openActivityEditor 尚未初始化");
+        window.showToast("編輯功能尚未初始化，請重新整理後再試","error");
+      }
     }else if(btn.hasAttribute("data-activity-close")){
       activityActionClose(a,btn);
     }else if(btn.hasAttribute("data-activity-hide")){
