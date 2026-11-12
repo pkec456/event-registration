@@ -6608,7 +6608,13 @@ async function init(){
     // 自動關閉統一由 startActivityExpiryWatcher 處理，避免兩套流程同時更新同一筆活動。
 
     if(activeTab !== "admin"){
+      // 首頁背景同步只更新活動狀態；報名資料由首次載入與活動頁的專屬同步維持。
+      // 避免每 6 秒重設 state.registrations 後，公開查詢短暫回傳空資料而把正確人數覆蓋成 0。
+      const previousRegistrations=state.registrations;
       await loadData();
+      if(Object.keys(state.registrations||{}).length===0 && Object.keys(previousRegistrations||{}).length>0){
+        state.registrations=previousRegistrations;
+      }
       try{
         const before=signinPageVisible;
         await loadSigninPageVisibilityRemote();
