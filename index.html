@@ -6582,7 +6582,9 @@ function renderAdminLock(el){
 }
 
 async function init(){
-  // 先完成雲端資料同步，再首次繪製活動列表，避免報名人數先短暫顯示為 0。
+  // 恢復原本已驗證的首次載入流程：先建立首頁 DOM，再讀取雲端資料並重新繪製。
+  // 這可避免首次 await loadData() 期間，其他初始化流程改變畫面狀態而導致活動人數未同步到列表。
+  render();
   await checkAdminSession();
   await loadData();
   try{ await loadAnnouncementRemote(); }
