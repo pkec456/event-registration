@@ -3959,58 +3959,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 /* V2.6.5 出席率查詢：活動紀錄分為有參加／沒參加兩欄 */
 .query-history-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%}.query-history-columns .query-history{margin:0;min-width:0}.query-history-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 12px 8px;font-size:14px;font-weight:900;border-bottom:1px solid var(--line)}.query-history-head span{display:flex;align-items:center;gap:6px}.query-history-head svg{width:18px;height:18px}.query-history-present .query-history-head{color:var(--success)}.query-history-absent .query-history-head{color:var(--accent)}.query-history-empty{padding:24px 12px;text-align:center;color:#999;font-size:13px}.query-history-columns .list-row{padding:12px 4px;gap:9px}.query-history-columns .list-name{font-size:13px;line-height:1.45}.query-history-columns .list-meta{font-size:11px}.query-history-columns .list-icon{width:34px;height:34px;border-radius:11px}.query-history-columns .history-status{flex:0 0 auto}@media(max-width:640px){.query-history-columns{gap:8px}.query-history-head{padding:10px 8px 7px;font-size:13px}.query-history-columns .list-row{padding:10px 2px;gap:6px}.query-history-columns .list-icon{width:32px;height:32px;border-radius:10px}.query-history-columns .list-name{font-size:12px}.query-history-columns .list-meta{font-size:10px}.query-history-columns .history-status{width:28px;height:28px}}
 
-/* V2.6.5：活動管理列表與首頁活動卡片統一 */
-#app.child-view .activity-admin-card.activity-card{
-  padding:14px;
-  margin-bottom:10px;
-  border:1px solid #eae7e1;
-  border-radius:14px;
-  background:#fff;
-}
-#app.child-view .activity-admin-card.activity-card .activity-top{align-items:center;gap:11px}
-#app.child-view .activity-admin-card.activity-card .activity-icon{
-  width:42px;height:42px;min-width:42px;flex-basis:42px;
-  border-radius:12px;background:#f6f3ee;color:#94764f;
-}
-#app.child-view .activity-admin-card.activity-card .activity-name{
-  color:#282622;font-size:15px;line-height:1.4;font-weight:750;
-}
-#app.child-view .activity-admin-card.activity-card .event-category-label{
-  margin-bottom:3px;padding:2px 6px;border-radius:5px;
-  background:#f8eeee;color:#a92f32;font-size:10px;font-weight:700;
-}
-#app.child-view .activity-admin-card.activity-card .activity-meta{
-  margin-top:5px;color:#817b73;font-size:11px;line-height:1.45;
-}
-#app.child-view .admin-card-stat-row{margin-top:12px;padding-top:10px;color:#817b73;font-size:11px;}
-
-/* V2.6.5：活動管理列表採兩欄卡片 */
-#app.child-view .activity-admin-list{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-#app.child-view .activity-admin-list .activity-admin-card.activity-card{
-  margin-bottom:0;
-  height:100%;
-}
-/* 手機版也與首頁一致，維持兩欄卡片 */
-@media (max-width:700px){
-  #app.child-view .activity-admin-list{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
-  }
-  #app.child-view .activity-admin-list .activity-admin-card.activity-card{
-    padding:10px;
-  }
-  #app.child-view .activity-admin-list .activity-icon{
-    width:34px;height:34px;min-width:34px;flex-basis:34px;
-  }
-  #app.child-view .activity-admin-list .activity-name{font-size:13px;}
-  #app.child-view .activity-admin-list .activity-meta,
-  #app.child-view .activity-admin-list .admin-card-stat-row{font-size:10px;}
-  #app.child-view .activity-admin-list .admin-actions{gap:5px;}
-}
 </style>
 
 
@@ -6139,24 +6087,19 @@ function activityAdminRow(a,hidden=false){
   // 管理頁採 V2.1：名單按鈕維持中性；開放／停止只由活動切換按鈕呈現顏色。
   const adminStatusIconClass = a.open ? "open-icon" : "closed-icon";
   const adminStatusButtonClass = a.open ? "is-on" : "is-off";
-  const category=String(a.eventCategory||"").trim();
-  const categoryIcon=category==="廟"?"landmark":category==="禮聘"?"piggy-bank":category==="隊"?"flag":category==="北港進香"?"route":category==="福宴"?"utensils":"calendar-days";
-  return `<div class="activity-admin-card activity-card ${hidden?"hidden":""} ${future?"activity-card-pending":""}" data-admin-activity-row="${escapeHtml(a.id)}">
-  <div class="activity-top">
-    <div class="activity-icon"><i data-lucide="${categoryIcon}"></i></div>
-    <div class="activity-main">
-      ${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}
-      <div class="activity-name admin-card-name">${escapeHtml(a.name)}</div>
-      <div class="activity-meta">${fmtDate(a.date)}</div>
+  return `<div class="activity-admin-card ${hidden?"hidden":""} ${future?"activity-card-pending":""}" data-admin-activity-row="${escapeHtml(a.id)}">
+  <div class="admin-card-top">
+    <div class="admin-card-info">
+      <div class="admin-card-title-block">${a.eventCategory?`<div class="event-category-label">${escapeHtml(a.eventCategory)}</div>`:""}<div class="admin-card-name">${escapeHtml(a.name)}</div></div>
+      <div class="admin-card-subtitle-block"><div class="admin-card-meta admin-card-date">${fmtDate(a.date)}</div><div class="admin-card-meta admin-card-creator">建立者：${escapeHtml(a.createdBy||"—")}</div></div>
+      <div class="admin-card-status">
+        ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i> 已隱藏</span>`:""}
+      </div>
     </div>
-    <div class="activity-right">
-      ${hidden?`<span class="status closed"><i data-lucide="eye-off"></i>隱藏中</span>`:""}
-      <span class="count">${list.length} 人</span>
+    <div class="admin-card-summary">
+      <div class="admin-card-meta">${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</div>
+      <div class="admin-card-meta">${list.length} 人報名</div>
     </div>
-  </div>
-  <div class="stat-row admin-card-stat-row">
-    <span>建立者：${escapeHtml(a.createdBy||"—")}</span>
-    <b>${a.maxParticipants?`上限 ${a.maxParticipants} 人`:"無人數限制"}</b>
   </div>
   <div class="admin-actions">
     <button data-admin-attendance="${escapeHtml(a.id)}"><i data-lucide="users"></i>${expanded ? "收起名單" : `名單 ${list.length}`}</button>
