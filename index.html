@@ -90,6 +90,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .activity-icon{width:46px;height:46px;border-radius:16px;background:#f1f1ef;display:grid;place-items:center;flex:0 0 auto}
 .activity-main{min-width:0;flex:1}
 .activity-name{font-size:17px;font-weight:850}
+.activity-note{margin-top:5px;color:#666;font-size:13px;line-height:1.6;white-space:pre-line;word-break:break-word}
 .event-category-label{display:inline-flex;align-items:center;width:max-content;max-width:100%;margin-bottom:4px;padding:3px 9px;border-radius:999px;background:#fff0f0;color:#c9141b;font-size:17px;font-weight:850;line-height:1.4}
 .admin-card-title-block .event-category-label{font-size:16px;margin-bottom:3px}
 .activity-meta{margin-top:4px;color:#777;font-size:12px}
@@ -5338,6 +5339,7 @@ function renderRegister(el){
           <div class="checkin-hero-icon"><i data-lucide="calendar-days"></i></div>
           <div>
             <h2>${escapeHtml(activity.name)}</h2>
+            ${activity.note ? `<div class="activity-note">${escapeHtml(activity.note)}</div>` : ""}
             <p>${fmtDate(activity.date)}</p>
           </div>
         </div>
