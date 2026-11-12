@@ -4241,7 +4241,7 @@ async function loadData(){
         .eq("hidden",false)
         .order("date",{ascending:false});
       if(aErr) throw aErr;
-      // 隊員頁也載入尚未到發布時間的公開活動，讓活動卡片可顯示「等待開放」；點擊限制由列表事件處理。
+      // 隊員頁載入所有公開活動，未來活動可直接接受報名。
       acts=(publicActs||[]);
     }
 
@@ -4681,7 +4681,7 @@ function recentOrOpenActivities(){
   const todayKey = localDateKey();
   return state.activities.filter(a=>{
     if(a.hidden) return false;
-    // 預定發布時間尚未到的活動也顯示在近期活動列表，標示「等待開放」。
+    // 公開活動皆顯示於近期活動列表。
     const activityDate = activityDateKey(a.date);
     if(activityDate && activityDate < todayKey) return false;
     return true;
@@ -5759,7 +5759,7 @@ function renderAdmin(el){
       </div>
     </div>`).join(""):`<div class="block"><div class="empty">此類別目前沒有活動</div></div>`}</div>`;
   }
-  if(adminPage==="create")content=`<div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span><div><div>建立活動</div><div class="page-subtitle" style="margin:4px 0 0;">填寫一次即可建立，不需要分步驟。</div></div></div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"><div class="field-hint">提醒：未來日期的活動建立後會先保持關閉，活動當天才能開放簽到。</div></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
+  if(adminPage==="create")content=`<div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="calendar-days"></i></span><div><div>建立活動</div><div class="page-subtitle" style="margin:4px 0 0;">填寫一次即可建立，不需要分步驟。</div></div></div>${eventCategoryButtons(draftEventCategory,"create")}<div class="field"><label class="field-label" for="new-name">活動名稱</label><input type="text" id="new-name" placeholder="請輸入活動名稱" value="${escapeHtml(draftName)}"></div><div class="field"><label class="field-label" for="new-date">活動日期</label><input type="date" id="new-date" min="${localDateKey()}" value="${escapeHtml(draftDate)}"></div><div class="field"><label class="field-label" for="new-max-participants">人數上限</label><input type="number" id="new-max-participants" min="1" step="1" placeholder="請輸入" value="${escapeHtml(draftMaxParticipants)}"><div class="field-hint">預設上限 0 人，可自行調整</div></div><div class="field"><label class="field-label" for="new-min-attendance">最低出席率</label><div style="display:flex;align-items:center;gap:8px"><input type="number" id="new-min-attendance" min="0" max="100" step="1" placeholder="請輸入" value="${escapeHtml(draftMinimumAttendanceRate)}" style="flex:1"><span style="font-weight:700">%</span></div><div class="field-hint">輸入 0～100%；0＝不限，出席率大於等於此數值才可簽到</div></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="list-checks"></i></span>攜帶物品</div><div id="draft-fields-wrap">${draftFields.map((label,i)=>`<div class="draft-field"><input type="text" class="draft-field-input" data-idx="${i}" value="${escapeHtml(label)}" placeholder="欄位名稱，例如：報名費"><button class="icon-btn danger" data-remove-field="${i}" title="刪除欄位"><i data-lucide="x"></i></button></div>`).join("")}</div><button class="add-field" id="add-field-btn"><i data-lucide="plus"></i>新增欄位</button></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="timer"></i></span>活動關閉計時器</div><div class="choice-grid four"><button type="button" class="choice ${draftCloseMinutes===0?'selected':''}" data-timer="0">無</button><button type="button" class="choice ${draftCloseMinutes===5?'selected':''}" data-timer="5">5 分</button><button type="button" class="choice ${draftCloseMinutes===10?'selected':''}" data-timer="10">10 分</button><button type="button" class="choice ${draftCloseMinutes===20?'selected':''}" data-timer="20">20 分</button></div></div><div class="form-block"><div class="form-title"><span class="ico"><i data-lucide="send"></i></span>發佈時間</div><div class="grid-2"><div class="field"><label class="field-label" for="new-publish-date">發佈日期</label><input type="date" id="new-publish-date" min="${localDateKey()}" value="${escapeHtml((draftPublishAt||"").slice(0,10))}"></div><div class="field"><label class="field-label" for="new-publish-time">發佈時間</label><input type="time" id="new-publish-time" value="${escapeHtml((draftPublishAt||"").slice(11,16))}"></div></div><div class="field-hint">留白＝立即發佈；設定日期與時間＝預先發佈</div></div><button type="button" class="primary" id="create-btn"><i data-lucide="plus"></i>建立活動</button><div class="debug-error-box" id="create-activity-error"></div>`;
   if(adminPage==="activities"){
     const visibleActs=acts.filter(a=>!a.hidden),hiddenActs=acts.filter(a=>a.hidden);
     const search=norm(activityManagementSearch).toLowerCase();
@@ -6027,7 +6027,7 @@ window.openManualRegistrationEditor=openManualRegistrationEditor;
 function activityAdminRow(a,hidden=false){
   const list=regsOf(a.id);
   const expanded=window.adminAttendanceExpandedId===a.id;
-  const future=!isManualRegistrationActivity(a) && isWaitingForPublish(a);
+  const future=false; // 報名模式不再依活動日期等待開放。
   let detail="";
   if(expanded){
     const rows=list.map((r,i)=>{
@@ -6202,14 +6202,9 @@ function setupCreateActivityPage(el){
     const date=draftDate?new Date(draftDate).toISOString():new Date().toISOString();
     const fields=draftFields.map(l=>norm(l)).filter(Boolean).map(label=>({key:uid(),label}));
     const session=getAdminSession();
-    const isFutureActivityDate=draftDate>todayKey;
-    const activityStartAt=new Date(draftDate+"T00:00:00");
-    const scheduledOpenAt=isFutureActivityDate
-      ? new Date(Math.max(activityStartAt.getTime(),publishAt?new Date(publishAt).getTime():0)).toISOString()
-      : publishAt;
+    // 活動改為報名模式：未來日期建立後即可接受報名，不再等待活動當天。
+    const scheduledOpenAt=publishAt;
     const closeBaseTime=scheduledOpenAt?new Date(scheduledOpenAt).getTime():Date.now();
-    // open=true 代表已排定開放；實際能否簽到由 publishAt 控制。
-    // 未來日期也必須預先寫入 closeAt，否則到達排定開放時間後不會自動關閉。
     const activity={id:uid(),name,date,fields,open:true,maxParticipants,createdBy:session?.username||"",closeAt:closeMinutes?new Date(closeBaseTime+closeMinutes*60000).toISOString():null,autoCloseMinutes:closeMinutes,hidden:false,publishAt:scheduledOpenAt,activityType:"normal",eventCategory:draftEventCategory,minimumAttendanceRate};
     createBtn.disabled=true;
     try{
@@ -6230,7 +6225,7 @@ function setupCreateActivityPage(el){
       }
       state.registrations[activity.id]=[];
       pendingPublishActivity=null;
-      showToast(isFutureActivityDate ? "活動已建立，將於活動當天排定時間自動開放簽到" : (publishAt ? "活動已建立，尚未發佈" : "活動已建立並發佈"));
+      showToast(publishAt ? "活動已建立，尚未發佈" : "活動已建立並開放報名");
       adminPage="activities";
       draftFields=["公用哨角"]; draftName="";
       draftEventCategory="";
@@ -6780,17 +6775,7 @@ window.addEventListener("unhandledrejection",function(e){showRuntimeError("Promi
   async function activityActionClose(a,btn){
     const next=!a.open;
     if(next){
-      const activityDay=window.activityDateKey?window.activityDateKey(a.date):"";
-      const today=window.localDateKey?window.localDateKey():new Date().toISOString().slice(0,10);
-      const scheduledAt=a.publishAt?new Date(a.publishAt).getTime():NaN;
-      if(activityDay && activityDay>today){
-        window.showToast("活動日期為 "+activityDay+"，請等待活動當天自動開放簽到。","error");
-        return;
-      }
-      if(Number.isFinite(scheduledAt) && scheduledAt>Date.now()){
-        window.showToast("此活動尚在等待開放，請等到排定時間。","error");
-        return;
-      }
+      // 報名模式不限制活動日期；管理者可隨時手動開放未來活動。
     }
     if(!confirm(next?"確定開啟「"+a.name+"」？":"確定關閉「"+a.name+"」？")) return;
 
