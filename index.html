@@ -5207,7 +5207,10 @@ function activityStatusClock(activity){
   const remaining=end?end-Date.now():0;
 
   if(isWaitingForPublish(activity)){
-    return `<div class="activity-status-clock pending-publish" aria-label="等待開放"><i data-lucide="clock"></i><span>等待開放</span></div>`;
+    // 未開啟活動：直接顯示距離開放時間的倒數，供近期活動卡片右下角使用。
+    const publishEnd=new Date(activity.publishAt).getTime();
+    const publishRemaining=Math.max(0,publishEnd-Date.now());
+    return `<div class="activity-status-clock countdown pending-publish" data-countdown-end="${publishEnd}" aria-label="距離開放 ${formatCountdown(publishRemaining)}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(publishRemaining)}</span></div>`;
   }
   if(activity.open && end && remaining>0){
     return `<div class="activity-status-clock countdown" data-countdown-end="${end}" aria-label="剩餘 ${formatCountdown(remaining)}"><i class="activity-list-icon ${((Number(activity.minimumAttendanceRate)||0)>0)?"attendance-limit-icon":"open-icon"}" data-lucide="timer"></i><span class="countdown-text">${formatCountdown(remaining)}</span></div>`;
