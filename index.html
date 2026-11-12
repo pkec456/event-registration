@@ -4263,7 +4263,8 @@ async function loadData(){
         (Object.prototype.hasOwnProperty.call(a,"is_hidden") ? !!a.is_hidden : false),
       publishAt:a.publish_at||null,
       activityType:a.activity_type||"normal",
-      eventCategory:a.event_category||""
+      eventCategory:a.event_category||"",
+      note:a.note||""
     }));
 
     // 先在暫存物件組合完整報名資料，確認讀取成功後才一次寫入 state。
