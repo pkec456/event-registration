@@ -6259,6 +6259,9 @@ function setupCreateActivityPage(el){
         await setMinimumAttendanceRateRemote(updated.id,minimumAttendanceRate);
         const idx=state.activities.findIndex(a=>String(a.id)===String(updated.id));
         if(idx>=0) state.activities[idx]={...updated,...(saved||{}),minimumAttendanceRate,eventCategory:draftEventCategory,note};
+        // 儲存後重新讀取資料庫，確認活動頁與管理列表都使用最新資料，
+        // 避免只更新暫存 state、重新整理後又回到舊資料。
+        await loadData();
         editingActivityId=null;
         draftFields=["公用哨角"]; draftName=""; draftEventCategory=""; draftDate=""; draftMaxParticipants=""; draftMinimumAttendanceRate=""; draftCloseMinutes=0; draftPublishAt=""; draftNote="";
         showToast("活動資料已更新");
@@ -6336,6 +6339,8 @@ async function saveManualRegistrationDraft(){
    await setEventCategoryRemote(activity.id,updated.eventCategory);
   const idx=state.activities.findIndex(a=>String(a.id)===String(activity.id));
   if(idx>=0) state.activities[idx]={...state.activities[idx],...(saved||{}),name:newName,date:newDate,fields,eventCategory:updated.eventCategory};
+  // 與一般活動一致，儲存後重新從資料庫同步最新活動資料。
+  await loadData();
   manualRegisterActivityName=newName;
    manualRegisterActivityDate=newDate;
    manualRegisterEventCategory=updated.eventCategory;
