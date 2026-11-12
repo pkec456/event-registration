@@ -5486,9 +5486,11 @@ function renderRegister(el){
   <div class="activity-card-bottom">
     <div class="activity-card-limit">${(Number(a.minimumAttendanceRate)||0)?`<div class="activity-list-attendance-rate ${a.open?'':'closed-attendance-rate'}">${Number(a.minimumAttendanceRate)}%</div>`:"<div class=\"activity-card-limit-placeholder\"></div>"}</div>
     <div class="activity-card-countdown-slot">${(() => {
+      // 近期活動卡片優先顯示「活動實際關閉倒數」；這才是管理者設定的 20 分鐘倒數。
+      const closeTime=a.closeAt?new Date(a.closeAt).getTime():0;
       const publishTime=a.publishAt?new Date(a.publishAt).getTime():0;
       const activityTime=a.date?new Date(String(a.date).replace(/-/g,"/")+" 00:00:00").getTime():0;
-      const countdownEnd=publishTime> Date.now()?publishTime:(activityTime>Date.now()?activityTime:0);
+      const countdownEnd=(a.open && closeTime>Date.now()) ? closeTime : (publishTime>Date.now()?publishTime:(activityTime>Date.now()?activityTime:0));
       return countdownEnd?`<div class="activity-card-countdown"><div class="activity-status-clock countdown" data-countdown-end="${countdownEnd}"><i data-lucide="timer"></i><span class="countdown-text">${formatCountdown(countdownEnd-Date.now())}</span></div></div>`:"<div class=\"activity-card-countdown-placeholder\"></div>";
     })()}</div>
   </div>
