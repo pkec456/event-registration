@@ -6588,7 +6588,9 @@ async function init(){
       active.tagName==="TEXTAREA" ||
       active.tagName==="SELECT"
     );
-    if(activeTab === 'query' || (activeTab === "admin" && adminPage === "create")) return;
+    // 活動詳情／報名頁正在開啟時，禁止背景同步重建 state；避免剛進入頁面時
+    // 報名人數先正確、背景刷新後因資料鍵值重新整理而歸 0。
+    if(activeTab === 'query' || openEventId || (activeTab === "admin" && adminPage === "create")) return;
 
     // 自動關閉統一由 startActivityExpiryWatcher 處理，避免兩套流程同時更新同一筆活動。
 
