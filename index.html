@@ -3959,6 +3959,41 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 /* V2.6.5 出席率查詢：活動紀錄分為有參加／沒參加兩欄 */
 .query-history-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%}.query-history-columns .query-history{margin:0;min-width:0}.query-history-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 12px 8px;font-size:14px;font-weight:900;border-bottom:1px solid var(--line)}.query-history-head span{display:flex;align-items:center;gap:6px}.query-history-head svg{width:18px;height:18px}.query-history-present .query-history-head{color:var(--success)}.query-history-absent .query-history-head{color:var(--accent)}.query-history-empty{padding:24px 12px;text-align:center;color:#999;font-size:13px}.query-history-columns .list-row{padding:12px 4px;gap:9px}.query-history-columns .list-name{font-size:13px;line-height:1.45}.query-history-columns .list-meta{font-size:11px}.query-history-columns .list-icon{width:34px;height:34px;border-radius:11px}.query-history-columns .history-status{flex:0 0 auto}@media(max-width:640px){.query-history-columns{gap:8px}.query-history-head{padding:10px 8px 7px;font-size:13px}.query-history-columns .list-row{padding:10px 2px;gap:6px}.query-history-columns .list-icon{width:32px;height:32px;border-radius:10px}.query-history-columns .list-name{font-size:12px}.query-history-columns .list-meta{font-size:10px}.query-history-columns .history-status{width:28px;height:28px}}
 
+/* V2.6.5：報名首頁近期活動改為兩欄卡片（包含手機） */
+#app.home-view .activity-grid.activity-grid-bootstrap{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-card{
+  padding:12px;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-top{
+  gap:8px;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-icon{
+  width:40px;height:40px;min-width:40px;flex-basis:40px;border-radius:13px;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-name{
+  font-size:14px;line-height:1.35;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-meta{
+  font-size:11px;margin-top:4px;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .activity-right{
+  display:none;
+}
+#app.home-view .activity-grid.activity-grid-bootstrap .event-category-label{
+  font-size:10px;margin-bottom:3px;
+}
+@media(max-width:430px){
+  #app.home-view .activity-grid.activity-grid-bootstrap{gap:8px;}
+  #app.home-view .activity-grid.activity-grid-bootstrap .activity-card{padding:10px;}
+  #app.home-view .activity-grid.activity-grid-bootstrap .activity-icon{
+    width:34px;height:34px;min-width:34px;flex-basis:34px;border-radius:11px;
+  }
+  #app.home-view .activity-grid.activity-grid-bootstrap .activity-name{font-size:13px;}
+  #app.home-view .activity-grid.activity-grid-bootstrap .activity-meta{font-size:10px;}
+}
 </style>
 
 
