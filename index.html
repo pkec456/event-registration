@@ -4769,18 +4769,25 @@ function isWaitingForPublish(activity){
 
 function recentOrOpenActivities(){
   const todayKey = localDateKey();
-  return state.activities.filter(a=>{
-    if(a.hidden) return false;
+  return state.activities
+    .filter(a=>{
+      if(a.hidden) return false;
 
-    // 恢復 V2.5 的活動列表邏輯：
-    // 保留開放中的活動、等待開放／未來活動，以及活動當天；
-    // 已結束且已停止報名的歷史活動不顯示在隊員首頁，
-    // 但其 registrations 仍保留在 state，供出席率與管理端使用。
-    const activityDay = activityDateKey(a.date);
-    if(a.open) return true;
-    if(isWaitingForPublish(a)) return true;
-    return !!activityDay && activityDay >= todayKey;
-  });
+      // 恢復 V2.5 的活動列表邏輯：
+      // 保留開放中的活動、等待開放／未來活動，以及活動當天；
+      // 已結束且已停止報名的歷史活動不顯示在隊員首頁，
+      // 但其 registrations 仍保留在 state，供出席率與管理端使用。
+      const activityDay = activityDateKey(a.date);
+      if(a.open) return true;
+      if(isWaitingForPublish(a)) return true;
+      return !!activityDay && activityDay >= todayKey;
+    })
+    // 近期活動固定依活動日期由近到遠排列，避免資料庫回傳順序影響首頁顯示。
+    .sort((a,b)=>{
+      const aDay=activityDateKey(a.date);
+      const bDay=activityDateKey(b.date);
+      return aDay.localeCompare(bDay);
+    });
 }
 
 function annualStats(name){
