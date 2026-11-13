@@ -5391,9 +5391,12 @@ async function attendanceEligibilityFor(name, activity){
 
 function renderRegister(el){
    if(!isSigninPageVisible()){ activeTab="query"; openEventId=null; return renderQuery(el); }
+  // 首頁近期活動統一依「活動日期」排序，不再受建立時間影響。
+  // 日期較晚的活動排在前方：11/30 → 11/27 → 11/15。
   const acts=[...recentOrOpenActivities()].sort((a,b)=>{
-    const ac=a.createdAt?new Date(a.createdAt).getTime():new Date(a.date).getTime();
-    const bc=b.createdAt?new Date(b.createdAt).getTime():new Date(b.date).getTime(); return bc-ac;
+    const aDay=activityDateKey(a.date);
+    const bDay=activityDateKey(b.date);
+    return bDay.localeCompare(aDay);
   });
   if(openEventId){
     const activity=acts.find(a=>String(a.id)===String(openEventId));
