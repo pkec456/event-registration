@@ -4008,6 +4008,14 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
 .query-history-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%}.query-history-columns .query-history{margin:0;min-width:0}.query-history-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 12px 8px;font-size:14px;font-weight:900;border-bottom:1px solid var(--line)}.query-history-head span{display:flex;align-items:center;gap:6px}.query-history-head svg{width:18px;height:18px}.query-history-present .query-history-head{color:var(--success)}.query-history-absent .query-history-head{color:var(--accent)}.query-history-empty{padding:24px 12px;text-align:center;color:#999;font-size:13px}.query-history-columns .list-row{padding:12px 4px;gap:9px}.query-history-columns .list-name{font-size:13px;line-height:1.45}.query-history-columns .list-meta{font-size:11px}.query-history-columns .list-icon{width:34px;height:34px;border-radius:11px}.query-history-columns .history-status{flex:0 0 auto}@media(max-width:640px){.query-history-columns{gap:8px}.query-history-head{padding:10px 8px 7px;font-size:13px}.query-history-columns .list-row{padding:10px 2px;gap:6px}.query-history-columns .list-icon{width:32px;height:32px;border-radius:10px}.query-history-columns .list-name{font-size:12px}.query-history-columns .list-meta{font-size:10px}.query-history-columns .history-status{width:28px;height:28px}}
 
 
+
+/* V2.6.5 Header transparent background fix */
+#app header.app-navbar,
+#app:has(.checkin-card) header.app-navbar,
+#app.member-feature-view > header.app-navbar{
+  background:transparent !important;
+  box-shadow:none !important;
+}
 </style>
 
 
