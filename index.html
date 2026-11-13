@@ -4531,6 +4531,8 @@ function normalizeActivityForRPC(activity){
 
   x.closeAt=x.closeAt||null;
   x.publishAt=x.publishAt||null;
+  // V2.6.5.1：activities.note 為 NOT NULL，所有空值統一保存為空字串。
+  x.note=(x.note===null || x.note===undefined) ? "" : String(x.note);
   x.open=!!x.open;
   x.hidden=!!x.hidden;
   return x;
@@ -4557,7 +4559,8 @@ async function updateActivityRemote(activity){
     p_publish_at:a.publishAt||null,
     p_event_category:a.eventCategory||null,
     p_minimum_attendance_rate:a.minimumAttendanceRate==null?0:Number(a.minimumAttendanceRate),
-    p_note:a.note||null
+    // 資料庫 activities.note 設為 NOT NULL，空白備註不可傳送 null。
+    p_note:String(a.note??"")
   });
 
   if(error){
