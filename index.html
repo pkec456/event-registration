@@ -4016,6 +4016,13 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   background:transparent !important;
   box-shadow:none !important;
 }
+/* Management-home desktop icon regression contract: keep all three groups at 20 × 20px. */
+#app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg,
+#app.admin-home-view .statistics-info-summary .metric-icon svg,
+#app.admin-home-view .cumulative-category-icon svg{
+  width:20px !important;
+  height:20px !important;
+}
 </style>
 
 
