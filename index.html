@@ -4782,11 +4782,11 @@ function recentOrOpenActivities(){
       if(isWaitingForPublish(a)) return true;
       return !!activityDay && activityDay >= todayKey;
     })
-    // 近期活動固定依活動日期由近到遠排列，避免資料庫回傳順序影響首頁顯示。
+    // 近期活動依日期由遠到近排列：較晚的活動固定在前方位置。
     .sort((a,b)=>{
       const aDay=activityDateKey(a.date);
       const bDay=activityDateKey(b.date);
-      return aDay.localeCompare(bDay);
+      return bDay.localeCompare(aDay);
     });
 }
 
