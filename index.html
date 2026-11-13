@@ -4023,6 +4023,20 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;}
   width:20px !important;
   height:20px !important;
 }
+
+/* Management-home mobile icon regression contract: 26 × 26px SVGs. */
+@media (max-width:520px){
+  #app.admin-home-view .admin-menu-grid > .admin-square .menu-icon svg{
+    width:26px !important;
+    height:26px !important;
+  }
+  #app.admin-home-view .statistics-info-summary .metric-icon svg,
+  #app.admin-home-view .cumulative-category-icon svg{
+    width:26px !important;
+    height:26px !important;
+  }
+}
+
 </style>
 
 
